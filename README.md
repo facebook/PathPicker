@@ -5,12 +5,15 @@ problem of selecting files out of bash output. PathPicker will:
 * Present the piped input in a convenient selector UI
 
 It is easiest to understand by watching a simple demo:
+<!---
+TODO -- remove token
+-->
+<img src="https://raw.githubusercontent.com/facebook/PathPicker/master/assets/simple_edit.gif?token=ABFRn-B9WTzjwrvwzJZIyR3Ukhky_usJks5VTQW7wA%3D%3D" />
 
 Here is another example showing arbitrary commands rather than opening the files in an editor:
 <!---
 TODO -- remove token
 -->
-
 <img src="https://raw.githubusercontent.com/facebook/PathPicker/master/assets/command_replace.gif?token=ABFRn2V2DtyRRD9MKaPROKmcs7mgzAd-ks5VTQJ6wA%3D%3D" />
 
 ## Examples
