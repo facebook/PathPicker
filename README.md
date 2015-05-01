@@ -14,7 +14,7 @@ Here is another example showing arbitrary commands rather than opening the files
 <!---
 TODO -- remove token
 -->
-<img src="https://raw.githubusercontent.com/facebook/PathPicker/master/assets/command_replace.gif?token=ABFRn2V2DtyRRD9MKaPROKmcs7mgzAd-ks5VTQJ6wA%3D%3D" />
+<img src="https://raw.githubusercontent.com/facebook/PathPicker/master/assets/command_replace.gif?token=ABFRnyD60MwpDuAuHUwOLNgiyxCunFq7ks5VTQdGwA%3D%3D" />
 
 ## Examples
 After installing PathPicker, using it is as easy as:
