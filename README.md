@@ -3,18 +3,15 @@ Facebook PathPicker is a simple command line tool that solves the perpetual
 problem of selecting files out of bash output. PathPicker will:
 * Parse all incoming lines for entries that look like files
 * Present the piped input in a convenient selector UI
+* Allow you to either:
+    * Edit the selected files in your favorite `$EDITOR`
+    * Execute an arbitrary command with them
 
 It is easiest to understand by watching a simple demo:
 <!---
 TODO -- remove token
 -->
 <img src="https://raw.githubusercontent.com/facebook/PathPicker/master/assets/simple_edit.gif?token=ABFRn-B9WTzjwrvwzJZIyR3Ukhky_usJks5VTQW7wA%3D%3D" />
-
-Here is another example showing arbitrary commands rather than opening the files in an editor:
-<!---
-TODO -- remove token
--->
-<img src="https://raw.githubusercontent.com/facebook/PathPicker/master/assets/command_replace.gif?token=ABFRnyD60MwpDuAuHUwOLNgiyxCunFq7ks5VTQdGwA%3D%3D" />
 
 ## Examples
 After installing PathPicker, using it is as easy as piping into `fpp`. It takes
@@ -37,6 +34,20 @@ ZSH is supported as well but won't have a few features like alias expansion.
 
 ## Installing PathPicker
 PIP module -- TODO
+
+## Advanced Functionality
+
+As mentioned above, PathPicker allows you to also execute arbitrary commands with the specified files.
+Here is an exaple showing a `git checkout` command executed against the selected files:
+<!---
+TODO -- remove token
+-->
+<img src="https://raw.githubusercontent.com/facebook/PathPicker/master/assets/command_replace.gif?token=ABFRnyD60MwpDuAuHUwOLNgiyxCunFq7ks5VTQdGwA%3D%3D" />
+
+The selected files are appended to the command prefix to form the final command. If you need the files
+in the middle of your command, you can use the `$F` token instead, like:
+
+`cat $F | wc -l`
 
 ## How PathPicker works
 PathPicker is a combination of a bash script and some small Python modules.
