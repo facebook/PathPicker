@@ -6,6 +6,7 @@ problem of selecting files out of bash output. PathPicker will:
 
 ## Examples
 After installing PathPicker, using it is as easy as:
+
 -- git status | fpp
 -- hg status | fpp
 -- git grep "FooBar" | fpp
@@ -24,6 +25,7 @@ PIP module -- TODO
 ## How PathPicker works
 PathPicker is a combination of a bash script and some small Python modules.
 It essentially has three steps:
+
 -- First in the bash script, redirect all standard in to a python module that
 parses and extracts out the filenames. This data is saved in a temporary file
 and the program exits.
