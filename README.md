@@ -1,18 +1,18 @@
 # PathPicker
 Facebook PathPicker is a simple command line tool that solves the perpetual
 problem of selecting files out of bash output. PathPicker will:
--- Parse all incoming lines for entries that look like files
--- Present the piped input in a convenient selector UI
+* Parse all incoming lines for entries that look like files
+* Present the piped input in a convenient selector UI
 
 ## Examples
 After installing PathPicker, using it is as easy as:
 
--- git status | fpp
--- hg status | fpp
--- git grep "FooBar" | fpp
--- grep -r "FooBar" . | fpp
--- git diff HEAD~1 --stat | fpp
--- arc inlines | fpp
+* git status | fpp
+* hg status | fpp
+* git grep "FooBar" | fpp
+* grep -r "FooBar" . | fpp
+* git diff HEAD~1 --stat | fpp
+* arc inlines | fpp
 and anything else you can dream up!
 
 ## Requirements
@@ -26,14 +26,14 @@ PIP module -- TODO
 PathPicker is a combination of a bash script and some small Python modules.
 It essentially has three steps:
 
--- First in the bash script, redirect all standard in to a python module that
+* First in the bash script, redirect all standard in to a python module that
 parses and extracts out the filenames. This data is saved in a temporary file
 and the program exits.
--- Secondly, the bash script switches to terminal input mode and
+* Secondly, the bash script switches to terminal input mode and
 another python module reads out the saved entries and presents them in a
 selector UI. The user either selects a few files to edit or inputs a command
 to execute.
--- Lastly, the python script outputs a command to a bash file that is later
+* Lastly, the python script outputs a command to a bash file that is later
 executed by the master bash script.
 
 It is a bit rough around the edges but provides (in our opinion) a lot of

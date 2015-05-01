@@ -1,0 +1,7 @@
+# Vim swaps
+*.sw*
+*.swp
+# python compiled files
+*.pyc
+# hg merge conflicts
+*.orig
