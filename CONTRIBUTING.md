@@ -4,6 +4,14 @@ Welcome to the community and thanks for stopping by! Facebook PathPicker is actu
 easy to contribute to -- it has minimal external and internal dependencies and just some
 simple input-output tests to run.
 
+The easiest way to get set up is to:
+* First, clone the repo with:
+** `git clone git@github.com:facebook/PathPicker.git`
+* Second, ensure you have Python installed between version `2.6` and less than `3.0`:
+** `python --version`
+* Go ahead and execute the script!
+** `cd PathPicker; ./fpp`
+
 The three areas to contribute to are:
 * Regex parsing (for detecting filenames and ignoring normal code)
 * UI functionality (either bug fixes with curses or new functionality)
@@ -13,6 +21,9 @@ The three areas to contribute to are:
 
 Send them over! Our bot will ask you to sign the CLA and after that someone
 from the team will start reviewing.
+
+Before sending them over, make sure the tests pass with:
+`python src/test.py`
 
 ### Contributor License Agreement ("CLA")
 
