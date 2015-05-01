@@ -52,6 +52,20 @@ class lineMatch(object):
         self.start = matches.start()
         self.end = min(matches.end(), len(line))
         self.group = matches.group()
+
+        # this is a bit weird but we need to strip
+        # off the whitespace for the matches we got,
+        # since matches like README are aggressive
+        # about including whitespace. For most lines
+        # this will be a no-op, but for lines like
+        # "README        " we will reset end to
+        # earlier
+        stringSubset = line[self.start:self.end]
+        strippedSubset = stringSubset.strip()
+        trailingWhitespace = (len(stringSubset) - len(strippedSubset))
+        self.end -= trailingWhitespace
+        self.group = self.group[0:len(self.group) - trailingWhitespace]
+
         self.selected = False
         self.hovered = False
 
