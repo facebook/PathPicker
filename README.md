@@ -17,14 +17,16 @@ TODO -- remove token
 <img src="https://raw.githubusercontent.com/facebook/PathPicker/master/assets/command_replace.gif?token=ABFRnyD60MwpDuAuHUwOLNgiyxCunFq7ks5VTQdGwA%3D%3D" />
 
 ## Examples
-After installing PathPicker, using it is as easy as:
+After installing PathPicker, using it is as easy as piping into `fpp`. It takes
+a wide variety of input -- try it with all the options below:
 
-* git status | fpp
-* hg status | fpp
-* git grep "FooBar" | fpp
-* grep -r "FooBar" . | fpp
-* git diff HEAD~1 --stat | fpp
-* arc inlines | fpp
+* `git status | fpp`
+* `hg status | fpp`
+* `git grep "FooBar" | fpp`
+* `grep -r "FooBar" . | fpp`
+* `git diff HEAD~1 --stat | fpp`
+* `arc inlines | fpp`
+* `find . -iname "*.js" | fpp`
 and anything else you can dream up!
 
 ## Requirements
