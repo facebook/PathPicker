@@ -119,12 +119,6 @@ prependDirTestCases = [
     'in': 'www/asd.py',
     'out': '~/www/asd.py'
 }, {
-    'in': 'opsfiles/asd.py',
-    'out': '~/opsfiles/asd.py'
-}, {
-    'in': 'fbandroid/asd.py',
-    'out': '~/fbandroid/asd.py'
-}, {
     'in': 'foo/bar/baz/asd.py',
     'out': parse.PREPEND_PATH + 'foo/bar/baz/asd.py'
 }, {
@@ -133,9 +127,6 @@ prependDirTestCases = [
 }, {
     'in': 'b/foo/bar/baz/asd.py',
     'out': parse.PREPEND_PATH + 'foo/bar/baz/asd.py'
-}, {
-    'in': parse.DATASWARM_PREPEND + 'data.py',
-    'out': '~/dataswarm/data.py'
 }, {
     'in': '',
     'out': ''

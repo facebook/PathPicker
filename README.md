@@ -16,7 +16,9 @@ After installing PathPicker, using it is as easy as:
 and anything else you can dream up!
 
 ## Requirements
-PathPicker should work with most Bash environments and requires Python ~2.7.
+PathPicker should work with most Bash environments and requires Python >2.6
+and <3.0.
+
 ZSH is supported as well but won't have a few features like alias expansion.
 
 ## Installing PathPicker
