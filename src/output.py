@@ -44,11 +44,11 @@ def getEditorAndPath():
 def getEditFileCommand(filePath, lineNum):
     editor, _editor_path = getEditorAndPath()
     if editor == 'vim' and lineNum != 0:
-        return '%s +%d' % (filePath, lineNum)
+        return '\'%s\' +%d' % (filePath, lineNum)
     elif editor in ['joe', 'emacs'] and lineNum != 0:
-        return '+%d %s' % (lineNum, filePath)
+        return '+%d \'%s\'' % (lineNum, filePath)
     else:
-        return filePath
+        return "'%s'" % filePath
 
 
 def getAliases():
