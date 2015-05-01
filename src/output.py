@@ -124,7 +124,7 @@ def composeCommand(command, lineObjs):
 
 
 def composeFileCommand(command, lineObjs):
-    files = [lineObj.getFile() for lineObj in lineObjs]
+    files = ["'%s'" % lineObj.getFile() for lineObj in lineObjs]
     file_str = ' '.join(files)
     if '$F' in command:
         command = command.replace('$F', file_str)
