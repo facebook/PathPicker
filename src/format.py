@@ -10,7 +10,7 @@ import parse
 import curses
 import output
 
-class simpleLine(object):
+class SimpleLine(object):
     def __init__(self, line, index):
         self.line = line
         self.index = index
@@ -37,7 +37,7 @@ class simpleLine(object):
         return True
 
 
-class lineMatch(object):
+class LineMatch(object):
     def __init__(self, line, result, index):
         self.line = line
         self.index = index

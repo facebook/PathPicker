@@ -107,10 +107,10 @@ def getLineObjs():
         result = parse.matchLine(line)
 
         if not result:
-            simple = format.simpleLine(line, index)
+            simple = format.SimpleLine(line, index)
             lineObjs[index] = simple
             continue
-        match = format.lineMatch(line, result, index)
+        match = format.LineMatch(line, result, index)
         lineObjs[index] = match
     return lineObjs
 
