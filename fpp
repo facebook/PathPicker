@@ -8,7 +8,6 @@
 #
 # get the directory of this script so we can execute the related python
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-echo "the dir name $DIR"
 
 # we need to handle the --help option outside the python
 # flow since otherwise we will move into input selection...
