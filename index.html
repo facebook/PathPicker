@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+</!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,16 +8,16 @@
     <meta property="og:title" content="Facebook PathPicker"/>
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="https://facebook.github.io/pathpicker/" />
-    <meta property="og:image" content="http://pcottle.github.io/learnGitBranching/assets/learnGitBranching.png"/>
+    <meta property="og:image" content="/assets/screenshot.png"/>
     <meta property="og:description" content="PathPicker is a command line tool to easily select files from piped input."/>
     <meta name="description" content="PathPicker is a command line tool to easily select files from piped input."/>
 
-    <link rel="icon" href="favicon.ico">
+    <link rel="icon" href="/assets/favicon.ico">
 
     <title>Facebook PathPicker</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/bootstrap.min.css" rel="stylesheet">
 
   </head>
 
@@ -53,7 +53,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-5">
-          <h2>Accepts a wide range of input</h2>
+          <h2>Any Input</h2>
           <p>
             PathPicker accepts a wide range of input -- output from git commands, grep results, searches -- pretty much anything.
           </p>
@@ -61,10 +61,28 @@
             After parsing the input, PathPicker presents you with a nice UI to select which files you're interested in. After that
             you can open them in your favorite editor or execute arbitrary commands.
           </p>
-          <p><a class="btn btn-default" href="https://github.com/facebook/pathpicker/" role="button">More on Github »</a></p>
+          <p><a class="btn btn-success" href="https://github.com/facebook/pathpicker/" role="button">More on Github »</a></p>
         </div>
         <div class="col-md-5">
-          <img src="https://raw.githubusercontent.com/facebook/PathPicker/master/assets/simple_edit.gif?token=ABFRn-B9WTzjwrvwzJZIyR3Ukhky_usJks5VTQW7wA%3D%3D" />
+          <img src="/assets/simple_edit.gif" />
+        </div>
+      </div>
+      <div style="margin-top: 120px"></div>
+      <div class="row">
+        <div class="col-md-5" style="width: 780px">
+          <img src="/assets/command_replace.gif" />
+        </div>
+        <div class="col-md-5" style="width: 300px">
+          <h2>Arbitrary Commands</h2>
+          <p>
+            Besides opening files in your editor, PathPicker also allows you to execute arbitrary commands with the selected
+            files.
+          </p>
+          <p>
+            You can use your selection to add files to version control, change permissions, scp, delete -- pretty much
+            whatever you want!
+          </p>
+          <p><a class="btn btn-success" href="https://github.com/facebook/pathpicker/" role="button">More on Github »</a></p>
         </div>
       </div>
     </div>
