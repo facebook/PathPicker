@@ -8,10 +8,7 @@ problem of selecting files out of bash output. PathPicker will:
     * Execute an arbitrary command with them
 
 It is easiest to understand by watching a simple demo:
-<!---
-TODO -- remove token
--->
-<img src="https://raw.githubusercontent.com/facebook/PathPicker/master/assets/simple_edit.gif?token=ABFRn-B9WTzjwrvwzJZIyR3Ukhky_usJks5VTQW7wA%3D%3D" />
+<img src="http://facebook.github.io/PathPicker/assets/simple_edit.gif" />
 
 ## Examples
 After installing PathPicker, using it is as easy as piping into `fpp`. It takes
@@ -24,25 +21,42 @@ a wide variety of input -- try it with all the options below:
 * `git diff HEAD~1 --stat | fpp`
 * `arc inlines | fpp`
 * `find . -iname "*.js" | fpp`
+
 and anything else you can dream up!
 
 ## Requirements
 PathPicker should work with most Bash environments and requires Python >2.6
 and <3.0.
 
-ZSH is supported as well but won't have a few features like alias expansion.
+ZSH is supported as well but won't have a few features like alias expansion
+in command line mode.
 
 ## Installing PathPicker
-PIP module -- TODO
+
+Installing PathPicker is easiest with [Homebrew for mac](http://brew.sh/):
+
+* `brew install fpp`
+
+However if you're on a system without Homebrew, it's still quite easy to install
+PathPicker since it's essentially just a bash script that calls some Python. These
+steps more-or-less outline the process:
+
+* `cd /usr/local/ # or wherever you install apps`
+* `git clone git@github.com:facebook/PathPicker.git`
+* `cd PathPicker/`
+
+here we make a symbolic link from the bash script in the repo
+to `/usr/local/bin/` which is assumed to be in the current
+`$PATH`
+
+* `ln -s ./fpp /usr/local/bin/fpp`
+* `fpp --help # should work!`
 
 ## Advanced Functionality
 
 As mentioned above, PathPicker allows you to also execute arbitrary commands with the specified files.
 Here is an exaple showing a `git checkout` command executed against the selected files:
-<!---
-TODO -- remove token
--->
-<img src="https://raw.githubusercontent.com/facebook/PathPicker/master/assets/command_replace.gif?token=ABFRnyD60MwpDuAuHUwOLNgiyxCunFq7ks5VTQdGwA%3D%3D" />
+<img src="http://facebook.github.io/PathPicker/assets/simple_edit.gif" />
 
 The selected files are appended to the command prefix to form the final command. If you need the files
 in the middle of your command, you can use the `$F` token instead, like:
@@ -53,18 +67,17 @@ in the middle of your command, you can use the `$F` token instead, like:
 PathPicker is a combination of a bash script and some small Python modules.
 It essentially has three steps:
 
-* First in the bash script, redirect all standard in to a python module that
+* First in the bash script, it redirects all standardput in to a python module that
 parses and extracts out the filenames. This data is saved in a temporary file
-and the program exits.
-* Secondly, the bash script switches to terminal input mode and
+and the python script exists.
+* Next, the bash script switches to terminal input mode and
 another python module reads out the saved entries and presents them in a
-selector UI. The user either selects a few files to edit or inputs a command
+selector UI built with `curses`. The user either selects a few files to edit or inputs a command
 to execute.
 * Lastly, the python script outputs a command to a bash file that is later
-executed by the master bash script.
+executed by the original bash script.
 
-It is a bit rough around the edges but provides (in our opinion) a lot of
-utility.
+It's not the most elegant architecture in the world but (in our opinion) provides a lot of utility.
 
 ## Join the PathPicker community
 See the CONTRIBUTING file for how to help out.
