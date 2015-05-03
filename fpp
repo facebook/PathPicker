@@ -7,22 +7,30 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 # get the directory of this script so we can execute the related python
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WHEREAMI=$0
+
+# Follow until we get our symlink resolved, since
+# homebrew has multiple hops.
+cd $(dirname $WHEREAMI)
+while [ -h "$WHEREAMI" ]; do
+  DEST=$(readlink $WHEREAMI)
+  cd $(dirname $DEST)
+  WHEREAMI=$(dirname $WHEREAMI)"/"$DEST
+done
 
 # we need to handle the --help option outside the python
 # flow since otherwise we will move into input selection...
 for opt in "$@"; do
   if [ "$opt" == "--help" -o "$opt" == "-h" ]; then
-    python $DIR/src/printHelp.py
+    python ./src/printHelp.py
     exit 0
   fi
 done
 
 # process input from pipe and store as pickled file
-python "$DIR/src/processInput.py"
+python ./src/processInput.py
 # now choose input and...
 exec 0<&-
-python "$DIR/src/choose.py" < /dev/tty
+python ./src/choose.py < /dev/tty
 # execute the output bash script
 sh ~/.fbPager.sh < /dev/tty
-
