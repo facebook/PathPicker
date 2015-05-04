@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="0.5.1"
+VERSION="0.5.2"
 DEST="./dist/fpp.$VERSION.tar.gz"
 tar -cf $DEST src/*.py fpp
 git add $DEST
@@ -9,7 +9,7 @@ HASH=$(cat $DEST | shasum -a 256 | cut -d " " -f 1)
 sed -i '' -e "s#sha256 .*#sha256 \"$HASH\"#g" ./fpp.rb
 
 NUMFILES=$(git status -sb | wc -l)
-if (( NUMFILES != 3 )); then
+if (( NUMFILES > 4 )); then
   echo "Git may include other changes aborting"
   exit 1
 fi
