@@ -8,7 +8,7 @@ problem of selecting files out of bash output. PathPicker will:
     * Execute an arbitrary command with them
 
 It is easiest to understand by watching a simple demo:
-[![asciicast](https://asciinema.org/a/19519.png)](https://asciinema.org/a/19519)
+<a href="https://asciinema.org/a/19519" target="_blank"><img src="https://asciinema.org/a/19519.png" width="597"/></a>
 
 ## Examples
 After installing PathPicker, using it is as easy as piping into `fpp`. It takes
