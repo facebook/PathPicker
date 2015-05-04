@@ -5,4 +5,3 @@
 *.pyc
 # hg merge conflicts
 *.orig
-dist/*
