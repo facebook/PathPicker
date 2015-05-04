@@ -1,7 +1,7 @@
 class Fpp < Formula
   homepage "https://facebook.github.io/PathPicker/"
   url "https://facebook.github.io/PathPicker/dist/fpp.0.5.1.tar.gz"
-  sha256 "d88a462b3733dc3b723a5eeafff764f8b37024bba44c2f67958d74568f2b9a12"
+  sha256 "824a6d329d3399b2aa3e14107c714ef1a63ea64de99c3b7a1393a485f2966c8a"
   head "https://github.com/facebook/pathpicker.git"
 
   depends_on :python if MacOS.version <= :snow_leopard
