@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="0.5.2"
+VERSION="0.5.3"
 DEST="./dist/fpp.$VERSION.tar.gz"
 tar -cf $DEST src/*.py fpp
 git add $DEST
