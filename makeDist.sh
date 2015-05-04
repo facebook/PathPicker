@@ -15,6 +15,6 @@ if (( NUMFILES != 3 )); then
 fi
 
 echo "Pushing distribution update"
-git checkout master && git commit -am "Distribution update" git push
+git checkout master && git commit -am "Distribution update" && git push
 git checkout gh-pages && git rebase master && git push
 git checkout master
