@@ -8,7 +8,7 @@ problem of selecting files out of bash output. PathPicker will:
     * Execute an arbitrary command with them
 
 It is easiest to understand by watching a simple demo:
-<img src="http://facebook.github.io/PathPicker/assets/simple_edit.gif" />
+[![asciicast](https://asciinema.org/a/19519.png)](https://asciinema.org/a/19519)
 
 ## Examples
 After installing PathPicker, using it is as easy as piping into `fpp`. It takes
@@ -56,7 +56,7 @@ to `/usr/local/bin/` which is assumed to be in the current
 
 As mentioned above, PathPicker allows you to also execute arbitrary commands with the specified files.
 Here is an exaple showing a `git checkout` command executed against the selected files:
-<img src="http://facebook.github.io/PathPicker/assets/simple_edit.gif" />
+[![asciicast](https://asciinema.org/a/19520.png)](https://asciinema.org/a/19520)
 
 The selected files are appended to the command prefix to form the final command. If you need the files
 in the middle of your command, you can use the `$F` token instead, like:
