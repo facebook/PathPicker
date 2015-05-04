@@ -8,7 +8,7 @@ sed -i '' -e "s#url .*#url \"https://facebook.github.io/PathPicker/dist/fpp.$VER
 HASH=$(cat $DEST | shasum -a 256 | cut -d " " -f 1)
 sed -i '' -e "s#sha256 .*#sha256 \"$HASH\"#g" ./fpp.rb
 
-NUMFILES=$(git status | wc -l)
+NUMFILES=$(git status -sb | wc -l)
 if (( NUMFILES != 3 )); then
   echo "Git may include other changes aborting"
   exit 1
