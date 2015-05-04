@@ -45,7 +45,7 @@ steps more-or-less outline the process:
 * `git clone git@github.com:facebook/PathPicker.git`
 * `cd PathPicker/`
 
-here we make a symbolic link from the bash script in the repo
+Here we make a symbolic link from the bash script in the repo
 to `/usr/local/bin/` which is assumed to be in the current
 `$PATH`
 
