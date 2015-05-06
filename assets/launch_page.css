@@ -1,0 +1,28 @@
+/**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+.jumbotron.pathPickerHeader {
+  background-color: #44609D;
+  color: white;
+  font-family: "HelveticaNeue-Light","Helvetica Neue Light", "Helvetica Neue", "Segoe UI", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: lighter;
+}
+
+.jumbotron .container div {
+  text-align: center;
+  padding: 40px 16px;
+}
+
+.container .row .asciiDemo {
+  height: 540px;
+  text-align: center;
+}
+
+.container .row .asciiDemo.extraHeight {
+  height: 550px;
+}
