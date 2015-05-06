@@ -11,6 +11,7 @@
   color: white;
   font-family: "HelveticaNeue-Light","Helvetica Neue Light", "Helvetica Neue", "Segoe UI", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-weight: lighter;
+  padding-bottom: 16px;
 }
 
 .jumbotron .container div {
@@ -25,4 +26,14 @@
 
 .container .row .asciiDemo.extraHeight {
   height: 550px;
+}
+
+.row.callToAction {
+  text-align: center;
+}
+
+.row.callToAction pre {
+  display: inline-block;
+      </div>
+  margin: 0;
 }
