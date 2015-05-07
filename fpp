@@ -15,7 +15,7 @@ while [ -h "$WHEREAMI" ]; do
   WHEREAMI=$(dirname "$WHEREAMI")"/"$(readlink "$WHEREAMI")
 done
 BASEDIR=$(dirname "$WHEREAMI")
-BASEDIR=$(cd $BASEDIR && pwd)
+BASEDIR=$(cd "$BASEDIR" && pwd)
 
 for opt in "$@"; do
   if [ "$opt" == "--debug" ]; then
