@@ -8,7 +8,6 @@
 # @nolint
 import parse
 import curses
-import output
 
 class SimpleLine(object):
     def __init__(self, line, index):
