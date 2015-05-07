@@ -18,7 +18,7 @@ PICKLE_FILE = '~/.fbPager.pickle'
 SELECTION_PICKLE = '~/.fbPager.selection.pickle'
 
 USAGE_INTRO = '''
-Welcome to fpp, the Facebook PathPicker! We hope your stay 
+Welcome to fpp, the Facebook PathPicker! We hope your stay
 with us is enjoyable.
 
 To get started with fpp, pipe some kind of terminal output into the program.

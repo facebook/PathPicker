@@ -8,6 +8,8 @@
 # @nolint
 import curses
 import sys
+
+
 import output
 import processInput
 import signal
