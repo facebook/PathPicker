@@ -7,16 +7,12 @@
 #
 # @nolint
 import curses
-import time
 import pickle
 import sys
 import os
 
-import parse
 import output
-import format
 import screenControl
-import processInput
 import logger
 
 PICKLE_FILE = '~/.fbPager.pickle'

@@ -7,14 +7,9 @@
 #
 # @nolint
 import curses
-import time
-import pickle
 import sys
-import os
 
-import parse
 import output
-import format
 import processInput
 import logger
 
@@ -22,9 +17,7 @@ PICKLE_FILE = '~/.fbPager.pickle'
 CHROME_MIN_X = 5
 CHROME_MIN_Y = 0
 
-mapping = {}
-for i in range(256):
-    mapping[i] = chr(i)
+mapping = {i: chr(i) for i in range(256)}
 mapping.update((value, name[4:]) for name, value in vars(curses).items()
                if name.startswith('KEY_'))
 # special exceptions
@@ -502,8 +495,4 @@ class Controller(object):
 
     def getKey(self):
         charCode = self.stdscr.getch()
-        try:
-            char = mapping[charCode]
-        except KeyError:
-            return ''
-        return char
+        return mapping.get(charCode, '')
