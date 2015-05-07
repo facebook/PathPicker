@@ -41,6 +41,8 @@ SHORT_COMMAND_PROMPT = 'Type a command below! Files will be appended or replace 
 SHORT_COMMAND_PROMPT2 = 'Enter a blank line to go back to the selection process'
 SHORT_FILES_HEADER = 'Files you have selected:'
 
+INVISIBLE_CURSOR = 0
+BLOCK_CURSOR = 2
 
 class HelperChrome(object):
     def __init__(self, stdscr, screenControl):
@@ -54,6 +56,10 @@ class HelperChrome(object):
 
     def output(self, mode):
         self.mode = mode
+        if self.mode == SELECT_MODE:
+            curses.curs_set(INVISIBLE_CURSOR)
+        else:
+            curses.curs_set(BLOCK_CURSOR)
         for func in [self.outputSide, self.outputBottom]:
             try:
                 func()
@@ -214,6 +220,7 @@ class Controller(object):
         self.numMatches = len(self.lineMatches)
 
         self.setHover(self.hoverIndex, True)
+        curses.use_default_colors()
         logger.addEvent('init')
 
     def getScrollOffset(self):
@@ -316,10 +323,13 @@ class Controller(object):
         self.moveIndex(-pageHeight)
 
     def moveIndex(self, delta):
+        newIndex = (self.hoverIndex + delta) % self.numMatches
+        self.jumpToIndex(newIndex)
+
+    def jumpToIndex(self, newIndex):
         self.setHover(self.hoverIndex, False)
         self.dirtyHoverIndex()
 
-        newIndex = (self.hoverIndex + delta) % self.numMatches
         self.hoverIndex = newIndex
         self.setHover(self.hoverIndex, True)
         self.dirtyHoverIndex()
@@ -336,6 +346,10 @@ class Controller(object):
             self.pageDown()
         elif key == 'b' or key == 'PAGE_UP':
             self.pageUp()
+        elif key == 'g':
+            self.jumpToIndex(0)
+        elif key == 'G':
+            self.jumpToIndex(self.numMatches - 1)
         elif key == 'f':
             self.toggleSelect()
         elif key == 'A':
