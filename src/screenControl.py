@@ -220,6 +220,7 @@ class Controller(object):
         self.numMatches = len(self.lineMatches)
 
         self.setHover(self.hoverIndex, True)
+        curses.use_default_colors()
         logger.addEvent('init')
 
     def getScrollOffset(self):
