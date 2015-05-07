@@ -26,9 +26,7 @@ PICKLE_FILE = '~/.fbPager.pickle'
 CHROME_MIN_X = 5
 CHROME_MIN_Y = 0
 
-mapping = {}
-for i in range(256):
-    mapping[i] = chr(i)
+mapping = {i: chr(i) for i in range(256)}
 mapping.update((value, name[4:]) for name, value in vars(curses).items()
                if name.startswith('KEY_'))
 # special exceptions
