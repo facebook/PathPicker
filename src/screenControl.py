@@ -41,6 +41,8 @@ SHORT_COMMAND_PROMPT = 'Type a command below! Files will be appended or replace 
 SHORT_COMMAND_PROMPT2 = 'Enter a blank line to go back to the selection process'
 SHORT_FILES_HEADER = 'Files you have selected:'
 
+INVISIBLE_CURSOR = 0
+BLOCK_CURSOR = 2
 
 class HelperChrome(object):
     def __init__(self, stdscr, screenControl):
@@ -54,6 +56,10 @@ class HelperChrome(object):
 
     def output(self, mode):
         self.mode = mode
+        if self.mode == SELECT_MODE:
+            curses.curs_set(INVISIBLE_CURSOR)
+        else:
+            curses.curs_set(BLOCK_CURSOR)
         for func in [self.outputSide, self.outputBottom]:
             try:
                 func()
