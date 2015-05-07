@@ -23,6 +23,9 @@ for opt in "$@"; do
   fi
 done
 
+# Until we have Python 3.0 support, lets check
+# if we have Python2 available directly and (if so)
+# use that instead. This helps on linux checkouts
 PYTHONCMD="python"
 if type python2 &> /dev/null; then
   PYTHONCMD="python2"
