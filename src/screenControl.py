@@ -511,8 +511,4 @@ class Controller(object):
 
     def getKey(self):
         charCode = self.stdscr.getch()
-        try:
-            char = mapping[charCode]
-        except KeyError:
-            return ''
-        return char
+        return mapping.get(charCode, '')
