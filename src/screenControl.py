@@ -39,7 +39,9 @@ SHORT_FILES_HEADER = 'Files you have selected:'
 INVISIBLE_CURSOR = 0
 BLOCK_CURSOR = 2
 
+
 class HelperChrome(object):
+
     def __init__(self, stdscr, screenControl):
         self.stdscr = stdscr
         self.screenControl = screenControl
@@ -111,6 +113,7 @@ class HelperChrome(object):
 
 
 class ScrollBar(object):
+
     def __init__(self, stdscr, lines, screenControl):
         self.stdscr = stdscr
         self.screenControl = screenControl
@@ -191,6 +194,7 @@ class ScrollBar(object):
 
 
 class Controller(object):
+
     def __init__(self, stdscr, lineObjs):
         self.stdscr = stdscr
         self.lineObjs = lineObjs
@@ -492,7 +496,8 @@ class Controller(object):
 
     def moveCursor(self):
         x = CHROME_MIN_X if self.scrollBar.getIsActivated() else 0
-        y = self.lineMatches[self.hoverIndex].getScreenIndex() + self.scrollOffset
+        y = self.lineMatches[
+            self.hoverIndex].getScreenIndex() + self.scrollOffset
         self.stdscr.move(y, x)
 
     def getKey(self):

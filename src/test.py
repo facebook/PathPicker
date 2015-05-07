@@ -109,31 +109,32 @@ fileTestCases = [{
 }]
 
 prependDirTestCases = [
-{
-    'in': 'home/absolute/path.py',
-    'out': '/home/absolute/path.py'
-}, {
-    'in': '~/www/asd.py',
-    'out': '~/www/asd.py'
-}, {
-    'in': 'www/asd.py',
-    'out': '~/www/asd.py'
-}, {
-    'in': 'foo/bar/baz/asd.py',
-    'out': parse.PREPEND_PATH + 'foo/bar/baz/asd.py'
-}, {
-    'in': 'a/foo/bar/baz/asd.py',
-    'out': parse.PREPEND_PATH + 'foo/bar/baz/asd.py'
-}, {
-    'in': 'b/foo/bar/baz/asd.py',
-    'out': parse.PREPEND_PATH + 'foo/bar/baz/asd.py'
-}, {
-    'in': '',
-    'out': ''
-}]
+    {
+        'in': 'home/absolute/path.py',
+        'out': '/home/absolute/path.py'
+    }, {
+        'in': '~/www/asd.py',
+        'out': '~/www/asd.py'
+    }, {
+        'in': 'www/asd.py',
+        'out': '~/www/asd.py'
+    }, {
+        'in': 'foo/bar/baz/asd.py',
+        'out': parse.PREPEND_PATH + 'foo/bar/baz/asd.py'
+    }, {
+        'in': 'a/foo/bar/baz/asd.py',
+        'out': parse.PREPEND_PATH + 'foo/bar/baz/asd.py'
+    }, {
+        'in': 'b/foo/bar/baz/asd.py',
+        'out': parse.PREPEND_PATH + 'foo/bar/baz/asd.py'
+    }, {
+        'in': '',
+        'out': ''
+    }]
 
 
 class TestParseFunction(unittest.TestCase):
+
     def testPrependDir(self):
         for testCase in prependDirTestCases:
             inFile = testCase['in']
@@ -177,7 +178,7 @@ class TestParseFunction(unittest.TestCase):
         self.assertEqual(testCase['file'], file, 'files not equal |%s| |%s|' %
                          (testCase['file'], file))
 
-        self.assertEqual(testCase['num'], num, 'num matches not equal %d %d for %s' \
+        self.assertEqual(testCase['num'], num, 'num matches not equal %d %d for %s'
                          % (testCase['num'], num, testCase.get('input')))
 
 

@@ -15,6 +15,8 @@ LOGGER_FILE = '~/.fbPager.log'
 # This file just outputs some simple log events that are consumed by
 # another service for internal logging at Facebook. Use it if you want
 # to, or disable it if you want.
+
+
 def writeToFile(content):
     file = open(os.path.expanduser(LOGGER_FILE), 'w')
     file.write(content)
