@@ -24,7 +24,7 @@ for opt in "$@"; do
 done
 
 PYTHONCMD="python"
-if type python2 > /dev/null; then
+if type python2 &> /dev/null; then
   PYTHONCMD="python2"
 fi
 
