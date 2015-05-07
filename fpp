@@ -23,19 +23,24 @@ for opt in "$@"; do
   fi
 done
 
+PYTHONCMD="python"
+if type python2 > /dev/null; then
+  PYTHONCMD="python2"
+fi
+
 # we need to handle the --help option outside the python
 # flow since otherwise we will move into input selection...
 for opt in "$@"; do
   if [ "$opt" == "--help" -o "$opt" == "-h" ]; then
-    python "$BASEDIR/src/printHelp.py"
+    $PYTHONCMD "$BASEDIR/src/printHelp.py"
     exit 0
   fi
 done
 
 # process input from pipe and store as pickled file
-python "$BASEDIR/src/processInput.py"
+$PYTHONCMD "$BASEDIR/src/processInput.py"
 # now choose input and...
 exec 0<&-
-python "$BASEDIR/src/choose.py" < /dev/tty
+$PYTHONCMD "$BASEDIR/src/choose.py" < /dev/tty
 # execute the output bash script
 sh ~/.fbPager.sh < /dev/tty
