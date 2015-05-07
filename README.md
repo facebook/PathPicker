@@ -68,7 +68,7 @@ in the middle of your command, you can use the `$F` token instead, like:
 PathPicker is a combination of a bash script and some small Python modules.
 It essentially has three steps:
 
-* First in the bash script, it redirects all standardput in to a python module that
+* First in the bash script, it redirects all standardout in to a python module that
 parses and extracts out the filenames. This data is saved in a temporary file
 and the python script exists.
 * Next, the bash script switches to terminal input mode and
