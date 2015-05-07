@@ -35,6 +35,7 @@ in command line mode.
 
 Installing PathPicker is easiest with [Homebrew for mac](http://brew.sh/):
 
+* `brew update` (to pull down the recipe since it is new)
 * `brew install fpp`
 
 However if you're on a system without Homebrew, it's still quite easy to install
