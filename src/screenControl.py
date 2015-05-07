@@ -316,10 +316,13 @@ class Controller(object):
         self.moveIndex(-pageHeight)
 
     def moveIndex(self, delta):
+        newIndex = (self.hoverIndex + delta) % self.numMatches
+        self.jumpToIndex(newIndex)
+
+    def jumpToIndex(self, newIndex):
         self.setHover(self.hoverIndex, False)
         self.dirtyHoverIndex()
 
-        newIndex = (self.hoverIndex + delta) % self.numMatches
         self.hoverIndex = newIndex
         self.setHover(self.hoverIndex, True)
         self.dirtyHoverIndex()
@@ -336,6 +339,10 @@ class Controller(object):
             self.pageDown()
         elif key == 'b' or key == 'PAGE_UP':
             self.pageUp()
+        elif key == 'g':
+            self.jumpToIndex(0)
+        elif key == 'G':
+            self.jumpToIndex(self.numMatches - 1)
         elif key == 'f':
             self.toggleSelect()
         elif key == 'A':
