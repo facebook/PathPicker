@@ -178,7 +178,7 @@ class TestParseFunction(unittest.TestCase):
                          (testCase['file'], file))
 
         self.assertEqual(testCase['num'], num, 'num matches not equal %d %d for %s' \
-                % (testCase['num'], num, testCase.get('input')))
+                         % (testCase['num'], num, testCase.get('input')))
 
 
 if __name__ == '__main__':

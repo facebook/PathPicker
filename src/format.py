@@ -6,9 +6,9 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 # @nolint
-import parse
 import curses
-import output
+import parse
+
 
 class SimpleLine(object):
     def __init__(self, line, index):

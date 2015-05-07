@@ -7,20 +7,16 @@
 #
 # @nolint
 import curses
-import time
 import pickle
 import sys
 import os
-
-import parse
 import output
-import format
 import screenControl
-import processInput
 import logger
 
 PICKLE_FILE = '~/.fbPager.pickle'
 SELECTION_PICKLE = '~/.fbPager.selection.pickle'
+
 
 def doProgram(stdscr):
     output.clearFile()
@@ -28,6 +24,7 @@ def doProgram(stdscr):
     lineObjs = getLineObjs()
     screen = screenControl.Controller(stdscr, lineObjs)
     screen.control()
+
 
 def getLineObjs():
     filePath = os.path.expanduser(PICKLE_FILE)

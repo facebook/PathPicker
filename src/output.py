@@ -9,7 +9,6 @@
 import os
 import pickle
 import re
-import sys
 
 import logger
 
@@ -153,7 +152,7 @@ def clearFile():
 
 def writeFriendlyCommand(command):
     header = 'echo "executing command:"\n' + \
-    'echo "' + command.replace('"', '\\"') + '"'
+             'echo "' + command.replace('"', '\\"') + '"'
     appendToFile(header)
     appendToFile(command)
 
