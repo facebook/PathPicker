@@ -17,6 +17,10 @@ done
 BASEDIR=$(dirname "$WHEREAMI")
 BASEDIR=$(cd $BASEDIR && pwd)
 
+if [ "$(uname -s)" == "Linux" ]; then
+  BASEDIR=$(cd "$(dirname "$(readlink -f "$0")")" && pwd)
+fi
+
 for opt in "$@"; do
   if [ "$opt" == "--debug" ]; then
     echo "Executing from '$BASEDIR'"
