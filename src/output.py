@@ -15,6 +15,7 @@ import logger
 OUTPUT_FILE = '~/.fbPager.sh'
 SELECTION_PICKLE = '~/.fbPager.selection.pickle'
 BASH_RC = '~/.bashrc'
+ZSH_RC = '~/.zshrc'
 DEBUG = '~/.fbPager.debug.text'
 
 ALIAS_REGEX = re.compile('alias (\w+)=[\'"](.*?)[\'"]')
@@ -54,7 +55,11 @@ def getAliases():
     try:
         lines = open(os.path.expanduser(BASH_RC), 'r').readlines()
     except IOError:
-        return {}
+        # fallback to zsh_rc and try there
+        try:
+          lines = open(os.path.expanduser(ZSH_RC), 'r').readlines()
+        except IOError:
+          return {}
     pairs = []
     for line in lines:
         results = ALIAS_REGEX.search(line)
