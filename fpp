@@ -12,10 +12,10 @@ WHEREAMI=$0
 # Follow until we get our symlink resolved, since
 # homebrew has multiple hops.
 while [ -h "$WHEREAMI" ]; do
-  WHEREAMI=$(dirname "$WHEREAMI")"/"$(readlink "$WHEREAMI")
+  WHEREAMI=$(readlink "$WHEREAMI")
 done
 BASEDIR=$(dirname "$WHEREAMI")
-BASEDIR=$(cd $BASEDIR && pwd)
+BASEDIR=$(cd "$BASEDIR" && pwd)
 
 for opt in "$@"; do
   if [ "$opt" == "--debug" ]; then
