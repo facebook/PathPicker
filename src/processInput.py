@@ -12,7 +12,6 @@ import pickle
 import re
 
 import parse
-import output
 import format
 
 PICKLE_FILE = '~/.fbPager.pickle'

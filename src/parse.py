@@ -29,6 +29,7 @@ JUST_FILE = re.compile('([a-zA-Z0-9\-_]+\.[a-zA-Z]{1,10})\s+')
 FILE_NO_PERIODS = re.compile(
     '([a-zA-Z0-9\-_\/]{1,}\/[a-zA-Z0-9\-_]{1,})(\s|$|:)+')
 
+
 # Attempts to resolve the root directory of the
 # repository in which path resides (i.e. the current directory).
 # both git and hg have commands for this, so let's just use those.
@@ -61,7 +62,9 @@ def getRepoPath():
     logger.addEvent('used_outside_repo')
     return '~/www'
 
+
 PREPEND_PATH = getRepoPath().strip() + '/'
+
 
 # returns a filename and (optional) line number
 # if it matches
@@ -138,7 +141,7 @@ def prependDir(file):
     if first in REPOS:
         return '~/' + file
 
-    if not '/' in file:
+    if '/' not in file:
         # assume current dir like ./
         return './' + file
 
