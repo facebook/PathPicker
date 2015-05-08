@@ -6,13 +6,17 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
+
 # get the directory of this script so we can execute the related python
 # http://stackoverflow.com/a/246128/212110
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+SOURCE=$0
+# resolve $SOURCE until the file is no longer a symlink
+while [ -h "$SOURCE" ]; do
   BASEDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
   SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$BASEDIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+  # if $SOURCE was a relative symlink, we need to resolve it relative to
+  # the path where the symlink file was located
+  [[ $SOURCE != /* ]] && SOURCE="$BASEDIR/$SOURCE"
 done
 BASEDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
