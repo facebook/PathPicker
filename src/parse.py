@@ -31,7 +31,7 @@ JUST_FILE = re.compile(
 FILE_NO_PERIODS = re.compile(''.join( (
     '(',
         # Recognized files starting with a dot followed by at least 3 characters
-        '(\.[a-zA-Z0-9\-_]{3,}[a-zA-Z0-9\-_\/]*)',
+        '((\/?([a-z.A-Z0-9\-_]+\/))?\.[a-zA-Z0-9\-_]{3,}[a-zA-Z0-9\-_\/]*)',
         # or
         '|',
         # Recognize files containing at least one slash

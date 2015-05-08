@@ -49,10 +49,27 @@ fileTestCases = [{
     'file': '.gitignore',
     'num': 0
 }, {
-    'input': '.bundle/config',
+    'input': 'tmp/.gitignore',
     'match': True,
-    'file': '.bundle/config',
+    'file': 'tmp/.gitignore',
     'num': 0
+}, {
+    'input': '.ssh/.gitignore',
+    'match': True,
+    'file': '.ssh/.gitignore',
+    'num': 0
+}, {
+    'input': '.ssh/known_hosts',
+    'match': True,
+    'file': '.ssh/known_hosts',
+    'num': 0
+
+# For now, don't worry about matching the following case perfectly,
+# simply because it's complicated.
+#}, {
+#    'input': '~/.ssh/known_hosts',
+#    'match': True,
+
 }, {
     # Arbitrarily ignore really short dot filenames
     'input': '.a',
