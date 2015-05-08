@@ -379,7 +379,6 @@ class Controller(object):
             # before exiting the program
             self.getFilesToUse()
             sys.exit(0)
-        pass
 
     def getFilesToUse(self):
         # if we have select files, those, otherwise hovered
