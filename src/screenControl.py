@@ -315,7 +315,7 @@ class Controller(object):
         # important, we need to get the real SCREEN position
         # of the hover index, not its index within our matches
         hovered = self.lineMatches[self.hoverIndex]
-        desiredTopRow = hovered.getScreenIndex() - halfHeight
+        desiredTopRow = hovered.index - halfHeight
 
         oldOffset = self.scrollOffset
         desiredTopRow = max(desiredTopRow, 0)
@@ -513,7 +513,7 @@ class Controller(object):
     def moveCursor(self):
         x = CHROME_MIN_X if self.scrollBar.getIsActivated() else 0
         y = self.lineMatches[
-            self.hoverIndex].getScreenIndex() + self.scrollOffset
+            self.hoverIndex].index + self.scrollOffset
         self.stdscr.move(y, x)
 
     def getKey(self):

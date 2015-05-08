@@ -80,9 +80,6 @@ class LineMatch(object):
     def setHover(self, val):
         self.hovered = val
 
-    def getScreenIndex(self):
-        return self.index
-
     @property
     def directory(self):
         # for the cd command and the like. file is a string like
