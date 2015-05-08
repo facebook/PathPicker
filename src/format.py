@@ -86,15 +86,17 @@ class LineMatch(object):
         return '/'.join(parts)
 
     def isResolvable(self):
-        return not self.isGitAbbreviatedPath()
+        return not self.is_git_abbreviated_path
 
-    def isGitAbbreviatedPath(self):
+    @property
+    def is_git_abbreviated_path(self):
         # this method mainly serves as a warning for when we get
         # git-abbrievated paths like ".../" that confuse users.
         parts = self.file.split('/')
-        if len(parts) and parts[0] == '...':
-            return True
-        return False
+        try:
+            return parts[0] == '...'
+        except IndexError:
+            return False
 
     @property
     def before(self):
@@ -134,10 +136,10 @@ class LineMatch(object):
         before = self.before
         after = self.after
         middle = decorator + self.match
-        (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
+        minx, miny, maxx, maxy = self.controller.getChromeBoundaries()
         y = miny + self.index + self.controller.getScrollOffset()
 
-        if (y < miny or y > maxy):
+        if y < miny or y > maxy:
             # wont be displayed!
             return
 

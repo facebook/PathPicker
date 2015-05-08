@@ -69,7 +69,7 @@ def appendIfInvalid(lineObjs):
     if not invalidLines:
         return
     appendError(INVALID_FILE_WARNING)
-    if len([line for line in invalidLines if line.isGitAbbreviatedPath()]):
+    if len([line for line in invalidLines if line.is_git_abbreviated_path]):
         appendError(GIT_ABBREVIATION_WARNING)
     appendToFile('read -p "%s" -r' % CONTINUE_WARNING)
 
