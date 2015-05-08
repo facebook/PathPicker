@@ -65,7 +65,7 @@ def editFiles(lineObjs):
 def appendIfInvalid(lineObjs):
     # lastly lets check validity and actually output an
     # error if any files are invalid
-    invalidLines = [line for line in lineObjs if not line.isResolvable()]
+    invalidLines = [line for line in lineObjs if not line.is_resolvable]
     if not invalidLines:
         return
     appendError(INVALID_FILE_WARNING)

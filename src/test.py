@@ -221,7 +221,7 @@ class TestParseFunction(unittest.TestCase):
         result = parse.matchLine(fileLine)
         lineObj = format.LineMatch(fileLine, result, 0)
         self.assertTrue(
-            not lineObj.isResolvable(),
+            not lineObj.is_resolvable,
             '"%s" should not be resolvable' % fileLine
         )
         print('Tested unresolvable case.')
@@ -232,7 +232,7 @@ class TestParseFunction(unittest.TestCase):
             result = parse.matchLine(testCase['input'])
             lineObj = format.LineMatch(testCase['input'], result, 0)
             self.assertTrue(
-                lineObj.isResolvable(),
+                lineObj.is_resolvable,
                 'Line "%s" was not resolvable' % testCase['input']
             )
         print('Tested %d resolvable cases.' % len(toCheck))

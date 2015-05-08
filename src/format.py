@@ -85,7 +85,8 @@ class LineMatch(object):
         parts = self.file.split('/')[0:-1]
         return '/'.join(parts)
 
-    def isResolvable(self):
+    @property
+    def is_resolvable(self):
         return not self.is_git_abbreviated_path
 
     @property
