@@ -27,8 +27,6 @@ Examples include:
     * git status | fpp
     * git show | fpp
     * git diff HEAD master | fpp
-    * tbgs EntAdAccount | fpp
-    * fbgs TupperwareJob | fpp
     * grep -r "Banana" . | fpp
 
 Once fpp parses your input (and something that looks like a file matches), it
