@@ -140,7 +140,7 @@ fileTestCases = [{
 }, {
     'input': 'blarg blah So.MANY.PERIODS.TXT:22',
     'match': True,
-    'num': 0, # we ignore the number here
+    'num': 0,  # we ignore the number here
     'file': 'So.MANY.PERIODS.TXT'
 }, {
     'input': 'SO.MANY&&PERIODSTXT',
