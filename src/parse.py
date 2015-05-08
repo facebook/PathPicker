@@ -40,7 +40,8 @@ def getRepoPath():
     proc = subprocess.Popen(["git rev-parse --show-toplevel"],
                             stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE,
-                            shell=True)
+                            shell=True,
+                            universal_newlines=True)
 
     (stdout, stderr) = proc.communicate()
 

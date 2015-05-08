@@ -6,6 +6,8 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 # @nolint
+from __future__ import print_function
+
 import sys
 import os
 import pickle
@@ -153,14 +155,14 @@ def doProgram():
 
 
 def usage():
-    print USAGE_STR
+    print(USAGE_STR)
 
 
 if __name__ == '__main__':
     filePath = os.path.expanduser(PICKLE_FILE)
     if sys.stdin.isatty():
         if os.path.isfile(filePath):
-            print 'Using old result...'
+            print('Using old result...')
         else:
             usage()
         # let the next stage parse the old version

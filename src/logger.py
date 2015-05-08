@@ -31,7 +31,8 @@ def getUnixName():
     proc = subprocess.Popen(['whoami'],
                             stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE,
-                            shell=True)
+                            shell=True,
+                            universal_newlines=True)
 
     (stdout, stderr) = proc.communicate()
     if not stdout:
