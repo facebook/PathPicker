@@ -21,9 +21,6 @@ class SimpleLine(object):
         self.index = index
         self.controller = None
 
-    def printOut(self):
-        print(str(self))
-
     def output(self, stdscr):
         minx, miny, maxx, maxy = self.controller.getChromeBoundaries()
         max_len = maxx - minx
