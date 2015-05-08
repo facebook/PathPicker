@@ -127,6 +127,24 @@ fileTestCases = [{
     'match': True,
     'num': 0,
     'file': '~/assets/retina/victory@2x.png'
+}, {
+    'input': 'So.many.periods.txt',
+    'match': True,
+    'num': 0,
+    'file': 'So.many.periods.txt'
+}, {
+    'input': 'SO.MANY.PERIODS.TXT',
+    'match': True,
+    'num': 0,
+    'file': 'SO.MANY.PERIODS.TXT'
+}, {
+    'input': 'blarg blah So.MANY.PERIODS.TXT:22',
+    'match': True,
+    'num': 0, # we ignore the number here
+    'file': 'So.MANY.PERIODS.TXT'
+}, {
+    'input': 'SO.MANY&&PERIODSTXT',
+    'match': False
 }]
 
 prependDirTestCases = [
