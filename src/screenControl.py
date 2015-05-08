@@ -524,7 +524,7 @@ class Controller(object):
         if self.mode == X_MODE:
             (maxy, _) = self.scrollBar.screenControl.getScreenDimensions()
             topY = maxy - 2
-            minY = self.scrollBar.getMinY()
+            minY = self.scrollBar.getMinY() - (1 if not self.scrollBar.activated else 0)
             for i in range(minY, topY + 1):
                 self.stdscr.addstr(i, 1, lbls[i - minY])
 
