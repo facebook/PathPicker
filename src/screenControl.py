@@ -216,7 +216,7 @@ class Controller(object):
         self.lineMatches = []
         # lets loop through and split
         for lineObj in self.lineObjs.values():
-            lineObj.setController(self)
+            lineObj.controller = self
             if (lineObj.isSimple()):
                 self.simpleLines.append(lineObj)
             else:
