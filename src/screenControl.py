@@ -54,7 +54,7 @@ class HelperChrome(object):
     def __init__(self, stdscr, screenControl):
         self.stdscr = stdscr
         self.screenControl = screenControl
-        if self.getIsSidebarMode():
+        if self.is_sidebar_mode:
             logger.addEvent('init_wide_mode')
         else:
             logger.addEvent('init_narrow_mode')
@@ -74,12 +74,12 @@ class HelperChrome(object):
             curses.curs_set(BLOCK_CURSOR)
 
     def reduceMaxY(self, maxy):
-        if self.getIsSidebarMode():
+        if self.is_sidebar_mode:
             return maxy
         return maxy - 4
 
     def reduceMaxX(self, maxx):
-        if not self.getIsSidebarMode():
+        if not self.is_sidebar_mode:
             return maxx
         return maxx - self.WIDTH
 
@@ -91,12 +91,13 @@ class HelperChrome(object):
     def getMinY(self):
         return self.screenControl.getChromeBoundaries()[1]
 
-    def getIsSidebarMode(self):
-        (maxy, maxx) = self.screenControl.getScreenDimensions()
+    @property
+    def is_sidebar_mode(self):
+        _, maxx = self.screenControl.getScreenDimensions()
         return maxx > 200
 
     def outputSide(self):
-        if not self.getIsSidebarMode():
+        if not self.is_sidebar_mode:
             return
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         borderX = maxx - self.WIDTH
@@ -111,7 +112,7 @@ class HelperChrome(object):
             self.stdscr.addstr(y, borderX, '|')
 
     def outputBottom(self):
-        if self.getIsSidebarMode():
+        if self.is_sidebar_mode:
             return
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         borderY = maxy - 2
@@ -406,7 +407,7 @@ class Controller(object):
         promptLine = '.' * len(SHORT_COMMAND_PROMPT)
         # from helper chrome code
         maxFileLength = maxx - 5
-        if self.helperChrome.getIsSidebarMode():
+        if self.helperChrome.is_sidebar_mode:
             # need to be shorter to not go into side bar
             maxFileLength = len(SHORT_COMMAND_PROMPT) + 18
 
@@ -485,7 +486,7 @@ class Controller(object):
             self.printAll()
         for index in self.dirtyIndexes:
             self.lineMatches[index].output(self.stdscr)
-        if self.helperChrome.getIsSidebarMode():
+        if self.helperChrome.is_sidebar_mode:
             # need to output since lines can override
             # the sidebar stuff
             self.printChrome()
