@@ -50,7 +50,7 @@ class LineMatch(object):
         # save a bunch of stuff so we can
         # pickle
         self.start = matches.start()
-        self.end = min(matches.end(), len(line))
+        end = min(matches.end(), len(line))
         group = matches.group()
 
         # this is a bit weird but we need to strip
@@ -60,10 +60,10 @@ class LineMatch(object):
         # this will be a no-op, but for lines like
         # "README        " we will reset end to
         # earlier
-        stringSubset = line[self.start:self.end]
+        stringSubset = line[self.start:end]
         strippedSubset = stringSubset.strip()
         trailingWhitespace = len(stringSubset) - len(strippedSubset)
-        self.end -= trailingWhitespace
+        self.end = end - trailingWhitespace
         self.group = group[:-trailingWhitespace]
 
         self.selected = False
