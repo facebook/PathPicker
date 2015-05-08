@@ -113,6 +113,21 @@ fileTestCases = [{
     'match': True,
     'num': 0,
     'file': '~/foo/bar/something.py'
+}, {
+    'input': '~/foo/bar/inHomeDir.py:22',
+    'match': True,
+    'num': 22,
+    'file': '~/foo/bar/inHomeDir.py'
+}, {
+    'input': 'blarge assets/retina/victory@2x.png',
+    'match': True,
+    'num': 0,
+    'file': 'assets/retina/victory@2x.png'
+}, {
+    'input': '~/assets/retina/victory@2x.png',
+    'match': True,
+    'num': 0,
+    'file': '~/assets/retina/victory@2x.png'
 }]
 
 prependDirTestCases = [
