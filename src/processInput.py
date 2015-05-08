@@ -64,13 +64,13 @@ enter before it is executed, so all you have
 to do is type the prefix. Some examples:
 
     * git add
-    * git checkout HEAD~10 --
+    * git checkout HEAD~1 --
     * rm -rf
 
 These commands get formatted into:
-    * git add file1 file2 // etc
+    * git add file1 file2 # etc
     * git checkout HEAD~1 -- file1 file2
-    * rm -rf file1 file2 // etc
+    * rm -rf file1 file2 # etc
 
 If your command needs filenames in the middle,
 the token "$F" will be replaced with your
