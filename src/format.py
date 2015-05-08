@@ -36,6 +36,10 @@ class SimpleLine(object):
 
 
 class LineMatch(object):
+    # Foreground/Background pair numbers.
+    HOVERED = 1
+    SELECTED = 2
+    HOVERED_AND_SELECTED = 3
 
     def __init__(self, line, result, index):
         self.line = line
@@ -111,17 +115,27 @@ class LineMatch(object):
         parts = [self.before, self.match, self.after, str(self.number)]
         return '||'.join(parts)
 
-    def getStyleForState(self):
-        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_RED)
-        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLUE)
-        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_GREEN)
+    # TODO: This might not be the most appropriate place to put this method.
+    # But still, it's better than before.
+    def set_color_pairs(self):
+        """
+        Set the different color pairs:
+        - The background/foreground for the hovered case.
+        - The background/foreground for the selected case.
+        - The background/foreground for the hovered and selected case.
+        """
+        curses.init_pair(self.HOVERED, curses.COLOR_WHITE, curses.COLOR_RED)
+        curses.init_pair(self.SELECTED, curses.COLOR_WHITE, curses.COLOR_BLUE)
+        curses.init_pair(self.HOVERED_AND_SELECTED, curses.COLOR_WHITE,
+                         curses.COLOR_GREEN)
 
+    def getStyleForState(self):
         if self.hovered and self.selected:
-            return curses.color_pair(3)
+            return curses.color_pair(self.HOVERED_AND_SELECTED)
         elif self.hovered:
-            return curses.color_pair(1)
+            return curses.color_pair(self.HOVERED)
         elif self.selected:
-            return curses.color_pair(2)
+            return curses.color_pair(self.SELECTED)
         else:
             return curses.A_UNDERLINE
 
@@ -150,6 +164,8 @@ class LineMatch(object):
             stdscr.addstr(y, minx, before)
             # bolded middle
             xIndex = len(before)
+
+            self.set_color_pairs()
             stdscr.addstr(y, minx + xIndex, middle[:max(maxLen - xIndex, 0)],
                           self.getStyleForState())
             # end
