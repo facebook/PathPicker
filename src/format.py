@@ -66,7 +66,10 @@ class LineMatch(object):
         stripped_subset = string_subset.strip()
         trailing_whitespace = len(string_subset) - len(stripped_subset)
         self.end = end - trailing_whitespace
-        self.match = group[:-trailing_whitespace]
+        if trailing_whitespace:
+            self.match = group[:-trailing_whitespace]
+        else:
+            self.match = group
 
         self.is_selected = False
         self.hovered = False
