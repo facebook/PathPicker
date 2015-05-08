@@ -100,7 +100,8 @@ class LineMatch(object):
     def getSelected(self):
         return self.selected
 
-    def getBefore(self):
+    @property
+    def before(self):
         return self.line[0:self.start]
 
     @property
@@ -111,7 +112,7 @@ class LineMatch(object):
         return self.group
 
     def __str__(self):
-        return self.getBefore() + '||' + self.getMatch(
+        return self.before + '||' + self.getMatch(
         ) + '||' + self.after + '||' + str(self.number)
 
     def getStyleForState(self):
@@ -135,7 +136,7 @@ class LineMatch(object):
 
     def output(self, stdscr):
         decorator = self.getDecorator()
-        before = self.getBefore()
+        before = self.before
         after = self.after
         middle = ''.join([decorator, self.getMatch()])
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
