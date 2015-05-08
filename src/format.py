@@ -64,7 +64,7 @@ class LineMatch(object):
         strippedSubset = stringSubset.strip()
         trailingWhitespace = len(stringSubset) - len(strippedSubset)
         self.end = end - trailingWhitespace
-        self.group = group[:-trailingWhitespace]
+        self.match = group[:-trailingWhitespace]
 
         self.selected = False
         self.hovered = False
@@ -105,12 +105,8 @@ class LineMatch(object):
     def after(self):
         return self.line[self.end:]
 
-    def getMatch(self):
-        return self.group
-
     def __str__(self):
-        return self.before + '||' + self.getMatch(
-        ) + '||' + self.after + '||' + str(self.number)
+        return self.before + '||' + self.match + '||' + self.after + '||' + str(self.number)
 
     def getStyleForState(self):
         curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_RED)
@@ -135,7 +131,7 @@ class LineMatch(object):
         decorator = self.getDecorator()
         before = self.before
         after = self.after
-        middle = ''.join([decorator, self.getMatch()])
+        middle = ''.join([decorator, self.match])
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
         y = miny + self.index + self.controller.getScrollOffset()
 
