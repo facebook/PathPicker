@@ -164,7 +164,7 @@ class TestParseFunction(unittest.TestCase):
             result = parse.prependDir(inFile)
             expected = testCase['out']
             if inFile[0:2] == '~/':
-              expected = os.path.expanduser(expected)
+                expected = os.path.expanduser(expected)
 
             self.assertEqual(expected, result)
         print 'Tested %d dir cases.' % len(prependDirTestCases)

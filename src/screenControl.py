@@ -10,6 +10,14 @@ import curses
 import sys
 import output
 import processInput
+import signal
+import sys
+
+def signal_handler(signal, frame):
+    # from http://stackoverflow.com/a/1112350/948126
+    # Lets just quit rather than signal.SIGINT printing the stack
+    sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
 
 import logger
 
