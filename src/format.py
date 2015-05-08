@@ -47,7 +47,6 @@ class LineMatch(object):
 
         file, num, matches = result
 
-        self.originalFile = file
         self.file = parse.prependDir(file)
         self.number = num
         # save a bunch of stuff so we can
