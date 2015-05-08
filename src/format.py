@@ -123,13 +123,15 @@ class LineMatch(object):
         else:
             return curses.A_UNDERLINE
 
-    def getDecorator(self):
+    # TODO: Maybe find a better name, since the name is ambiguous.
+    @property
+    def decorator(self):
         if self.selected:
             return '|===>'
         return ''
 
     def output(self, stdscr):
-        decorator = self.getDecorator()
+        decorator = self.decorator
         before = self.before
         after = self.after
         middle = decorator + self.match
