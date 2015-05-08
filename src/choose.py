@@ -44,7 +44,7 @@ def getLineObjs():
             if index < len(matches):
                 matches[index].setSelect(True)
 
-    if not len(matches):
+    if not matches:
         output.writeToFile('echo "No lines matched!!"')
         sys.exit(0)
     return lineObjs
