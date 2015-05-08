@@ -47,6 +47,8 @@ class HelperChrome(object):
         self.printer = printer
         self.screenControl = screenControl
         self.WIDTH = 50
+        self.mode = None
+
         if self.is_sidebar_mode:
             logger.addEvent('init_wide_mode')
         else:
