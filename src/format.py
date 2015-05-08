@@ -59,11 +59,11 @@ class LineMatch(object):
         # this will be a no-op, but for lines like
         # "README        " we will reset end to
         # earlier
-        stringSubset = line[self.start:end]
-        strippedSubset = stringSubset.strip()
-        trailingWhitespace = len(stringSubset) - len(strippedSubset)
-        self.end = end - trailingWhitespace
-        self.match = group[:-trailingWhitespace]
+        string_subset = line[self.start:end]
+        stripped_subset = string_subset.strip()
+        trailing_whitespace = len(string_subset) - len(stripped_subset)
+        self.end = end - trailing_whitespace
+        self.match = group[:-trailing_whitespace]
 
         self.is_selected = False
         self.hovered = False
