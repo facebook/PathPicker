@@ -270,8 +270,8 @@ class Controller(object):
     def toggleSelectAll(self):
         files = set()
         for line in self.lineMatches:
-            if line.getFile() not in files:
-                files.add(line.getFile())
+            if line.file not in files:
+                files.add(line.file)
                 line.toggleSelect()
 
         self.dirtyLines()
@@ -402,7 +402,7 @@ class Controller(object):
 
     def showAndGetCommand(self):
         fileObjs = self.getFilesToUse()
-        files = [fileObj.getFile() for fileObj in fileObjs]
+        files = [fileObj.file for fileObj in fileObjs]
         maxy, maxx = self.screen_dimensions
         halfHeight = int(round(maxy / 2) - len(files) / 2.0)
 

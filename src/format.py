@@ -83,9 +83,6 @@ class LineMatch(object):
     def getScreenIndex(self):
         return self.index
 
-    def getFile(self):
-        return self.file
-
     @property
     def directory(self):
         # for the cd command and the like. file is a string like

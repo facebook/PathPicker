@@ -54,7 +54,7 @@ def editFiles(lineObjs):
     partialCommands = []
     logger.addEvent('editing_num_files', len(lineObjs))
     for lineObj in lineObjs:
-        (file, num) = (lineObj.getFile(), lineObj.getLineNum())
+        (file, num) = (lineObj.file, lineObj.getLineNum())
         partialCommands.append(getEditFileCommand(file, num))
     command = joinEditCommands(partialCommands)
     appendIfInvalid(lineObjs)
@@ -171,7 +171,7 @@ def composeCommand(command, lineObjs):
 
 
 def composeFileCommand(command, lineObjs):
-    files = ["'%s'" % lineObj.getFile() for lineObj in lineObjs]
+    files = ["'%s'" % lineObj.file for lineObj in lineObjs]
     file_str = ' '.join(files)
     if '$F' in command:
         command = command.replace('$F', file_str)
