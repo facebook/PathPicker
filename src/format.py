@@ -70,7 +70,7 @@ class LineMatch(object):
 
         self.controller = None
 
-    def toggleSelect(self):
+    def toggle_select(self):
         self.selected = not self.selected
 
     def setSelect(self, val):

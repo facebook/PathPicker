@@ -260,16 +260,16 @@ class Controller(object):
     def setHover(self, index, val):
         self.lineMatches[index].hovered = val
 
-    def toggleSelect(self):
+    def toggle_select(self):
         self.dirtyHoverIndex()
-        self.lineMatches[self.hoverIndex].toggleSelect()
+        self.lineMatches[self.hoverIndex].toggle_select()
 
     def toggleSelectAll(self):
         files = set()
         for line in self.lineMatches:
             if line.file not in files:
                 files.add(line.file)
-                line.toggleSelect()
+                line.toggle_select()
 
         self.dirtyLines()
 
@@ -367,7 +367,7 @@ class Controller(object):
         elif key == 'G':
             self.jumpToIndex(self.numMatches - 1)
         elif key == 'f':
-            self.toggleSelect()
+            self.toggle_select()
         elif key == 'A':
             self.toggleSelectAll()
         elif key == 'ENTER':
