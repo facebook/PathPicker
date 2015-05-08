@@ -42,7 +42,7 @@ class LineMatch(object):
         self.line = line
         self.index = index
 
-        (file, num, matches) = result
+        file, num, matches = result
 
         self.originalFile = file
         self.file = parse.prependDir(file)
@@ -51,7 +51,7 @@ class LineMatch(object):
         # pickle
         self.start = matches.start()
         self.end = min(matches.end(), len(line))
-        self.group = matches.group()
+        group = matches.group()
 
         # this is a bit weird but we need to strip
         # off the whitespace for the matches we got,
@@ -64,7 +64,7 @@ class LineMatch(object):
         strippedSubset = stringSubset.strip()
         trailingWhitespace = (len(stringSubset) - len(strippedSubset))
         self.end -= trailingWhitespace
-        self.group = self.group[0:len(self.group) - trailingWhitespace]
+        self.group = group[0:len(group) - trailingWhitespace]
 
         self.selected = False
         self.hovered = False
