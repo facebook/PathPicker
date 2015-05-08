@@ -48,5 +48,10 @@ $PYTHONCMD "$BASEDIR/src/processInput.py"
 # now choose input and...
 exec 0<&-
 $PYTHONCMD "$BASEDIR/src/choose.py" < /dev/tty
-# execute the output bash script
-sh ~/.fbPager.sh < /dev/tty
+
+# Try to guess which shell this script was launched in
+SHELL="$(ps -o comm= $PPID)"
+echo running in $SHELL
+# Run shell in login interactive mode, this forces it
+# to load .zshrc/.bashrc/etc that may contain aliases
+$SHELL -i ~/.fbPager.sh < /dev/tty
