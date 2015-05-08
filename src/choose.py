@@ -6,6 +6,8 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 # @nolint
+from __future__ import print_function
+
 import curses
 import pickle
 import sys
@@ -49,7 +51,7 @@ def getLineObjs():
 
 if __name__ == '__main__':
     if not os.path.exists(os.path.expanduser(PICKLE_FILE)):
-        print 'Nothing to do!'
+        print('Nothing to do!')
         output.writeToFile('echo ":D"')
         sys.exit(0)
     output.clearFile()

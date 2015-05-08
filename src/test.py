@@ -6,6 +6,8 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 # @nolint
+from __future__ import print_function
+
 import unittest
 import os
 import format
@@ -166,7 +168,7 @@ class TestParseFunction(unittest.TestCase):
                 expected = os.path.expanduser(expected)
 
             self.assertEqual(expected, result)
-        print 'Tested %d dir cases.' % len(prependDirTestCases)
+        print('Tested %d dir cases.' % len(prependDirTestCases))
 
     def testFileFuzz(self):
         befores = ['M ', 'Modified: ', 'Changed: ', '+++ ',
@@ -181,7 +183,7 @@ class TestParseFunction(unittest.TestCase):
                     thisCase = testCase.copy()
                     thisCase['input'] = testInput
                     self.checkFileResult(thisCase)
-        print 'Tested %d cases for file fuzz.' % len(fileTestCases)
+        print('Tested %d cases for file fuzz.' % len(fileTestCases))
 
     def testUnresolvable(self):
         fileLine = ".../something/foo.py"
@@ -191,7 +193,7 @@ class TestParseFunction(unittest.TestCase):
             not lineObj.isResolvable(),
             '"%s" should not be resolvable' % fileLine
         )
-        print 'Tested unresolvable case.'
+        print('Tested unresolvable case.')
 
     def testResolvable(self):
         toCheck = [case for case in fileTestCases if case['match']]
@@ -202,12 +204,12 @@ class TestParseFunction(unittest.TestCase):
                 lineObj.isResolvable(),
                 'Line "%s" was not resolvable' % testCase['input']
             )
-        print 'Tested %d resolvable cases.' % len(toCheck)
+        print('Tested %d resolvable cases.' % len(toCheck))
 
     def testFileMatch(self):
         for testCase in fileTestCases:
             self.checkFileResult(testCase)
-        print 'Tested %d cases.' % len(fileTestCases)
+        print('Tested %d cases.' % len(fileTestCases))
 
     def checkFileResult(self, testCase):
         result = parse.matchLine(testCase['input'])
