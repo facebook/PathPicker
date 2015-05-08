@@ -141,7 +141,9 @@ def expandPath(filePath):
 def joinEditCommands(partialCommands):
     editor, editor_path = getEditorAndPath()
     if editor == 'vim':
-        if len(partialCommands) > 1:
+        if len(partialCommands) > 3:
+            return editor_path + ' ' + ' '.join(partialCommands)
+        elif len(partialCommands) > 1:
             return editor_path + ' -O ' + ' '.join(partialCommands)
         else:
             return editor_path + ' ' + partialCommands[0]
