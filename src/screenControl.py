@@ -59,15 +59,17 @@ class HelperChrome(object):
 
     def output(self, mode):
         self.mode = mode
-        if self.mode == SELECT_MODE:
-            curses.curs_set(INVISIBLE_CURSOR)
-        else:
-            curses.curs_set(BLOCK_CURSOR)
-        for func in [self.outputSide, self.outputBottom]:
+        for func in [self.outputSide, self.outputBottom, self.toggleCursor]:
             try:
                 func()
             except curses.error:
                 pass
+
+    def toggleCursor(self):
+        if self.mode == SELECT_MODE:
+            curses.curs_set(INVISIBLE_CURSOR)
+        else:
+            curses.curs_set(BLOCK_CURSOR)
 
     def reduceMaxY(self, maxy):
         if self.getIsSidebarMode():
