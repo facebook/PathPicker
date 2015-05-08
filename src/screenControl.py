@@ -49,10 +49,11 @@ BLOCK_CURSOR = 2
 
 class HelperChrome(object):
 
+    WIDTH = 50
+
     def __init__(self, stdscr, screenControl):
         self.stdscr = stdscr
         self.screenControl = screenControl
-        self.WIDTH = 50
         if self.getIsSidebarMode():
             logger.addEvent('init_wide_mode')
         else:
