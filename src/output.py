@@ -199,6 +199,7 @@ def appendError(text):
     appendToFile('printf "%s%s%s\n"' % (RED_COLOR, text, NO_COLOR))
 
 
+# TODO: Side effects are not cool !
 def appendToFile(command):
     file = open(os.path.expanduser(OUTPUT_FILE), 'a')
     file.write(command + '\n')
@@ -206,6 +207,7 @@ def appendToFile(command):
     logger.output()
 
 
+# TODO: Side effects are not cool !
 def writeToFile(command):
     file = open(os.path.expanduser(OUTPUT_FILE), 'w')
     file.write(command + '\n')
