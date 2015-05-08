@@ -70,7 +70,7 @@ It essentially has three steps:
 
 * First in the bash script, it redirects all standardout in to a python module that
 parses and extracts out the filenames. This data is saved in a temporary file
-and the python script exists.
+and the python script exits.
 * Next, the bash script switches to terminal input mode and
 another python module reads out the saved entries and presents them in a
 selector UI built with `curses`. The user either selects a few files to edit or inputs a command
