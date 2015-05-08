@@ -39,6 +39,11 @@ fileTestCases = [{
     'file': './asd.txt',
     'num': 83
 }, {
+    'input': '.env.local',
+    'match': True,
+    'file': '.env.local',
+    'num': 0
+}, {
     'input': 'flib/asd/ent/berkeley/two.py-22',
     'match': True,
     'file': 'flib/asd/ent/berkeley/two.py',
