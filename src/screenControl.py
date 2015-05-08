@@ -101,7 +101,7 @@ class HelperChrome(object):
     def outputSide(self):
         if not self.is_sidebar_mode:
             return
-        (maxy, maxx) = self.screenControl.screen_dimensions
+        maxy, maxx = self.screenControl.screen_dimensions
         borderX = maxx - self.WIDTH
         if (self.mode == COMMAND_MODE):
             borderX = len(SHORT_COMMAND_PROMPT) + 20
@@ -116,7 +116,7 @@ class HelperChrome(object):
     def outputBottom(self):
         if self.is_sidebar_mode:
             return
-        (maxy, maxx) = self.screenControl.screen_dimensions
+        maxy, maxx = self.screenControl.screen_dimensions
         borderY = maxy - 2
         # first output text since we might throw an exception during border
         usageStr = SHORT_NAV_USAGE if self.mode == SELECT_MODE else SHORT_COMMAND_USAGE
@@ -137,7 +137,7 @@ class ScrollBar(object):
 
         # see if we are activated
         self.activated = True
-        (maxy, maxx) = self.screenControl.screen_dimensions
+        maxy, _ = self.screenControl.screen_dimensions
         if (self.numLines < maxy):
             self.activated = False
             logger.addEvent('no_scrollbar')
@@ -150,7 +150,7 @@ class ScrollBar(object):
     def calcBoxFractions(self):
         # what we can see is basically the fraction of our screen over
         # total num lines
-        (maxy, maxx) = self.screenControl.screen_dimensions
+        maxy, _ = self.screenControl.screen_dimensions
         fracDisplayed = min(1.0, (maxy / float(self.numLines)))
         self.boxStartFraction = -self.screenControl.getScrollOffset() / float(
             self.numLines)
@@ -174,12 +174,12 @@ class ScrollBar(object):
 
     def outputBorder(self):
         x = self.getX() + 4
-        (maxy, maxx) = self.screenControl.screen_dimensions
+        maxy, _ = self.screenControl.screen_dimensions
         for y in range(0, maxy):
             self.stdscr.addstr(y, x, ' ')
 
     def outputBox(self):
-        (maxy, maxx) = self.screenControl.screen_dimensions
+        maxy, _ = self.screenControl.screen_dimensions
         topY = maxy - 2
         minY = self.getMinY()
         diff = topY - minY
@@ -195,13 +195,13 @@ class ScrollBar(object):
 
     def outputCaps(self):
         x = self.getX()
-        (maxy, maxx) = self.screenControl.screen_dimensions
+        maxy, _ = self.screenControl.screen_dimensions
         for y in [self.getMinY() - 1, maxy - 1]:
             self.stdscr.addstr(y, x, '===')
 
     def outputBase(self):
         x = self.getX()
-        (maxy, maxx) = self.screenControl.screen_dimensions
+        maxy, _ = self.screenControl.screen_dimensions
         for y in range(self.getMinY(), maxy - 1):
             self.stdscr.addstr(y, x, ' . ')
 
@@ -256,7 +256,7 @@ class Controller(object):
         return (minx, CHROME_MIN_Y, maxx, maxy)
 
     def getViewportHeight(self):
-        (minx, miny, maxx, maxy) = self.getChromeBoundaries()
+        _, miny, _, maxy = self.getChromeBoundaries()
         return maxy - miny
 
     def setHover(self, index, val):
@@ -293,14 +293,14 @@ class Controller(object):
             self.stdscr.refresh()
 
     def checkResize(self):
-        (maxy, maxx) = self.screen_dimensions
+        maxy, maxx = self.screen_dimensions
         if (maxy is not self.oldmaxy or maxx is not self.oldmaxx):
             # we resized so print all!
             self.printAll()
             self.resetDirty()
             self.stdscr.refresh()
             logger.addEvent('resize')
-        (self.oldmaxy, self.oldmaxx) = self.screen_dimensions
+        self.oldmaxy, self.oldmaxx = self.screen_dimensions
 
     def updateScrollOffset(self):
         """
@@ -402,7 +402,7 @@ class Controller(object):
     def showAndGetCommand(self):
         fileObjs = self.getFilesToUse()
         files = [fileObj.getFile() for fileObj in fileObjs]
-        (maxy, maxx) = self.screen_dimensions
+        maxy, maxx = self.screen_dimensions
         halfHeight = int(round(maxy / 2) - len(files) / 2.0)
 
         borderLine = '=' * len(SHORT_COMMAND_PROMPT)
