@@ -17,8 +17,61 @@ SELECTION_PICKLE = '~/.fbPager.selection.pickle'
 BASH_RC = '~/.bashrc'
 ZSH_RC = '~/.zshrc'
 DEBUG = '~/.fbPager.debug.text'
+RED_COLOR = u'\033[0;31m'
+NO_COLOR = u'\033[0m'
+
+INVALID_FILE_WARNING = '''
+Warning! Some invalid or unresolvable files were detected.
+'''
+
+GIT_ABBREVIATION_WARNING = '''
+It looks like one of these is a git abbreviated file with
+a triple dot path (.../). Try to turn off git's abbreviation
+with --numstat so we get actual paths (not abbreviated
+versions which cannot be resolved.
+'''
+
+CONTINUE_WARNING = 'Are you sure you want to continue? Ctrl-C to quit'
 
 ALIAS_REGEX = re.compile('alias (\w+)=[\'"](.*?)[\'"]')
+
+
+# The two main entry points into this module:
+#
+
+def execComposedCommand(command, lineObjs):
+    if not len(command):
+        editFiles(lineObjs)
+        return
+    logger.addEvent('command_on_num_files', len(lineObjs))
+    command = composeCommand(command, lineObjs)
+    command = expandAliases(command)
+    appendIfInvalid(lineObjs)
+    appendFriendlyCommand(command)
+
+
+def editFiles(lineObjs):
+    partialCommands = []
+    logger.addEvent('editing_num_files', len(lineObjs))
+    for lineObj in lineObjs:
+        (file, num) = (lineObj.getFile(), lineObj.getLineNum())
+        partialCommands.append(getEditFileCommand(file, num))
+    command = joinEditCommands(partialCommands)
+    appendIfInvalid(lineObjs)
+    appendToFile(command)
+
+
+# Private helpers
+def appendIfInvalid(lineObjs):
+    # lastly lets check validity and actually output an
+    # error if any files are invalid
+    invalidLines = [line for line in lineObjs if not line.isResolvable()]
+    if not invalidLines:
+        return
+    appendError(INVALID_FILE_WARNING)
+    if len([line for line in invalidLines if line.isGitAbbreviatedPath()]):
+        appendError(GIT_ABBREVIATION_WARNING)
+    appendToFile('read -p "%s" -r' % CONTINUE_WARNING)
 
 
 def debug(*args):
@@ -57,9 +110,9 @@ def getAliases():
     except IOError:
         # fallback to zsh_rc and try there
         try:
-          lines = open(os.path.expanduser(ZSH_RC), 'r').readlines()
+            lines = open(os.path.expanduser(ZSH_RC), 'r').readlines()
         except IOError:
-          return {}
+            return {}
     pairs = []
     for line in lines:
         results = ALIAS_REGEX.search(line)
@@ -96,16 +149,6 @@ def joinEditCommands(partialCommands):
     return editor_path + ' ' + ' '.join(partialCommands)
 
 
-def editFiles(lineObjs):
-    partialCommands = []
-    logger.addEvent('editing_num_files', len(lineObjs))
-    for lineObj in lineObjs:
-        (file, num) = (lineObj.getFile(), lineObj.getLineNum())
-        partialCommands.append(getEditFileCommand(file, num))
-    command = joinEditCommands(partialCommands)
-    appendToFile(command)
-
-
 def composeCdCommand(command, lineObjs):
     filePath = os.path.expanduser(lineObjs[0].getDir())
     filePath = os.path.abspath(filePath)
@@ -137,16 +180,6 @@ def composeFileCommand(command, lineObjs):
     return command
 
 
-def execComposedCommand(command, lineObjs):
-    if not len(command):
-        editFiles(lineObjs)
-        return
-    logger.addEvent('command_on_num_files', len(lineObjs))
-    command = composeCommand(command, lineObjs)
-    command = expandAliases(command)
-    writeFriendlyCommand(command)
-
-
 def outputNothing():
     appendToFile('echo "nothing to do!"')
 
@@ -155,11 +188,15 @@ def clearFile():
     writeToFile('')
 
 
-def writeFriendlyCommand(command):
+def appendFriendlyCommand(command):
     header = 'echo "executing command:"\n' + \
              'echo "' + command.replace('"', '\\"') + '"'
     appendToFile(header)
     appendToFile(command)
+
+
+def appendError(text):
+    appendToFile('printf "%s%s%s\n"' % (RED_COLOR, text, NO_COLOR))
 
 
 def appendToFile(command):

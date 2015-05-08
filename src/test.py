@@ -8,6 +8,7 @@
 # @nolint
 import random
 import unittest
+import format
 
 import parse
 
@@ -138,10 +139,10 @@ class TestParseFunction(unittest.TestCase):
     def testPrependDir(self):
         for testCase in prependDirTestCases:
             inFile = testCase['in']
-            print 'Testing dir case\t', inFile
 
             result = parse.prependDir(inFile)
             self.assertEqual(testCase['out'], result)
+        print 'Tested %d dir cases.' % len(prependDirTestCases)
 
     def testFileFuzz(self):
         befores = ['M ', 'Modified: ', 'Changed: ', '+++ ',
@@ -155,13 +156,34 @@ class TestParseFunction(unittest.TestCase):
                     testInput = '%s%s%s' % (before, testCase['input'], after)
                     thisCase = testCase.copy()
                     thisCase['input'] = testInput
-                    print 'Testing case\t', testInput
                     self.checkFileResult(thisCase)
+        print 'Tested %d cases for file fuzz.' % len(fileTestCases)
+
+    def testUnresolvable(self):
+        fileLine = ".../something/foo.py"
+        result = parse.matchLine(fileLine)
+        lineObj = format.LineMatch(fileLine, result, 0)
+        self.assertTrue(
+            not lineObj.isResolvable(),
+            '"%s" should not be resolvable' % fileLine
+        )
+        print 'Tested unresolvable case.'
+
+    def testResolvable(self):
+        toCheck = [case for case in fileTestCases if case['match']]
+        for testCase in toCheck:
+            result = parse.matchLine(testCase['input'])
+            lineObj = format.LineMatch(testCase['input'], result, 0)
+            self.assertTrue(
+                lineObj.isResolvable(),
+                'Line "%s" was not resolvable' % testCase['input']
+            )
+        print 'Tested %d resolvable cases.' % len(toCheck)
 
     def testFileMatch(self):
         for testCase in fileTestCases:
-            print 'Testing case\t', testCase['input']
             self.checkFileResult(testCase)
+        print 'Tested %d cases.' % len(fileTestCases)
 
     def checkFileResult(self, testCase):
         result = parse.matchLine(testCase['input'])

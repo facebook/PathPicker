@@ -97,6 +97,17 @@ class LineMatch(object):
         parts = self.file.split('/')[0:-1]
         return '/'.join(parts)
 
+    def isResolvable(self):
+        return not self.isGitAbbreviatedPath()
+
+    def isGitAbbreviatedPath(self):
+        # this method mainly serves as a warning for when we get
+        # git-abbrievated paths like ".../" that confuse users.
+        parts = self.file.split('/')
+        if len(parts) and parts[0] == '...':
+            return True
+        return False
+
     def getLineNum(self):
         return self.num
 

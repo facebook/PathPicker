@@ -454,9 +454,6 @@ class Controller(object):
         output.editFiles(lineObjs)
         sys.exit(0)
 
-    def openFile(self, filePath, num):
-        output.editFile(filePath, num)
-
     def resetDirty(self):
         # reset all dirty state for our components
         self.linesDirty = False
