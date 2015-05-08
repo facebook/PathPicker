@@ -7,15 +7,14 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 # get the directory of this script so we can execute the related python
-WHEREAMI=$0
-
-# Follow until we get our symlink resolved, since
-# homebrew has multiple hops.
-while [ -h "$WHEREAMI" ]; do
-  WHEREAMI=$(dirname "$WHEREAMI")"/"$(readlink "$WHEREAMI")
+# http://stackoverflow.com/a/246128/212110
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  BASEDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$BASEDIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
-BASEDIR=$(dirname "$WHEREAMI")
-BASEDIR=$(cd $BASEDIR && pwd)
+BASEDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 for opt in "$@"; do
   if [ "$opt" == "--debug" ]; then
