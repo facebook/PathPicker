@@ -24,11 +24,11 @@ class SimpleLine(object):
         print(str(self))
 
     def output(self, stdscr):
-        (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
-        maxLen = maxx - minx
+        minx, miny, maxx, maxy = self.controller.getChromeBoundaries()
+        max_len = maxx - minx
         y = miny + self.index + self.controller.getScrollOffset()
         try:
-            stdscr.addstr(y, minx, str(self)[0:maxLen])
+            stdscr.addstr(y, minx, str(self)[:max_len])
         except curses.error:
             pass
 
@@ -148,10 +148,10 @@ class LineMatch(object):
             stdscr.addstr(y, minx, before)
             # bolded middle
             xIndex = len(before)
-            stdscr.addstr(y, minx + xIndex, middle[0:max(maxLen - xIndex, 0)],
+            stdscr.addstr(y, minx + xIndex, middle[:max(maxLen - xIndex, 0)],
                           self.getStyleForState())
             # end
             xIndex = len(before) + len(middle)
-            stdscr.addstr(y, minx + xIndex, after[0:max(maxLen - xIndex, 0)])
+            stdscr.addstr(y, minx + xIndex, after[:max(maxLen - xIndex, 0)])
         except curses.error:
             pass
