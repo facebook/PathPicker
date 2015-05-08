@@ -47,6 +47,6 @@ done
 $PYTHONCMD "$BASEDIR/src/processInput.py"
 # now choose input and...
 exec 0<&-
-$PYTHONCMD "$BASEDIR/src/choose.py" < /dev/tty
+$PYTHONCMD "$BASEDIR/src/choose.py" "$@" < /dev/tty
 # execute the output bash script
 sh ~/.fbPager.sh < /dev/tty

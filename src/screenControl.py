@@ -7,6 +7,7 @@
 #
 # @nolint
 import curses
+import os
 import sys
 import signal
 
@@ -203,7 +204,7 @@ class ScrollBar(object):
 
 class Controller(object):
 
-    def __init__(self, stdscr, lineObjs):
+    def __init__(self, stdscr, lineObjs, keepOpen=False):
         self.stdscr = stdscr
         self.lineObjs = lineObjs
         self.hoverIndex = 0
@@ -212,6 +213,7 @@ class Controller(object):
         self.helperChrome = HelperChrome(stdscr, self)
         (self.oldmaxy, self.oldmaxx) = self.getScreenDimensions()
         self.mode = SELECT_MODE
+        self.keepOpen = keepOpen
 
         self.simpleLines = []
         self.lineMatches = []
@@ -456,7 +458,7 @@ class Controller(object):
             return
         lineObjs = self.getFilesToUse()
         output.execComposedCommand(command, lineObjs)
-        sys.exit(0)
+        sys.run()
 
     def onEnter(self):
         lineObjs = self.getFilesToUse()
@@ -465,7 +467,15 @@ class Controller(object):
             lineObjs = self.getHoveredFiles()
         logger.addEvent('selected_num_files', len(lineObjs))
         output.editFiles(lineObjs)
-        sys.exit(0)
+        self.run()
+
+    def run(self):
+        if self.keepOpen:
+            os.system('sh ~/.fbPager.sh; rm -f ~/.fbPager.sh')
+            self.dirtyLines()
+            self.processDirty()
+        else:
+            sys.exit(0)
 
     def resetDirty(self):
         # reset all dirty state for our components

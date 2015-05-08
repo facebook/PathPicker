@@ -64,6 +64,10 @@ in the middle of your command, you can use the `$F` token instead, like:
 
 `cat $F | wc -l`
 
+By default, `fpp` exits once you execute a command.
+Use `fpp --keep-open` (or `fpp -k`) to keep your `fpp` session open
+after running a command.
+
 ## How PathPicker works
 PathPicker is a combination of a bash script and some small Python modules.
 It essentially has three steps:
