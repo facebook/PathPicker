@@ -129,7 +129,14 @@ class LineMatch(object):
         curses.init_pair(self.HOVERED_AND_SELECTED, curses.COLOR_WHITE,
                          curses.COLOR_GREEN)
 
-    def getStyleForState(self):
+    @property
+    def color_pair(self):
+        """
+        Color pair for the current line's state.
+
+        /!\ Side effects. You must call :meth:`set_color_pairs` before
+        accessing this attribute.
+        """
         if self.hovered and self.selected:
             return curses.color_pair(self.HOVERED_AND_SELECTED)
         elif self.hovered:
@@ -167,7 +174,7 @@ class LineMatch(object):
 
             self.set_color_pairs()
             stdscr.addstr(y, minx + xIndex, middle[:max(maxLen - xIndex, 0)],
-                          self.getStyleForState())
+                          self.color_pair)
             # end
             xIndex = len(before) + len(middle)
             stdscr.addstr(y, minx + xIndex, after[:max(maxLen - xIndex, 0)])
