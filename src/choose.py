@@ -32,7 +32,7 @@ def doProgram(stdscr):
 def getLineObjs():
     filePath = os.path.expanduser(PICKLE_FILE)
     lineObjs = pickle.load(open(filePath))
-    matches = [lineObj for i, lineObj in lineObjs.items()
+    matches = [lineObj for lineObj in lineObjs.values()
                if not lineObj.isSimple()]
     logger.addEvent('total_num_files', len(lineObjs.items()))
 

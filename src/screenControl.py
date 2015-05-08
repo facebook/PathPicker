@@ -217,7 +217,7 @@ class Controller(object):
         self.simpleLines = []
         self.lineMatches = []
         # lets loop through and split
-        for key, lineObj in self.lineObjs.items():
+        for lineObj in self.lineObjs.values():
             lineObj.setController(self)
             if (lineObj.isSimple()):
                 self.simpleLines.append(lineObj)
@@ -496,7 +496,7 @@ class Controller(object):
         self.printChrome()
 
     def printLines(self):
-        for key, lineObj in self.lineObjs.items():
+        for lineObj in self.lineObjs.values():
             lineObj.output(self.stdscr)
 
     def printScroll(self):
