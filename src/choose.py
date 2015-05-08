@@ -13,6 +13,7 @@ import pickle
 import sys
 import os
 
+from format import LineMatch
 import output
 import screenControl
 import logger
@@ -33,7 +34,7 @@ def getLineObjs():
     filePath = os.path.expanduser(PICKLE_FILE)
     lineObjs = pickle.load(open(filePath))
     matches = [lineObj for lineObj in lineObjs.values()
-               if not lineObj.isSimple()]
+               if isinstance(lineObj, LineMatch)]
     logger.addEvent('total_num_files', len(lineObjs))
 
     selectionPath = os.path.expanduser(SELECTION_PICKLE)

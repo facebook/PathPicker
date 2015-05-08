@@ -10,8 +10,9 @@ import curses
 import sys
 import signal
 
-import processInput
+from format import SimpleLine
 import output
+import processInput
 
 
 def signal_handler(signal, frame):
@@ -223,7 +224,7 @@ class Controller(object):
         # lets loop through and split
         for lineObj in self.lineObjs.values():
             lineObj.controller = self
-            if (lineObj.isSimple()):
+            if isinstance(lineObj, SimpleLine):
                 self.simpleLines.append(lineObj)
             else:
                 self.lineMatches.append(lineObj)

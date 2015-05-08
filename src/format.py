@@ -35,9 +35,6 @@ class SimpleLine(object):
     def __str__(self):
         return self.line
 
-    def isSimple(self):
-        return True
-
 
 class LineMatch(object):
 
@@ -110,9 +107,6 @@ class LineMatch(object):
 
     def getLineNum(self):
         return self.num
-
-    def isSimple(self):
-        return False
 
     def getSelected(self):
         return self.selected
