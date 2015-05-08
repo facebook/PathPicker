@@ -77,9 +77,6 @@ class LineMatch(object):
     def setSelect(self, val):
         self.selected = val
 
-    def setHover(self, val):
-        self.hovered = val
-
     @property
     def directory(self):
         # for the cd command and the like. file is a string like
