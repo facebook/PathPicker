@@ -34,7 +34,7 @@ def getLineObjs():
     lineObjs = pickle.load(open(filePath))
     matches = [lineObj for lineObj in lineObjs.values()
                if not lineObj.isSimple()]
-    logger.addEvent('total_num_files', len(lineObjs.items()))
+    logger.addEvent('total_num_files', len(lineObjs))
 
     selectionPath = os.path.expanduser(SELECTION_PICKLE)
     if os.path.isfile(selectionPath):
