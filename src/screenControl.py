@@ -31,6 +31,8 @@ SELECT_MODE = 'SELECT'
 COMMAND_MODE = 'COMMAND_MODE'
 X_MODE = 'X_MODE'
 
+lbls = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'"
+
 SHORT_NAV_USAGE = '[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [c] command mode'
 SHORT_COMMAND_USAGE = 'command examples: | git add | git checkout HEAD~1 -- | mv $F ../here/ |'
 SHORT_COMMAND_PROMPT = 'Type a command below! Files will be appended or replace $F'
@@ -231,7 +233,7 @@ class Controller(object):
 
     def getChromeBoundaries(self):
         (maxy, maxx) = self.stdscr.getmaxyx()
-        minx = CHROME_MIN_X if self.scrollBar.getIsActivated() else 0
+        minx = CHROME_MIN_X if self.scrollBar.getIsActivated() or self.mode == X_MODE else 0
         maxy = self.helperChrome.reduceMaxY(maxy)
         maxx = self.helperChrome.reduceMaxX(maxx)
         # format of (MINX, MINY, MAXX, MAXY)
@@ -335,42 +337,13 @@ class Controller(object):
         self.dirtyHoverIndex()
         self.updateScrollOffset()
 
-    def printXMode(self) :
-        if self.mode == X_MODE :
-            self.mode = X_MODE
-            (maxy, maxx) = self.scrollBar.screenControl.getScreenDimensions()
-            topY = maxy - 2
-            minY = self.scrollBar.getMinY()
-            lbls = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'"
-            lblcnt = 0
-            for i in range(minY,topY+1) :
-                self.stdscr.addstr(i, 1, lbls[lblcnt])
-                lblcnt += 1
-
-    def selectXMode(self, key):
-        lblIndex = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'".index(key)
-        if self.scrollOffset == 0:
-            lineno = lblIndex + 1
-        else :
-            lineno = lblIndex + 1 + (-1 * self.scrollOffset)
-        l = self.lineObjs[lineno]
-        if hasattr(l,"toggleSelect") :
-            matchIndex = self.lineMatches.index(l)
-            self.dirtyIndexes.append(matchIndex)
-            self.lineMatches[matchIndex].toggleSelect()
-
     def processInput(self, key):
         if key == 'UP' or key == 'k':
             self.moveIndex(-1)
         elif key == 'DOWN' or key == 'j':
             self.moveIndex(1)
         elif key == 'x':
-            if self.mode != X_MODE:
-                self.mode = X_MODE
-                self.printXMode()
-            else:
-                self.mode = SELECT_MODE
-                self.printAll()
+            self.toggleXMode()
         elif key == 'c':
             self.beginEnterCommand()
         elif key == ' ' or key == 'PAGE_DOWN':
@@ -493,8 +466,8 @@ class Controller(object):
         self.linesDirty = False
         self.dirtyIndexes = []
 
-    def dirtyHoverIndex(self):
-        self.dirtyIndexes.append(self.hoverIndex)
+    def dirtyHoverIndex(self, idx=-1):
+        self.dirtyIndexes.append(idx if idx > 0 else self.hoverIndex)
 
     def dirtyLines(self):
         self.linesDirty = True
@@ -518,10 +491,7 @@ class Controller(object):
 
     def printLines(self):
         for key, lineObj in self.lineObjs.items():
-            if(X_MODE) :
-                lineObj.output(self.stdscr)
-            else :
-                lineObj.output(self.stdscr)
+            lineObj.output(self.stdscr)
 
     def printScroll(self):
         self.scrollBar.output()
@@ -542,3 +512,25 @@ class Controller(object):
         except KeyError:
             return ''
         return char
+
+    def toggleXMode(self):
+        if self.mode != X_MODE:
+            self.mode = X_MODE
+        else:
+            self.mode = SELECT_MODE
+        self.printAll()
+
+    def printXMode(self):
+        if self.mode == X_MODE:
+            (maxy, _) = self.scrollBar.screenControl.getScreenDimensions()
+            topY = maxy - 2
+            minY = self.scrollBar.getMinY()
+            for i in range(minY, topY+1):
+                self.stdscr.addstr(i, 1, lbls[i - minY])
+
+    def selectXMode(self, key):
+        lineObj = self.lineObjs[lbls.index(key) + 1 + - self.scrollOffset]
+        if hasattr(lineObj, "toggleSelect"):
+            lineMatchIndex = self.lineMatches.index(lineObj)
+            self.dirtyHoverIndex(lineMatchIndex)
+            self.lineMatches[lineMatchIndex].toggleSelect()
