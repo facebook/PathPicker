@@ -29,6 +29,7 @@ mapping[21] = 'PAGE_UP'
 
 SELECT_MODE = 'SELECT'
 COMMAND_MODE = 'COMMAND_MODE'
+X_MODE = 'X_MODE'
 
 SHORT_NAV_USAGE = '[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [c] command mode'
 SHORT_COMMAND_USAGE = 'command examples: | git add | git checkout HEAD~1 -- | mv $F ../here/ |'
@@ -334,11 +335,42 @@ class Controller(object):
         self.dirtyHoverIndex()
         self.updateScrollOffset()
 
+    def printXMode(self) :
+        if self.mode == X_MODE :
+            self.mode = X_MODE
+            (maxy, maxx) = self.scrollBar.screenControl.getScreenDimensions()
+            topY = maxy - 2
+            minY = self.scrollBar.getMinY()
+            lbls = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'"
+            lblcnt = 0
+            for i in range(minY,topY+1) :
+                self.stdscr.addstr(i, 1, lbls[lblcnt])
+                lblcnt += 1
+
+    def selectXMode(self, key):
+        lblIndex = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'".index(key)
+        if self.scrollOffset == 0:
+            lineno = lblIndex + 1
+        else :
+            lineno = lblIndex + 1 + (-1 * self.scrollOffset)
+        l = self.lineObjs[lineno]
+        if hasattr(l,"toggleSelect") :
+            matchIndex = self.lineMatches.index(l)
+            self.dirtyIndexes.append(matchIndex)
+            self.lineMatches[matchIndex].toggleSelect()
+
     def processInput(self, key):
         if key == 'UP' or key == 'k':
             self.moveIndex(-1)
         elif key == 'DOWN' or key == 'j':
             self.moveIndex(1)
+        elif key == 'x':
+            if self.mode != X_MODE:
+                self.mode = X_MODE
+                self.printXMode()
+            else:
+                self.mode = SELECT_MODE
+                self.printAll()
         elif key == 'c':
             self.beginEnterCommand()
         elif key == ' ' or key == 'PAGE_DOWN':
@@ -347,11 +379,11 @@ class Controller(object):
             self.pageUp()
         elif key == 'g':
             self.jumpToIndex(0)
-        elif key == 'G':
+        elif key == 'G' and not self.mode == X_MODE:
             self.jumpToIndex(self.numMatches - 1)
         elif key == 'f':
             self.toggleSelect()
-        elif key == 'A':
+        elif key == 'A' and not self.mode == X_MODE:
             self.toggleSelectAll()
         elif key == 'ENTER':
             self.onEnter()
@@ -361,6 +393,8 @@ class Controller(object):
             # before exiting the program
             self.getFilesToUse()
             sys.exit(0)
+        elif self.mode == X_MODE and key in "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'" :
+            self.selectXMode(key)
         pass
 
     def getFilesToUse(self):
@@ -479,11 +513,15 @@ class Controller(object):
         self.stdscr.clear()
         self.printLines()
         self.printScroll()
+        self.printXMode()
         self.printChrome()
 
     def printLines(self):
         for key, lineObj in self.lineObjs.items():
-            lineObj.output(self.stdscr)
+            if(X_MODE) :
+                lineObj.output(self.stdscr)
+            else :
+                lineObj.output(self.stdscr)
 
     def printScroll(self):
         self.scrollBar.output()
