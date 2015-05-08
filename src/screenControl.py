@@ -33,7 +33,7 @@ X_MODE = 'X_MODE'
 
 lbls = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'"
 
-SHORT_NAV_USAGE = '[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [c] command mode'
+SHORT_NAV_USAGE = '[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick select mode, [c] command mode'
 SHORT_COMMAND_USAGE = 'command examples: | git add | git checkout HEAD~1 -- | mv $F ../here/ |'
 SHORT_COMMAND_PROMPT = 'Type a command below! Files will be appended or replace $F'
 SHORT_COMMAND_PROMPT2 = 'Enter a blank line to go back to the selection process'
@@ -109,7 +109,7 @@ class HelperChrome(object):
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         borderY = maxy - 2
         # first output text since we might throw an exception during border
-        usageStr = SHORT_NAV_USAGE if self.mode == SELECT_MODE else SHORT_COMMAND_USAGE
+        usageStr = SHORT_NAV_USAGE if self.mode == SELECT_MODE or X_MODE else SHORT_COMMAND_USAGE
         borderStr = '_' * (maxx - self.getMinX() - 0)
         self.stdscr.addstr(borderY, self.getMinX(), borderStr)
         self.stdscr.addstr(borderY + 1, self.getMinX(), usageStr)
@@ -366,7 +366,7 @@ class Controller(object):
             # before exiting the program
             self.getFilesToUse()
             sys.exit(0)
-        elif self.mode == X_MODE and key in "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'" :
+        elif self.mode == X_MODE and key in lbls:
             self.selectXMode(key)
         pass
 
@@ -525,7 +525,7 @@ class Controller(object):
             (maxy, _) = self.scrollBar.screenControl.getScreenDimensions()
             topY = maxy - 2
             minY = self.scrollBar.getMinY()
-            for i in range(minY, topY+1):
+            for i in range(minY, topY + 1):
                 self.stdscr.addstr(i, 1, lbls[i - minY])
 
     def selectXMode(self, key):
