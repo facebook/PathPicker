@@ -19,12 +19,15 @@ class SimpleLine(object):
     def __init__(self, line, index):
         self.line = line
         self.index = index
-        self.controller = None
 
-    def output(self, stdscr):
-        minx, miny, maxx, _ = self.controller.getChromeBoundaries()
+    # TODO: Change the name of this method ? Like `write_output` ?
+    def output(self, controller):
+        # TODO: Maybe add methods to the controller to access `stdscr`
+        stdscr = controller.stdscr
+
+        minx, miny, maxx, _ = controller.getChromeBoundaries()
         max_len = maxx - minx
-        y = miny + self.index + self.controller.getScrollOffset()
+        y = miny + self.index + controller.getScrollOffset()
         with ignore_curse_errors():
             stdscr.addstr(y, minx, str(self)[:max_len])
 
@@ -67,8 +70,6 @@ class LineMatch(object):
 
         self.is_selected = False
         self.hovered = False
-
-        self.controller = None
 
     def toggle_select(self):
         self.is_selected = not self.is_selected
@@ -146,13 +147,16 @@ class LineMatch(object):
             return '|===>'
         return ''
 
-    def output(self, stdscr):
+    # TODO: Change the name of this method ? Like `write_output` ?
+    def output(self, controller):
+        # TODO: Maybe add methods to the controller to access `stdscr`
+        stdscr = controller.stdscr
         decorator = self.decorator
         before = self.before
         after = self.after
         middle = decorator + self.match
-        minx, miny, maxx, maxy = self.controller.getChromeBoundaries()
-        y = miny + self.index + self.controller.getScrollOffset()
+        minx, miny, maxx, maxy = controller.getChromeBoundaries()
+        y = miny + self.index + controller.getScrollOffset()
 
         if y < miny or y > maxy:
             # wont be displayed!

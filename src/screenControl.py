@@ -220,7 +220,6 @@ class Controller(object):
         self.lineMatches = []
         # lets loop through and split
         for lineObj in self.lineObjs.values():
-            lineObj.controller = self
             if isinstance(lineObj, SimpleLine):
                 self.simpleLines.append(lineObj)
             else:
@@ -480,7 +479,7 @@ class Controller(object):
         if self.linesDirty:
             self.printAll()
         for index in self.dirtyIndexes:
-            self.lineMatches[index].output(self.stdscr)
+            self.lineMatches[index].output(self)
         if self.helperChrome.is_sidebar_mode:
             # need to output since lines can override
             # the sidebar stuff
@@ -494,7 +493,7 @@ class Controller(object):
 
     def printLines(self):
         for lineObj in self.lineObjs.values():
-            lineObj.output(self.stdscr)
+            lineObj.output(self)
 
     def printScroll(self):
         self.scrollBar.output()
