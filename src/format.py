@@ -7,6 +7,7 @@
 #
 # @nolint
 import curses
+
 import parse
 
 

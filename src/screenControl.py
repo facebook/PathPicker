@@ -8,10 +8,10 @@
 # @nolint
 import curses
 import sys
-import output
-import processInput
 import signal
 
+import processInput
+import output
 
 def signal_handler(signal, frame):
     # from http://stackoverflow.com/a/1112350/948126
