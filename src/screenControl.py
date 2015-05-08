@@ -54,6 +54,8 @@ class HelperChrome(object):
     def __init__(self, stdscr, screenControl):
         self.stdscr = stdscr
         self.screenControl = screenControl
+        self.mode = None
+
         if self.is_sidebar_mode:
             logger.addEvent('init_wide_mode')
         else:
