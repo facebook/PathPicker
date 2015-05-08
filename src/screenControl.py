@@ -13,6 +13,7 @@ import processInput
 import signal
 import sys
 
+
 def signal_handler(signal, frame):
     # from http://stackoverflow.com/a/1112350/948126
     # Lets just quit rather than signal.SIGINT printing the stack
@@ -228,6 +229,11 @@ class Controller(object):
 
         self.setHover(self.hoverIndex, True)
         curses.use_default_colors()
+        # the scroll offset might not start off
+        # at 0 if our first real match is WAY
+        # down the screen -- so lets init it to
+        # a valid value after we have all our line objects
+        self.updateScrollOffset()
         logger.addEvent('init')
 
     def getScrollOffset(self):
