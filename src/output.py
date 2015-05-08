@@ -150,7 +150,7 @@ def joinEditCommands(partialCommands):
 
 
 def composeCdCommand(command, lineObjs):
-    filePath = os.path.expanduser(lineObjs[0].getDir())
+    filePath = os.path.expanduser(lineObjs[0].directory)
     filePath = os.path.abspath(filePath)
     # now copy it into clipboard for cdp-ing
     # TODO -- this is pretty specific to

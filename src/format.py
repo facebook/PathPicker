@@ -86,7 +86,8 @@ class LineMatch(object):
     def getFile(self):
         return self.file
 
-    def getDir(self):
+    @property
+    def directory(self):
         # for the cd command and the like. file is a string like
         # ./asd.py or ~/www/asdasd/dsada.php, so since it already
         # has the directory appended we can just split on / and drop
