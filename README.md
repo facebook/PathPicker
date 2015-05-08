@@ -53,6 +53,10 @@ to `/usr/local/bin/` which is assumed to be in the current
 * `ln -s ./fpp /usr/local/bin/fpp`
 * `fpp --help # should work!`
 
+## Configuration
+
+The `$FPP_EDITOR` environment variable can be set to tell PathPicker which editor to open paths with. The `$EDITOR` environment variable is used by default.
+
 ## Advanced Functionality
 
 As mentioned above, PathPicker allows you to also execute arbitrary commands with the specified files.
