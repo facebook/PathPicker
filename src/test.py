@@ -8,6 +8,7 @@
 # @nolint
 import random
 import unittest
+import os
 import format
 
 import parse
@@ -107,6 +108,11 @@ fileTestCases = [{
     'match': True,
     'num': 1083,
     'file': 'fbcode/search/places/scorer/TARGETS'
+}, {
+    'input': '~/foo/bar/something.py',
+    'match': True,
+    'num': 0,
+    'file': '~/foo/bar/something.py'
 }]
 
 prependDirTestCases = [
@@ -141,7 +147,11 @@ class TestParseFunction(unittest.TestCase):
             inFile = testCase['in']
 
             result = parse.prependDir(inFile)
-            self.assertEqual(testCase['out'], result)
+            expected = testCase['out']
+            if inFile[0:2] == '~/':
+              expected = os.path.expanduser(expected)
+
+            self.assertEqual(expected, result)
         print 'Tested %d dir cases.' % len(prependDirTestCases)
 
     def testFileFuzz(self):
