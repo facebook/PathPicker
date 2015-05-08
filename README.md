@@ -19,8 +19,8 @@ a wide variety of input -- try it with all the options below:
 * `git grep "FooBar" | fpp`
 * `grep -r "FooBar" . | fpp`
 * `git diff HEAD~1 --stat | fpp`
-* `arc inlines | fpp`
 * `find . -iname "*.js" | fpp`
+* `arc inlines | fpp`
 
 and anything else you can dream up!
 

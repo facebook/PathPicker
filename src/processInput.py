@@ -27,9 +27,9 @@ Examples include:
     * git status | fpp
     * git show | fpp
     * git diff HEAD master | fpp
-    * tbgs EntAdAccount | fpp
-    * fbgs TupperwareJob | fpp
+    * git diff HEAD~10 --numstat | fpp
     * grep -r "Banana" . | fpp
+    * find . -iname "*.js" | fpp
 
 Once fpp parses your input (and something that looks like a file matches), it
 will put you inside a pager that will allow you to select files with the
