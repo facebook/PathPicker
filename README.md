@@ -56,7 +56,7 @@ to `/usr/local/bin/` which is assumed to be in the current
 ## Advanced Functionality
 
 As mentioned above, PathPicker allows you to also execute arbitrary commands with the specified files.
-Here is an exaple showing a `git checkout` command executed against the selected files:
+Here is an example showing a `git checkout` command executed against the selected files:
 <a href="https://asciinema.org/a/19520" target="_blank"><img src="https://asciinema.org/a/19520.png" width="597"/></a>
 
 The selected files are appended to the command prefix to form the final command. If you need the files
