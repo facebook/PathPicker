@@ -10,6 +10,7 @@ from __future__ import print_function
 
 import curses
 
+from utils import ignore_curse_errors
 import parse
 
 
@@ -27,10 +28,8 @@ class SimpleLine(object):
         minx, miny, maxx, maxy = self.controller.getChromeBoundaries()
         max_len = maxx - minx
         y = miny + self.index + self.controller.getScrollOffset()
-        try:
+        with ignore_curse_errors():
             stdscr.addstr(y, minx, str(self)[:max_len])
-        except curses.error:
-            pass
 
     def __str__(self):
         return self.line
@@ -143,7 +142,7 @@ class LineMatch(object):
             return
 
         maxLen = maxx - minx
-        try:
+        with ignore_curse_errors():
             # beginning
             stdscr.addstr(y, minx, before)
             # bolded middle
@@ -153,5 +152,3 @@ class LineMatch(object):
             # end
             xIndex = len(before) + len(middle)
             stdscr.addstr(y, minx + xIndex, after[:max(maxLen - xIndex, 0)])
-        except curses.error:
-            pass

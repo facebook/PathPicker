@@ -13,6 +13,7 @@ import signal
 from format import SimpleLine
 import output
 import processInput
+from utils import ignore_curse_errors
 
 
 def signal_handler(signal, frame):
@@ -65,10 +66,8 @@ class HelperChrome(object):
     def output(self, mode):
         self.mode = mode
         for func in [self.outputSide, self.outputBottom, self.toggleCursor]:
-            try:
+            with ignore_curse_errors():
                 func()
-            except curses.error:
-                pass
 
     def toggleCursor(self):
         if self.mode == SELECT_MODE:
@@ -162,10 +161,8 @@ class ScrollBar(object):
             return
         for func in [self.outputCaps, self.outputBase, self.outputBox,
                      self.outputBorder]:
-            try:
+            with ignore_curse_errors():
                 func()
-            except curses.error:
-                pass
 
     def getMinY(self):
         return self.screenControl.getChromeBoundaries()[1] + 1
@@ -416,29 +413,24 @@ class Controller(object):
 
         # first lets print all the files
         startHeight = halfHeight - 1 - len(files)
-        try:
+        with ignore_curse_errors():
             self.stdscr.addstr(startHeight - 3, 0, borderLine)
             self.stdscr.addstr(startHeight - 2, 0, SHORT_FILES_HEADER)
             self.stdscr.addstr(startHeight - 1, 0, borderLine)
             for index, file in enumerate(files):
                 self.stdscr.addstr(startHeight + index, 0,
                                    file[0:maxFileLength])
-        except curses.error:
-            pass
 
         # first print prompt
-        try:
+        with ignore_curse_errors():
             self.stdscr.addstr(halfHeight, 0, SHORT_COMMAND_PROMPT)
             self.stdscr.addstr(halfHeight + 1, 0, SHORT_COMMAND_PROMPT2)
-        except curses.error:
-            pass
+
         # then line to distinguish and prompt line
-        try:
+        with ignore_curse_errors():
             self.stdscr.addstr(halfHeight - 1, 0, borderLine)
             self.stdscr.addstr(halfHeight + 2, 0, borderLine)
             self.stdscr.addstr(halfHeight + 3, 0, promptLine)
-        except curses.error:
-            pass
 
         self.stdscr.refresh()
         curses.echo()
