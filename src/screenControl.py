@@ -394,7 +394,7 @@ class Controller(object):
 
     def getSelectedFiles(self):
         return [lineObj for (index, lineObj) in enumerate(self.lineMatches)
-                if lineObj.getSelected()]
+                if lineObj.selected]
 
     def getHoveredFiles(self):
         return [lineObj for (index, lineObj) in enumerate(self.lineMatches)

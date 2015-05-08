@@ -97,9 +97,6 @@ class LineMatch(object):
             return True
         return False
 
-    def getSelected(self):
-        return self.selected
-
     @property
     def before(self):
         return self.line[0:self.start]
