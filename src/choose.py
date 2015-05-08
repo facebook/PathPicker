@@ -42,7 +42,7 @@ def getLineObjs():
         selectedIndices = pickle.load(open(selectionPath))
         for index in selectedIndices:
             if index < len(matches):
-                matches[index].setSelect(True)
+                matches[index].is_selected = True
 
     if not matches:
         output.writeToFile('echo "No lines matched!!"')

@@ -274,7 +274,7 @@ class Controller(object):
         self.dirtyLines()
 
     def setSelect(self, val):
-        self.lineMatches[self.hoverIndex].setSelect(val)
+        self.lineMatches[self.hoverIndex].is_selected = val
 
     def control(self):
         # we start out by printing everything we need to

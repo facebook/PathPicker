@@ -73,9 +73,6 @@ class LineMatch(object):
     def toggle_select(self):
         self.is_selected = not self.is_selected
 
-    def setSelect(self, val):
-        self.is_selected = val
-
     @property
     def directory(self):
         # for the cd command and the like. file is a string like
