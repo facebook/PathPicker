@@ -18,6 +18,7 @@ class SimpleLine(object):
     def __init__(self, line, index):
         self.line = line
         self.index = index
+        self.controller = None
 
     def printOut(self):
         print(str(self))
@@ -30,9 +31,6 @@ class SimpleLine(object):
             stdscr.addstr(y, minx, str(self)[0:maxLen])
         except curses.error:
             pass
-
-    def setController(self, controller):
-        self.controller = controller
 
     def __str__(self):
         return self.line
@@ -74,11 +72,10 @@ class LineMatch(object):
         self.selected = False
         self.hovered = False
 
+        self.controller = None
+
     def toggleSelect(self):
         self.selected = not self.selected
-
-    def setController(self, controller):
-        self.controller = controller
 
     def setSelect(self, val):
         self.selected = val
