@@ -11,6 +11,7 @@ import signal
 
 import processInput
 import output
+from colorPrinter import ColorPrinter
 
 
 def signal_handler(signal, frame):
@@ -104,9 +105,9 @@ class HelperChrome(object):
         if self.mode == COMMAND_MODE:
             usageLines = processInput.USAGE_COMMAND.split('\n')
         for index, usageLine in enumerate(usageLines):
-            self.stdscr.addstr(self.getMinY() + index, borderX + 2, usageLine)
+            self.stdscr.addstr(self.getMinY() + index, borderX + 2, usageLine, curses.color_pair(0))
         for y in range(self.getMinY(), maxy):
-            self.stdscr.addstr(y, borderX, '|')
+            self.stdscr.addstr(y, borderX, '|', curses.color_pair(0))
 
     def outputBottom(self):
         if self.getIsSidebarMode():
@@ -116,8 +117,8 @@ class HelperChrome(object):
         # first output text since we might throw an exception during border
         usageStr = SHORT_NAV_USAGE if self.mode == SELECT_MODE else SHORT_COMMAND_USAGE
         borderStr = '_' * (maxx - self.getMinX() - 0)
-        self.stdscr.addstr(borderY, self.getMinX(), borderStr)
-        self.stdscr.addstr(borderY + 1, self.getMinX(), usageStr)
+        self.stdscr.addstr(borderY, self.getMinX(), borderStr, curses.color_pair(0))
+        self.stdscr.addstr(borderY + 1, self.getMinX(), usageStr, curses.color_pair(0))
 
 
 class ScrollBar(object):
@@ -171,7 +172,7 @@ class ScrollBar(object):
         x = self.getX() + 4
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         for y in range(0, maxy):
-            self.stdscr.addstr(y, x, ' ')
+            self.stdscr.addstr(y, x, ' ', curses.color_pair(0))
 
     def outputBox(self):
         (maxy, maxx) = self.screenControl.getScreenDimensions()
@@ -183,28 +184,30 @@ class ScrollBar(object):
         boxStartY = int(diff * self.boxStartFraction) + minY
         boxStopY = int(diff * self.boxStopFraction) + minY
 
-        self.stdscr.addstr(boxStartY, x, '/-\\')
+        self.stdscr.addstr(boxStartY, x, '/-\\', curses.color_pair(0))
         for y in range(boxStartY + 1, boxStopY):
-            self.stdscr.addstr(y, x, '|-|')
-        self.stdscr.addstr(boxStopY, x, '\-/')
+            self.stdscr.addstr(y, x, '|-|', curses.color_pair(0))
+        self.stdscr.addstr(boxStopY, x, '\-/', curses.color_pair(0))
 
     def outputCaps(self):
         x = self.getX()
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         for y in [self.getMinY() - 1, maxy - 1]:
-            self.stdscr.addstr(y, x, '===')
+            self.stdscr.addstr(y, x, '===', curses.color_pair(0))
 
     def outputBase(self):
         x = self.getX()
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         for y in range(self.getMinY(), maxy - 1):
-            self.stdscr.addstr(y, x, ' . ')
+            self.stdscr.addstr(y, x, ' . ', curses.color_pair(0))
 
 
 class Controller(object):
 
     def __init__(self, stdscr, lineObjs):
         self.stdscr = stdscr
+        self.colorPrinter = ColorPrinter(self.stdscr)
+
         self.lineObjs = lineObjs
         self.hoverIndex = 0
         self.scrollOffset = 0
@@ -228,6 +231,7 @@ class Controller(object):
 
         self.setHover(self.hoverIndex, True)
         curses.use_default_colors()
+
         # the scroll offset might not start off
         # at 0 if our first real match is WAY
         # down the screen -- so lets init it to
@@ -482,7 +486,7 @@ class Controller(object):
         if self.linesDirty:
             self.printAll()
         for index in self.dirtyIndexes:
-            self.lineMatches[index].output(self.stdscr)
+            self.lineMatches[index].output(self.colorPrinter)
         if self.helperChrome.getIsSidebarMode():
             # need to output since lines can override
             # the sidebar stuff
@@ -496,7 +500,7 @@ class Controller(object):
 
     def printLines(self):
         for key, lineObj in self.lineObjs.items():
-            lineObj.output(self.stdscr)
+            lineObj.output(self.colorPrinter)
 
     def printScroll(self):
         self.scrollBar.output()

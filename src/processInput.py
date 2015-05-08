@@ -15,6 +15,7 @@ import re
 import parse
 import format
 import stateFiles
+from formattedText import FormattedText
 
 USAGE_INTRO = '''
 Welcome to fpp, the Facebook PathPicker! We hope your stay
@@ -138,15 +139,16 @@ def getLineObjs():
     lineObjs = {}
     for index, line in enumerate(inputLines):
         line = line.replace('\t', '    ')
-        line = re.sub(r'\x1b[^mK]*(m|K)', '', line)
-        result = parse.matchLine(line)
+        formattedLine = FormattedText(line)
+        result = parse.matchLine(str(formattedLine))
 
         if not result:
-            simple = format.SimpleLine(line, index)
-            lineObjs[index] = simple
-            continue
-        match = format.LineMatch(line, result, index)
-        lineObjs[index] = match
+            line = format.SimpleLine(formattedLine, index)
+        else:
+            line = format.LineMatch(formattedLine, result, index)
+
+        lineObjs[index] = line
+
     return lineObjs
 
 
