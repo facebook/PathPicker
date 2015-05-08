@@ -162,16 +162,16 @@ class LineMatch(object):
             # wont be displayed!
             return
 
-        maxLen = maxx - minx
+        max_len = maxx - minx
         with ignore_curse_errors():
             # beginning
             stdscr.addstr(y, minx, before)
             # bolded middle
-            xIndex = len(before)
+            x_index = len(before)
 
             self.set_color_pairs()
-            stdscr.addstr(y, minx + xIndex, middle[:max(maxLen - xIndex, 0)],
+            stdscr.addstr(y, minx + x_index, middle[:max(max_len - x_index, 0)],
                           self.color_pair)
             # end
-            xIndex = len(before) + len(middle)
-            stdscr.addstr(y, minx + xIndex, after[:max(maxLen - xIndex, 0)])
+            x_index = len(before) + len(middle)
+            stdscr.addstr(y, minx + x_index, after[:max(max_len - x_index, 0)])
