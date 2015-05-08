@@ -103,7 +103,8 @@ class LineMatch(object):
     def getBefore(self):
         return self.line[0:self.start]
 
-    def getAfter(self):
+    @property
+    def after(self):
         return self.line[self.end:]
 
     def getMatch(self):
@@ -111,7 +112,7 @@ class LineMatch(object):
 
     def __str__(self):
         return self.getBefore() + '||' + self.getMatch(
-        ) + '||' + self.getAfter() + '||' + str(self.number)
+        ) + '||' + self.after + '||' + str(self.number)
 
     def getStyleForState(self):
         curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_RED)
@@ -135,7 +136,7 @@ class LineMatch(object):
     def output(self, stdscr):
         decorator = self.getDecorator()
         before = self.getBefore()
-        after = self.getAfter()
+        after = self.after
         middle = ''.join([decorator, self.getMatch()])
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
         y = miny + self.index + self.controller.getScrollOffset()
