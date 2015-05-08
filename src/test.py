@@ -44,6 +44,20 @@ fileTestCases = [{
     'file': '.env.local',
     'num': 0
 }, {
+    'input': '.gitignore',
+    'match': True,
+    'file': '.gitignore',
+    'num': 0
+}, {
+    'input': '.bundle/config',
+    'match': True,
+    'file': '.bundle/config',
+    'num': 0
+}, {
+    # Arbitrarily ignore really short dot filenames
+    'input': '.a',
+    'match': False,
+}, {
     'input': 'flib/asd/ent/berkeley/two.py-22',
     'match': True,
     'file': 'flib/asd/ent/berkeley/two.py',
