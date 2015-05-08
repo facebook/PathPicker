@@ -65,16 +65,16 @@ class LineMatch(object):
         self.end = end - trailingWhitespace
         self.match = group[:-trailingWhitespace]
 
-        self.selected = False
+        self.is_selected = False
         self.hovered = False
 
         self.controller = None
 
     def toggle_select(self):
-        self.selected = not self.selected
+        self.is_selected = not self.is_selected
 
     def setSelect(self, val):
-        self.selected = val
+        self.is_selected = val
 
     @property
     def directory(self):
@@ -133,11 +133,11 @@ class LineMatch(object):
         /!\ Side effects. You must call :meth:`set_color_pairs` before
         accessing this attribute.
         """
-        if self.hovered and self.selected:
+        if self.hovered and self.is_selected:
             return curses.color_pair(self.HOVERED_AND_SELECTED)
         elif self.hovered:
             return curses.color_pair(self.HOVERED)
-        elif self.selected:
+        elif self.is_selected:
             return curses.color_pair(self.SELECTED)
         else:
             return curses.A_UNDERLINE
@@ -145,7 +145,7 @@ class LineMatch(object):
     # TODO: Maybe find a better name, since the name is ambiguous.
     @property
     def decorator(self):
-        if self.selected:
+        if self.is_selected:
             return '|===>'
         return ''
 
