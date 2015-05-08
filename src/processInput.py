@@ -83,6 +83,10 @@ string. Examples include:
 Which format to:
     * scp file1 file2 dev:~/backup
     * mv file1 file2 ../over/here
+
+By default, `fpp` exits once you execute a command.
+Use `fpp --keep-open` (or `fpp -k`) to keep your `fpp` session open
+after running a command.
 '''
 
 USAGE_TAIL = '''

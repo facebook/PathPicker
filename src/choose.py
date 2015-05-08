@@ -6,6 +6,7 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 # @nolint
+import argparse
 import curses
 import pickle
 import sys
@@ -19,11 +20,11 @@ PICKLE_FILE = '~/.fbPager.pickle'
 SELECTION_PICKLE = '~/.fbPager.selection.pickle'
 
 
-def doProgram(stdscr):
+def doProgram(args, stdscr):
     output.clearFile()
     logger.clearFile()
     lineObjs = getLineObjs()
-    screen = screenControl.Controller(stdscr, lineObjs)
+    screen = screenControl.Controller(stdscr, lineObjs, keepOpen=args.keep_open)
     screen.control()
 
 
@@ -52,5 +53,11 @@ if __name__ == '__main__':
         print 'Nothing to do!'
         output.writeToFile('echo ":D"')
         sys.exit(0)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-k', '--keep-open', help='keep fpp open',
+                        default=False, action='store_true')
+    args = parser.parse_args()
+
     output.clearFile()
-    curses.wrapper(doProgram)
+    curses.wrapper(lambda x: doProgram(args, x))
