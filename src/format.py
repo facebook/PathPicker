@@ -46,7 +46,7 @@ class LineMatch(object):
 
         self.originalFile = file
         self.file = parse.prependDir(file)
-        self.num = num
+        self.number = num
         # save a bunch of stuff so we can
         # pickle
         self.start = matches.start()
@@ -97,9 +97,6 @@ class LineMatch(object):
             return True
         return False
 
-    def getLineNum(self):
-        return self.num
-
     def getSelected(self):
         return self.selected
 
@@ -114,7 +111,7 @@ class LineMatch(object):
 
     def __str__(self):
         return self.getBefore() + '||' + self.getMatch(
-        ) + '||' + self.getAfter() + '||' + str(self.num)
+        ) + '||' + self.getAfter() + '||' + str(self.number)
 
     def getStyleForState(self):
         curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_RED)
