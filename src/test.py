@@ -8,11 +8,14 @@
 # @nolint
 from __future__ import print_function
 
-import unittest
+import curses
 import os
-import format
+import unittest
 
+import format
 import parse
+from utils import ignore_curse_errors
+
 
 fileTestCases = [{
     'input': 'html/js/hotness.js',
@@ -256,6 +259,31 @@ class TestParseFunction(unittest.TestCase):
 
         self.assertEqual(testCase['num'], num, 'num matches not equal %d %d for %s'
                          % (testCase['num'], num, testCase.get('input')))
+
+    def test_ignore_curse_errors_no_exception(self):
+        """
+        Check that if no exception is raised, the result is still the same.
+        """
+        with ignore_curse_errors():
+            result = 42
+        self.assertEqual(result, 42)
+
+    def test_ignore_curse_errors_raise_from_curse(self):
+        """
+        Check that if an exception from curse is raised, it is ignored.
+        """
+        # If the exception is ignored, the test passes. Otherwise it doesn't
+        # because an exception is raised.
+        with ignore_curse_errors():
+            raise curses.error
+
+    def test_ignore_curse_errors_raise_exception(self):
+        """
+        Check that if an exception that is not from curse, it is not ignored.
+        """
+        with self.assertRaises(LookupError):
+            with ignore_curse_errors():
+                raise LookupError
 
 
 if __name__ == '__main__':
