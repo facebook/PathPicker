@@ -36,6 +36,11 @@ will put you inside a pager that will allow you to select files with the
 following commands:
 '''
 
+USAGE_PAGE_HEADER = '''
+== Navigation ==
+
+'''
+
 USAGE_PAGE = '''
     * [f] toggle the selection of a file
     * [A] toggle selection of all (unique) files
@@ -53,6 +58,11 @@ them via command mode:
         (or file under cursor if none selected)
         in $EDITOR
     * [c] enter command mode
+'''
+
+USAGE_COMMAND_HEADER = '''
+== Command Mode ==
+
 '''
 
 USAGE_COMMAND = '''
@@ -85,13 +95,34 @@ Which format to:
     * mv file1 file2 ../over/here
 '''
 
+USAGE_CONFIGURATION = '''
+== Configuration == 
+
+
+PathPicker offers a bit of configuration currently with more to come
+in the future.
+
+~ Editor ~
+
+The $FPP_EDITOR environment variable can be set to tell PathPicker
+which editor to open the selected files with. If that variable
+is not set, $EDITOR is used the next fallback, with "vim" as a last resort.
+
+'''
+
 USAGE_TAIL = '''
 That's a fairly in-depth overview of Facebook PathPicker.
 We also provide help along the way as you
 use the app, so don't worry and jump on in!
 '''
 
-USAGE_STR = USAGE_INTRO + USAGE_PAGE + USAGE_COMMAND + USAGE_TAIL
+USAGE_STR = USAGE_INTRO + \
+    USAGE_PAGE_HEADER + \
+    USAGE_PAGE + \
+    USAGE_COMMAND_HEADER + \
+    USAGE_COMMAND + \
+    USAGE_CONFIGURATION + \
+    USAGE_TAIL
 
 decorator = '*' * 80
 USAGE_STR = decorator + '\n' + USAGE_STR + '\n' + decorator
