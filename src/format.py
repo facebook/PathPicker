@@ -22,7 +22,7 @@ class SimpleLine(object):
         self.controller = None
 
     def output(self, stdscr):
-        minx, miny, maxx, maxy = self.controller.getChromeBoundaries()
+        minx, miny, maxx, _ = self.controller.getChromeBoundaries()
         max_len = maxx - minx
         y = miny + self.index + self.controller.getScrollOffset()
         with ignore_curse_errors():
