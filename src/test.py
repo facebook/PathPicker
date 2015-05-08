@@ -127,6 +127,16 @@ fileTestCases = [{
     'match': True,
     'num': 0,
     'file': '~/assets/retina/victory@2x.png'
+}, {
+    'input': 'test src/categories/NSDate+Category.h',
+    'match': True,
+    'num': 0,
+    'file': 'src/categories/NSDate+Category.h'
+}, {
+    'input': '~/src/categories/NSDate+Category.h',
+    'match': True,
+    'num': 0,
+    'file': '~/src/categories/NSDate+Category.h'
 }]
 
 prependDirTestCases = [
