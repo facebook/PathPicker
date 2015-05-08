@@ -377,7 +377,6 @@ class Controller(object):
             # before exiting the program
             self.getFilesToUse()
             self.cursesAPI.exit()
-        pass
 
     def getFilesToUse(self):
         # if we have select files, those, otherwise hovered
