@@ -38,8 +38,8 @@ class FormattedText(object):
     def parseFormatting(cls, formatting):
         """Parse ANSI formatting; the formatting passed in should be
         stripped of the control characters and ending character"""
-        fore = 0
-        back = 0
+        fore = -1 #-1 default means "use default", not "use white/black"
+        back = -1
         other = 0
         intValues = [int(value) for value in formatting.split(';') if value]
         for code in intValues:
