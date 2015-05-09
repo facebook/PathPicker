@@ -54,7 +54,7 @@ def editFiles(lineObjs):
     partialCommands = []
     logger.addEvent('editing_num_files', len(lineObjs))
     for lineObj in lineObjs:
-        (file, num) = (lineObj.getFile(), lineObj.getLineNum())
+        file, num = lineObj.file, lineObj.number
         partialCommands.append(getEditFileCommand(file, num))
     command = joinEditCommands(partialCommands)
     appendIfInvalid(lineObjs)
@@ -65,11 +65,11 @@ def editFiles(lineObjs):
 def appendIfInvalid(lineObjs):
     # lastly lets check validity and actually output an
     # error if any files are invalid
-    invalidLines = [line for line in lineObjs if not line.isResolvable()]
+    invalidLines = [line for line in lineObjs if not line.is_resolvable]
     if not invalidLines:
         return
     appendError(INVALID_FILE_WARNING)
-    if len([line for line in invalidLines if line.isGitAbbreviatedPath()]):
+    if len([line for line in invalidLines if line.is_git_abbreviated_path]):
         appendError(GIT_ABBREVIATION_WARNING)
     appendToFile('read -p "%s" -r' % CONTINUE_WARNING)
 
@@ -95,7 +95,7 @@ def getEditorAndPath():
 
 
 def getEditFileCommand(filePath, lineNum):
-    editor, _editor_path = getEditorAndPath()
+    editor, _ = getEditorAndPath()
     if editor == 'vim' and lineNum != 0:
         return '\'%s\' +%d' % (filePath, lineNum)
     elif editor in ['joe', 'emacs'] and lineNum != 0:
@@ -150,7 +150,7 @@ def joinEditCommands(partialCommands):
 
 
 def composeCdCommand(command, lineObjs):
-    filePath = os.path.expanduser(lineObjs[0].getDir())
+    filePath = os.path.expanduser(lineObjs[0].directory)
     filePath = os.path.abspath(filePath)
     # now copy it into clipboard for cdp-ing
     # TODO -- this is pretty specific to
@@ -171,7 +171,7 @@ def composeCommand(command, lineObjs):
 
 
 def composeFileCommand(command, lineObjs):
-    files = ["'%s'" % lineObj.getFile() for lineObj in lineObjs]
+    files = ["'%s'" % lineObj.file for lineObj in lineObjs]
     file_str = ' '.join(files)
     if '$F' in command:
         command = command.replace('$F', file_str)
@@ -199,6 +199,7 @@ def appendError(text):
     appendToFile('printf "%s%s%s\n"' % (RED_COLOR, text, NO_COLOR))
 
 
+# TODO: Side effects are not cool !
 def appendToFile(command):
     file = open(os.path.expanduser(OUTPUT_FILE), 'a')
     file.write(command + '\n')
@@ -206,6 +207,7 @@ def appendToFile(command):
     logger.output()
 
 
+# TODO: Side effects are not cool !
 def writeToFile(command):
     file = open(os.path.expanduser(OUTPUT_FILE), 'w')
     file.write(command + '\n')

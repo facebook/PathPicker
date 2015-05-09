@@ -17,6 +17,7 @@ LOGGER_FILE = '~/.fbPager.log'
 # to, or disable it if you want.
 
 
+# TODO: Side effects are not cool !
 def writeToFile(content):
     file = open(os.path.expanduser(LOGGER_FILE), 'w')
     file.write(content)

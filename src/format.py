@@ -10,6 +10,7 @@ from __future__ import print_function
 
 import curses
 
+from utils import ignore_curse_errors
 import parse
 
 
@@ -19,44 +20,40 @@ class SimpleLine(object):
         self.line = line
         self.index = index
 
-    def printOut(self):
-        print(str(self))
+    # TODO: Change the name of this method ? Like `write_output` ?
+    def output(self, controller):
+        # TODO: Maybe add methods to the controller to access `stdscr`
+        stdscr = controller.stdscr
 
-    def output(self, stdscr):
-        (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
-        maxLen = maxx - minx
-        y = miny + self.index + self.controller.getScrollOffset()
-        try:
-            stdscr.addstr(y, minx, str(self)[0:maxLen])
-        except curses.error:
-            pass
-
-    def setController(self, controller):
-        self.controller = controller
+        minx, miny, maxx, _ = controller.getChromeBoundaries()
+        max_len = maxx - minx
+        y = miny + self.index + controller.getScrollOffset()
+        with ignore_curse_errors():
+            stdscr.addstr(y, minx, str(self)[:max_len])
 
     def __str__(self):
         return self.line
 
-    def isSimple(self):
-        return True
-
 
 class LineMatch(object):
+    # Foreground/Background pair numbers.
+    HOVERED = 1
+    SELECTED = 2
+    HOVERED_AND_SELECTED = 3
 
     def __init__(self, line, result, index):
         self.line = line
         self.index = index
 
-        (file, num, matches) = result
+        file, num, matches = result
 
-        self.originalFile = file
         self.file = parse.prependDir(file)
-        self.num = num
+        self.number = num
         # save a bunch of stuff so we can
         # pickle
         self.start = matches.start()
-        self.end = min(matches.end(), len(line))
-        self.group = matches.group()
+        end = min(matches.end(), len(line))
+        group = matches.group()
 
         # this is a bit weird but we need to strip
         # off the whitespace for the matches we got,
@@ -65,34 +62,23 @@ class LineMatch(object):
         # this will be a no-op, but for lines like
         # "README        " we will reset end to
         # earlier
-        stringSubset = line[self.start:self.end]
-        strippedSubset = stringSubset.strip()
-        trailingWhitespace = (len(stringSubset) - len(strippedSubset))
-        self.end -= trailingWhitespace
-        self.group = self.group[0:len(self.group) - trailingWhitespace]
+        string_subset = line[self.start:end]
+        stripped_subset = string_subset.strip()
+        trailing_whitespace = len(string_subset) - len(stripped_subset)
+        self.end = end - trailing_whitespace
+        if trailing_whitespace:
+            self.match = group[:-trailing_whitespace]
+        else:
+            self.match = group
 
-        self.selected = False
-        self.hovered = False
+        self.is_selected = False
+        self.is_hovered = False
 
-    def toggleSelect(self):
-        self.selected = not self.selected
+    def toggle_select(self):
+        self.is_selected = not self.is_selected
 
-    def setController(self, controller):
-        self.controller = controller
-
-    def setSelect(self, val):
-        self.selected = val
-
-    def setHover(self, val):
-        self.hovered = val
-
-    def getScreenIndex(self):
-        return self.index
-
-    def getFile(self):
-        return self.file
-
-    def getDir(self):
+    @property
+    def directory(self):
         # for the cd command and the like. file is a string like
         # ./asd.py or ~/www/asdasd/dsada.php, so since it already
         # has the directory appended we can just split on / and drop
@@ -100,80 +86,95 @@ class LineMatch(object):
         parts = self.file.split('/')[0:-1]
         return '/'.join(parts)
 
-    def isResolvable(self):
-        return not self.isGitAbbreviatedPath()
+    @property
+    def is_resolvable(self):
+        return not self.is_git_abbreviated_path
 
-    def isGitAbbreviatedPath(self):
+    @property
+    def is_git_abbreviated_path(self):
         # this method mainly serves as a warning for when we get
         # git-abbrievated paths like ".../" that confuse users.
         parts = self.file.split('/')
-        if len(parts) and parts[0] == '...':
-            return True
-        return False
+        try:
+            return parts[0] == '...'
+        except IndexError:
+            return False
 
-    def getLineNum(self):
-        return self.num
-
-    def isSimple(self):
-        return False
-
-    def getSelected(self):
-        return self.selected
-
-    def getBefore(self):
+    @property
+    def before(self):
         return self.line[0:self.start]
 
-    def getAfter(self):
+    @property
+    def after(self):
         return self.line[self.end:]
 
-    def getMatch(self):
-        return self.group
-
     def __str__(self):
-        return self.getBefore() + '||' + self.getMatch(
-        ) + '||' + self.getAfter() + '||' + str(self.num)
+        parts = [self.before, self.match, self.after, str(self.number)]
+        return '||'.join(parts)
 
-    def getStyleForState(self):
-        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_RED)
-        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLUE)
-        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_GREEN)
+    # TODO: This might not be the most appropriate place to put this method.
+    # But still, it's better than before.
+    def set_color_pairs(self):
+        """
+        Set the different color pairs:
+        - The background/foreground for the hovered case.
+        - The background/foreground for the selected case.
+        - The background/foreground for the hovered and selected case.
+        """
+        curses.init_pair(self.HOVERED, curses.COLOR_WHITE, curses.COLOR_RED)
+        curses.init_pair(self.SELECTED, curses.COLOR_WHITE, curses.COLOR_BLUE)
+        curses.init_pair(self.HOVERED_AND_SELECTED, curses.COLOR_WHITE,
+                         curses.COLOR_GREEN)
 
-        if self.hovered and self.selected:
-            return curses.color_pair(3)
-        elif self.hovered:
-            return curses.color_pair(1)
-        elif self.selected:
-            return curses.color_pair(2)
+    @property
+    def color_pair(self):
+        """
+        Color pair for the current line's state.
+
+        /!\ Side effects. You must call :meth:`set_color_pairs` before
+        accessing this attribute.
+        """
+        if self.is_hovered and self.is_selected:
+            return curses.color_pair(self.HOVERED_AND_SELECTED)
+        elif self.is_hovered:
+            return curses.color_pair(self.HOVERED)
+        elif self.is_selected:
+            return curses.color_pair(self.SELECTED)
         else:
             return curses.A_UNDERLINE
 
-    def getDecorator(self):
-        if self.selected:
+    # TODO: Maybe find a better name, since the name is ambiguous.
+    @property
+    def decorator(self):
+        if self.is_selected:
             return '|===>'
         return ''
 
-    def output(self, stdscr):
-        decorator = self.getDecorator()
-        before = self.getBefore()
-        after = self.getAfter()
-        middle = ''.join([decorator, self.getMatch()])
-        (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
-        y = miny + self.index + self.controller.getScrollOffset()
+    # TODO: Change the name of this method ? Like `write_output` ?
+    def output(self, controller):
+        # TODO: Maybe add methods to the controller to access `stdscr`
+        stdscr = controller.stdscr
+        decorator = self.decorator
+        before = self.before
+        after = self.after
+        middle = decorator + self.match
+        minx, miny, maxx, maxy = controller.getChromeBoundaries()
+        y = miny + self.index + controller.getScrollOffset()
 
-        if (y < miny or y > maxy):
+        if y < miny or y > maxy:
             # wont be displayed!
             return
 
-        maxLen = maxx - minx
-        try:
+        max_len = maxx - minx
+        with ignore_curse_errors():
             # beginning
             stdscr.addstr(y, minx, before)
             # bolded middle
-            xIndex = len(before)
-            stdscr.addstr(y, minx + xIndex, middle[0:max(maxLen - xIndex, 0)],
-                          self.getStyleForState())
+            x_index = len(before)
+
+            self.set_color_pairs()
+            stdscr.addstr(y, minx + x_index, middle[:max(max_len - x_index, 0)],
+                          self.color_pair)
             # end
-            xIndex = len(before) + len(middle)
-            stdscr.addstr(y, minx + xIndex, after[0:max(maxLen - xIndex, 0)])
-        except curses.error:
-            pass
+            x_index = len(before) + len(middle)
+            stdscr.addstr(y, minx + x_index, after[:max(max_len - x_index, 0)])

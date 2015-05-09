@@ -13,6 +13,7 @@ import pickle
 import sys
 import os
 
+from format import LineMatch
 import output
 import screenControl
 import logger
@@ -32,18 +33,18 @@ def doProgram(stdscr):
 def getLineObjs():
     filePath = os.path.expanduser(PICKLE_FILE)
     lineObjs = pickle.load(open(filePath))
-    matches = [lineObj for i, lineObj in lineObjs.items()
-               if not lineObj.isSimple()]
-    logger.addEvent('total_num_files', len(lineObjs.items()))
+    matches = [lineObj for lineObj in lineObjs.values()
+               if isinstance(lineObj, LineMatch)]
+    logger.addEvent('total_num_files', len(lineObjs))
 
     selectionPath = os.path.expanduser(SELECTION_PICKLE)
     if os.path.isfile(selectionPath):
         selectedIndices = pickle.load(open(selectionPath))
         for index in selectedIndices:
             if index < len(matches):
-                matches[index].setSelect(True)
+                matches[index].is_selected = True
 
-    if not len(matches):
+    if not matches:
         output.writeToFile('echo "No lines matched!!"')
         sys.exit(0)
     return lineObjs
