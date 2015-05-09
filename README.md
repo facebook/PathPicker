@@ -50,7 +50,7 @@ Here we make a symbolic link from the bash script in the repo
 to `/usr/local/bin/` which is assumed to be in the current
 `$PATH`
 
-* `ln -s ./fpp /usr/local/bin/fpp`
+* `sudo ln -s $(readlink -f ./fpp) /usr/local/bin/fpp`
 * `fpp --help # should work!`
 
 ## Advanced Functionality
