@@ -98,7 +98,7 @@ Which format to:
 '''
 
 USAGE_CONFIGURATION = '''
-== Configuration == 
+== Configuration ==
 
 
 PathPicker offers a bit of configuration currently with more to come
@@ -151,7 +151,7 @@ def doProgram():
     filePath = os.path.expanduser(PICKLE_FILE)
     lineObjs = getLineObjs()
     # pickle it so the next program can parse it
-    pickle.dump(lineObjs, open(filePath, 'w'))
+    pickle.dump(lineObjs, open(filePath, 'wb'))
 
 
 def usage():
