@@ -18,13 +18,16 @@ class ColorPrinter(object):
 
 
     def setAttributes(self, foreColor, backColor, other):
+        colorIndex = -1
         colorPair = (foreColor, backColor)
         if not colorPair in self.colors:
             newIndex = len(self.colors)
-            curses.init_pair(newIndex, foreColor, backColor)
-            self.colors[colorPair] = newIndex
-
-        colorIndex = self.colors[colorPair]
+            if newIndex < curses.COLOR_PAIRS:
+                curses.init_pair(newIndex, foreColor, backColor)
+                self.colors[colorPair] = newIndex
+                colorIndex = newIndex
+        else:
+            colorIndex = self.colors[colorPair]
 
         attr = curses.color_pair(colorIndex)
         attr = attr | other
