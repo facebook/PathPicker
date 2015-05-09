@@ -6,7 +6,10 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 # @nolint
+from __future__ import print_function
+
 import curses
+
 import parse
 
 
@@ -17,7 +20,7 @@ class SimpleLine(object):
         self.index = index
 
     def printOut(self):
-        print str(self)
+        print(str(self))
 
     def output(self, stdscr):
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()

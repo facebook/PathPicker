@@ -8,8 +8,17 @@
 # @nolint
 import curses
 import sys
-import output
+import signal
+
 import processInput
+import output
+
+
+def signal_handler(signal, frame):
+    # from http://stackoverflow.com/a/1112350/948126
+    # Lets just quit rather than signal.SIGINT printing the stack
+    sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
 
 import logger
 
@@ -17,9 +26,7 @@ PICKLE_FILE = '~/.fbPager.pickle'
 CHROME_MIN_X = 5
 CHROME_MIN_Y = 0
 
-mapping = {}
-for i in range(256):
-    mapping[i] = chr(i)
+mapping = {i: chr(i) for i in range(256)}
 mapping.update((value, name[4:]) for name, value in vars(curses).items()
                if name.startswith('KEY_'))
 # special exceptions
@@ -56,15 +63,17 @@ class HelperChrome(object):
 
     def output(self, mode):
         self.mode = mode
-        if self.mode == SELECT_MODE:
-            curses.curs_set(INVISIBLE_CURSOR)
-        else:
-            curses.curs_set(BLOCK_CURSOR)
-        for func in [self.outputSide, self.outputBottom]:
+        for func in [self.outputSide, self.outputBottom, self.toggleCursor]:
             try:
                 func()
             except curses.error:
                 pass
+
+    def toggleCursor(self):
+        if self.mode == SELECT_MODE:
+            curses.curs_set(INVISIBLE_CURSOR)
+        else:
+            curses.curs_set(BLOCK_CURSOR)
 
     def reduceMaxY(self, maxy):
         if self.getIsSidebarMode():
@@ -223,6 +232,11 @@ class Controller(object):
 
         self.setHover(self.hoverIndex, True)
         curses.use_default_colors()
+        # the scroll offset might not start off
+        # at 0 if our first real match is WAY
+        # down the screen -- so lets init it to
+        # a valid value after we have all our line objects
+        self.updateScrollOffset()
         logger.addEvent('init')
 
     def getScrollOffset(self):
@@ -507,11 +521,7 @@ class Controller(object):
 
     def getKey(self):
         charCode = self.stdscr.getch()
-        try:
-            char = mapping[charCode]
-        except KeyError:
-            return ''
-        return char
+        return mapping.get(charCode, '')
 
     def toggleXMode(self):
         if self.mode != X_MODE:
@@ -529,7 +539,7 @@ class Controller(object):
                 self.stdscr.addstr(i, 1, lbls[i - minY])
 
     def selectXMode(self, key):
-        lineObj = self.lineObjs[lbls.index(key) + 1 + - self.scrollOffset]
+        lineObj = self.lineObjs[lbls.index(key) + int(self.scrollBar.activated) - self.scrollOffset]
         if hasattr(lineObj, "toggleSelect"):
             lineMatchIndex = self.lineMatches.index(lineObj)
             self.dirtyHoverIndex(lineMatchIndex)

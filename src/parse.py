@@ -22,12 +22,15 @@ import logger
 REPOS = ['www']
 
 MASTER_REGEX = re.compile(
-    '(\/?([a-z.A-Z0-9\-_]+\/)+[a-zA-Z0-9\-_.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
+    '(\/?([a-z.A-Z0-9\-_]+\/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
+HOMEDIR_REGEX = re.compile(
+    '(~\/([a-z.A-Z0-9\-_]+\/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
 OTHER_BGS_RESULT_REGEX = re.compile(
     '(\/?([a-z.A-Z0-9\-_]+\/)+[a-zA-Z0-9_.]{3,})[:-]{0,1}(\d+)')
-JUST_FILE = re.compile('([a-zA-Z0-9\-_]+\.[a-zA-Z]{1,10})\s+')
+JUST_FILE = re.compile(
+    '([a-zA-Z0-9\-_][a-z.A-Z0-9\-_]*\.[a-zA-Z]{1,10})(\s|$|:)+')
 FILE_NO_PERIODS = re.compile(
-    '([a-zA-Z0-9\-_\/]{1,}\/[a-zA-Z0-9\-_]{1,})(\s|$|:)+')
+    '([a-z.A-Z0-9\-_\/]{1,}\/[a-zA-Z0-9\-_]{1,})(\s|$|:)+')
 
 
 # Attempts to resolve the root directory of the
@@ -37,7 +40,8 @@ def getRepoPath():
     proc = subprocess.Popen(["git rev-parse --show-toplevel"],
                             stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE,
-                            shell=True)
+                            shell=True,
+                            universal_newlines=True)
 
     (stdout, stderr) = proc.communicate()
 
@@ -69,6 +73,14 @@ PREPEND_PATH = getRepoPath().strip() + '/'
 # returns a filename and (optional) line number
 # if it matches
 def matchLine(line):
+    # Homedirs need a separate regex. TODO -- fix this copypasta
+    matches = HOMEDIR_REGEX.search(line)
+    if matches:
+        groups = matches.groups()
+        file = groups[0]
+        num = 0 if groups[2] is None else int(groups[2])
+        return (file, num, matches)
+
     matches = MASTER_REGEX.search(line)
     # the master regex matches tbgs results with
     # line numbers, so we prefer that and test it first
@@ -125,6 +137,10 @@ def prependDir(file):
 
     if file[0] == '/':
         return file
+
+    if file[0:2] == '~/':
+        # need to absolute it
+        return os.path.expanduser(file)
 
     # if it starts with ./ (grep), then that's the easiest because abspath
     # will resolve this

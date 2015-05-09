@@ -6,8 +6,10 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 # @nolint
-import random
+from __future__ import print_function
+
 import unittest
+import os
 import format
 
 import parse
@@ -107,6 +109,54 @@ fileTestCases = [{
     'match': True,
     'num': 1083,
     'file': 'fbcode/search/places/scorer/TARGETS'
+}, {
+    'input': '~/foo/bar/something.py',
+    'match': True,
+    'num': 0,
+    'file': '~/foo/bar/something.py'
+}, {
+    'input': '~/foo/bar/inHomeDir.py:22',
+    'match': True,
+    'num': 22,
+    'file': '~/foo/bar/inHomeDir.py'
+}, {
+    'input': 'blarge assets/retina/victory@2x.png',
+    'match': True,
+    'num': 0,
+    'file': 'assets/retina/victory@2x.png'
+}, {
+    'input': '~/assets/retina/victory@2x.png',
+    'match': True,
+    'num': 0,
+    'file': '~/assets/retina/victory@2x.png'
+}, {
+    'input': 'So.many.periods.txt',
+    'match': True,
+    'num': 0,
+    'file': 'So.many.periods.txt'
+}, {
+    'input': 'SO.MANY.PERIODS.TXT',
+    'match': True,
+    'num': 0,
+    'file': 'SO.MANY.PERIODS.TXT'
+}, {
+    'input': 'blarg blah So.MANY.PERIODS.TXT:22',
+    'match': True,
+    'num': 0,  # we ignore the number here
+    'file': 'So.MANY.PERIODS.TXT'
+}, {
+    'input': 'SO.MANY&&PERIODSTXT',
+    'match': False
+}, {
+    'input': 'test src/categories/NSDate+Category.h',
+    'match': True,
+    'num': 0,
+    'file': 'src/categories/NSDate+Category.h'
+}, {
+    'input': '~/src/categories/NSDate+Category.h',
+    'match': True,
+    'num': 0,
+    'file': '~/src/categories/NSDate+Category.h'
 }]
 
 prependDirTestCases = [
@@ -141,8 +191,12 @@ class TestParseFunction(unittest.TestCase):
             inFile = testCase['in']
 
             result = parse.prependDir(inFile)
-            self.assertEqual(testCase['out'], result)
-        print 'Tested %d dir cases.' % len(prependDirTestCases)
+            expected = testCase['out']
+            if inFile[0:2] == '~/':
+                expected = os.path.expanduser(expected)
+
+            self.assertEqual(expected, result)
+        print('Tested %d dir cases.' % len(prependDirTestCases))
 
     def testFileFuzz(self):
         befores = ['M ', 'Modified: ', 'Changed: ', '+++ ',
@@ -157,7 +211,7 @@ class TestParseFunction(unittest.TestCase):
                     thisCase = testCase.copy()
                     thisCase['input'] = testInput
                     self.checkFileResult(thisCase)
-        print 'Tested %d cases for file fuzz.' % len(fileTestCases)
+        print('Tested %d cases for file fuzz.' % len(fileTestCases))
 
     def testUnresolvable(self):
         fileLine = ".../something/foo.py"
@@ -167,7 +221,7 @@ class TestParseFunction(unittest.TestCase):
             not lineObj.isResolvable(),
             '"%s" should not be resolvable' % fileLine
         )
-        print 'Tested unresolvable case.'
+        print('Tested unresolvable case.')
 
     def testResolvable(self):
         toCheck = [case for case in fileTestCases if case['match']]
@@ -178,12 +232,12 @@ class TestParseFunction(unittest.TestCase):
                 lineObj.isResolvable(),
                 'Line "%s" was not resolvable' % testCase['input']
             )
-        print 'Tested %d resolvable cases.' % len(toCheck)
+        print('Tested %d resolvable cases.' % len(toCheck))
 
     def testFileMatch(self):
         for testCase in fileTestCases:
             self.checkFileResult(testCase)
-        print 'Tested %d cases.' % len(fileTestCases)
+        print('Tested %d cases.' % len(fileTestCases))
 
     def checkFileResult(self, testCase):
         result = parse.matchLine(testCase['input'])
