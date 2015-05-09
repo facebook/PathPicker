@@ -72,7 +72,7 @@ class LineMatch(object):
             self.match = group
 
         self.is_selected = False
-        self.hovered = False
+        self.is_hovered = False
 
     def toggle_select(self):
         self.is_selected = not self.is_selected
@@ -134,9 +134,9 @@ class LineMatch(object):
         /!\ Side effects. You must call :meth:`set_color_pairs` before
         accessing this attribute.
         """
-        if self.hovered and self.is_selected:
+        if self.is_hovered and self.is_selected:
             return curses.color_pair(self.HOVERED_AND_SELECTED)
-        elif self.hovered:
+        elif self.is_hovered:
             return curses.color_pair(self.HOVERED)
         elif self.is_selected:
             return curses.color_pair(self.SELECTED)

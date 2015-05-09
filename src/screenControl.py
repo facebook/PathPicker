@@ -257,7 +257,7 @@ class Controller(object):
         return maxy - miny
 
     def setHover(self, index, val):
-        self.lineMatches[index].hovered = val
+        self.lineMatches[index].is_hovered = val
 
     def toggle_select(self):
         self.dirtyHoverIndex()
