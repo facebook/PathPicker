@@ -71,7 +71,23 @@ PREPEND_PATH = getRepoPath().strip() + '/'
 
 # returns a filename and (optional) line number
 # if it matches
-def matchLine(line):
+def matchLine(line, customRegex=None):
+    # If we have a custom regex, we don't try any of the
+    # others.
+    if customRegex:
+        regex = re.compile(customRegex)
+        matches = regex.search(line)
+        if matches:
+            groups = matches.groups()
+            # It needs a group to match against
+            if not groups:
+                raise ValueError("Invalid custom regex -- no groups!")
+            # Not entirely sure what the point of this is
+            # num = 0 if groups[2] is None else int(groups[2])
+            return (groups[0], 0, matches)
+        else:
+            return None
+
     # Homedirs need a separate regex. TODO -- fix this copypasta
     matches = HOMEDIR_REGEX.search(line)
     if matches:

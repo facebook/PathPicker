@@ -127,26 +127,30 @@ decorator = '*' * 80
 USAGE_STR = decorator + '\n' + USAGE_STR + '\n' + decorator
 
 
-def getLineObjs():
+def getLineObjs(customRegex=None):
     inputLines = sys.stdin.readlines()
     lineObjs = {}
     for index, line in enumerate(inputLines):
         line = line.replace('\t', '    ')
         line = re.sub(r'\x1b[^mK]*(m|K)', '', line)
-        result = parse.matchLine(line)
+        result = parse.matchLine(line, customRegex=customRegex)
 
         if not result:
             simple = format.SimpleLine(line, index)
             lineObjs[index] = simple
             continue
         match = format.LineMatch(line, result, index)
+        # Ugly hack to remove prepended ./ from
+        # matches from custom regexes
+        if customRegex:
+            match.file = result[0]
         lineObjs[index] = match
     return lineObjs
 
 
-def doProgram():
+def doProgram(customRegex=None):
     filePath = stateFiles.getPickleFilePath()
-    lineObjs = getLineObjs()
+    lineObjs = getLineObjs(customRegex)
     # pickle it so the next program can parse it
     pickle.dump(lineObjs, open(filePath, 'wb'))
 
@@ -169,5 +173,9 @@ if __name__ == '__main__':
         if os.path.isfile(selectionPath):
             os.remove(selectionPath)
 
-        doProgram()
+        # If there is an argument, it's a custom regex
+        if len(sys.argv) > 1:
+            doProgram(customRegex=sys.argv[1])
+        else:
+            doProgram()
         sys.exit(0)
