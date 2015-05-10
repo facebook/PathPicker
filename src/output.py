@@ -171,6 +171,7 @@ def composeCommand(command, lineObjs):
 
 
 def composeFileCommand(command, lineObjs):
+    command = command.decode('utf-8')
     files = ["'%s'" % lineObj.getFile() for lineObj in lineObjs]
     file_str = ' '.join(files)
     if '$F' in command:
