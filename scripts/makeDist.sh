@@ -1,4 +1,6 @@
 #!/bin/bash
+cd ../
+
 VERSION="0.5.5"
 DEST="./dist/fpp.$VERSION.tar.gz"
 mkdir -p ./dist/

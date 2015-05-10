@@ -1,4 +1,6 @@
 #!/bin/bash
+cd ../
+
 PEPLINES=$(autopep8 --recursive ./src/ --diff | wc -l)
 if (( PEPLINES > 0 )); then
   echo "Not Pep8 compliant:";
