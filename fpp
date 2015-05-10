@@ -23,6 +23,8 @@ BASEDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 PYTHONCMD="python"
 # we need to handle the --help option outside the python
 # flow since otherwise we will move into input selection...
+# Hack to be able to access argument following '-r'/'--regex'
+i=0
 for opt in "$@"; do
   if [ "$opt" == "--debug" ]; then
     echo "Executing from '$BASEDIR'"
@@ -31,11 +33,16 @@ for opt in "$@"; do
   elif [ "$opt" == "--help" -o "$opt" == "-h" ]; then
     $PYTHONCMD "$BASEDIR/src/printHelp.py"
     exit 0
+  elif [ "$opt" == "-r" -o "$opt" == "--regex" ]; then
+    # Ditto wrt hack
+    array=( "$@" )
+    CUSTOMREGEX=${array[((i+1))]}
   fi
+  i=$((i+1))
 done
 
 # process input from pipe and store as pickled file
-$PYTHONCMD "$BASEDIR/src/processInput.py"
+$PYTHONCMD "$BASEDIR/src/processInput.py" $CUSTOMREGEX
 # now choose input and...
 exec 0<&-
 $PYTHONCMD "$BASEDIR/src/choose.py" < /dev/tty
