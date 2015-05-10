@@ -20,14 +20,7 @@ while [ -h "$SOURCE" ]; do
 done
 BASEDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-# Until we have Python 3.0 support, lets check
-# if we have Python2 available directly and (if so)
-# use that instead. This helps on linux checkouts
 PYTHONCMD="python"
-if type python2 &> /dev/null; then
-  PYTHONCMD="python2"
-fi
-
 # we need to handle the --help option outside the python
 # flow since otherwise we will move into input selection...
 for opt in "$@"; do
