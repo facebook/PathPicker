@@ -18,8 +18,6 @@ import screenControl
 import logger
 import format
 
-PICKLE_FILE = '~/.fbPager.pickle'
-SELECTION_PICKLE = '~/.fbPager.selection.pickle'
 LOAD_SELECTION_WARNING = '''
 WARNING! Loading the standard input and previous selection
 failed. This is probably due to a backwards compatibility issue
@@ -27,6 +25,8 @@ with upgrading PathPicker or an internal error. Please pipe
 a new set of input to PathPicker to start fresh (after which
 this error will go away)
 '''
+PICKLE_FILE = '~/.fpp/.pickle'
+SELECTION_PICKLE = '~/.fpp/.selection.pickle'
 
 
 def doProgram(stdscr):
