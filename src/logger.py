@@ -9,7 +9,7 @@ import json
 import subprocess
 import os
 
-LOGGER_FILE = '~/.fbPager.log'
+import stateFiles
 
 # This file just outputs some simple log events that are consumed by
 # another service for internal logging at Facebook. Use it if you want
@@ -17,7 +17,7 @@ LOGGER_FILE = '~/.fbPager.log'
 
 
 def writeToFile(content):
-    file = open(os.path.expanduser(LOGGER_FILE), 'w')
+    file = open(stateFiles.getLoggerFilePath(), 'w')
     file.write(content)
     file.close()
 

@@ -13,6 +13,7 @@ FPP_DIR = '~/.fpp'
 PICKLE_FILE = '.pickle'
 SELECTION_PICKLE = '.selection.pickle'
 OUTPUT_FILE = '.fpp.sh'
+LOGGER_FILE = '.fpp.log'
 
 def assertDirCreated():
     path = os.path.expanduser(FPP_DIR)
@@ -35,3 +36,7 @@ def getSelectionFilePath():
 def getScriptOutputFilePath():
     assertDirCreated()
     return os.path.expanduser(os.path.join(FPP_DIR, OUTPUT_FILE))
+
+def getLoggerFilePath():
+    assertDirCreated()
+    return os.path.expanduser(os.path.join(FPP_DIR, LOGGER_FILE))
