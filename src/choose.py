@@ -17,8 +17,8 @@ import output
 import screenControl
 import logger
 
-PICKLE_FILE = '~/.fbPager.pickle'
-SELECTION_PICKLE = '~/.fbPager.selection.pickle'
+PICKLE_FILE = '~/.fpp/.pickle'
+SELECTION_PICKLE = '~/.fpp/.selection.pickle'
 
 
 def doProgram(stdscr):
