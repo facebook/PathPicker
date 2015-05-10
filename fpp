@@ -20,12 +20,6 @@ while [ -h "$SOURCE" ]; do
 done
 BASEDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-for opt in "$@"; do
-  if [ "$opt" == "--debug" ]; then
-    echo "Executing from '$BASEDIR'"
-  fi
-done
-
 # Until we have Python 3.0 support, lets check
 # if we have Python2 available directly and (if so)
 # use that instead. This helps on linux checkouts
@@ -37,7 +31,11 @@ fi
 # we need to handle the --help option outside the python
 # flow since otherwise we will move into input selection...
 for opt in "$@"; do
-  if [ "$opt" == "--help" -o "$opt" == "-h" ]; then
+  if [ "$opt" == "--debug" ]; then
+    echo "Executing from '$BASEDIR'"
+  elif [ "$opt" == "--python3" ]; then
+    PYTHONCMD="python3"
+  elif [ "$opt" == "--help" -o "$opt" == "-h" ]; then
     $PYTHONCMD "$BASEDIR/src/printHelp.py"
     exit 0
   fi
