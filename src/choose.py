@@ -19,6 +19,13 @@ import logger
 
 PICKLE_FILE = '~/.fbPager.pickle'
 SELECTION_PICKLE = '~/.fbPager.selection.pickle'
+LOAD_SELECTION_WARNING = '''
+WARNING! Loading the standard input and previous selection
+failed. This is probably due to a backwards compatibility issue
+with upgrading PathPicker or an internal error. Please pipe
+a new set of input to PathPicker to start fresh (after which
+this error will go away)
+'''
 
 
 def doProgram(stdscr):
@@ -31,14 +38,22 @@ def doProgram(stdscr):
 
 def getLineObjs():
     filePath = os.path.expanduser(PICKLE_FILE)
-    lineObjs = pickle.load(open(filePath, 'rb'))
+    try:
+      lineObjs = pickle.load(open(filePath, 'rb'))
+    except:
+      output.appendError(LOAD_SELECTION_WARNING)
+      sys.exit(1)
     matches = [lineObj for i, lineObj in lineObjs.items()
                if not lineObj.isSimple()]
     logger.addEvent('total_num_files', len(lineObjs.items()))
 
     selectionPath = os.path.expanduser(SELECTION_PICKLE)
     if os.path.isfile(selectionPath):
-        selectedIndices = pickle.load(open(selectionPath))
+        try:
+            selectedIndices = pickle.load(open(selectionPath, 'rb'))
+        except:
+            output.appendError(LOAD_SELECTION_WARNING)
+            sys.exit(1)
         for index in selectedIndices:
             if index < len(matches):
                 matches[index].setSelect(True)
