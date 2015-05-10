@@ -16,6 +16,7 @@ import os
 import output
 import screenControl
 import logger
+import format
 
 PICKLE_FILE = '~/.fbPager.pickle'
 SELECTION_PICKLE = '~/.fbPager.selection.pickle'
@@ -47,7 +48,7 @@ def getLineObjs():
 
     selectionPath = os.path.expanduser(SELECTION_PICKLE)
     if os.path.isfile(selectionPath):
-        setSelectionsFromPickle(lineObjs)
+        setSelectionsFromPickle(selectionPath, lineObjs)
 
     matches = [lineObj for i, lineObj in lineObjs.items()
                if not lineObj.isSimple()]
@@ -56,7 +57,7 @@ def getLineObjs():
         sys.exit(0)
     return lineObjs
 
-def setSelectionsFromPickle(lineObjs):
+def setSelectionsFromPickle(selectionPath, lineObjs):
     try:
         selectedIndices = pickle.load(open(selectionPath, 'rb'))
     except:
