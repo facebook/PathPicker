@@ -82,7 +82,7 @@ def debug(*args):
 def outputSelection(lineObjs):
     filePath = os.path.expanduser(SELECTION_PICKLE)
     indices = [l.index for l in lineObjs]
-    pickle.dump(indices, open(filePath, 'w'))
+    pickle.dump(indices, open(filePath, 'wb'))
 
 
 def getEditorAndPath():
