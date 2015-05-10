@@ -43,25 +43,36 @@ def getLineObjs():
     except:
       output.appendError(LOAD_SELECTION_WARNING)
       sys.exit(1)
-    matches = [lineObj for i, lineObj in lineObjs.items()
-               if not lineObj.isSimple()]
     logger.addEvent('total_num_files', len(lineObjs.items()))
 
     selectionPath = os.path.expanduser(SELECTION_PICKLE)
     if os.path.isfile(selectionPath):
-        try:
-            selectedIndices = pickle.load(open(selectionPath, 'rb'))
-        except:
-            output.appendError(LOAD_SELECTION_WARNING)
-            sys.exit(1)
-        for index in selectedIndices:
-            if index < len(matches):
-                matches[index].setSelect(True)
+        setSelectionsFromPickle(lineObjs)
 
+    matches = [lineObj for i, lineObj in lineObjs.items()
+               if not lineObj.isSimple()]
     if not len(matches):
         output.writeToFile('echo "No lines matched!!"')
         sys.exit(0)
     return lineObjs
+
+def setSelectionsFromPickle(lineObjs):
+    try:
+        selectedIndices = pickle.load(open(selectionPath, 'rb'))
+    except:
+        output.appendError(LOAD_SELECTION_WARNING)
+        sys.exit(1)
+    for index in selectedIndices:
+        if index >= len(lineObjs.items()):
+            error = 'Found index %d more than total matches' % index
+            output.appendError(error)
+            continue
+        toSelect = lineObjs[index]
+        if isinstance(toSelect, format.LineMatch):
+            lineObjs[index].setSelect(True)
+        else:
+            error = 'Line %d was selected but is not LineMatch' % index
+            output.appendError(error)
 
 
 if __name__ == '__main__':

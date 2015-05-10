@@ -82,6 +82,9 @@ def debug(*args):
 def outputSelection(lineObjs):
     filePath = os.path.expanduser(SELECTION_PICKLE)
     indices = [l.index for l in lineObjs]
+    debug("OUTPUTTING SELETION")
+    for index in indices:
+      debug(index)
     pickle.dump(indices, open(filePath, 'wb'))
 
 
