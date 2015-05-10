@@ -38,10 +38,10 @@ def doProgram(stdscr):
 def getLineObjs():
     filePath = stateFiles.getPickleFilePath()
     try:
-      lineObjs = pickle.load(open(filePath, 'rb'))
+        lineObjs = pickle.load(open(filePath, 'rb'))
     except:
-      output.appendError(LOAD_SELECTION_WARNING)
-      sys.exit(1)
+        output.appendError(LOAD_SELECTION_WARNING)
+        sys.exit(1)
     logger.addEvent('total_num_files', len(lineObjs.items()))
 
     selectionPath = stateFiles.getSelectionFilePath()
@@ -54,6 +54,7 @@ def getLineObjs():
         output.writeToFile('echo "No lines matched!!"')
         sys.exit(0)
     return lineObjs
+
 
 def setSelectionsFromPickle(selectionPath, lineObjs):
     try:
