@@ -16,6 +16,7 @@ import output
 import screenControl
 import logger
 import format
+import stateFiles
 
 LOAD_SELECTION_WARNING = '''
 WARNING! Loading the standard input and previous selection
@@ -24,8 +25,6 @@ with upgrading PathPicker or an internal error. Please pipe
 a new set of input to PathPicker to start fresh (after which
 this error will go away)
 '''
-PICKLE_FILE = '~/.fpp/.pickle'
-SELECTION_PICKLE = '~/.fpp/.selection.pickle'
 
 
 def doProgram(stdscr):
@@ -37,7 +36,7 @@ def doProgram(stdscr):
 
 
 def getLineObjs():
-    filePath = os.path.expanduser(PICKLE_FILE)
+    filePath = stateFiles.getPickleFilePath()
     try:
       lineObjs = pickle.load(open(filePath, 'rb'))
     except:
@@ -45,7 +44,7 @@ def getLineObjs():
       sys.exit(1)
     logger.addEvent('total_num_files', len(lineObjs.items()))
 
-    selectionPath = os.path.expanduser(SELECTION_PICKLE)
+    selectionPath = stateFiles.getSelectionFilePath()
     if os.path.isfile(selectionPath):
         setSelectionsFromPickle(selectionPath, lineObjs)
 
@@ -76,7 +75,8 @@ def setSelectionsFromPickle(selectionPath, lineObjs):
 
 
 if __name__ == '__main__':
-    if not os.path.exists(os.path.expanduser(PICKLE_FILE)):
+    filePath = stateFiles.getPickleFilePath()
+    if not os.path.exists(filePath):
         print('Nothing to do!')
         output.writeToFile('echo ":D"')
         sys.exit(0)

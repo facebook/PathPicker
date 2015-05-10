@@ -10,9 +10,8 @@ import pickle
 import re
 
 import logger
+import stateFiles
 
-OUTPUT_FILE = '~/.fbPager.sh'
-SELECTION_PICKLE = '~/.fbPager.selection.pickle'
 BASH_RC = '~/.bashrc'
 ZSH_RC = '~/.zshrc'
 DEBUG = '~/.fbPager.debug.text'
@@ -79,7 +78,7 @@ def debug(*args):
 
 
 def outputSelection(lineObjs):
-    filePath = os.path.expanduser(SELECTION_PICKLE)
+    filePath = stateFiles.getSelectionFilePath()
     indices = [l.index for l in lineObjs]
     pickle.dump(indices, open(filePath, 'wb'))
 
@@ -200,14 +199,14 @@ def appendError(text):
 
 
 def appendToFile(command):
-    file = open(os.path.expanduser(OUTPUT_FILE), 'a')
+    file = open(stateFiles.getScriptOutputFilePath(), 'a')
     file.write(command + '\n')
     file.close()
     logger.output()
 
 
 def writeToFile(command):
-    file = open(os.path.expanduser(OUTPUT_FILE), 'w')
+    file = open(stateFiles.getScriptOutputFilePath(), 'w')
     file.write(command + '\n')
     file.close()
     logger.output()

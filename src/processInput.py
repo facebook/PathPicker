@@ -14,10 +14,7 @@ import re
 
 import parse
 import format
-
-FPP_DIR = '~/.fpp'
-PICKLE_FILE = '.pickle'
-SELECTION_PICKLE = '.selection.pickle'
+import stateFiles
 
 USAGE_INTRO = '''
 Welcome to fpp, the Facebook PathPicker! We hope your stay
@@ -147,17 +144,8 @@ def getLineObjs():
     return lineObjs
 
 
-def validateFiles():
-    path = os.path.expanduser(FPP_DIR)
-    try:
-        os.makedirs(path)
-    except OSError:
-        if not os.path.isdir(path):
-            raise
-
-
 def doProgram():
-    filePath = os.path.expanduser(os.path.join(FPP_DIR, PICKLE_FILE))
+    filePath = stateFiles.getPickleFilePath()
     lineObjs = getLineObjs()
     # pickle it so the next program can parse it
     pickle.dump(lineObjs, open(filePath, 'wb'))
@@ -168,10 +156,8 @@ def usage():
 
 
 if __name__ == '__main__':
-    validateFiles()
-    filePath = os.path.expanduser(os.path.join(FPP_DIR, PICKLE_FILE))
     if sys.stdin.isatty():
-        if os.path.isfile(filePath):
+        if os.path.isfile(stateFiles.getPickleFilePath()):
             print('Using old result...')
         else:
             usage()
@@ -179,9 +165,7 @@ if __name__ == '__main__':
         sys.exit(0)
     else:
         # delete the old selection
-        selectionPath = os.path.expanduser(
-            os.path.join(FPP_DIR, SELECTION_PICKLE))
-
+        selectionPath = stateFiles.getSelectionFilePath()
         if os.path.isfile(selectionPath):
             os.remove(selectionPath)
 

@@ -40,4 +40,4 @@ $PYTHONCMD "$BASEDIR/src/processInput.py"
 exec 0<&-
 $PYTHONCMD "$BASEDIR/src/choose.py" < /dev/tty
 # execute the output bash script
-sh ~/.fbPager.sh < /dev/tty
+sh ~/.fpp/.fpp.sh < /dev/tty
