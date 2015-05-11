@@ -84,12 +84,18 @@ class FormattedText(object):
 
     def findSegmentPlace(self, toGo):
         index = 1
+
         while index < len(self.segments):
             toGo -= len(self.segments[index])
             if toGo < 0:
                 return (index, toGo)
 
             index += 2
+
+        if toGo == 0:
+            #we could reach here if the requested place is equal
+            #to the very end of the string (as we do a <0 above).
+            return (index-2, len(self.segments[index-2]))
 
 
     def breakat(self, where):
