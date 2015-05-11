@@ -39,6 +39,42 @@ fileTestCases = [{
     'file': './asd.txt',
     'num': 83
 }, {
+    'input': '.env.local',
+    'match': True,
+    'file': '.env.local',
+    'num': 0
+}, {
+    'input': '.gitignore',
+    'match': True,
+    'file': '.gitignore',
+    'num': 0
+}, {
+    'input': 'tmp/.gitignore',
+    'match': True,
+    'file': 'tmp/.gitignore',
+    'num': 0
+}, {
+    'input': '.ssh/.gitignore',
+    'match': True,
+    'file': '.ssh/.gitignore',
+    'num': 0
+}, {
+    'input': '.ssh/known_hosts',
+    'match': True,
+    'file': '.ssh/known_hosts',
+    'num': 0
+
+# For now, don't worry about matching the following case perfectly,
+# simply because it's complicated.
+#}, {
+#    'input': '~/.ssh/known_hosts',
+#    'match': True,
+
+}, {
+    # Arbitrarily ignore really short dot filenames
+    'input': '.a',
+    'match': False,
+}, {
     'input': 'flib/asd/ent/berkeley/two.py-22',
     'match': True,
     'file': 'flib/asd/ent/berkeley/two.py',
