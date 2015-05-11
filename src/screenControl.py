@@ -23,7 +23,6 @@ signal.signal(signal.SIGINT, signal_handler)
 
 import logger
 
-PICKLE_FILE = '~/.fbPager.pickle'
 CHROME_MIN_X = 5
 CHROME_MIN_Y = 0
 
