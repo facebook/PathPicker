@@ -9,7 +9,6 @@ from __future__ import print_function
 
 import curses
 import parse
-import sys
 from formattedText import FormattedText
 
 class SimpleLine(object):
@@ -186,7 +185,6 @@ class LineMatch(object):
 
         maxLen = maxx - minx
         soFar = (minx, maxLen)
-        sys.stderr.write(str(self.decoratedMatch.segments) + '\n')
 
         soFar = self.printUpTo(self.beforeText, printer, y, *soFar)
         soFar = self.printUpTo(self.decoratedMatch, printer, y, *soFar)
