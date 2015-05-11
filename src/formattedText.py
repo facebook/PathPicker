@@ -9,6 +9,7 @@
 
 import re
 import curses
+from collections import namedtuple
 
 class FormattedText(object):
     """A piece of ANSI escape formatted text which responds
@@ -18,17 +19,21 @@ class FormattedText(object):
     ANSI_ESCAPE_FORMATTING = r'\x1b\[([^mK]*)[mK]'
     BOLD_ATTRIBUTE = 1
     UNDERLINE_ATTRIBUTE = 4
+    Range = namedtuple('Range', 'bottom top')
+    FOREGROUND_RANGE = Range(30,39)
+    BACKGROUND_RANGE = Range(40,49)
 
-    def __init__(self, text):
+    def __init__(self, text=None):
         self.text = text
 
-        self.segments = re.split(self.ANSI_ESCAPE_FORMATTING, self.text)
-        #re.split will insert a empty string if there is a match at the beginning
-        #or it will return [string] if there is no match
-        #create the invariant that every segment has a formatting segment, e.g
-        #we will always have FORMAT, TEXT, FORMAT, TEXT
-        self.segments.insert(0, '')
-        self.plainText = ''.join(self.segments[1::2])
+        if not self.text is None:
+            self.segments = re.split(self.ANSI_ESCAPE_FORMATTING, self.text)
+            #re.split will insert a empty string if there is a match at the beginning
+            #or it will return [string] if there is no match
+            #create the invariant that every segment has a formatting segment, e.g
+            #we will always have FORMAT, TEXT, FORMAT, TEXT
+            self.segments.insert(0, '')
+            self.plainText = ''.join(self.segments[1::2])
 
 
     def __str__(self):
@@ -43,10 +48,12 @@ class FormattedText(object):
         other = 0
         intValues = [int(value) for value in formatting.split(';') if value]
         for code in intValues:
-            if code >= 30 and code <= 39:
-                fore = code-30
-            elif code >= 40 and code <= 49:
-                back = code-40
+            if (code >= cls.FOREGROUND_RANGE.bottom
+                and code <= cls.FOREGROUND_RANGE.top):
+                fore = code-cls.FOREGROUND_RANGE.bottom
+            elif (code >= cls.BACKGROUND_RANGE.bottom
+                  and code <= cls.BACKGROUND_RANGE.top):
+                back = code-cls.BACKGROUND_RANGE.bottom
             elif code == cls.BOLD_ATTRIBUTE:
                 other = other | curses.A_BOLD
             elif code == cls.UNDERLINE_ATTRIBUTE:
@@ -54,11 +61,13 @@ class FormattedText(object):
 
         return (fore, back, other)
 
-    @staticmethod
-    def getSequenceForAttributes(fore, back, attr):
+    @classmethod
+    def getSequenceForAttributes(cls, fore, back, attr):
         """Return a fully formed escape sequence for the color pair
         and additional attributes"""
-        return "\x1b["+str(30+fore)+";"+str(40+back)+";"+str(attr)+"m"
+        return ("\x1b[" + str(cls.FOREGROUND_RANGE.bottom + fore)
+                + ";" + str(cls.BACKGROUND_RANGE.bottom + back) + ";"
+                + str(attr) + "m")
 
     def printText(self, y, x, printer, maxLen):
         """Print out using ncurses. Note that if any formatting changes
@@ -84,9 +93,11 @@ class FormattedText(object):
 
             index += 2
 
-    def breakat(self, toGo):
-        """Break the line at the point given and replicate
-        the formatting"""
+
+    def breakat(self, where):
+        """Break the formatted text at the point given and return
+        a new tuple of two FormattedText representing the before and
+        after"""
         #FORMAT, TEXT, FORMAT, TEXT, FORMAT, TEXT
         #--before----, segF,   seg,  ----after--
         #
@@ -95,33 +106,21 @@ class FormattedText(object):
         #FORMAT, TEXT, FORMAT, TEXTBEFORE, FORMAT, TEXTAFTER, FORMAT, TEXT
         #--before----, segF,   [before],   segF,   [after],   -----after--
         #----index---------------/
-        (index, toGo) = self.findSegmentPlace(toGo)
+        (index, splitPoint) = self.findSegmentPlace(where)
         textSegment = self.segments[index]
-        beforeText = textSegment[:toGo]
-        afterText = textSegment[toGo:]
+        beforeText = textSegment[:splitPoint]
+        afterText = textSegment[splitPoint:]
         beforeSegments = self.segments[:index]
         afterSegments = self.segments[index+1:]
 
         formattingForSegment = self.segments[index-1]
 
-        self.segments = (beforeSegments + [beforeText]
-                         + [formattingForSegment]
-                         + [afterText] + afterSegments)
+        beforeFormattedText = FormattedText()
+        afterFormattedText = FormattedText()
+        beforeFormattedText.segments = (beforeSegments + [beforeText])
+        afterFormattedText.segments = ([formattingForSegment]
+                              + [afterText] + afterSegments)
+        beforeFormattedText.plainText = self.plainText[:where]
+        afterFormattedText.plainText = self.plainText[where:]
 
-    def replace(self, start, end, newString):
-        """replace some text in the formatted text with some new text.
-        the start and end indices index into the string ignoring the
-        formatting"""
-        newFormattedString = FormattedText(newString)
-
-        self.breakat(start)
-        self.breakat(end)
-
-        (startSegmentIndex, startPlace) = self.findSegmentPlace(start)
-        (endSegmentIndex, endPlace) = self.findSegmentPlace(end)
-
-        newSegments = (self.segments[:startSegmentIndex-1]
-                       + newFormattedString.segments
-                       + self.segments[endSegmentIndex-1:])
-
-        self.segments = newSegments
+        return (beforeFormattedText, afterFormattedText)

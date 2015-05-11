@@ -9,7 +9,7 @@ from __future__ import print_function
 
 import curses
 import parse
-import copy
+import sys
 from formattedText import FormattedText
 
 class SimpleLine(object):
@@ -77,17 +77,24 @@ class LineMatch(object):
         self.selected = False
         self.hovered = False
 
+        #precalculate the pre, post, and match strings
+        (self.beforeText, unused) = self.formattedLine.breakat(self.start)
+        (unused, self.afterText) = self.formattedLine.breakat(self.end)
+        self.updateDecoratedMatch()
+
     def toggleSelect(self):
-        self.selected = not self.selected
+        self.setSelect(not self.selected)
 
     def setController(self, controller):
         self.controller = controller
 
     def setSelect(self, val):
         self.selected = val
+        self.updateDecoratedMatch()
 
     def setHover(self, val):
         self.hovered = val
+        self.updateDecoratedMatch()
 
     def getScreenIndex(self):
         return self.index
@@ -124,10 +131,10 @@ class LineMatch(object):
         return self.selected
 
     def getBefore(self):
-        return str(self.formattedLine)[0:self.start]
+        return str(self.beforeText)
 
     def getAfter(self):
-        return str(self.formattedLine)[self.end:]
+        return str(self.afterText)
 
     def getMatch(self):
         return self.group
@@ -137,7 +144,8 @@ class LineMatch(object):
                 + '||' + self.getAfter() + '||' +
                 str(self.num))
 
-    def getDecoratorFormatting(self):
+    def updateDecoratedMatch(self):
+        '''Update the cached decorated match formatted string'''
         if self.hovered and self.selected:
             attributes = (curses.COLOR_WHITE, curses.COLOR_RED, 0)
         elif self.hovered:
@@ -147,24 +155,28 @@ class LineMatch(object):
         else:
             attributes = (0,0,FormattedText.UNDERLINE_ATTRIBUTE)
 
-        return FormattedText.getSequenceForAttributes(*attributes)
+        self.decoratedMatch = FormattedText(
+            FormattedText.getSequenceForAttributes(*attributes) +
+            self.getDecorator() + self.getMatch())
+
 
     def getDecorator(self):
         if self.selected:
             return '|===>'
         return ''
 
-    def output(self, printer):
-        decorator = self.getDecorator()
-        # inject the decorator and decorated style
-        # into the formatted text and then simply print it out
-        text = copy.deepcopy(self.formattedLine)
-        decoratedMatch = (self.getDecoratorFormatting()
-                          + self.getDecorator()
-                          + self.getMatch())
-        text.replace(self.start, self.end,
-                     decoratedMatch)
+    def printUpTo(self, text, printer, y, x, maxLen):
+        '''Attempt to print maxLen characters, returning a tuple
+        (x, maxLen) updated with the actual number of characters
+        printed'''
+        if maxLen <= 0:
+            return (x, maxLen)
 
+        maxPrintable = min(len(str(text)), maxLen)
+        text.printText(y, x, printer, maxPrintable)
+        return (x + maxPrintable, maxLen - maxPrintable)
+
+    def output(self, printer):
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
         y = miny + self.index + self.controller.getScrollOffset()
 
@@ -173,4 +185,9 @@ class LineMatch(object):
             return
 
         maxLen = maxx - minx
-        text.printText(y, minx, printer, maxLen)
+        soFar = (minx, maxLen)
+        sys.stderr.write(str(self.decoratedMatch.segments) + '\n')
+
+        soFar = self.printUpTo(self.beforeText, printer, y, *soFar)
+        soFar = self.printUpTo(self.decoratedMatch, printer, y, *soFar)
+        soFar = self.printUpTo(self.afterText, printer, y, *soFar)
