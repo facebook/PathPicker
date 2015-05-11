@@ -20,7 +20,7 @@ class ColorPrinter(object):
         self.colors[(-1, -1)] = 1
         curses.init_pair(1, -1, -1)
         self.screen = screen
-        self.currentAttributes = Fasle  # initialized in setAttributes
+        self.currentAttributes = False  # initialized in setAttributes
 
     def setAttributes(self, foreColor, backColor, other):
         colorIndex = -1
