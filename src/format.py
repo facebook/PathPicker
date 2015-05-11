@@ -5,18 +5,21 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
-# @nolint
-import parse
+from __future__ import print_function
+
 import curses
-import output
+
+import parse
+
 
 class SimpleLine(object):
+
     def __init__(self, line, index):
         self.line = line
         self.index = index
 
     def printOut(self):
-        print str(self)
+        print(str(self))
 
     def output(self, stdscr):
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
@@ -38,6 +41,7 @@ class SimpleLine(object):
 
 
 class LineMatch(object):
+
     def __init__(self, line, result, index):
         self.line = line
         self.index = index
@@ -94,6 +98,17 @@ class LineMatch(object):
         # the last
         parts = self.file.split('/')[0:-1]
         return '/'.join(parts)
+
+    def isResolvable(self):
+        return not self.isGitAbbreviatedPath()
+
+    def isGitAbbreviatedPath(self):
+        # this method mainly serves as a warning for when we get
+        # git-abbrievated paths like ".../" that confuse users.
+        parts = self.file.split('/')
+        if len(parts) and parts[0] == '...':
+            return True
+        return False
 
     def getLineNum(self):
         return self.num

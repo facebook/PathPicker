@@ -5,22 +5,27 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
-# @nolint
+from __future__ import print_function
+
 import curses
-import time
 import pickle
 import sys
 import os
 
-import parse
 import output
-import format
 import screenControl
-import processInput
 import logger
+import format
+import stateFiles
 
-PICKLE_FILE = '~/.fbPager.pickle'
-SELECTION_PICKLE = '~/.fbPager.selection.pickle'
+LOAD_SELECTION_WARNING = '''
+WARNING! Loading the standard input and previous selection
+failed. This is probably due to a backwards compatibility issue
+with upgrading PathPicker or an internal error. Please pipe
+a new set of input to PathPicker to start fresh (after which
+this error will go away)
+'''
+
 
 def doProgram(stdscr):
     output.clearFile()
@@ -29,29 +34,51 @@ def doProgram(stdscr):
     screen = screenControl.Controller(stdscr, lineObjs)
     screen.control()
 
+
 def getLineObjs():
-    filePath = os.path.expanduser(PICKLE_FILE)
-    lineObjs = pickle.load(open(filePath))
-    matches = [lineObj for i, lineObj in lineObjs.items()
-               if not lineObj.isSimple()]
+    filePath = stateFiles.getPickleFilePath()
+    try:
+        lineObjs = pickle.load(open(filePath, 'rb'))
+    except:
+        output.appendError(LOAD_SELECTION_WARNING)
+        sys.exit(1)
     logger.addEvent('total_num_files', len(lineObjs.items()))
 
-    selectionPath = os.path.expanduser(SELECTION_PICKLE)
+    selectionPath = stateFiles.getSelectionFilePath()
     if os.path.isfile(selectionPath):
-        selectedIndices = pickle.load(open(selectionPath))
-        for index in selectedIndices:
-            if index < len(matches):
-                matches[index].setSelect(True)
+        setSelectionsFromPickle(selectionPath, lineObjs)
 
+    matches = [lineObj for i, lineObj in lineObjs.items()
+               if not lineObj.isSimple()]
     if not len(matches):
         output.writeToFile('echo "No lines matched!!"')
         sys.exit(0)
     return lineObjs
 
 
+def setSelectionsFromPickle(selectionPath, lineObjs):
+    try:
+        selectedIndices = pickle.load(open(selectionPath, 'rb'))
+    except:
+        output.appendError(LOAD_SELECTION_WARNING)
+        sys.exit(1)
+    for index in selectedIndices:
+        if index >= len(lineObjs.items()):
+            error = 'Found index %d more than total matches' % index
+            output.appendError(error)
+            continue
+        toSelect = lineObjs[index]
+        if isinstance(toSelect, format.LineMatch):
+            lineObjs[index].setSelect(True)
+        else:
+            error = 'Line %d was selected but is not LineMatch' % index
+            output.appendError(error)
+
+
 if __name__ == '__main__':
-    if not os.path.exists(os.path.expanduser(PICKLE_FILE)):
-        print 'Nothing to do!'
+    filePath = stateFiles.getPickleFilePath()
+    if not os.path.exists(filePath):
+        print('Nothing to do!')
         output.writeToFile('echo ":D"')
         sys.exit(0)
     output.clearFile()

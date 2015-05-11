@@ -19,8 +19,8 @@ a wide variety of input -- try it with all the options below:
 * `git grep "FooBar" | fpp`
 * `grep -r "FooBar" . | fpp`
 * `git diff HEAD~1 --stat | fpp`
-* `arc inlines | fpp`
 * `find . -iname "*.js" | fpp`
+* `arc inlines | fpp`
 
 and anything else you can dream up!
 
@@ -56,7 +56,7 @@ to `/usr/local/bin/` which is assumed to be in the current
 ## Advanced Functionality
 
 As mentioned above, PathPicker allows you to also execute arbitrary commands with the specified files.
-Here is an exaple showing a `git checkout` command executed against the selected files:
+Here is an example showing a `git checkout` command executed against the selected files:
 <a href="https://asciinema.org/a/19520" target="_blank"><img src="https://asciinema.org/a/19520.png" width="597"/></a>
 
 The selected files are appended to the command prefix to form the final command. If you need the files
@@ -68,9 +68,9 @@ in the middle of your command, you can use the `$F` token instead, like:
 PathPicker is a combination of a bash script and some small Python modules.
 It essentially has three steps:
 
-* First in the bash script, it redirects all standardput in to a python module that
+* First in the bash script, it redirects all standardout in to a python module that
 parses and extracts out the filenames. This data is saved in a temporary file
-and the python script exists.
+and the python script exits.
 * Next, the bash script switches to terminal input mode and
 another python module reads out the saved entries and presents them in a
 selector UI built with `curses`. The user either selects a few files to edit or inputs a command
@@ -79,6 +79,10 @@ to execute.
 executed by the original bash script.
 
 It's not the most elegant architecture in the world but (in our opinion) provides a lot of utility.
+
+## Documentation & Configuration
+
+For all documentation and configuration options, see the output of `fpp --help`.
 
 ## Join the PathPicker community
 See the CONTRIBUTING file for how to help out.

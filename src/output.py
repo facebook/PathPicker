@@ -5,20 +5,74 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
-# @nolint
 import os
 import pickle
 import re
-import sys
 
 import logger
+import stateFiles
 
-OUTPUT_FILE = '~/.fbPager.sh'
-SELECTION_PICKLE = '~/.fbPager.selection.pickle'
-BASH_RC = '~/.bashrc'
 DEBUG = '~/.fbPager.debug.text'
+RED_COLOR = u'\033[0;31m'
+NO_COLOR = u'\033[0m'
 
-ALIAS_REGEX = re.compile('alias (\w+)=[\'"](.*?)[\'"]')
+INVALID_FILE_WARNING = '''
+Warning! Some invalid or unresolvable files were detected.
+'''
+
+GIT_ABBREVIATION_WARNING = '''
+It looks like one of these is a git abbreviated file with
+a triple dot path (.../). Try to turn off git's abbreviation
+with --numstat so we get actual paths (not abbreviated
+versions which cannot be resolved.
+'''
+
+CONTINUE_WARNING = 'Are you sure you want to continue? Ctrl-C to quit'
+
+FILES_TO_SOURCE = [
+    '~/.zshrc',
+    '~/.bashrc',
+    '~/.bash_profile',
+    '~/.bash_aliases'
+]
+
+# The two main entry points into this module:
+#
+
+
+def execComposedCommand(command, lineObjs):
+    if not len(command):
+        editFiles(lineObjs)
+        return
+    logger.addEvent('command_on_num_files', len(lineObjs))
+    command = composeCommand(command, lineObjs)
+    appendAliasExpansion()
+    appendIfInvalid(lineObjs)
+    appendFriendlyCommand(command)
+
+
+def editFiles(lineObjs):
+    partialCommands = []
+    logger.addEvent('editing_num_files', len(lineObjs))
+    for lineObj in lineObjs:
+        (file, num) = (lineObj.getFile(), lineObj.getLineNum())
+        partialCommands.append(getEditFileCommand(file, num))
+    command = joinEditCommands(partialCommands)
+    appendIfInvalid(lineObjs)
+    appendToFile(command)
+
+
+# Private helpers
+def appendIfInvalid(lineObjs):
+    # lastly lets check validity and actually output an
+    # error if any files are invalid
+    invalidLines = [line for line in lineObjs if not line.isResolvable()]
+    if not invalidLines:
+        return
+    appendError(INVALID_FILE_WARNING)
+    if len([line for line in invalidLines if line.isGitAbbreviatedPath()]):
+        appendError(GIT_ABBREVIATION_WARNING)
+    appendToFile('read -p "%s" -r' % CONTINUE_WARNING)
 
 
 def debug(*args):
@@ -27,13 +81,13 @@ def debug(*args):
 
 
 def outputSelection(lineObjs):
-    filePath = os.path.expanduser(SELECTION_PICKLE)
+    filePath = stateFiles.getSelectionFilePath()
     indices = [l.index for l in lineObjs]
-    pickle.dump(indices, open(filePath, 'w'))
+    pickle.dump(indices, open(filePath, 'wb'))
 
 
 def getEditorAndPath():
-    editor_path = os.environ.get('EDITOR')
+    editor_path = os.environ.get('FPP_EDITOR') or os.environ.get('EDITOR')
     if editor_path:
         editor = os.path.basename(editor_path)
         logger.addEvent('using_editor_' + editor)
@@ -49,29 +103,6 @@ def getEditFileCommand(filePath, lineNum):
         return '+%d \'%s\'' % (lineNum, filePath)
     else:
         return "'%s'" % filePath
-
-
-def getAliases():
-    try:
-        lines = open(os.path.expanduser(BASH_RC), 'r').readlines()
-    except IOError:
-        return {}
-    pairs = []
-    for line in lines:
-        results = ALIAS_REGEX.search(line)
-        if results:
-            # groups is a tuple of (word, expanded)
-            pairs.append(results.groups())
-    # ok now we can make a dict out of this
-    return dict(pairs)
-
-
-def expandAliases(command):
-    aliasToExpand = getAliases()
-    tokens = command.split(' ')
-    if (tokens[0] in aliasToExpand):
-        tokens[0] = aliasToExpand[tokens[0]]
-    return ' '.join(tokens)
 
 
 def expandPath(filePath):
@@ -90,16 +121,6 @@ def joinEditCommands(partialCommands):
             return editor_path + ' ' + partialCommands[0]
     # Assume that all other editors behave like emacs
     return editor_path + ' ' + ' '.join(partialCommands)
-
-
-def editFiles(lineObjs):
-    partialCommands = []
-    logger.addEvent('editing_num_files', len(lineObjs))
-    for lineObj in lineObjs:
-        (file, num) = (lineObj.getFile(), lineObj.getLineNum())
-        partialCommands.append(getEditFileCommand(file, num))
-    command = joinEditCommands(partialCommands)
-    appendToFile(command)
 
 
 def composeCdCommand(command, lineObjs):
@@ -124,6 +145,7 @@ def composeCommand(command, lineObjs):
 
 
 def composeFileCommand(command, lineObjs):
+    command = command.decode('utf-8')
     files = ["'%s'" % lineObj.getFile() for lineObj in lineObjs]
     file_str = ' '.join(files)
     if '$F' in command:
@@ -131,16 +153,6 @@ def composeFileCommand(command, lineObjs):
     else:
         command = command + ' ' + file_str
     return command
-
-
-def execComposedCommand(command, lineObjs):
-    if not len(command):
-        editFiles(lineObjs)
-        return
-    logger.addEvent('command_on_num_files', len(lineObjs))
-    command = composeCommand(command, lineObjs)
-    command = expandAliases(command)
-    writeFriendlyCommand(command)
 
 
 def outputNothing():
@@ -151,22 +163,34 @@ def clearFile():
     writeToFile('')
 
 
-def writeFriendlyCommand(command):
+def appendAliasExpansion():
+    appendToFile('shopt -s expand_aliases')
+    for sourceFile in FILES_TO_SOURCE:
+        appendToFile('if [ -f %s ]; then' % sourceFile)
+        appendToFile('  source %s' % sourceFile)
+        appendToFile('fi')
+
+
+def appendFriendlyCommand(command):
     header = 'echo "executing command:"\n' + \
-    'echo "' + command.replace('"', '\\"') + '"'
+             'echo "' + command.replace('"', '\\"') + '"'
     appendToFile(header)
     appendToFile(command)
 
 
+def appendError(text):
+    appendToFile('printf "%s%s%s\n"' % (RED_COLOR, text, NO_COLOR))
+
+
 def appendToFile(command):
-    file = open(os.path.expanduser(OUTPUT_FILE), 'a')
+    file = open(stateFiles.getScriptOutputFilePath(), 'a')
     file.write(command + '\n')
     file.close()
     logger.output()
 
 
 def writeToFile(command):
-    file = open(os.path.expanduser(OUTPUT_FILE), 'w')
+    file = open(stateFiles.getScriptOutputFilePath(), 'w')
     file.write(command + '\n')
     file.close()
     logger.output()

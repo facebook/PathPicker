@@ -5,26 +5,27 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
-# @nolint
 import curses
-import time
-import pickle
 import sys
-import os
+import signal
 
-import parse
-import output
-import format
 import processInput
+import output
+
+
+def signal_handler(signal, frame):
+    # from http://stackoverflow.com/a/1112350/948126
+    # Lets just quit rather than signal.SIGINT printing the stack
+    sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
+
 import logger
 
 PICKLE_FILE = '~/.fbPager.pickle'
 CHROME_MIN_X = 5
 CHROME_MIN_Y = 0
 
-mapping = {}
-for i in range(256):
-    mapping[i] = chr(i)
+mapping = {i: chr(i) for i in range(256)}
 mapping.update((value, name[4:]) for name, value in vars(curses).items()
                if name.startswith('KEY_'))
 # special exceptions
@@ -44,7 +45,9 @@ SHORT_FILES_HEADER = 'Files you have selected:'
 INVISIBLE_CURSOR = 0
 BLOCK_CURSOR = 2
 
+
 class HelperChrome(object):
+
     def __init__(self, stdscr, screenControl):
         self.stdscr = stdscr
         self.screenControl = screenControl
@@ -56,15 +59,17 @@ class HelperChrome(object):
 
     def output(self, mode):
         self.mode = mode
-        if self.mode == SELECT_MODE:
-            curses.curs_set(INVISIBLE_CURSOR)
-        else:
-            curses.curs_set(BLOCK_CURSOR)
-        for func in [self.outputSide, self.outputBottom]:
+        for func in [self.outputSide, self.outputBottom, self.toggleCursor]:
             try:
                 func()
             except curses.error:
                 pass
+
+    def toggleCursor(self):
+        if self.mode == SELECT_MODE:
+            curses.curs_set(INVISIBLE_CURSOR)
+        else:
+            curses.curs_set(BLOCK_CURSOR)
 
     def reduceMaxY(self, maxy):
         if self.getIsSidebarMode():
@@ -116,6 +121,7 @@ class HelperChrome(object):
 
 
 class ScrollBar(object):
+
     def __init__(self, stdscr, lines, screenControl):
         self.stdscr = stdscr
         self.screenControl = screenControl
@@ -196,6 +202,7 @@ class ScrollBar(object):
 
 
 class Controller(object):
+
     def __init__(self, stdscr, lineObjs):
         self.stdscr = stdscr
         self.lineObjs = lineObjs
@@ -221,6 +228,11 @@ class Controller(object):
 
         self.setHover(self.hoverIndex, True)
         curses.use_default_colors()
+        # the scroll offset might not start off
+        # at 0 if our first real match is WAY
+        # down the screen -- so lets init it to
+        # a valid value after we have all our line objects
+        self.updateScrollOffset()
         logger.addEvent('init')
 
     def getScrollOffset(self):
@@ -455,9 +467,6 @@ class Controller(object):
         output.editFiles(lineObjs)
         sys.exit(0)
 
-    def openFile(self, filePath, num):
-        output.editFile(filePath, num)
-
     def resetDirty(self):
         # reset all dirty state for our components
         self.linesDirty = False
@@ -497,13 +506,10 @@ class Controller(object):
 
     def moveCursor(self):
         x = CHROME_MIN_X if self.scrollBar.getIsActivated() else 0
-        y = self.lineMatches[self.hoverIndex].getScreenIndex() + self.scrollOffset
+        y = self.lineMatches[
+            self.hoverIndex].getScreenIndex() + self.scrollOffset
         self.stdscr.move(y, x)
 
     def getKey(self):
         charCode = self.stdscr.getch()
-        try:
-            char = mapping[charCode]
-        except KeyError:
-            return ''
-        return char
+        return mapping.get(charCode, '')

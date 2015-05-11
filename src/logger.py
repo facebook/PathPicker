@@ -5,18 +5,19 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
-# @nolint
 import json
 import subprocess
 import os
 
-LOGGER_FILE = '~/.fbPager.log'
+import stateFiles
 
 # This file just outputs some simple log events that are consumed by
 # another service for internal logging at Facebook. Use it if you want
 # to, or disable it if you want.
+
+
 def writeToFile(content):
-    file = open(os.path.expanduser(LOGGER_FILE), 'w')
+    file = open(stateFiles.getLoggerFilePath(), 'w')
     file.write(content)
     file.close()
 
@@ -29,7 +30,8 @@ def getUnixName():
     proc = subprocess.Popen(['whoami'],
                             stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE,
-                            shell=True)
+                            shell=True,
+                            universal_newlines=True)
 
     (stdout, stderr) = proc.communicate()
     if not stdout:
