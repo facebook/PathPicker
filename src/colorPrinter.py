@@ -20,6 +20,7 @@ class ColorPrinter(object):
         self.colors[(-1, -1)] = 1
         curses.init_pair(1, -1, -1)
         self.screen = screen
+        self.currentAttributes = Fasle  # initialized in setAttributes
 
     def setAttributes(self, foreColor, backColor, other):
         colorIndex = -1
@@ -29,9 +30,7 @@ class ColorPrinter(object):
             if newIndex < curses.COLOR_PAIRS:
                 curses.init_pair(newIndex, foreColor, backColor)
                 self.colors[colorPair] = newIndex
-                colorIndex = newIndex
-        else:
-            colorIndex = self.colors[colorPair]
+        colorIndex = newIndex
 
         attr = curses.color_pair(colorIndex)
         attr = attr | other
