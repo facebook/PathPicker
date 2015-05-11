@@ -11,6 +11,7 @@ import signal
 
 import processInput
 import output
+from colorPrinter import ColorPrinter
 
 
 def signal_handler(signal, frame):
@@ -48,8 +49,8 @@ BLOCK_CURSOR = 2
 
 class HelperChrome(object):
 
-    def __init__(self, stdscr, screenControl):
-        self.stdscr = stdscr
+    def __init__(self, printer, screenControl):
+        self.printer = printer
         self.screenControl = screenControl
         self.WIDTH = 50
         if self.getIsSidebarMode():
@@ -104,9 +105,9 @@ class HelperChrome(object):
         if self.mode == COMMAND_MODE:
             usageLines = processInput.USAGE_COMMAND.split('\n')
         for index, usageLine in enumerate(usageLines):
-            self.stdscr.addstr(self.getMinY() + index, borderX + 2, usageLine)
+            self.printer.addstr(self.getMinY() + index, borderX + 2, usageLine)
         for y in range(self.getMinY(), maxy):
-            self.stdscr.addstr(y, borderX, '|')
+            self.printer.addstr(y, borderX, '|')
 
     def outputBottom(self):
         if self.getIsSidebarMode():
@@ -116,14 +117,14 @@ class HelperChrome(object):
         # first output text since we might throw an exception during border
         usageStr = SHORT_NAV_USAGE if self.mode == SELECT_MODE else SHORT_COMMAND_USAGE
         borderStr = '_' * (maxx - self.getMinX() - 0)
-        self.stdscr.addstr(borderY, self.getMinX(), borderStr)
-        self.stdscr.addstr(borderY + 1, self.getMinX(), usageStr)
+        self.printer.addstr(borderY, self.getMinX(), borderStr)
+        self.printer.addstr(borderY + 1, self.getMinX(), usageStr)
 
 
 class ScrollBar(object):
 
-    def __init__(self, stdscr, lines, screenControl):
-        self.stdscr = stdscr
+    def __init__(self, printer, lines, screenControl):
+        self.printer = printer
         self.screenControl = screenControl
         self.numLines = len(lines)
         self.boxStartFraction = 0.0
@@ -171,7 +172,7 @@ class ScrollBar(object):
         x = self.getX() + 4
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         for y in range(0, maxy):
-            self.stdscr.addstr(y, x, ' ')
+            self.printer.addstr(y, x, ' ')
 
     def outputBox(self):
         (maxy, maxx) = self.screenControl.getScreenDimensions()
@@ -183,33 +184,36 @@ class ScrollBar(object):
         boxStartY = int(diff * self.boxStartFraction) + minY
         boxStopY = int(diff * self.boxStopFraction) + minY
 
-        self.stdscr.addstr(boxStartY, x, '/-\\')
+        self.printer.addstr(boxStartY, x, '/-\\')
         for y in range(boxStartY + 1, boxStopY):
-            self.stdscr.addstr(y, x, '|-|')
-        self.stdscr.addstr(boxStopY, x, '\-/')
+            self.printer.addstr(y, x, '|-|')
+        self.printer.addstr(boxStopY, x, '\-/')
 
     def outputCaps(self):
         x = self.getX()
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         for y in [self.getMinY() - 1, maxy - 1]:
-            self.stdscr.addstr(y, x, '===')
+            self.printer.addstr(y, x, '===')
 
     def outputBase(self):
         x = self.getX()
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         for y in range(self.getMinY(), maxy - 1):
-            self.stdscr.addstr(y, x, ' . ')
+            self.printer.addstr(y, x, ' . ')
 
 
 class Controller(object):
 
     def __init__(self, stdscr, lineObjs):
+        curses.use_default_colors()
         self.stdscr = stdscr
+        self.colorPrinter = ColorPrinter(self.stdscr)
+
         self.lineObjs = lineObjs
         self.hoverIndex = 0
         self.scrollOffset = 0
-        self.scrollBar = ScrollBar(stdscr, lineObjs, self)
-        self.helperChrome = HelperChrome(stdscr, self)
+        self.scrollBar = ScrollBar(self.colorPrinter, lineObjs, self)
+        self.helperChrome = HelperChrome(self.colorPrinter, self)
         (self.oldmaxy, self.oldmaxx) = self.getScreenDimensions()
         self.mode = SELECT_MODE
 
@@ -227,7 +231,7 @@ class Controller(object):
         self.numMatches = len(self.lineMatches)
 
         self.setHover(self.hoverIndex, True)
-        curses.use_default_colors()
+
         # the scroll offset might not start off
         # at 0 if our first real match is WAY
         # down the screen -- so lets init it to
@@ -482,7 +486,7 @@ class Controller(object):
         if self.linesDirty:
             self.printAll()
         for index in self.dirtyIndexes:
-            self.lineMatches[index].output(self.stdscr)
+            self.lineMatches[index].output(self.colorPrinter)
         if self.helperChrome.getIsSidebarMode():
             # need to output since lines can override
             # the sidebar stuff
@@ -496,7 +500,7 @@ class Controller(object):
 
     def printLines(self):
         for key, lineObj in self.lineObjs.items():
-            lineObj.output(self.stdscr)
+            lineObj.output(self.colorPrinter)
 
     def printScroll(self):
         self.scrollBar.output()

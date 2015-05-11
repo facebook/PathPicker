@@ -15,6 +15,7 @@ import re
 import parse
 import format
 import stateFiles
+from formattedText import FormattedText
 
 USAGE_INTRO = '''
 Welcome to fpp, the Facebook PathPicker! We hope your stay
@@ -113,6 +114,17 @@ Use the --keep-open or -ko flag to avoid closing PathPicker once
 a file selection or command is performed. This will loop the program
 until Ctrl-C is used to terminate the process.
 
+~ Colors ~
+
+FPP will understand colors if the piped input uses them. In general, most
+tools do not unless requested to do so.
+
+For git, try `git config --global color.ui always` or use the command
+line option --color.
+
+For built in commands like `ls`, try `-G` (on Mac, additionally export
+CLICOLOR_FORCE in your environment to anything.)
+
 '''
 
 USAGE_TAIL = '''
@@ -138,15 +150,16 @@ def getLineObjs():
     lineObjs = {}
     for index, line in enumerate(inputLines):
         line = line.replace('\t', '    ')
-        line = re.sub(r'\x1b[^mK]*(m|K)', '', line)
-        result = parse.matchLine(line)
+        formattedLine = FormattedText(line)
+        result = parse.matchLine(str(formattedLine))
 
         if not result:
-            simple = format.SimpleLine(line, index)
-            lineObjs[index] = simple
-            continue
-        match = format.LineMatch(line, result, index)
-        lineObjs[index] = match
+            line = format.SimpleLine(formattedLine, index)
+        else:
+            line = format.LineMatch(formattedLine, result, index)
+
+        lineObjs[index] = line
+
     return lineObjs
 
 

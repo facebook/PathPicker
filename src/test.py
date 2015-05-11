@@ -10,7 +10,7 @@ from __future__ import print_function
 import unittest
 import os
 import format
-
+from formattedText import FormattedText
 import parse
 
 fileTestCases = [{
@@ -215,7 +215,7 @@ class TestParseFunction(unittest.TestCase):
     def testUnresolvable(self):
         fileLine = ".../something/foo.py"
         result = parse.matchLine(fileLine)
-        lineObj = format.LineMatch(fileLine, result, 0)
+        lineObj = format.LineMatch(FormattedText(fileLine), result, 0)
         self.assertTrue(
             not lineObj.isResolvable(),
             '"%s" should not be resolvable' % fileLine
@@ -226,7 +226,7 @@ class TestParseFunction(unittest.TestCase):
         toCheck = [case for case in fileTestCases if case['match']]
         for testCase in toCheck:
             result = parse.matchLine(testCase['input'])
-            lineObj = format.LineMatch(testCase['input'], result, 0)
+            lineObj = format.LineMatch(FormattedText(testCase['input']), result, 0)
             self.assertTrue(
                 lineObj.isResolvable(),
                 'Line "%s" was not resolvable' % testCase['input']
