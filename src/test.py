@@ -64,11 +64,11 @@ fileTestCases = [{
     'file': '.ssh/known_hosts',
     'num': 0
 
-# For now, don't worry about matching the following case perfectly,
-# simply because it's complicated.
-#}, {
-#    'input': '~/.ssh/known_hosts',
-#    'match': True,
+    # For now, don't worry about matching the following case perfectly,
+    # simply because it's complicated.
+    #}, {
+    #    'input': '~/.ssh/known_hosts',
+    #    'match': True,
 
 }, {
     # Arbitrarily ignore really short dot filenames

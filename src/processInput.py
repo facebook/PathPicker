@@ -18,6 +18,7 @@ import stateFiles
 from formattedText import FormattedText
 from usageStrings import USAGE_STR
 
+
 def getLineObjs():
     inputLines = sys.stdin.readlines()
     lineObjs = {}
