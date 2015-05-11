@@ -107,6 +107,12 @@ The $FPP_EDITOR environment variable can be set to tell PathPicker
 which editor to open the selected files with. If that variable
 is not set, $EDITOR is used the next fallback, with "vim" as a last resort.
 
+~ Keep-Open ~
+
+Use the --keep-open or -ko flag to avoid closing PathPicker once
+a file selection or command is performed. This will loop the program
+until Ctrl-C is used to terminate the process.
+
 '''
 
 USAGE_TAIL = '''
@@ -165,6 +171,7 @@ if __name__ == '__main__':
         sys.exit(0)
     else:
         # delete the old selection
+        print('getting input')
         selectionPath = stateFiles.getSelectionFilePath()
         if os.path.isfile(selectionPath):
             os.remove(selectionPath)
