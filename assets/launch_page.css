@@ -56,3 +56,7 @@
   display: inline-block;
   margin: 0;
 }
+
+div.row a.btn.btn-success {
+  background-color: #4EC099;
+}
