@@ -10,6 +10,7 @@ import sys
 import signal
 
 import processInput
+import usageStrings
 import output
 from colorPrinter import ColorPrinter
 
@@ -101,9 +102,9 @@ class HelperChrome(object):
         borderX = maxx - self.WIDTH
         if (self.mode == COMMAND_MODE):
             borderX = len(SHORT_COMMAND_PROMPT) + 20
-        usageLines = processInput.USAGE_PAGE.split('\n')
+        usageLines = usageStrings.USAGE_PAGE.split('\n')
         if self.mode == COMMAND_MODE:
-            usageLines = processInput.USAGE_COMMAND.split('\n')
+            usageLines = usageStrings.USAGE_COMMAND.split('\n')
         for index, usageLine in enumerate(usageLines):
             self.printer.addstr(self.getMinY() + index, borderX + 2, usageLine)
         for y in range(self.getMinY(), maxy):
