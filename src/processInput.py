@@ -114,6 +114,17 @@ Use the --keep-open or -ko flag to avoid closing PathPicker once
 a file selection or command is performed. This will loop the program
 until Ctrl-C is used to terminate the process.
 
+~ Colors ~
+
+FPP will understand colors if the piped input uses them. In general, most
+tools do not unless requested to do so.
+
+For git, try `git config --global color.ui always` or use the command
+line option --color.
+
+For built in commands like `ls`, try `-G` (on Mac, additionally export
+CLICOLOR_FORCE in your environment to anything.)
+
 '''
 
 USAGE_TAIL = '''
