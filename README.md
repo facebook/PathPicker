@@ -33,10 +33,15 @@ in command line mode.
 
 ## Installing PathPicker
 
+
+### Homebrew
+
 Installing PathPicker is easiest with [Homebrew for mac](http://brew.sh/):
 
 * `brew update` (to pull down the recipe since it is new)
 * `brew install fpp`
+
+### Manual Installation
 
 However if you're on a system without Homebrew, it's still quite easy to install
 PathPicker since it's essentially just a bash script that calls some Python. These
@@ -52,6 +57,11 @@ to `/usr/local/bin/` which is assumed to be in the current
 
 * `ln -s ./fpp /usr/local/bin/fpp`
 * `fpp --help # should work!`
+
+### Add-ons
+
+For tmux users, you can additionally install `tmux-fpp` which adds a key combination to run PathPicker on the last received `stdout`. It makes jumping into file selection mode even easier -- [check it out here](https://github.com/jbnicolai/tmux-fpp).
+
 
 ## Advanced Functionality
 
