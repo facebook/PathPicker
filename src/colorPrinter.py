@@ -30,7 +30,9 @@ class ColorPrinter(object):
             if newIndex < curses.COLOR_PAIRS:
                 curses.init_pair(newIndex, foreColor, backColor)
                 self.colors[colorPair] = newIndex
-        colorIndex = newIndex
+                colorIndex = newIndex
+        else: 
+            colorIndex = self.colors[colorPair]
 
         attr = curses.color_pair(colorIndex)
         attr = attr | other
