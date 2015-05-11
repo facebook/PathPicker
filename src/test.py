@@ -226,7 +226,8 @@ class TestParseFunction(unittest.TestCase):
         toCheck = [case for case in fileTestCases if case['match']]
         for testCase in toCheck:
             result = parse.matchLine(testCase['input'])
-            lineObj = format.LineMatch(FormattedText(testCase['input']), result, 0)
+            lineObj = format.LineMatch(
+                FormattedText(testCase['input']), result, 0)
             self.assertTrue(
                 lineObj.isResolvable(),
                 'Line "%s" was not resolvable' % testCase['input']

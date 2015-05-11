@@ -11,6 +11,7 @@ import curses
 import parse
 from formattedText import FormattedText
 
+
 class SimpleLine(object):
 
     def __init__(self, formattedLine, index):
@@ -76,7 +77,7 @@ class LineMatch(object):
         self.selected = False
         self.hovered = False
 
-        #precalculate the pre, post, and match strings
+        # precalculate the pre, post, and match strings
         (self.beforeText, unused) = self.formattedLine.breakat(self.start)
         (unused, self.afterText) = self.formattedLine.breakat(self.end)
         self.updateDecoratedMatch()
@@ -152,12 +153,11 @@ class LineMatch(object):
         elif self.selected:
             attributes = (curses.COLOR_WHITE, curses.COLOR_GREEN, 0)
         else:
-            attributes = (0,0,FormattedText.UNDERLINE_ATTRIBUTE)
+            attributes = (0, 0, FormattedText.UNDERLINE_ATTRIBUTE)
 
         self.decoratedMatch = FormattedText(
             FormattedText.getSequenceForAttributes(*attributes) +
             self.getDecorator() + self.getMatch())
-
 
     def getDecorator(self):
         if self.selected:

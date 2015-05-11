@@ -7,17 +7,19 @@
 #
 import curses
 
+
 class ColorPrinter(object):
+
     """A thin wrapper over screens in ncurses that caches colors and
     attribute state"""
+
     def __init__(self, screen):
         self.colors = {}
-        self.colors[(0,0)] = 0 #0,0 = white on black is hardcoded
-        #in general, we want to use -1,-1 for most "normal" text printing
-        self.colors[(-1,-1)] = 1
+        self.colors[(0, 0)] = 0  # 0,0 = white on black is hardcoded
+        # in general, we want to use -1,-1 for most "normal" text printing
+        self.colors[(-1, -1)] = 1
         curses.init_pair(1, -1, -1)
         self.screen = screen
-
 
     def setAttributes(self, foreColor, backColor, other):
         colorIndex = -1
