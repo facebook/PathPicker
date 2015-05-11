@@ -14,6 +14,9 @@ class ColorPrinter(object):
     def __init__(self, screen):
         self.colors = {}
         self.colors[(0,0)] = 0 #0,0 = white on black is hardcoded
+        #in general, we want to use -1,-1 for most "normal" text printing
+        self.colors[(-1,-1)] = 1
+        curses.init_pair(1, -1, -1)
         self.screen = screen
 
 
@@ -38,3 +41,9 @@ class ColorPrinter(object):
 
     def restoreAttributes(self):
         self.screen.attrset(self.currentAttributes)
+
+    def addstr(self, y, x, text, attr=None):
+        if attr is None:
+            attr = curses.color_pair(1)
+
+        self.screen.addstr(y, x, text, attr)
