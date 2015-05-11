@@ -30,10 +30,7 @@ class SimpleLine(object):
             # wont be displayed!
             return
 
-        try:
-            self.formattedLine.printText(y, minx, printer, maxLen)
-        except curses.error as e:
-            pass
+        self.formattedLine.printText(y, minx, printer, maxLen)
 
     def setController(self, controller):
         self.controller = controller
@@ -176,7 +173,4 @@ class LineMatch(object):
             return
 
         maxLen = maxx - minx
-        try:
-            text.printText(y, minx, printer, maxLen)
-        except curses.error:
-            pass
+        text.printText(y, minx, printer, maxLen)
