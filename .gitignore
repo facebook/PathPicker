@@ -6,3 +6,7 @@
 # hg merge conflicts
 *.orig
 dist/*
+
+.tox
+*.egg-info
+
