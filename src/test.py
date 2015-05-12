@@ -192,6 +192,22 @@ fileTestCases = [{
     'match': True,
     'num': 0,
     'file': '~/src/categories/NSDate+Category.h'
+}, {
+    # Unicode
+    'input': u'\xe4.py',
+    'match': True,
+    'num': 0,
+    'file': u'\xe4.py',
+}, {
+    'input': u'test.py\xe4',
+    'match': True,
+    'num': 0,
+    'file': u'test.py\xe4',
+}, {
+    'input': u'test\xe4.\xe42',
+    'match': False,
+    'num': 0,
+    'file': u'test\xe4.\xe42',
 }]
 
 prependDirTestCases = [

@@ -6,6 +6,7 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import curses
 import parse
@@ -23,7 +24,7 @@ class SimpleLine(object):
 
     def output(self, printer):
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
-        maxLen = min(maxx - minx, len(str(self)))
+        maxLen = min(maxx - minx, len(u"{}".format(self)))
         y = miny + self.index + self.controller.getScrollOffset()
 
         if (y < miny or y > maxy):
@@ -36,7 +37,7 @@ class SimpleLine(object):
         self.controller = controller
 
     def __str__(self):
-        return str(self.formattedLine)
+        return u"{}".format(self.formattedLine)
 
     def isSimple(self):
         return True
@@ -54,7 +55,7 @@ class LineMatch(object):
         self.file = parse.prependDir(file)
         self.num = num
 
-        line = str(self.formattedLine)
+        line = u"{}".format(self.formattedLine)
         # save a bunch of stuff so we can
         # pickle
         self.start = matches.start()

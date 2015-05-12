@@ -6,6 +6,7 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import sys
 import os
@@ -25,7 +26,7 @@ def getLineObjs():
     for index, line in enumerate(inputLines):
         line = line.replace('\t', '    ')
         formattedLine = FormattedText(line)
-        result = parse.matchLine(str(formattedLine))
+        result = parse.matchLine(u"{}".format(formattedLine))
 
         if not result:
             line = format.SimpleLine(formattedLine, index)
