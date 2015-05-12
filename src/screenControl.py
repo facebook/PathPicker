@@ -26,7 +26,7 @@ import logger
 CHROME_MIN_X = 5
 CHROME_MIN_Y = 0
 
-mapping = {i: chr(i) for i in range(256)}
+mapping = dict((i, chr(i)) for i in range(256))
 mapping.update((value, name[4:]) for name, value in vars(curses).items()
                if name.startswith('KEY_'))
 # special exceptions
