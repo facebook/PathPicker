@@ -1,4 +1,7 @@
 # PathPicker
+
+[![Build Status](https://travis-ci.org/facebook/PathPicker.svg?branch=master)](https://travis-ci.org/facebook/PathPicker)
+
 Facebook PathPicker is a simple command line tool that solves the perpetual
 problem of selecting files out of bash output. PathPicker will:
 * Parse all incoming lines for entries that look like files
