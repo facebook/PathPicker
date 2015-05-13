@@ -21,12 +21,18 @@ INPUT_DIR = './inputs/'
 
 def getLineObjsFromFile(inputFile):
     inputFile = os.path.join(INPUT_DIR, inputFile)
-    lines = open(inputFile).read().split('\n')
+    file = open(inputFile)
+    lines = file.read().split('\n')
+    file.close()
     return processInput.getLineObjsFromLines(lines)
 
-def getRowsFromScreenRun(inputFile, charInputs, printScreen=True):
+def getRowsFromScreenRun(inputFile, charInputs, screenConfig={}, printScreen=True):
     lineObjs = getLineObjsFromFile(inputFile)
-    screen = ScreenForTest(charInputs)
+    screen = ScreenForTest(
+        charInputs,
+        maxX=screenConfig.get('maxX', 80),
+        maxY=screenConfig.get('maxY', 30),
+    )
     try:
         choose.doProgram(screen, CursesForTest(), lineObjs)
     except StopIteration:

@@ -17,7 +17,7 @@ class ScreenForTest(object):
     of curses standard screen. Allows us to unit-test parts
     of the UI code"""
 
-    def __init__(self, charInputs, maxX=80, maxY=30):
+    def __init__(self, charInputs, maxX, maxY):
         self.maxX = maxX
         self.maxY = maxY
         self.cursorX = 0

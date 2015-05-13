@@ -17,22 +17,43 @@ import screenTestRunner
 EXPECTED_DIR = './expected/'
 screenTestCases = [{
     'name': 'simpleLoadAndQuit',
-    'input': 'gitDiff.txt',
+}, {
+    'name': 'tallLoadAndQuit',
+    'screenConfig': {
+        'maxX': 140,
+        'maxY': 60,
+    },
+}, {
+    'name': 'selectFirst',
+    'inputs': ['f'],
+}, {
+    'name': 'selectDownSelect',
+    'inputs': ['f', 'j', 'f'],
+}, {
+    'name': 'selectDownSelectInverse',
+    'inputs': ['f', 'j', 'f', 'A'],
 }]
 
 class TestScreenLogic(unittest.TestCase):
 
     def testScreenInputs(self):
+        seenCases = {}
         for testCase in screenTestCases:
+            # make sure its not copy pasta-ed
+            testName = testCase['name']
+            self.assertFalse(seenCases.get(testName, False), 'Already seen %s ' % testName)
+            seenCases[testName] = True
+
             charInputs = ['q']  # we always quit at the end
             charInputs = testCase.get('inputs', []) + charInputs
             actualLines = screenTestRunner.getRowsFromScreenRun(
-                inputFile=testCase['input'],
+                inputFile=testCase.get('input', 'gitDiff.txt'),
                 charInputs=charInputs,
+                screenConfig=testCase.get('screenConfig', {}),
                 printScreen=False,
             )
-            self.compareToExpected(testCase['name'], actualLines)
-            print('Tested %s ' % testCase['name'])
+            self.compareToExpected(testName, actualLines)
+            print('Tested %s ' % testName)
 
     def compareToExpected(self, testName, actualLines):
         expectedFile = os.path.join(EXPECTED_DIR, testName + '.txt')
@@ -43,10 +64,12 @@ class TestScreenLogic(unittest.TestCase):
             file = open(expectedFile, 'w')
             file.write('\n'.join(actualLines))
             file.close()
-            self.fail('File outputted, please inspect for correctness')
+            self.fail('File outputted, please inspect %s for correctness' % expectedFile)
             return
 
-        expectedLines = open(expectedFile).read().split('\n')
+        file = open(expectedFile)
+        expectedLines = file.read().split('\n')
+        file.close()
         self.assertEqual(
             len(actualLines),
             len(expectedLines),

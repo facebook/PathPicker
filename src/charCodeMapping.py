@@ -17,4 +17,4 @@ CODE_TO_CHAR[4] = 'PAGE_DOWN'
 CODE_TO_CHAR[10] = 'ENTER'
 CODE_TO_CHAR[21] = 'PAGE_UP'
 
-CHAR_TO_CODE = dict((v, k) for k, v in CODE_TO_CHAR.iteritems())
+CHAR_TO_CODE = dict((v, k) for k, v in CODE_TO_CHAR.items())
