@@ -15,9 +15,13 @@ import choose
 from screenForTest import ScreenForTest
 from cursesForTest import CursesForTest
 
-def initScreenTest():
+def initScreenTest(charInputs=['q']):
     print('Getting the line objs')
-    choose.doProgram(ScreenForTest(), CursesForTest())
+    screen = ScreenForTest(charInputs)
+    try:
+        choose.doProgram(screen, CursesForTest())
+    except StopIteration:
+        screen.printScreen()
 
 if __name__ == '__main__':
     initScreenTest()

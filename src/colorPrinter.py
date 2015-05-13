@@ -29,21 +29,16 @@ class ColorPrinter(object):
     def setAttributes(self, foreColor, backColor, other):
         colorIndex = -1
         colorPair = (foreColor, backColor)
-        print('self.colors is', self.colors)
         if not colorPair in self.colors:
-            print('need to init')
             newIndex = len(self.colors)
-            print('new index is',newIndex)
-            if newIndex < self.cursesAPI.getColorPairs() or True:
+            if newIndex < self.cursesAPI.getColorPairs():
                 self.cursesAPI.initPair(newIndex, foreColor, backColor)
                 self.colors[colorPair] = newIndex
                 colorIndex = newIndex
         else:
-            print('the color ', colorPair)
             colorIndex = self.colors[colorPair]
 
         attr = self.cursesAPI.colorPair(colorIndex)
-        output.debug('the attr i got', attr, colorIndex)
 
         attr = attr | other
 

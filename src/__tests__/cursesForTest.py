@@ -30,14 +30,16 @@ class CursesForTest(object):
         self.isEcho = False
 
     def initPair(self, pairNumber, fg, bg):
-        print('initing pair', pairNumber, fg, bg)
         self.colorPairs[pairNumber] = (fg, bg)
 
     def colorPair(self, colorNumber):
-        print('asking to change to', colorNumber)
         self.currentColor = self.colorPairs[colorNumber]
         # TOOD -- find a better return than this?
         return colorNumber
 
     def getColorPairs(self):
-        return len(self.colorPairs)
+        # pretend we are on 256 color
+        return 256
+
+    def exit(self):
+        raise StopIteration('stopping program')

@@ -24,10 +24,10 @@ PYTHONCMD="python"
 
 function doProgram {
   # process input from pipe and store as pickled file
-  $PYTHONCMD "$BASEDIR/src/processInput.py"
+  $PYTHONCMD "$BASEDIR/src/processInput.py" "$@"
   # now close stdin and choose input...
   exec 0<&-
-  $PYTHONCMD "$BASEDIR/src/choose.py" < /dev/tty
+  $PYTHONCMD "$BASEDIR/src/choose.py" "$@" < /dev/tty
   # execute the output bash script
   sh ~/.fpp/.fpp.sh < /dev/tty
 }
@@ -42,6 +42,8 @@ for opt in "$@"; do
   elif [ "$opt" == "--help" -o "$opt" == "-h" ]; then
     $PYTHONCMD "$BASEDIR/src/printHelp.py"
     exit 0
+  elif [ "$opt" == "--record" -o "$opt" == "-r" ]; then
+    echo "Recording input and output..."
   elif [ "$opt" == "--keep-open" -o "$opt" == "-ko" ]; then
     # allow control-c to exit the loop
     # http://unix.stackexchange.com/a/48432

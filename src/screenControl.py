@@ -5,6 +5,7 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
+from __future__ import print_function
 import curses
 import sys
 import signal
@@ -12,8 +13,9 @@ import signal
 import processInput
 import usageStrings
 import output
+import logger
+from charCodeMapping import CODE_TO_CHAR
 from colorPrinter import ColorPrinter
-
 
 def signal_handler(signal, frame):
     # from http://stackoverflow.com/a/1112350/948126
@@ -21,18 +23,9 @@ def signal_handler(signal, frame):
     sys.exit(0)
 signal.signal(signal.SIGINT, signal_handler)
 
-import logger
 
 CHROME_MIN_X = 5
 CHROME_MIN_Y = 0
-
-mapping = dict((i, chr(i)) for i in range(256))
-mapping.update((value, name[4:]) for name, value in vars(curses).items()
-               if name.startswith('KEY_'))
-# special exceptions
-mapping[4] = 'PAGE_DOWN'
-mapping[10] = 'ENTER'
-mapping[21] = 'PAGE_UP'
 
 SELECT_MODE = 'SELECT'
 COMMAND_MODE = 'COMMAND_MODE'
@@ -378,7 +371,7 @@ class Controller(object):
             # this will get the appropriate selection and save it to a file for reuse
             # before exiting the program
             self.getFilesToUse()
-            sys.exit(0)
+            self.cursesAPI.exit()
         pass
 
     def getFilesToUse(self):
@@ -517,4 +510,4 @@ class Controller(object):
 
     def getKey(self):
         charCode = self.stdscr.getch()
-        return mapping.get(charCode, '')
+        return CODE_TO_CHAR.get(charCode, '')

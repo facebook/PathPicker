@@ -8,6 +8,7 @@
 from __future__ import print_function
 
 import curses
+import sys
 
 class CursesAPI(object):
 
@@ -18,11 +19,9 @@ class CursesAPI(object):
         pass
 
     def useDefaultColors(self):
-        print('using default colors')
         curses.use_default_colors()
 
     def echo(self):
-        print('echo')
         curses.echo()
 
     def noecho(self):
@@ -36,3 +35,6 @@ class CursesAPI(object):
 
     def getColorPairs(self):
         return curses.COLOR_PAIRS
+
+    def exit(self):
+        sys.exit(0)
