@@ -10,7 +10,7 @@ from __future__ import print_function
 import curses
 import sys
 import os
-sys.path.insert(0,'../')
+sys.path.insert(0, '../')
 
 import choose
 import processInput
@@ -19,12 +19,14 @@ from cursesForTest import CursesForTest
 
 INPUT_DIR = './inputs/'
 
+
 def getLineObjsFromFile(inputFile):
     inputFile = os.path.join(INPUT_DIR, inputFile)
     file = open(inputFile)
     lines = file.read().split('\n')
     file.close()
     return processInput.getLineObjsFromLines(lines)
+
 
 def getRowsFromScreenRun(inputFile, charInputs, screenConfig={}, printScreen=True):
     lineObjs = getLineObjsFromFile(inputFile)

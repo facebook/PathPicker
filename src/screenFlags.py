@@ -9,6 +9,7 @@ from __future__ import print_function
 
 import argparse
 
+
 class ScreenFlags(object):
 
     """A class that just represents what flags we pass into
@@ -25,10 +26,10 @@ class ScreenFlags(object):
     def initFromArgs():
         parser = argparse.ArgumentParser()
         parser.add_argument('-r',
-            '--record',
-            help='record input and output',
-            default=False,
-            action='store_true')
+                            '--record',
+                            help='record input and output',
+                            default=False,
+                            action='store_true')
         args = parser.parse_args()
 
         return ScreenFlags(args.record)

@@ -17,6 +17,7 @@ import logger
 from charCodeMapping import CODE_TO_CHAR
 from colorPrinter import ColorPrinter
 
+
 def signal_handler(signal, frame):
     # from http://stackoverflow.com/a/1112350/948126
     # Lets just quit rather than signal.SIGINT printing the stack

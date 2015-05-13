@@ -10,6 +10,7 @@ from __future__ import print_function
 import curses
 import sys
 
+
 class CursesAPI(object):
 
     """A dummy curses wrapper that allows us to intercept these

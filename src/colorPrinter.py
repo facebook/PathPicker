@@ -7,7 +7,8 @@
 #
 from __future__ import print_function
 
-import output 
+import output
+
 
 class ColorPrinter(object):
 

@@ -8,7 +8,7 @@
 from __future__ import print_function
 
 import sys
-sys.path.insert(0,'../')
+sys.path.insert(0, '../')
 import unittest
 import os
 
@@ -34,6 +34,7 @@ screenTestCases = [{
     'inputs': ['f', 'j', 'f', 'A'],
 }]
 
+
 class TestScreenLogic(unittest.TestCase):
 
     def testScreenInputs(self):
@@ -41,7 +42,8 @@ class TestScreenLogic(unittest.TestCase):
         for testCase in screenTestCases:
             # make sure its not copy pasta-ed
             testName = testCase['name']
-            self.assertFalse(seenCases.get(testName, False), 'Already seen %s ' % testName)
+            self.assertFalse(
+                seenCases.get(testName, False), 'Already seen %s ' % testName)
             seenCases[testName] = True
 
             charInputs = ['q']  # we always quit at the end
@@ -64,7 +66,8 @@ class TestScreenLogic(unittest.TestCase):
             file = open(expectedFile, 'w')
             file.write('\n'.join(actualLines))
             file.close()
-            self.fail('File outputted, please inspect %s for correctness' % expectedFile)
+            self.fail(
+                'File outputted, please inspect %s for correctness' % expectedFile)
             return
 
         file = open(expectedFile)
@@ -73,14 +76,16 @@ class TestScreenLogic(unittest.TestCase):
         self.assertEqual(
             len(actualLines),
             len(expectedLines),
-            'Actual lines was %d but expected lines aws %d' % (len(actualLines), len(expectedLines)),
+            'Actual lines was %d but expected lines aws %d' % (
+                len(actualLines), len(expectedLines)),
         )
         for index, expectedLine in enumerate(expectedLines):
             actualLine = actualLines[index]
             self.assertEqual(
                 expectedLine,
                 actualLine,
-                'Lines did not match:\n\nExpected:%s\nActual:%s' % (expectedLine, actualLine),
+                'Lines did not match:\n\nExpected:%s\nActual:%s' % (
+                    expectedLine, actualLine),
             )
 
 if __name__ == '__main__':

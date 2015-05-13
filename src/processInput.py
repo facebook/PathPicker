@@ -23,6 +23,7 @@ def getLineObjs():
     inputLines = sys.stdin.readlines()
     return getLineObjsFromLines(inputLines)
 
+
 def getLineObjsFromLines(inputLines):
     lineObjs = {}
     for index, line in enumerate(inputLines):
