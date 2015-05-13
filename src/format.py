@@ -26,7 +26,7 @@ class SimpleLine(object):
         maxLen = min(maxx - minx, len(str(self)))
         y = miny + self.index + self.controller.getScrollOffset()
 
-        if (y < miny or y > maxy):
+        if (y < miny or y >= maxy):
             # wont be displayed!
             return
 
@@ -179,7 +179,7 @@ class LineMatch(object):
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
         y = miny + self.index + self.controller.getScrollOffset()
 
-        if (y < miny or y > maxy):
+        if (y < miny or y >= maxy):
             # wont be displayed!
             return
 
