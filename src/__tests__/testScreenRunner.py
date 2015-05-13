@@ -44,19 +44,19 @@ def compareToExpected(testName, actualLines):
         else:
             print('%s and %s did not match ' % (expectedLine, actualLine))
 
-def initScreenTest(inputFile, charInputs, testName):
+def getRowsFromScreenRun(inputFile, charInputs, printScreen=True):
     lineObjs = getLineObjsFromFile(inputFile)
     screen = ScreenForTest(charInputs)
     try:
         choose.doProgram(screen, CursesForTest(), lineObjs)
     except StopIteration:
         pass
-    screen.printScreen()
-    compareToExpected(testName, screen.getRows())
+    if printScreen:
+        screen.printScreen()
+    return screen.getRows()
 
 if __name__ == '__main__':
-    initScreenTest(
+    getRowsFromScreenRun(
         inputFile='./inputs/gitDiff.txt',
         charInputs=['q'],
-        testName='simpleGitDiff',
     )

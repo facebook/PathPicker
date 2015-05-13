@@ -7,8 +7,11 @@
 #
 from __future__ import print_function
 
+import sys
 import unittest
 import os
+sys.path.insert(0,'../')
+
 import format
 from formattedText import FormattedText
 import parse
