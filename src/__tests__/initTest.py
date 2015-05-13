@@ -16,7 +16,6 @@ from screenForTest import ScreenForTest
 from cursesForTest import CursesForTest
 
 def initScreenTest(charInputs=['q']):
-    print('Getting the line objs')
     screen = ScreenForTest(charInputs)
     try:
         choose.doProgram(screen, CursesForTest())

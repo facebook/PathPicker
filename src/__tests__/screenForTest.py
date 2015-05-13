@@ -17,7 +17,7 @@ class ScreenForTest(object):
     of curses standard screen. Allows us to unit-test parts
     of the UI code"""
 
-    def __init__(self, charInputs, maxX=85, maxY=100):
+    def __init__(self, charInputs, maxX=80, maxY=30):
         self.maxX = maxX
         self.maxY = maxY
         self.cursorX = 0
@@ -54,7 +54,6 @@ class ScreenForTest(object):
         for deltaX in range(len(string)):
             coord = (x + deltaX, y)
             self.output[coord] = string[deltaX]
-        # print("got " + string)
 
     def getch(self):
         return CHAR_TO_CODE[self.charInputs.pop(0)]
@@ -65,4 +64,4 @@ class ScreenForTest(object):
             for x in range(self.maxX):
                 coord = (x, y)
                 row += self.output.get(coord, ' ')
-            print('ROW %d:%s' % (y, row))
+            print("ROW %02d:%s" % (y, row))
