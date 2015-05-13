@@ -41,6 +41,12 @@ Installing PathPicker is easiest with [Homebrew for mac](http://brew.sh/):
 * `brew update` (to pull down the recipe since it is new)
 * `brew install fpp`
 
+### Linux
+
+You can easily install PathPicker from the GitHub master branch
+via [the AUR fpp-git package](https://aur.archlinux.org/packages/fpp-git/).
+For non-Arch users, see the manual installation instructions below:
+
 ### Manual Installation
 
 However if you're on a system without Homebrew, it's still quite easy to install
