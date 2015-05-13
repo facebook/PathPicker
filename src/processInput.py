@@ -24,9 +24,9 @@ def getLineObjs():
     lineObjs = {}
     for index, line in enumerate(inputLines):
         line = line.replace('\t', '    ')
-        #remove the new line as we place the cursor ourselves for each
-        #line. this avoids curses errors when we newline past the end of the
-        #screen
+        # remove the new line as we place the cursor ourselves for each
+        # line. this avoids curses errors when we newline past the end of the
+        # screen
         line = line.replace('\n', '')
         formattedLine = FormattedText(line)
         result = parse.matchLine(str(formattedLine))
