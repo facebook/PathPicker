@@ -59,9 +59,15 @@ class ScreenForTest(object):
         return CHAR_TO_CODE[self.charInputs.pop(0)]
 
     def printScreen(self):
+        for index, row in enumerate(self.getRows()):
+            print("Row %02d:%s" % (index, row))
+
+    def getRows(self):
+        rows = []
         for y in range(self.maxY):
             row = ''
             for x in range(self.maxX):
                 coord = (x, y)
                 row += self.output.get(coord, ' ')
-            print("Row %02d:%s" % (y, row))
+            rows.append(row)
+        return rows
