@@ -204,10 +204,11 @@ class ScrollBar(object):
 
 class Controller(object):
 
-    def __init__(self, stdscr, lineObjs):
-        curses.use_default_colors()
+    def __init__(self, stdscr, lineObjs, cursesAPI):
         self.stdscr = stdscr
-        self.colorPrinter = ColorPrinter(self.stdscr)
+        self.cursesAPI = cursesAPI
+        self.cursesAPI.useDefaultColors()
+        self.colorPrinter = ColorPrinter(self.stdscr, cursesAPI)
 
         self.lineObjs = lineObjs
         self.hoverIndex = 0
@@ -439,7 +440,7 @@ class Controller(object):
             pass
 
         self.stdscr.refresh()
-        curses.echo()
+        self.cursesAPI.echo()
         maxX = int(round(maxx - 1))
         command = self.stdscr.getstr(halfHeight + 3, 0, maxX)
         return command
@@ -454,7 +455,7 @@ class Controller(object):
         if len(command) == 0:
             # go back to selection mode and repaint
             self.mode = SELECT_MODE
-            curses.noecho()
+            self.cursesAPI.noecho()
             self.dirtyLines()
             logger.addEvent('exit_command_mode')
             return
