@@ -43,3 +43,7 @@ class CursesForTest(object):
 
     def exit(self):
         raise StopIteration('stopping program')
+
+    def allowFileOutput(self):
+        # do not output selection pickle
+        return False

@@ -381,7 +381,8 @@ class Controller(object):
             toUse = self.getHoveredFiles()
 
         # save the selection we are using
-        output.outputSelection(toUse)
+        if self.cursesAPI.allowFileOutput():
+            output.outputSelection(toUse)
         return toUse
 
     def getSelectedFiles(self):

@@ -38,3 +38,6 @@ class CursesAPI(object):
 
     def exit(self):
         sys.exit(0)
+
+    def allowFileOutput(self):
+        return True

@@ -83,7 +83,9 @@ def debug(*args):
 def outputSelection(lineObjs):
     filePath = stateFiles.getSelectionFilePath()
     indices = [l.index for l in lineObjs]
-    pickle.dump(indices, open(filePath, 'wb'))
+    file = open(filePath, 'wb')
+    pickle.dump(indices, file)
+    file.close()
 
 
 def getEditorAndPath():
