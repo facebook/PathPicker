@@ -12,13 +12,19 @@ import sys
 sys.path.insert(0,'../')
 
 import choose
+import processInput
 from screenForTest import ScreenForTest
 from cursesForTest import CursesForTest
 
-def initScreenTest(charInputs=['q']):
+def getLineObjsFromFile(inputFile):
+    lines = open(inputFile).read().split('\n')
+    return processInput.getLineObjsFromLines(lines)
+
+def initScreenTest(inputFile='./inputs/gitDiff.txt', charInputs=['q']):
+    lineObjs = getLineObjsFromFile(inputFile)
     screen = ScreenForTest(charInputs)
     try:
-        choose.doProgram(screen, CursesForTest())
+        choose.doProgram(screen, CursesForTest(), lineObjs)
     except StopIteration:
         screen.printScreen()
 

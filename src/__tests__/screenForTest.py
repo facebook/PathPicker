@@ -64,4 +64,4 @@ class ScreenForTest(object):
             for x in range(self.maxX):
                 coord = (x, y)
                 row += self.output.get(coord, ' ')
-            print("ROW %02d:%s" % (y, row))
+            print("Row %02d:%s" % (y, row))
