@@ -8,7 +8,7 @@ else
   echo "Pep8 Compliant!"
 fi
 
-python ./src/test.py > /dev/null
+python ./src/__tests__/testParsing.py && python ./src/__tests__/testScreen.py > /dev/null
 if [ $? -eq 0 ]
 then
   echo "Tests passed!"
