@@ -51,13 +51,15 @@ class ScreenForTest(object):
     def addstr(self, y, x, string, attr=None):
         if attr:
             self.attrset(attr)
-        print("got " + string)
+        for deltaX in range(len(string)):
+            coord = (x + deltaX, y)
+            self.output[coord] = string[deltaX]
+        # print("got " + string)
 
     def getch(self):
         return CHAR_TO_CODE[self.charInputs.pop(0)]
 
     def printScreen(self):
-        print('printing myself')
         for y in range(self.maxY):
             row = ''
             for x in range(self.maxX):
