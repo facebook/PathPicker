@@ -17,32 +17,12 @@ import processInput
 from screenForTest import ScreenForTest
 from cursesForTest import CursesForTest
 
-EXPECTED_DIR = './expected/'
+INPUT_DIR = './inputs/'
 
 def getLineObjsFromFile(inputFile):
+    inputFile = os.path.join(INPUT_DIR, inputFile)
     lines = open(inputFile).read().split('\n')
     return processInput.getLineObjsFromLines(lines)
-
-def compareToExpected(testName, actualLines):
-    expectedFile = os.path.join(EXPECTED_DIR, testName + '.txt')
-    if not os.path.isdir(EXPECTED_DIR):
-        os.makedirs(EXPECTED_DIR)
-    if not os.path.isfile(expectedFile):
-        print('Could not find file %s so outputting...' % expectedFile)
-        file = open(expectedFile, 'w')
-        file.write('\n'.join(actualLines))
-        file.close()
-        print('File outputted, please inspect for correctness')
-        return
-    expectedLines = open(expectedFile).read().split('\n')
-    if len(actualLines) != len(expectedLines):
-        print('error!! not equal %d %d' % (len(actualLines), len(expectedLines)))
-    for index, expectedLine in enumerate(expectedLines):
-        actualLine = actualLines[index]
-        if expectedLine == actualLine:
-            print('it is correct! %s ' % expectedLine)
-        else:
-            print('%s and %s did not match ' % (expectedLine, actualLine))
 
 def getRowsFromScreenRun(inputFile, charInputs, printScreen=True):
     lineObjs = getLineObjsFromFile(inputFile)
@@ -57,6 +37,6 @@ def getRowsFromScreenRun(inputFile, charInputs, printScreen=True):
 
 if __name__ == '__main__':
     getRowsFromScreenRun(
-        inputFile='./inputs/gitDiff.txt',
+        inputFile='gitDiff.txt',
         charInputs=['q'],
     )
