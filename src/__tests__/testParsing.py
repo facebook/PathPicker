@@ -7,37 +7,67 @@
 #
 from __future__ import print_function
 
+import sys
 import unittest
 import os
-import format
+sys.path.insert(0, '../')
 
+import format
+from formattedText import FormattedText
 import parse
 
 fileTestCases = [{
     'input': 'html/js/hotness.js',
     'match': True,
-    'file': 'html/js/hotness.js',
-    'num': 0
+    'file': 'html/js/hotness.js'
 }, {
     'input': '/absolute/path/to/something.txt',
     'match': True,
-    'file': '/absolute/path/to/something.txt',
-    'num': 0
+    'file': '/absolute/path/to/something.txt'
 }, {
     'input': '/html/js/hotness.js42',
     'match': True,
-    'file': '/html/js/hotness.js42',
-    'num': 0
+    'file': '/html/js/hotness.js42'
 }, {
     'input': '/html/js/hotness.js',
     'match': True,
-    'file': '/html/js/hotness.js',
-    'num': 0
+    'file': '/html/js/hotness.js'
 }, {
     'input': './asd.txt:83',
     'match': True,
     'file': './asd.txt',
     'num': 83
+}, {
+    'input': '.env.local',
+    'match': True,
+    'file': '.env.local'
+}, {
+    'input': '.gitignore',
+    'match': True,
+    'file': '.gitignore'
+}, {
+    'input': 'tmp/.gitignore',
+    'match': True,
+    'file': 'tmp/.gitignore'
+}, {
+    'input': '.ssh/.gitignore',
+    'match': True,
+    'file': '.ssh/.gitignore'
+}, {
+    'input': '.ssh/known_hosts',
+    'match': True,
+    'file': '.ssh/known_hosts'
+
+    # For now, don't worry about matching the following case perfectly,
+    # simply because it's complicated.
+    #}, {
+    #    'input': '~/.ssh/known_hosts',
+    #    'match': True,
+
+}, {
+    # Arbitrarily ignore really short dot filenames
+    'input': '.a',
+    'match': False,
 }, {
     'input': 'flib/asd/ent/berkeley/two.py-22',
     'match': True,
@@ -46,36 +76,30 @@ fileTestCases = [{
 }, {
     'input': 'flib/foo/bar',
     'match': True,
-    'file': 'flib/foo/bar',
-    'num': 0
+    'file': 'flib/foo/bar'
 }, {
     'input': 'flib/foo/bar ',  # note space
     'match': True,
-    'file': 'flib/foo/bar',
-    'num': 0
+    'file': 'flib/foo/bar'
 }, {
     'input': 'foo/b ',
     'match': True,
-    'file': 'foo/b',
-    'num': 0
+    'file': 'foo/b'
 }, {
     'input': 'foo/bar/baz/',
     'match': False
 }, {
     'input': 'flib/ads/ads.thrift',
     'match': True,
-    'file': 'flib/ads/ads.thrift',
-    'num': 0
+    'file': 'flib/ads/ads.thrift'
 }, {
     'input': 'banana hanana Wilde/ads/story.m',
     'match': True,
-    'file': 'Wilde/ads/story.m',
-    'num': 0
+    'file': 'Wilde/ads/story.m'
 }, {
     'input': 'flib/asd/asd.py two/three/four.py',
     'match': True,
-    'file': 'flib/asd/asd.py',
-    'num': 0
+    'file': 'flib/asd/asd.py'
 }, {
     'input': 'asd/asd/asd/ 23',
     'match': False
@@ -111,50 +135,43 @@ fileTestCases = [{
 }, {
     'input': '~/foo/bar/something.py',
     'match': True,
-    'num': 0,
     'file': '~/foo/bar/something.py'
 }, {
     'input': '~/foo/bar/inHomeDir.py:22',
     'match': True,
+    'file': '~/foo/bar/inHomeDir.py',
     'num': 22,
-    'file': '~/foo/bar/inHomeDir.py'
 }, {
     'input': 'blarge assets/retina/victory@2x.png',
     'match': True,
-    'num': 0,
     'file': 'assets/retina/victory@2x.png'
 }, {
     'input': '~/assets/retina/victory@2x.png',
     'match': True,
-    'num': 0,
     'file': '~/assets/retina/victory@2x.png'
 }, {
     'input': 'So.many.periods.txt',
     'match': True,
-    'num': 0,
     'file': 'So.many.periods.txt'
 }, {
     'input': 'SO.MANY.PERIODS.TXT',
     'match': True,
-    'num': 0,
     'file': 'SO.MANY.PERIODS.TXT'
 }, {
     'input': 'blarg blah So.MANY.PERIODS.TXT:22',
     'match': True,
-    'num': 0,  # we ignore the number here
-    'file': 'So.MANY.PERIODS.TXT'
+    'file': 'So.MANY.PERIODS.TXT',
+    'num': 0  # we ignore the number here
 }, {
     'input': 'SO.MANY&&PERIODSTXT',
     'match': False
 }, {
     'input': 'test src/categories/NSDate+Category.h',
     'match': True,
-    'num': 0,
     'file': 'src/categories/NSDate+Category.h'
 }, {
     'input': '~/src/categories/NSDate+Category.h',
     'match': True,
-    'num': 0,
     'file': '~/src/categories/NSDate+Category.h'
 }]
 
@@ -215,7 +232,7 @@ class TestParseFunction(unittest.TestCase):
     def testUnresolvable(self):
         fileLine = ".../something/foo.py"
         result = parse.matchLine(fileLine)
-        lineObj = format.LineMatch(fileLine, result, 0)
+        lineObj = format.LineMatch(FormattedText(fileLine), result, 0)
         self.assertTrue(
             not lineObj.isResolvable(),
             '"%s" should not be resolvable' % fileLine
@@ -226,7 +243,8 @@ class TestParseFunction(unittest.TestCase):
         toCheck = [case for case in fileTestCases if case['match']]
         for testCase in toCheck:
             result = parse.matchLine(testCase['input'])
-            lineObj = format.LineMatch(testCase['input'], result, 0)
+            lineObj = format.LineMatch(
+                FormattedText(testCase['input']), result, 0)
             self.assertTrue(
                 lineObj.isResolvable(),
                 'Line "%s" was not resolvable' % testCase['input']
@@ -253,8 +271,8 @@ class TestParseFunction(unittest.TestCase):
         self.assertEqual(testCase['file'], file, 'files not equal |%s| |%s|' %
                          (testCase['file'], file))
 
-        self.assertEqual(testCase['num'], num, 'num matches not equal %d %d for %s'
-                         % (testCase['num'], num, testCase.get('input')))
+        self.assertEqual(testCase.get('num', 0), num, 'num matches not equal %d %d for %s'
+                         % (testCase.get('num', 0), num, testCase.get('input')))
 
 
 if __name__ == '__main__':

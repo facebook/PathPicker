@@ -1,6 +1,4 @@
 #!/bin/bash
-cd ../
-
 PEPLINES=$(autopep8 --recursive ./src/ --diff | wc -l)
 if (( PEPLINES > 0 )); then
   echo "Not Pep8 compliant:";
@@ -10,7 +8,8 @@ else
   echo "Pep8 Compliant!"
 fi
 
-python ./src/test.py > /dev/null
+cd ./src/__tests__/
+python testParsing.py && python testScreen.py > /dev/null
 if [ $? -eq 0 ]
 then
   echo "Tests passed!"

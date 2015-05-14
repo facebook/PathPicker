@@ -8,33 +8,35 @@
 from __future__ import print_function
 
 import curses
-
 import parse
+from formattedText import FormattedText
 
 
 class SimpleLine(object):
 
-    def __init__(self, line, index):
-        self.line = line
+    def __init__(self, formattedLine, index):
+        self.formattedLine = formattedLine
         self.index = index
 
     def printOut(self):
         print(str(self))
 
-    def output(self, stdscr):
+    def output(self, printer):
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
-        maxLen = maxx - minx
+        maxLen = min(maxx - minx, len(str(self)))
         y = miny + self.index + self.controller.getScrollOffset()
-        try:
-            stdscr.addstr(y, minx, str(self)[0:maxLen])
-        except curses.error:
-            pass
+
+        if (y < miny or y >= maxy):
+            # wont be displayed!
+            return
+
+        self.formattedLine.printText(y, minx, printer, maxLen)
 
     def setController(self, controller):
         self.controller = controller
 
     def __str__(self):
-        return self.line
+        return str(self.formattedLine)
 
     def isSimple(self):
         return True
@@ -42,8 +44,8 @@ class SimpleLine(object):
 
 class LineMatch(object):
 
-    def __init__(self, line, result, index):
-        self.line = line
+    def __init__(self, formattedLine, result, index):
+        self.formattedLine = formattedLine
         self.index = index
 
         (file, num, matches) = result
@@ -51,6 +53,8 @@ class LineMatch(object):
         self.originalFile = file
         self.file = parse.prependDir(file)
         self.num = num
+
+        line = str(self.formattedLine)
         # save a bunch of stuff so we can
         # pickle
         self.start = matches.start()
@@ -73,17 +77,24 @@ class LineMatch(object):
         self.selected = False
         self.hovered = False
 
+        # precalculate the pre, post, and match strings
+        (self.beforeText, unused) = self.formattedLine.breakat(self.start)
+        (unused, self.afterText) = self.formattedLine.breakat(self.end)
+        self.updateDecoratedMatch()
+
     def toggleSelect(self):
-        self.selected = not self.selected
+        self.setSelect(not self.selected)
 
     def setController(self, controller):
         self.controller = controller
 
     def setSelect(self, val):
         self.selected = val
+        self.updateDecoratedMatch()
 
     def setHover(self, val):
         self.hovered = val
+        self.updateDecoratedMatch()
 
     def getScreenIndex(self):
         return self.index
@@ -120,59 +131,61 @@ class LineMatch(object):
         return self.selected
 
     def getBefore(self):
-        return self.line[0:self.start]
+        return str(self.beforeText)
 
     def getAfter(self):
-        return self.line[self.end:]
+        return str(self.afterText)
 
     def getMatch(self):
         return self.group
 
     def __str__(self):
-        return self.getBefore() + '||' + self.getMatch(
-        ) + '||' + self.getAfter() + '||' + str(self.num)
+        return (self.getBefore() + '||' + self.getMatch()
+                + '||' + self.getAfter() + '||' +
+                str(self.num))
 
-    def getStyleForState(self):
-        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_RED)
-        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLUE)
-        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_GREEN)
-
+    def updateDecoratedMatch(self):
+        '''Update the cached decorated match formatted string'''
         if self.hovered and self.selected:
-            return curses.color_pair(3)
+            attributes = (curses.COLOR_WHITE, curses.COLOR_RED, 0)
         elif self.hovered:
-            return curses.color_pair(1)
+            attributes = (curses.COLOR_WHITE, curses.COLOR_BLUE, 0)
         elif self.selected:
-            return curses.color_pair(2)
+            attributes = (curses.COLOR_WHITE, curses.COLOR_GREEN, 0)
         else:
-            return curses.A_UNDERLINE
+            attributes = (0, 0, FormattedText.UNDERLINE_ATTRIBUTE)
+
+        self.decoratedMatch = FormattedText(
+            FormattedText.getSequenceForAttributes(*attributes) +
+            self.getDecorator() + self.getMatch())
 
     def getDecorator(self):
         if self.selected:
             return '|===>'
         return ''
 
-    def output(self, stdscr):
-        decorator = self.getDecorator()
-        before = self.getBefore()
-        after = self.getAfter()
-        middle = ''.join([decorator, self.getMatch()])
+    def printUpTo(self, text, printer, y, x, maxLen):
+        '''Attempt to print maxLen characters, returning a tuple
+        (x, maxLen) updated with the actual number of characters
+        printed'''
+        if maxLen <= 0:
+            return (x, maxLen)
+
+        maxPrintable = min(len(str(text)), maxLen)
+        text.printText(y, x, printer, maxPrintable)
+        return (x + maxPrintable, maxLen - maxPrintable)
+
+    def output(self, printer):
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
         y = miny + self.index + self.controller.getScrollOffset()
 
-        if (y < miny or y > maxy):
+        if (y < miny or y >= maxy):
             # wont be displayed!
             return
 
         maxLen = maxx - minx
-        try:
-            # beginning
-            stdscr.addstr(y, minx, before)
-            # bolded middle
-            xIndex = len(before)
-            stdscr.addstr(y, minx + xIndex, middle[0:max(maxLen - xIndex, 0)],
-                          self.getStyleForState())
-            # end
-            xIndex = len(before) + len(middle)
-            stdscr.addstr(y, minx + xIndex, after[0:max(maxLen - xIndex, 0)])
-        except curses.error:
-            pass
+        soFar = (minx, maxLen)
+
+        soFar = self.printUpTo(self.beforeText, printer, y, *soFar)
+        soFar = self.printUpTo(self.decoratedMatch, printer, y, *soFar)
+        soFar = self.printUpTo(self.afterText, printer, y, *soFar)

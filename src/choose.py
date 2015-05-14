@@ -17,6 +17,8 @@ import screenControl
 import logger
 import format
 import stateFiles
+from cursesAPI import CursesAPI
+from screenFlags import ScreenFlags
 
 LOAD_SELECTION_WARNING = '''
 WARNING! Loading the standard input and previous selection
@@ -27,11 +29,18 @@ this error will go away)
 '''
 
 
-def doProgram(stdscr):
+def doProgram(stdscr, cursesAPI=None, lineObjs=None, flags=None):
+    # curses and lineObjs get dependency injected for
+    # our tests, so init these if they are not provided
+    if not cursesAPI:
+        cursesAPI = CursesAPI()
+    if not lineObjs:
+        lineObjs = getLineObjs()
+    if not flags:
+        flags = ScreenFlags.initFromArgs()
     output.clearFile()
     logger.clearFile()
-    lineObjs = getLineObjs()
-    screen = screenControl.Controller(stdscr, lineObjs)
+    screen = screenControl.Controller(stdscr, lineObjs, cursesAPI)
     screen.control()
 
 

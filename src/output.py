@@ -83,11 +83,14 @@ def debug(*args):
 def outputSelection(lineObjs):
     filePath = stateFiles.getSelectionFilePath()
     indices = [l.index for l in lineObjs]
-    pickle.dump(indices, open(filePath, 'wb'))
+    file = open(filePath, 'wb')
+    pickle.dump(indices, file)
+    file.close()
 
 
 def getEditorAndPath():
-    editor_path = os.environ.get('FPP_EDITOR') or os.environ.get('EDITOR')
+    editor_path = os.environ.get('FPP_EDITOR') or os.environ.get('VISUAL') or \
+        os.environ.get('EDITOR')
     if editor_path:
         editor = os.path.basename(editor_path)
         logger.addEvent('using_editor_' + editor)
@@ -114,7 +117,7 @@ def expandPath(filePath):
 
 def joinEditCommands(partialCommands):
     editor, editor_path = getEditorAndPath()
-    if editor == 'vim':
+    if editor in ['vim', 'mvim']:
         if len(partialCommands) > 1:
             return editor_path + ' -O ' + ' '.join(partialCommands)
         else:
