@@ -29,11 +29,11 @@ def getLineObjsFromFile(inputFile):
 
 
 def getRowsFromScreenRun(
-      inputFile,
-      charInputs,
-      screenConfig={},
-      printScreen=True,
-      pastScreen=None):
+        inputFile,
+        charInputs,
+        screenConfig={},
+        printScreen=True,
+        pastScreen=None):
     lineObjs = getLineObjsFromFile(inputFile)
     screen = ScreenForTest(
         charInputs,

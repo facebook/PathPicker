@@ -23,6 +23,9 @@ class FormattedText(object):
     FOREGROUND_RANGE = Range(30, 39)
     BACKGROUND_RANGE = Range(40, 49)
 
+    DEFAULT_COLOR_FOREGROUND = -1
+    DEFAULT_COLOR_BACKGROUND = -1
+
     def __init__(self, text=None):
         self.text = text
 
@@ -42,8 +45,8 @@ class FormattedText(object):
     def parseFormatting(cls, formatting):
         """Parse ANSI formatting; the formatting passed in should be
         stripped of the control characters and ending character"""
-        fore = -1  # -1 default means "use default", not "use white/black"
-        back = -1
+        fore = cls.DEFAULT_COLOR_FOREGROUND
+        back = cls.DEFAULT_COLOR_BACKGROUND
         other = 0
         intValues = [int(value) for value in formatting.split(';') if value]
         for code in intValues:
@@ -64,8 +67,18 @@ class FormattedText(object):
     def getSequenceForAttributes(cls, fore, back, attr):
         """Return a fully formed escape sequence for the color pair
         and additional attributes"""
-        return ("\x1b[" + str(cls.FOREGROUND_RANGE.bottom + fore)
-                + ";" + str(cls.BACKGROUND_RANGE.bottom + back) + ";"
+        if fore == cls.DEFAULT_COLOR_FOREGROUND:
+            foreStr = "-1"
+        else:
+            foreStr = str(cls.FOREGROUND_RANGE.bottom + fore)
+
+        if back == cls.DEFAULT_COLOR_BACKGROUND:
+            backStr = "-1"
+        else:
+            backStr = str(cls.BACKGROUND_RANGE.bottom + back)
+
+        return ("\x1b[" + foreStr
+                + ";" + backStr + ";"
                 + str(attr) + "m")
 
     def printText(self, y, x, printer, maxLen):
