@@ -1,0 +1,30 @@
+
+
+
+
+
+
+
+
+==========================================================
+Files you have selected:
+==========================================================
+./README.md
+/Users/pcottle/Dropbox (Facebook)/wip/PathPicker/src/__tests__/__init__.py
+==========================================================
+Type a command below! Files will be appended or replace $F
+Enter a blank line to go back to the selection process
+==========================================================
+..........................................................
+
+
+
+
+
+
+
+
+
+
+________________________________________________________________________________
+command examples: | git add | git checkout HEAD~1 -- | mv $F ../here/ |

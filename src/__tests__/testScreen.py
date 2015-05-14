@@ -32,6 +32,10 @@ screenTestCases = [{
 }, {
     'name': 'selectDownSelectInverse',
     'inputs': ['f', 'j', 'f', 'A'],
+}, {
+    'name': 'selectTwoCommandMode',
+    'inputs': ['f', 'j', 'f', 'c'],
+    'pastScreen': 1
 }]
 
 
