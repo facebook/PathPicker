@@ -5,4 +5,4 @@ python:
   - "3.2"
   - "3.3"
   - "3.4"
-script: "python src/test.py"
+script: "./scripts/buildAndTest.sh"
