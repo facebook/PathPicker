@@ -7,16 +7,34 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 .jumbotron.pathPickerHeader {
-  background-color: #44609D;
+  background-color: #003945;
   color: white;
   font-family: "HelveticaNeue-Light","Helvetica Neue Light", "Helvetica Neue", "Segoe UI", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-weight: lighter;
-  padding-bottom: 16px;
+  padding: 30px 0 0 0;
+}
+
+.heading p.lead {
+  color: #739198;
+  font-family: Menlo;
+  font-size: 15px;
+  font-weight: ligher;
+}
+
+.heading img {
+  height: 84px;
+  width: 183px;
 }
 
 .jumbotron .heading {
   text-align: center;
-  padding: 40px 16px;
+  padding: 64px 16px;
+  padding-bottom: 40px;
+}
+
+.jumbotron p.lead {
+  margin-top: 32px;
+  margin-bottom: 0;
 }
 
 .container .row .asciiDemo {
@@ -30,10 +48,15 @@
 
 .callToAction {
   text-align: center;
+  background-color: #4EC099;
+  padding: 24px 0;
 }
 
 .callToAction pre {
   display: inline-block;
-      </div>
   margin: 0;
+}
+
+div.row a.btn.btn-success {
+  background-color: #4EC099;
 }

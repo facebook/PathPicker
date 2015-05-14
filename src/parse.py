@@ -5,7 +5,6 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
-# @nolint
 import re
 import os
 import subprocess
@@ -28,9 +27,19 @@ HOMEDIR_REGEX = re.compile(
 OTHER_BGS_RESULT_REGEX = re.compile(
     '(\/?([a-z.A-Z0-9\-_]+\/)+[a-zA-Z0-9_.]{3,})[:-]{0,1}(\d+)')
 JUST_FILE = re.compile(
-    '([a-zA-Z0-9\-_][a-z.A-Z0-9\-_]*\.[a-zA-Z]{1,10})(\s|$|:)+')
-FILE_NO_PERIODS = re.compile(
-    '([a-z.A-Z0-9\-_\/]{1,}\/[a-zA-Z0-9\-_]{1,})(\s|$|:)+')
+    '([a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
+FILE_NO_PERIODS = re.compile(''.join((
+    '(',
+    # Recognized files starting with a dot followed by at least 3 characters
+    '((\/?([a-z.A-Z0-9\-_]+\/))?\.[a-zA-Z0-9\-_]{3,}[a-zA-Z0-9\-_\/]*)',
+    # or
+    '|',
+    # Recognize files containing at least one slash
+    '([a-z.A-Z0-9\-_\/]{1,}\/[a-zA-Z0-9\-_]{1,})',
+    ')',
+    # Regardless of the above case, here's how the file name should terminate
+    '(\s|$|:)+'
+)))
 
 
 # Attempts to resolve the root directory of the
@@ -64,7 +73,7 @@ def getRepoPath():
 
     # Not a git or hg repo, go with ~/www as a default
     logger.addEvent('used_outside_repo')
-    return '~/www'
+    return './'
 
 
 PREPEND_PATH = getRepoPath().strip() + '/'

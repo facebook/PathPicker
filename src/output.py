@@ -5,17 +5,13 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
-# @nolint
 import os
 import pickle
 import re
 
 import logger
+import stateFiles
 
-OUTPUT_FILE = '~/.fbPager.sh'
-SELECTION_PICKLE = '~/.fbPager.selection.pickle'
-BASH_RC = '~/.bashrc'
-ZSH_RC = '~/.zshrc'
 DEBUG = '~/.fbPager.debug.text'
 RED_COLOR = u'\033[0;31m'
 NO_COLOR = u'\033[0m'
@@ -33,11 +29,16 @@ versions which cannot be resolved.
 
 CONTINUE_WARNING = 'Are you sure you want to continue? Ctrl-C to quit'
 
-ALIAS_REGEX = re.compile('alias (\w+)=[\'"](.*?)[\'"]')
-
+FILES_TO_SOURCE = [
+    '~/.zshrc',
+    '~/.bashrc',
+    '~/.bash_profile',
+    '~/.bash_aliases'
+]
 
 # The two main entry points into this module:
 #
+
 
 def execComposedCommand(command, lineObjs):
     if not len(command):
@@ -45,7 +46,7 @@ def execComposedCommand(command, lineObjs):
         return
     logger.addEvent('command_on_num_files', len(lineObjs))
     command = composeCommand(command, lineObjs)
-    command = expandAliases(command)
+    appendAliasExpansion()
     appendIfInvalid(lineObjs)
     appendFriendlyCommand(command)
 
@@ -80,13 +81,16 @@ def debug(*args):
 
 
 def outputSelection(lineObjs):
-    filePath = os.path.expanduser(SELECTION_PICKLE)
+    filePath = stateFiles.getSelectionFilePath()
     indices = [l.index for l in lineObjs]
-    pickle.dump(indices, open(filePath, 'w'))
+    file = open(filePath, 'wb')
+    pickle.dump(indices, file)
+    file.close()
 
 
 def getEditorAndPath():
-    editor_path = os.environ.get('FPP_EDITOR') or os.environ.get('EDITOR')
+    editor_path = os.environ.get('FPP_EDITOR') or os.environ.get('VISUAL') or \
+        os.environ.get('EDITOR')
     if editor_path:
         editor = os.path.basename(editor_path)
         logger.addEvent('using_editor_' + editor)
@@ -104,33 +108,6 @@ def getEditFileCommand(filePath, lineNum):
         return "'%s'" % filePath
 
 
-def getAliases():
-    try:
-        lines = open(os.path.expanduser(BASH_RC), 'r').readlines()
-    except IOError:
-        # fallback to zsh_rc and try there
-        try:
-            lines = open(os.path.expanduser(ZSH_RC), 'r').readlines()
-        except IOError:
-            return {}
-    pairs = []
-    for line in lines:
-        results = ALIAS_REGEX.search(line)
-        if results:
-            # groups is a tuple of (word, expanded)
-            pairs.append(results.groups())
-    # ok now we can make a dict out of this
-    return dict(pairs)
-
-
-def expandAliases(command):
-    aliasToExpand = getAliases()
-    tokens = command.split(' ')
-    if (tokens[0] in aliasToExpand):
-        tokens[0] = aliasToExpand[tokens[0]]
-    return ' '.join(tokens)
-
-
 def expandPath(filePath):
     # expand ~/ paths
     filePath = os.path.expanduser(filePath)
@@ -140,7 +117,7 @@ def expandPath(filePath):
 
 def joinEditCommands(partialCommands):
     editor, editor_path = getEditorAndPath()
-    if editor == 'vim':
+    if editor in ['vim', 'mvim']:
         if len(partialCommands) > 1:
             return editor_path + ' -O ' + ' '.join(partialCommands)
         else:
@@ -171,6 +148,7 @@ def composeCommand(command, lineObjs):
 
 
 def composeFileCommand(command, lineObjs):
+    command = command.decode('utf-8')
     files = ["'%s'" % lineObj.getFile() for lineObj in lineObjs]
     file_str = ' '.join(files)
     if '$F' in command:
@@ -188,6 +166,14 @@ def clearFile():
     writeToFile('')
 
 
+def appendAliasExpansion():
+    appendToFile('shopt -s expand_aliases')
+    for sourceFile in FILES_TO_SOURCE:
+        appendToFile('if [ -f %s ]; then' % sourceFile)
+        appendToFile('  source %s' % sourceFile)
+        appendToFile('fi')
+
+
 def appendFriendlyCommand(command):
     header = 'echo "executing command:"\n' + \
              'echo "' + command.replace('"', '\\"') + '"'
@@ -200,14 +186,14 @@ def appendError(text):
 
 
 def appendToFile(command):
-    file = open(os.path.expanduser(OUTPUT_FILE), 'a')
+    file = open(stateFiles.getScriptOutputFilePath(), 'a')
     file.write(command + '\n')
     file.close()
     logger.output()
 
 
 def writeToFile(command):
-    file = open(os.path.expanduser(OUTPUT_FILE), 'w')
+    file = open(stateFiles.getScriptOutputFilePath(), 'w')
     file.write(command + '\n')
     file.close()
     logger.output()
