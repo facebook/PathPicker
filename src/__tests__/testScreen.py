@@ -77,16 +77,16 @@ class TestScreenLogic(unittest.TestCase):
         self.assertEqual(
             len(actualLines),
             len(expectedLines),
-            'Actual lines was %d but expected lines aws %d' % (
-                len(actualLines), len(expectedLines)),
+            'In file %s, actual lines was %d but expected lines was %d' % (
+                testName, len(actualLines), len(expectedLines)),
         )
         for index, expectedLine in enumerate(expectedLines):
             actualLine = actualLines[index]
             self.assertEqual(
                 expectedLine,
                 actualLine,
-                'Lines did not match:\n\nExpected:%s\nActual:%s' % (
-                    expectedLine, actualLine),
+                'Lines did not match in file %s:\n\nExpected:"%s"\nActual:"%s"' % (
+                    testName, expectedLine, actualLine),
             )
 
 if __name__ == '__main__':
