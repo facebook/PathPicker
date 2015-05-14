@@ -24,6 +24,7 @@ class ScreenForTest(object):
         self.cursorX = 0
         self.cursorY = 0
         self.output = {}
+        self.pastScreens = []
         self.charInputs = charInputs
         self.clear()
         self.currentAttribute = 0
@@ -35,7 +36,16 @@ class ScreenForTest(object):
         # TODO -- nothing to do here?
         pass
 
+    def containsContent(self, screen):
+        for coord, char in screen.items():
+            if char:
+                return True
+        return False
+
     def clear(self):
+        if self.containsContent(self.output):
+            # we have an old screen, so add it
+            self.pastScreens.append(self.output)
         self.output = {}
         for x in range(self.maxX):
             for y in range(self.maxY):
@@ -59,16 +69,33 @@ class ScreenForTest(object):
     def getch(self):
         return CHAR_TO_CODE[self.charInputs.pop(0)]
 
+    def getstr(self, y, x, maxLen):
+        # TODO -- enable editing this
+        return ''
+
     def printScreen(self):
         for index, row in enumerate(self.getRows()):
             print("Row %02d:%s" % (index, row))
 
-    def getRows(self):
+    def printOldScreens(self):
+        for oldScreen in range(self.getNumPastScreens()):
+            for index, row in enumerate(self.getRowsForPastScreen(oldScreen)):
+                print("Screen %02d Row %02d:%s" % (oldScreen, index, row))
+
+    def getNumPastScreens(self):
+        return len(self.pastScreens)
+
+    def getRowsForPastScreen(self, pastScreen):
+        return self.getRows(screen=self.pastScreens[pastScreen])
+
+    def getRows(self, screen=None):
+        if not screen:
+            screen = self.output
         rows = []
         for y in range(self.maxY):
             row = ''
             for x in range(self.maxX):
                 coord = (x, y)
-                row += self.output.get(coord, ' ')
+                row += screen.get(coord, ' ')
             rows.append(row)
         return rows

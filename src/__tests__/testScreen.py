@@ -53,6 +53,7 @@ class TestScreenLogic(unittest.TestCase):
                 charInputs=charInputs,
                 screenConfig=testCase.get('screenConfig', {}),
                 printScreen=False,
+                pastScreen=testCase.get('pastScreen', None),
             )
             self.compareToExpected(testName, actualLines)
             print('Tested %s ' % testName)

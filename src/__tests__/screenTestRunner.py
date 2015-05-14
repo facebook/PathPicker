@@ -28,7 +28,12 @@ def getLineObjsFromFile(inputFile):
     return processInput.getLineObjsFromLines(lines)
 
 
-def getRowsFromScreenRun(inputFile, charInputs, screenConfig={}, printScreen=True):
+def getRowsFromScreenRun(
+      inputFile,
+      charInputs,
+      screenConfig={},
+      printScreen=True,
+      pastScreen=None):
     lineObjs = getLineObjsFromFile(inputFile)
     screen = ScreenForTest(
         charInputs,
@@ -40,7 +45,9 @@ def getRowsFromScreenRun(inputFile, charInputs, screenConfig={}, printScreen=Tru
     except StopIteration:
         pass
     if printScreen:
-        screen.printScreen()
+        screen.printOldScreens()
+    if pastScreen:
+        return screen.getRowsForPastScreen(pastScreen)
     return screen.getRows()
 
 if __name__ == '__main__':
