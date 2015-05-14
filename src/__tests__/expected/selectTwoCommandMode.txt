@@ -9,8 +9,8 @@
 ==========================================================
 Files you have selected:
 ==========================================================
-./README.md
-/Users/pcottle/Dropbox (Facebook)/wip/PathPicker/src/__tests__/__init__.py
+/foo/bar/README.md
+/foo/bar/fpp
 ==========================================================
 Type a command below! Files will be appended or replace $F
 Enter a blank line to go back to the selection process

@@ -34,6 +34,7 @@ screenTestCases = [{
     'inputs': ['f', 'j', 'f', 'A'],
 }, {
     'name': 'selectTwoCommandMode',
+    'input': 'absoluteGitDiff.txt',
     'inputs': ['f', 'j', 'f', 'c'],
     'pastScreen': 1
 }]

@@ -1,0 +1,15 @@
+ /foo/bar/README.md                      |  8 ++++-
+ /foo/bar/fpp                            |  6 ++--
+ /foo/bar/src/__tests__/__init__.py      |  0
+ /foo/bar/src/__tests__/cursesForTest.py | 45 ++++++++++++++++++++++++++++
+ /foo/bar/src/__tests__/initTest.py      | 28 ++++++++++++++++++
+ /foo/bar/src/__tests__/screenForTest.py | 67 ++++++++++++++++++++++++++++++++++++++++++
+ /foo/bar/src/charCodeMapping.py         | 20 +++++++++++++
+ /foo/bar/src/choose.py                  | 15 ++++++++--
+ /foo/bar/src/colorPrinter.py            | 21 ++++++++-----
+ /foo/bar/src/cursesAPI.py               | 40 +++++++++++++++++++++++++
+ /foo/bar/src/format.py                  |  4 +--
+ /foo/bar/src/processInput.py            |  7 +++++
+ /foo/bar/src/screenControl.py           | 28 +++++++-----------
+ /foo/bar/src/screenFlags.py             | 34 +++++++++++++++++++++
+ 14 files changed, 290 insertions(+), 33 deletions(-)
