@@ -6,7 +6,7 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 from __future__ import print_function
-
+from screenFlags import ScreenFlags
 
 USAGE_INTRO = '''
 Welcome to fpp, the Facebook PathPicker! We hope your stay
@@ -100,12 +100,6 @@ which editor to open the selected files with. If that variable
 is not set, $VISUAL and then $EDITOR are used as fallbacks,
 with "vim" as a last resort.
 
-~ Keep-Open ~
-
-Use the --keep-open or -ko flag to avoid closing PathPicker once
-a file selection or command is performed. This will loop the program
-until Ctrl-C is used to terminate the process.
-
 ~ Colors ~
 
 FPP will understand colors if the piped input uses them. In general, most
@@ -116,6 +110,14 @@ line option --color.
 
 For built in commands like `ls`, try `-G` (on Mac, additionally export
 CLICOLOR_FORCE in your environment to anything.)
+
+'''
+
+USAGE_COMMAND_LINE = '''
+== Command line arguments ==
+
+
+PathPicker supports some command line arguments, as well.
 
 '''
 
@@ -131,6 +133,8 @@ USAGE_STR = USAGE_INTRO + \
     USAGE_COMMAND_HEADER + \
     USAGE_COMMAND + \
     USAGE_CONFIGURATION + \
+    USAGE_COMMAND_LINE + \
+    ScreenFlags.getArgParser().format_help() + \
     USAGE_TAIL
 
 decorator = '*' * 80

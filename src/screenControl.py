@@ -198,11 +198,12 @@ class ScrollBar(object):
 
 class Controller(object):
 
-    def __init__(self, stdscr, lineObjs, cursesAPI):
+    def __init__(self, flags, stdscr, lineObjs, cursesAPI):
         self.stdscr = stdscr
         self.cursesAPI = cursesAPI
         self.cursesAPI.useDefaultColors()
         self.colorPrinter = ColorPrinter(self.stdscr, cursesAPI)
+        self.flags = flags
 
         self.lineObjs = lineObjs
         self.hoverIndex = 0
@@ -437,6 +438,7 @@ class Controller(object):
         self.stdscr.refresh()
         self.cursesAPI.echo()
         maxX = int(round(maxx - 1))
+
         command = self.stdscr.getstr(halfHeight + 3, 0, maxX)
         return command
 
@@ -464,7 +466,15 @@ class Controller(object):
             # nothing selected, assume we want hovered
             lineObjs = self.getHoveredFiles()
         logger.addEvent('selected_num_files', len(lineObjs))
-        output.editFiles(lineObjs)
+
+        # do we already have a command from the command line?
+        presetCommand = self.flags.getPresetCommand()
+
+        if len(presetCommand) > 0:
+            output.execComposedCommand(presetCommand, lineObjs)
+        else:
+            output.editFiles(lineObjs)
+
         sys.exit(0)
 
     def resetDirty(self):

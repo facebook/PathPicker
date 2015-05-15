@@ -21,20 +21,22 @@ done
 BASEDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 PYTHONCMD="python"
+OPTS="$@"
 
 function doProgram {
   # process input from pipe and store as pickled file
-  $PYTHONCMD "$BASEDIR/src/processInput.py" "$@"
+  $PYTHONCMD "$BASEDIR/src/processInput.py" $OPTS
   # now close stdin and choose input...
   exec 0<&-
-  $PYTHONCMD "$BASEDIR/src/choose.py" "$@" < /dev/tty
+
+  $PYTHONCMD "$BASEDIR/src/choose.py" $OPTS < /dev/tty
   # execute the output bash script
   sh ~/.fpp/.fpp.sh < /dev/tty
 }
 
 # we need to handle the --help option outside the python
 # flow since otherwise we will move into input selection...
-for opt in "$@"; do
+for opt in OPTS; do
   if [ "$opt" == "--debug" ]; then
     echo "Executing from '$BASEDIR'"
   elif [ "$opt" == "--python3" ]; then
