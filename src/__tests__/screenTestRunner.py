@@ -36,15 +36,17 @@ def getRowsFromScreenRun(
         charInputs,
         screenConfig={},
         printScreen=True,
-        pastScreen=None):
+        pastScreen=None,
+        args=[]):
+
     lineObjs = getLineObjsFromFile(inputFile)
     screen = ScreenForTest(
         charInputs,
         maxX=screenConfig.get('maxX', 80),
         maxY=screenConfig.get('maxY', 30),
     )
-    # mock our flags with an empty command line for now
-    flags = ScreenFlags.initFromArgs([])
+    # mock our flags with the passed arg list
+    flags = ScreenFlags.initFromArgs(args)
     try:
         choose.doProgram(screen, flags, CursesForTest(), lineObjs)
     except StopIteration:

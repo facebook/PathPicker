@@ -37,6 +37,14 @@ screenTestCases = [{
     'input': 'absoluteGitDiff.txt',
     'inputs': ['f', 'j', 'f', 'c'],
     'pastScreen': 1
+}, {
+    'name': 'selectCommandWithPassedCommand',
+    'input': 'absoluteGitDiff.txt',
+    # the last key "a" is so we quit from command mode
+    # after seeing the warning
+    'inputs': ['f', 'c', 'a'],
+    'pastScreen': 1,
+    'args': ["-c 'git add'"]
 }]
 
 
@@ -59,6 +67,7 @@ class TestScreenLogic(unittest.TestCase):
                 screenConfig=testCase.get('screenConfig', {}),
                 printScreen=False,
                 pastScreen=testCase.get('pastScreen', None),
+                args=testCase.get('args', [])
             )
             self.compareToExpected(testName, actualLines)
             print('Tested %s ' % testName)
