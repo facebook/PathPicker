@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="0.5.6"
+VERSION="$(python ./src/version.py)"
 DEST="./dist/fpp.$VERSION.tar.gz"
 mkdir -p ./dist/
 tar -cf $DEST src/*.py fpp

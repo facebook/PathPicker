@@ -49,6 +49,11 @@ Record input and output. This is
 largely used for testing, but you may find it useful for scripting.''',
                             default=False,
                             action='store_true')
+        parser.add_argument('--version',
+                            default=False,
+                            help='''
+Print the version of fpp and exit.''',
+                            action='store_true')
         parser.add_argument('--clean',
                             default=False,
                             action='store_true',

@@ -38,6 +38,10 @@ function doProgram {
 for opt in "$@"; do
   if [ "$opt" == "--debug" ]; then
     echo "Executing from '$BASEDIR'"
+  elif [ "$opt" == "--version" ]; then
+    VERSION="$($PYTHONCMD "$BASEDIR/src/version.py")"
+    echo "fpp version $VERSION"
+    exit 0
   elif [ "$opt" == "--python3" ]; then
     PYTHONCMD="python3"
   elif [ "$opt" == "--help" -o "$opt" == "-h" ]; then
