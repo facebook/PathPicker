@@ -66,7 +66,6 @@ if __name__ == '__main__':
         sys.exit(0)
     else:
         # delete the old selection
-        print('getting input')
         selectionPath = stateFiles.getSelectionFilePath()
         if os.path.isfile(selectionPath):
             os.remove(selectionPath)
