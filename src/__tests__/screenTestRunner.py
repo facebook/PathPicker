@@ -45,7 +45,7 @@ def getRowsFromScreenRun(
         maxX=screenConfig.get('maxX', 80),
         maxY=screenConfig.get('maxY', 30),
     )
-    # mock our flags with thep assed arg list
+    # mock our flags with the passed arg list
     flags = ScreenFlags.initFromArgs(args)
     try:
         choose.doProgram(screen, flags, CursesForTest(), lineObjs)
