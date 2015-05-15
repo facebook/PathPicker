@@ -45,3 +45,14 @@ def getScriptOutputFilePath():
 def getLoggerFilePath():
     assertDirCreated()
     return os.path.expanduser(os.path.join(FPP_DIR, LOGGER_FILE))
+
+
+def getAllStateFiles():
+    # keep this update to date! We do not include
+    # the script output path since that gets cleaned automatically
+    return [
+        getPickleFilePath(),
+        getSelectionFilePath(),
+        getLoggerFilePath(),
+        getScriptOutputFilePath(),
+    ]
