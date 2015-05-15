@@ -65,5 +65,5 @@ it will be invoked instead.''',
 
     @staticmethod
     def initFromArgs(argv):
-        args = ScreenFlags.getArgParser().parse_args(argv)
+        args = ScreenFlags.getArgParser().parse_known_args(argv)
         return ScreenFlags(args)
