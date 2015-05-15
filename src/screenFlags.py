@@ -6,9 +6,9 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 from __future__ import print_function
-import logger
 import argparse
 
+import logger
 
 class ScreenFlags(object):
 
@@ -65,5 +65,5 @@ it will be invoked instead.''',
 
     @staticmethod
     def initFromArgs(argv):
-        args = ScreenFlags.getArgParser().parse_known_args(argv)
+        (args, chars) = ScreenFlags.getArgParser().parse_known_args(argv)
         return ScreenFlags(args)

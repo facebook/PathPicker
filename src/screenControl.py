@@ -467,9 +467,8 @@ class Controller(object):
             lineObjs = self.getHoveredFiles()
         logger.addEvent('selected_num_files', len(lineObjs))
 
-        # do we already have a command from the command line?
+        # commands passed from the command line get used immediately
         presetCommand = self.flags.getPresetCommand()
-
         if len(presetCommand) > 0:
             output.execComposedCommand(presetCommand, lineObjs)
         else:
