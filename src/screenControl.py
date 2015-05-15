@@ -444,6 +444,18 @@ class Controller(object):
 
     def beginEnterCommand(self):
         self.stdscr.clear()
+        # first check if they are trying to enter command mode
+        # but already have a command...
+        if len(self.flags.getPresetCommand()):
+            self.helperChrome.output(self.mode)
+            (_, minY, _, maxY) = self.getChromeBoundaries()
+            yStart = (maxY + minY) / 2 - 3
+            self.printProvidedCommandWarning(yStart)
+            self.getKey()
+            self.mode = SELECT_MODE
+            self.dirtyLines()
+            return
+
         self.mode = COMMAND_MODE
         self.helperChrome.output(self.mode)
         logger.addEvent('enter_command_mode')
@@ -509,6 +521,17 @@ class Controller(object):
 
     def printScroll(self):
         self.scrollBar.output()
+
+    def printProvidedCommandWarning(self, yStart):
+        self.colorPrinter.setAttributes(
+            curses.COLOR_WHITE, curses.COLOR_RED, 0)
+        self.stdscr.addstr(yStart, 0, 'Oh no! You already provided a command so ' +
+                           'you cannot enter command mode.')
+        self.stdscr.attrset(0)
+        self.stdscr.addstr(
+            yStart + 1, 0, 'The command you provided was "%s" ' % self.flags.getPresetCommand())
+        self.stdscr.addstr(
+            yStart + 2, 0, 'Press any key to go back to selecting files.')
 
     def printChrome(self):
         self.helperChrome.output(self.mode)
