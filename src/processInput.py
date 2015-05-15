@@ -17,6 +17,7 @@ import format
 import stateFiles
 from formattedText import FormattedText
 from usageStrings import USAGE_STR
+from screenFlags import ScreenFlags
 
 
 def getLineObjs():
@@ -57,6 +58,15 @@ def usage():
 
 
 if __name__ == '__main__':
+    flags = ScreenFlags.initFromArgs(sys.argv[1:])
+    if (flags.getIsCleanMode()):
+        print('Cleaning out state files...')
+        for filePath in stateFiles.getAllStateFiles():
+            if os.path.isfile(filePath):
+                os.remove(filePath)
+        print('Done! Removed %d files ' % len(stateFiles.getAllStateFiles()))
+        sys.exit(0)
+
     if sys.stdin.isatty():
         if os.path.isfile(stateFiles.getPickleFilePath()):
             print('Using old result...')
@@ -66,7 +76,6 @@ if __name__ == '__main__':
         sys.exit(0)
     else:
         # delete the old selection
-        print('getting input')
         selectionPath = stateFiles.getSelectionFilePath()
         if os.path.isfile(selectionPath):
             os.remove(selectionPath)

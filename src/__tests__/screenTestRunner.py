@@ -10,10 +10,13 @@ from __future__ import print_function
 import curses
 import sys
 import os
+
 sys.path.insert(0, '../')
 
 import choose
 import processInput
+from screenFlags import ScreenFlags
+
 from screenForTest import ScreenForTest
 from cursesForTest import CursesForTest
 
@@ -29,19 +32,23 @@ def getLineObjsFromFile(inputFile):
 
 
 def getRowsFromScreenRun(
-      inputFile,
-      charInputs,
-      screenConfig={},
-      printScreen=True,
-      pastScreen=None):
+        inputFile,
+        charInputs,
+        screenConfig={},
+        printScreen=True,
+        pastScreen=None,
+        args=[]):
+
     lineObjs = getLineObjsFromFile(inputFile)
     screen = ScreenForTest(
         charInputs,
         maxX=screenConfig.get('maxX', 80),
         maxY=screenConfig.get('maxY', 30),
     )
+    # mock our flags with the passed arg list
+    flags = ScreenFlags.initFromArgs(args)
     try:
-        choose.doProgram(screen, CursesForTest(), lineObjs)
+        choose.doProgram(screen, flags, CursesForTest(), lineObjs)
     except StopIteration:
         pass
     if printScreen:

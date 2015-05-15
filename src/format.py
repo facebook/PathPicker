@@ -17,6 +17,7 @@ class SimpleLine(object):
     def __init__(self, formattedLine, index):
         self.formattedLine = formattedLine
         self.index = index
+        self.controller = None
 
     def printOut(self):
         print(str(self))
@@ -31,9 +32,6 @@ class SimpleLine(object):
             return
 
         self.formattedLine.printText(y, minx, printer, maxLen)
-
-    def setController(self, controller):
-        self.controller = controller
 
     def __str__(self):
         return str(self.formattedLine)
@@ -81,12 +79,10 @@ class LineMatch(object):
         (self.beforeText, unused) = self.formattedLine.breakat(self.start)
         (unused, self.afterText) = self.formattedLine.breakat(self.end)
         self.updateDecoratedMatch()
+        self.controller = None
 
     def toggleSelect(self):
         self.setSelect(not self.selected)
-
-    def setController(self, controller):
-        self.controller = controller
 
     def setSelect(self, val):
         self.selected = val

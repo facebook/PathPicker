@@ -52,6 +52,10 @@
   padding: 24px 0;
 }
 
+.callToAction div {
+  margin-bottom: 12px;
+}
+
 .callToAction pre {
   display: inline-block;
   margin: 0;

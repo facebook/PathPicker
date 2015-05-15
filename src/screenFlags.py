@@ -6,30 +6,81 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 from __future__ import print_function
-
 import argparse
+
+import logger
 
 
 class ScreenFlags(object):
 
-    """A class that just represents what flags we pass into
-    the screencontrol method -- for instance, if we are in
-    record mode. Possibly will be expanded in the future."""
+    """A class that just represents the total set of flags
+    available to FPP. Note that some of these are actually
+    processsed by the fpp batch file, and not by python.
+    However, they are documented here because argsparse is
+    clean and easy to use for that purpose.
 
-    def __init__(self, isRecordMode=False):
-        self.isRecordMode = isRecordMode
+    The flags that are actually processed and are meaningful
+    are
+
+    * c (command)
+    * r (record)
+
+    """
+
+    def __init__(self, args):
+        self.args = args
 
     def getIsRecordMode(self):
-        return self.isRecordMode
+        return self.args.record
+
+    def getPresetCommand(self):
+        return ' '.join(self.args.command)
+
+    def getIsCleanMode(self):
+        return self.args.clean
 
     @staticmethod
-    def initFromArgs():
-        parser = argparse.ArgumentParser()
+    def getArgParser():
+        parser = argparse.ArgumentParser(prog='fpp')
         parser.add_argument('-r',
                             '--record',
-                            help='record input and output',
+                            help='''
+Record input and output. This is
+largely used for testing, but you may find it useful for scripting.''',
                             default=False,
                             action='store_true')
-        args = parser.parse_args()
+        parser.add_argument('--version',
+                            default=False,
+                            help='''
+Print the version of fpp and exit.''',
+                            action='store_true')
+        parser.add_argument('--clean',
+                            default=False,
+                            action='store_true',
+                            help='''
+Remove the state files that fpp uses when starting up, including
+the previous input used and selection pickle. Useful when using fpp
+in a script context where the previous state should be discarded.''')
+        parser.add_argument('-ko',
+                            '--keep-open',
+                            default=False,
+                            action='store_true',
+                            help='''keep PathPicker open once
+a file selection or command is performed. This will loop the program
+until Ctrl-C is used to terminate the process.''')
+        parser.add_argument('-c',
+                            '--command',
+                            help='''You may specify a command while
+invoking fpp that will be run once files have been selected. Normally,
+fpp opens your editor (see discussion of $EDITOR, $VISUAL, and
+$FPP_EDITOR) when you press enter. If you specify a command here,
+it will be invoked instead.''',
+                            default='',
+                            action='store',
+                            nargs='+')
+        return parser
 
-        return ScreenFlags(args.record)
+    @staticmethod
+    def initFromArgs(argv):
+        (args, chars) = ScreenFlags.getArgParser().parse_known_args(argv)
+        return ScreenFlags(args)

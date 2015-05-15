@@ -198,11 +198,12 @@ class ScrollBar(object):
 
 class Controller(object):
 
-    def __init__(self, stdscr, lineObjs, cursesAPI):
+    def __init__(self, flags, stdscr, lineObjs, cursesAPI):
         self.stdscr = stdscr
         self.cursesAPI = cursesAPI
         self.cursesAPI.useDefaultColors()
         self.colorPrinter = ColorPrinter(self.stdscr, cursesAPI)
+        self.flags = flags
 
         self.lineObjs = lineObjs
         self.hoverIndex = 0
@@ -215,8 +216,8 @@ class Controller(object):
         self.simpleLines = []
         self.lineMatches = []
         # lets loop through and split
-        for key, lineObj in self.lineObjs.items():
-            lineObj.setController(self)
+        for lineObj in self.lineObjs.values():
+            lineObj.controller = self
             if (lineObj.isSimple()):
                 self.simpleLines.append(lineObj)
             else:
@@ -437,11 +438,24 @@ class Controller(object):
         self.stdscr.refresh()
         self.cursesAPI.echo()
         maxX = int(round(maxx - 1))
+
         command = self.stdscr.getstr(halfHeight + 3, 0, maxX)
         return command
 
     def beginEnterCommand(self):
         self.stdscr.clear()
+        # first check if they are trying to enter command mode
+        # but already have a command...
+        if len(self.flags.getPresetCommand()):
+            self.helperChrome.output(self.mode)
+            (_, minY, _, maxY) = self.getChromeBoundaries()
+            yStart = (maxY + minY) / 2 - 3
+            self.printProvidedCommandWarning(yStart)
+            self.getKey()
+            self.mode = SELECT_MODE
+            self.dirtyLines()
+            return
+
         self.mode = COMMAND_MODE
         self.helperChrome.output(self.mode)
         logger.addEvent('enter_command_mode')
@@ -464,7 +478,14 @@ class Controller(object):
             # nothing selected, assume we want hovered
             lineObjs = self.getHoveredFiles()
         logger.addEvent('selected_num_files', len(lineObjs))
-        output.editFiles(lineObjs)
+
+        # commands passed from the command line get used immediately
+        presetCommand = self.flags.getPresetCommand()
+        if len(presetCommand) > 0:
+            output.execComposedCommand(presetCommand, lineObjs)
+        else:
+            output.editFiles(lineObjs)
+
         sys.exit(0)
 
     def resetDirty(self):
@@ -495,11 +516,22 @@ class Controller(object):
         self.printChrome()
 
     def printLines(self):
-        for key, lineObj in self.lineObjs.items():
+        for lineObj in self.lineObjs.values():
             lineObj.output(self.colorPrinter)
 
     def printScroll(self):
         self.scrollBar.output()
+
+    def printProvidedCommandWarning(self, yStart):
+        self.colorPrinter.setAttributes(
+            curses.COLOR_WHITE, curses.COLOR_RED, 0)
+        self.stdscr.addstr(yStart, 0, 'Oh no! You already provided a command so ' +
+                           'you cannot enter command mode.')
+        self.stdscr.attrset(0)
+        self.stdscr.addstr(
+            yStart + 1, 0, 'The command you provided was "%s" ' % self.flags.getPresetCommand())
+        self.stdscr.addstr(
+            yStart + 2, 0, 'Press any key to go back to selecting files.')
 
     def printChrome(self):
         self.helperChrome.output(self.mode)
