@@ -12,7 +12,6 @@ import pickle
 import sys
 import os
 import argparse
-import functools
 
 import output
 import screenControl
@@ -91,8 +90,8 @@ if __name__ == '__main__':
         output.writeToFile('echo ":D"')
         sys.exit(0)
     output.clearFile()
-    # we initialize our args *before* we curse up
+    # we initialize our args *before* we move into curses
     # so we can benefit from the default argparse
     # behavior:
-    flags = ScreenFlags.initFromArgs(sys.argv)
-    curses.wrapper(functools.partial(doProgram, flags=flags))
+    flags = ScreenFlags.initFromArgs(sys.argv[1:])
+    curses.wrapper(lambda x: doProgram(x, flags))
