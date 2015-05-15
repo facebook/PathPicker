@@ -36,15 +36,26 @@ class ScreenFlags(object):
     def getPresetCommand(self):
         return ' '.join(self.args.command)
 
+    def getIsCleanMode(self):
+        return self.args.clean
+
     @staticmethod
     def getArgParser():
         parser = argparse.ArgumentParser(prog='fpp')
         parser.add_argument('-r',
                             '--record',
-                            help='''record input and output. This is
+                            help='''
+Record input and output. This is
 largely used for testing, but you may find it useful for scripting.''',
                             default=False,
                             action='store_true')
+        parser.add_argument('--clean',
+                            default=False,
+                            action='store_true',
+                            help='''
+Remove the state files that fpp uses when starting up, including
+the previous input used and selection pickle. Useful when using fpp
+in a script context where the previous state should be discarded.''')
         parser.add_argument('-ko',
                             '--keep-open',
                             default=False,
