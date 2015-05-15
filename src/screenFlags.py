@@ -10,6 +10,7 @@ import argparse
 
 import logger
 
+
 class ScreenFlags(object):
 
     """A class that just represents the total set of flags
