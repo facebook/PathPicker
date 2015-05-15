@@ -51,7 +51,7 @@ def getLineObjs():
     except:
         output.appendError(LOAD_SELECTION_WARNING)
         sys.exit(1)
-    logger.addEvent('total_num_files', len(lineObjs.items()))
+    logger.addEvent('total_num_files', len(lineObjs))
 
     selectionPath = stateFiles.getSelectionFilePath()
     if os.path.isfile(selectionPath):
