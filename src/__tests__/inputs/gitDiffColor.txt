@@ -1,0 +1,20 @@
+ assets/launch_page.css                             |  4 [32m+[m
+ fpp                                                |  4 [32m+[m
+ fpp.rb                                             |  4 [32m+[m[31m-[m
+ index.html                                         | 11 [32m++[m[31m-[m
+ scripts/makeDist.sh                                |  2 [32m+[m[31m-[m
+ .../expected/selectCommandWithPassedCommand.txt    | 30 [32m+++++++[m
+ src/__tests__/expected/selectDownSelectInverse.txt |  4 [32m+[m[31m-[m
+ .../expected/simpleSelectWithAttributes.txt        | 60 [32m++++++++++++++[m
+ src/__tests__/expected/simpleWithAttributes.txt    | 60 [32m++++++++++++++[m
+ src/__tests__/screenForTest.py                     | 40 [32m+++++++[m[31m--[m
+ src/__tests__/screenTestRunner.py                  | 17 [32m++[m[31m--[m
+ src/__tests__/testScreen.py                        | 96 [32m++++++++++++++++++[m[31m----[m
+ src/format.py                                      | 29 [32m++++++[m[31m-[m
+ src/formattedText.py                               |  3 [32m+[m
+ src/processInput.py                                | 10 [32m+++[m
+ src/screenControl.py                               | 23 [32m++++++[m
+ src/screenFlags.py                                 | 18 [32m+++[m[31m-[m
+ src/stateFiles.py                                  | 11 [32m+++[m
+ src/version.py                                     | 15 [32m++++[m
+ 19 files changed, 404 insertions(+), 37 deletions(-)

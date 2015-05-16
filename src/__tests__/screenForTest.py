@@ -11,6 +11,19 @@ import sys
 sys.path.insert(0, '../')
 from charCodeMapping import CHAR_TO_CODE
 
+ATTRIBUTE_SYMBOL_MAPPING = {
+    0: ' ',
+    1: ' ',
+    2: 'B',
+    131072: '_',
+    3: 'G',
+    4: 'R',
+    5: '?',
+    6: '!',
+    2097153: '?',
+    7: '?',
+}
+
 
 class ScreenForTest(object):
 
@@ -37,7 +50,8 @@ class ScreenForTest(object):
         pass
 
     def containsContent(self, screen):
-        for coord, char in screen.items():
+        for coord, pair in screen.items():
+            (char, attr) = pair
             if char:
                 return True
         return False
@@ -50,7 +64,7 @@ class ScreenForTest(object):
         for x in range(self.maxX):
             for y in range(self.maxY):
                 coord = (x, y)
-                self.output[coord] = ''
+                self.output[coord] = ('', 1)
 
     def move(self, y, x):
         self.cursorY = y
@@ -64,7 +78,7 @@ class ScreenForTest(object):
             self.attrset(attr)
         for deltaX in range(len(string)):
             coord = (x + deltaX, y)
-            self.output[coord] = string[deltaX]
+            self.output[coord] = (string[deltaX], self.currentAttribute)
 
     def getch(self):
         return CHAR_TO_CODE[self.charInputs.pop(0)]
@@ -88,14 +102,33 @@ class ScreenForTest(object):
     def getRowsForPastScreen(self, pastScreen):
         return self.getRows(screen=self.pastScreens[pastScreen])
 
-    def getRows(self, screen=None):
+    def getRowsWithAttributesForPastScreen(self, pastScreen):
+        return self.getRowsWithAttributes(screen=self.pastScreens[pastScreen])
+
+    def getRowsWithAttributes(self, screen=None):
         if not screen:
             screen = self.output
+
         rows = []
+        attributeRows = []
         for y in range(self.maxY):
             row = ''
+            attributeRow = ''
             for x in range(self.maxX):
                 coord = (x, y)
-                row += screen.get(coord, ' ')
+                (char, attr) = screen[coord]
+                row += char
+                attributeRow += self.getAttributeSymbolForCode(attr)
             rows.append(row)
+            attributeRows.append(attributeRow)
+        return (rows, attributeRows)
+
+    def getRows(self, screen=None):
+        (rows, _) = self.getRowsWithAttributes(screen)
         return rows
+
+    def getAttributeSymbolForCode(self, code):
+        symbol = ATTRIBUTE_SYMBOL_MAPPING.get(code, None)
+        if symbol is None:
+            raise ValueError('%d not mapped' % code)
+        return symbol
