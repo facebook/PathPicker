@@ -78,6 +78,11 @@ screenTestCases = [{
     'input': 'gitLongDiffColor.txt',
     'inputs': [' ', ' '],
     'withAttributes': True,
+}, {
+    'name': 'gitDiffWithValidation',
+    'input': 'gitDiffSomeExist.txt',
+    'validateFileExists': True,
+    'withAttributes': True,
 }]
 
 
@@ -101,7 +106,8 @@ class TestScreenLogic(unittest.TestCase):
                 screenConfig=testCase.get('screenConfig', {}),
                 printScreen=False,
                 pastScreen=testCase.get('pastScreen', None),
-                args=testCase.get('args', [])
+                args=testCase.get('args', []),
+                validateFileExists=testCase.get('validateFileExists', False)
             )
 
             self.compareToExpected(testCase, testName, screenData)
@@ -151,16 +157,16 @@ class TestScreenLogic(unittest.TestCase):
         self.fail(
             'File outputted, please inspect %s for correctness' % expectedFile)
 
-    def assertEqualNumLines(self, actualLines, expectedLines):
+    def assertEqualNumLines(self, testName, actualLines, expectedLines):
         self.assertEqual(
             len(actualLines),
             len(expectedLines),
-            'Actual lines was %d but expected lines was %d' % (
-                len(actualLines), len(expectedLines)),
+            '%s test: Actual lines was %d but expected lines was %d' % (
+                testName, len(actualLines), len(expectedLines)),
         )
 
     def assertEqualLines(self, testName, actualLines, expectedLines):
-        self.assertEqualNumLines(actualLines, expectedLines)
+        self.assertEqualNumLines(testName, actualLines, expectedLines)
         expectedFile = TestScreenLogic.getExpectedFile(testName)
         for index, expectedLine in enumerate(expectedLines):
             actualLine = actualLines[index]
@@ -170,7 +176,7 @@ class TestScreenLogic(unittest.TestCase):
                 'Lines did not match for test %s:\n\nExpected:%s\nActual:%s' % (
                     expectedFile, expectedLine, actualLine),
             )
-        
+
     @staticmethod
     def getExpectedFile(testName):
         return os.path.join(EXPECTED_DIR, testName + '.txt')
