@@ -41,6 +41,38 @@ FILE_NO_PERIODS = re.compile(''.join((
     '(\s|$|:)+'
 )))
 
+REGEX_WATERFALL = [{
+    # Homedirs need a separate regex.
+    'regex': HOMEDIR_REGEX,
+}, {
+    # the master regex matches tbgs results with
+    # line numbers, so we prefer that and test it first
+    'regex': MASTER_REGEX,
+    # one real quick check -- did we find a better match
+    # earlier in the regex?
+    'preferred_regex': OTHER_BGS_RESULT_REGEX,
+}, {
+    # if something clearly looks like an *bgs result but
+    # just has a weird filename (like all caps with no extension)
+    # then we can match that as well. Note that we require
+    # the line number match since otherwise this would be too lax
+    # of a regex.
+    'regex': OTHER_BGS_RESULT_REGEX,
+}, {
+    # ok maybe its just a normal file (with a dot)
+    # so lets test for that if the above fails
+    'regex': JUST_FILE,
+    'noNum': True
+}, {
+    # ok finally it might be a file with no periods. we test
+    # this last since its more restrictive, because we dont
+    # want to match things like cx('foo/root'). hence
+    # we require some minimum number of slashes and minimum
+    # file name length
+    'regex': FILE_NO_PERIODS,
+    'noNum': True
+}]
+
 
 # Attempts to resolve the root directory of the
 # repository in which path resides (i.e. the current directory).
@@ -85,49 +117,27 @@ def matchLine(line, validateFileExists=False):
     return matchLineImpl(line)
 
 def matchLineImpl(line):
-    # Homedirs need a separate regex.
-    matches = HOMEDIR_REGEX.search(line)
-    if matches:
-        return unpackMatches(matches)
+    for regexConfig in REGEX_WATERFALL:
+        regex = regexConfig['regex']
+        matches = regex.search(line)
+        if not matches:
+            continue
+        
+        unpackFunc = unpackMatchesNoNum if regexConfig.get('noNum') \
+                else unpackMatches
+        if not regexConfig.get('preferred_regex'):
+            return unpackFunc(matches)
 
-    matches = MASTER_REGEX.search(line)
-    # the master regex matches tbgs results with
-    # line numbers, so we prefer that and test it first
-    if matches:
-        # one real quick check -- did we find a better match
-        # earlier in the regex?
-        other_matches = OTHER_BGS_RESULT_REGEX.search(line)
+        # check the preferred_regex
+        preferred_regex = regexConfig.get('preferred_regex')
+        other_matches = preferred_regex.search(line)
         if not other_matches:
-            return unpackMatches(matches)
-        if other_matches.start() >= matches.start():
-            # return as before
-            return unpackMatches(matches)
-        # we actually want the BGS result, not the one after
-        return unpackMatches(other_matches)
-
-    # if something clearly looks like an *bgs result but
-    # just has a weird filename (like all caps with no extension)
-    # then we can match that as well. Note that we require
-    # the line number match since otherwise this would be too lax
-    # of a regex.
-    matches = OTHER_BGS_RESULT_REGEX.search(line)
-    if matches:
-        return unpackMatches(matches)
-
-    # ok maybe its just a normal file (with a dot)
-    # so lets test for that if the above fails
-    matches = JUST_FILE.search(line)
-    if matches:
-        return unpackMatchesNoNum(matches)
-
-    # ok finally it might be a file with no periods. we test
-    # this last since its more restrictive, because we dont
-    # want to match things like cx('foo/root'). hence
-    # we require some minimum number of slashes and minimum
-    # file name length
-    matches = FILE_NO_PERIODS.search(line)
-    if matches:
-        return unpackMatchesNoNum(matches)
+            return unpackFunc(matches)
+        if other_matches.start() < matches.start():
+            # we found a better result earlier, so return that
+            return unpackFunc(other_matches)
+        return unpackFunc(matches)
+    # nothing matched at all
     return None
 
 
