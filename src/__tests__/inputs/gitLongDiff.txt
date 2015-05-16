@@ -1,0 +1,480 @@
+diff --git a/src/choose.py b/src/choose.py
+index d184f91..5d7f2f9 100755
+--- a/src/choose.py
++++ b/src/choose.py
+@@ -11,6 +11,7 @@ import curses
+ import pickle
+ import sys
+ import os
++import argparse
+ 
+ import output
+ import screenControl
+@@ -29,18 +30,16 @@ this error will go away)
+ '''
+ 
+ 
+-def doProgram(stdscr, cursesAPI=None, lineObjs=None, flags=None):
++def doProgram(stdscr, flags, cursesAPI=None, lineObjs=None):
+     # curses and lineObjs get dependency injected for
+     # our tests, so init these if they are not provided
+     if not cursesAPI:
+         cursesAPI = CursesAPI()
+     if not lineObjs:
+         lineObjs = getLineObjs()
+-    if not flags:
+-        flags = ScreenFlags.initFromArgs()
+     output.clearFile()
+     logger.clearFile()
+-    screen = screenControl.Controller(stdscr, lineObjs, cursesAPI)
++    screen = screenControl.Controller(flags, stdscr, lineObjs, cursesAPI)
+     screen.control()
+ 
+ 
+@@ -51,7 +50,7 @@ def getLineObjs():
+     except:
+         output.appendError(LOAD_SELECTION_WARNING)
+         sys.exit(1)
+-    logger.addEvent('total_num_files', len(lineObjs.items()))
++    logger.addEvent('total_num_files', len(lineObjs))
+ 
+     selectionPath = stateFiles.getSelectionFilePath()
+     if os.path.isfile(selectionPath):
+@@ -91,4 +90,8 @@ if __name__ == '__main__':
+         output.writeToFile('echo ":D"')
+         sys.exit(0)
+     output.clearFile()
+-    curses.wrapper(doProgram)
++    # we initialize our args *before* we move into curses
++    # so we can benefit from the default argparse
++    # behavior:
++    flags = ScreenFlags.initFromArgs(sys.argv[1:])
++    curses.wrapper(lambda x: doProgram(x, flags))
+diff --git a/src/format.py b/src/format.py
+index 946b91a..8c887f8 100644
+--- a/src/format.py
++++ b/src/format.py
+@@ -17,6 +17,7 @@ class SimpleLine(object):
+     def __init__(self, formattedLine, index):
+         self.formattedLine = formattedLine
+         self.index = index
++        self.controller = None
+ 
+     def printOut(self):
+         print(str(self))
+@@ -32,9 +33,6 @@ class SimpleLine(object):
+ 
+         self.formattedLine.printText(y, minx, printer, maxLen)
+ 
+-    def setController(self, controller):
+-        self.controller = controller
+-
+     def __str__(self):
+         return str(self.formattedLine)
+ 
+@@ -44,6 +42,8 @@ class SimpleLine(object):
+ 
+ class LineMatch(object):
+ 
++    ARROW_DECORATOR = '|===>'
++
+     def __init__(self, formattedLine, result, index):
+         self.formattedLine = formattedLine
+         self.index = index
+@@ -81,13 +81,16 @@ class LineMatch(object):
+         (self.beforeText, unused) = self.formattedLine.breakat(self.start)
+         (unused, self.afterText) = self.formattedLine.breakat(self.end)
+         self.updateDecoratedMatch()
++        self.controller = None
++        self.needsUnselectedPrint = False
+ 
+     def toggleSelect(self):
++        if self.selected:
++            # we need to print ourselves blank at the end of the line
++            # to prevent the lingering text bug
++            self.needsUnselectedPrint = True
+         self.setSelect(not self.selected)
+ 
+-    def setController(self, controller):
+-        self.controller = controller
+-
+     def setSelect(self, val):
+         self.selected = val
+         self.updateDecoratedMatch()
+@@ -155,15 +158,30 @@ class LineMatch(object):
+         else:
+             attributes = (0, 0, FormattedText.UNDERLINE_ATTRIBUTE)
+ 
++        decoratorText = self.getDecorator()
+         self.decoratedMatch = FormattedText(
+             FormattedText.getSequenceForAttributes(*attributes) +
+-            self.getDecorator() + self.getMatch())
++            decoratorText + self.getMatch())
++
++        # because decorators add length to the line, when the decorator
++        # is removed, we need to print blank space (aka "erase") the
++        # part of the line that is stale. calculate how much this is based
++        # on the max length decorator.
++        self.endingClearText = FormattedText(
++            FormattedText.getSequenceForAttributes(
++                FormattedText.DEFAULT_COLOR_FOREGROUND,
++                FormattedText.DEFAULT_COLOR_BACKGROUND,
++                0) +
++                " " * (self.getMaxDecoratorLength() - len(decoratorText)))
+ 
+     def getDecorator(self):
+         if self.selected:
+-            return '|===>'
++            return self.ARROW_DECORATOR
+         return ''
+ 
++    def getMaxDecoratorLength(self):
++        return len(self.ARROW_DECORATOR)
++
+     def printUpTo(self, text, printer, y, x, maxLen):
+         '''Attempt to print maxLen characters, returning a tuple
+         (x, maxLen) updated with the actual number of characters
+@@ -189,3 +207,6 @@ class LineMatch(object):
+         soFar = self.printUpTo(self.beforeText, printer, y, *soFar)
+         soFar = self.printUpTo(self.decoratedMatch, printer, y, *soFar)
+         soFar = self.printUpTo(self.afterText, printer, y, *soFar)
++        if self.needsUnselectedPrint:
++            self.needsUnselectedPrint = False
++            self.printUpTo(self.endingClearText, printer, y, *soFar)
+diff --git a/src/formattedText.py b/src/formattedText.py
+index f02d1ca..e495352 100644
+--- a/src/formattedText.py
++++ b/src/formattedText.py
+@@ -23,6 +23,9 @@ class FormattedText(object):
+     FOREGROUND_RANGE = Range(30, 39)
+     BACKGROUND_RANGE = Range(40, 49)
+ 
++    DEFAULT_COLOR_FOREGROUND = -1
++    DEFAULT_COLOR_BACKGROUND = -1
++
+     def __init__(self, text=None):
+         self.text = text
+ 
+diff --git a/src/output.py b/src/output.py
+index b923c45..350cba4 100644
+--- a/src/output.py
++++ b/src/output.py
+@@ -159,7 +159,7 @@ def composeFileCommand(command, lineObjs):
+ 
+ 
+ def outputNothing():
+-    appendToFile('echo "nothing to do!"')
++    appendToFile('echo "nothing to do!" && exit 1')
+ 
+ 
+ def clearFile():
+diff --git a/src/processInput.py b/src/processInput.py
+index 1c8b102..b4db0d4 100755
+--- a/src/processInput.py
++++ b/src/processInput.py
+@@ -17,6 +17,7 @@ import format
+ import stateFiles
+ from formattedText import FormattedText
+ from usageStrings import USAGE_STR
++from screenFlags import ScreenFlags
+ 
+ 
+ def getLineObjs():
+@@ -57,6 +58,15 @@ def usage():
+ 
+ 
+ if __name__ == '__main__':
++    flags = ScreenFlags.initFromArgs(sys.argv[1:])
++    if (flags.getIsCleanMode()):
++        print('Cleaning out state files...')
++        for filePath in stateFiles.getAllStateFiles():
++            if os.path.isfile(filePath):
++                os.remove(filePath)
++        print('Done! Removed %d files ' % len(stateFiles.getAllStateFiles()))
++        sys.exit(0)
++
+     if sys.stdin.isatty():
+         if os.path.isfile(stateFiles.getPickleFilePath()):
+             print('Using old result...')
+@@ -66,7 +76,6 @@ if __name__ == '__main__':
+         sys.exit(0)
+     else:
+         # delete the old selection
+-        print('getting input')
+         selectionPath = stateFiles.getSelectionFilePath()
+         if os.path.isfile(selectionPath):
+             os.remove(selectionPath)
+diff --git a/src/screenControl.py b/src/screenControl.py
+index d8483fa..53f4739 100755
+--- a/src/screenControl.py
++++ b/src/screenControl.py
+@@ -198,11 +198,12 @@ class ScrollBar(object):
+ 
+ class Controller(object):
+ 
+-    def __init__(self, stdscr, lineObjs, cursesAPI):
++    def __init__(self, flags, stdscr, lineObjs, cursesAPI):
+         self.stdscr = stdscr
+         self.cursesAPI = cursesAPI
+         self.cursesAPI.useDefaultColors()
+         self.colorPrinter = ColorPrinter(self.stdscr, cursesAPI)
++        self.flags = flags
+ 
+         self.lineObjs = lineObjs
+         self.hoverIndex = 0
+@@ -216,7 +217,7 @@ class Controller(object):
+         self.lineMatches = []
+         # lets loop through and split
+         for lineObj in self.lineObjs.values():
+-            lineObj.setController(self)
++            lineObj.controller = self
+             if (lineObj.isSimple()):
+                 self.simpleLines.append(lineObj)
+             else:
+@@ -437,11 +438,24 @@ class Controller(object):
+         self.stdscr.refresh()
+         self.cursesAPI.echo()
+         maxX = int(round(maxx - 1))
++
+         command = self.stdscr.getstr(halfHeight + 3, 0, maxX)
+         return command
+ 
+     def beginEnterCommand(self):
+         self.stdscr.clear()
++        # first check if they are trying to enter command mode
++        # but already have a command...
++        if len(self.flags.getPresetCommand()):
++            self.helperChrome.output(self.mode)
++            (_, minY, _, maxY) = self.getChromeBoundaries()
++            yStart = (maxY + minY) / 2 - 3
++            self.printProvidedCommandWarning(yStart)
++            self.getKey()
++            self.mode = SELECT_MODE
++            self.dirtyLines()
++            return
++
+         self.mode = COMMAND_MODE
+         self.helperChrome.output(self.mode)
+         logger.addEvent('enter_command_mode')
+@@ -464,7 +478,14 @@ class Controller(object):
+             # nothing selected, assume we want hovered
+             lineObjs = self.getHoveredFiles()
+         logger.addEvent('selected_num_files', len(lineObjs))
+-        output.editFiles(lineObjs)
++
++        # commands passed from the command line get used immediately
++        presetCommand = self.flags.getPresetCommand()
++        if len(presetCommand) > 0:
++            output.execComposedCommand(presetCommand, lineObjs)
++        else:
++            output.editFiles(lineObjs)
++
+         sys.exit(0)
+ 
+     def resetDirty(self):
+@@ -501,6 +522,17 @@ class Controller(object):
+     def printScroll(self):
+         self.scrollBar.output()
+ 
++    def printProvidedCommandWarning(self, yStart):
++        self.colorPrinter.setAttributes(
++            curses.COLOR_WHITE, curses.COLOR_RED, 0)
++        self.stdscr.addstr(yStart, 0, 'Oh no! You already provided a command so ' +
++                           'you cannot enter command mode.')
++        self.stdscr.attrset(0)
++        self.stdscr.addstr(
++            yStart + 1, 0, 'The command you provided was "%s" ' % self.flags.getPresetCommand())
++        self.stdscr.addstr(
++            yStart + 2, 0, 'Press any key to go back to selecting files.')
++
+     def printChrome(self):
+         self.helperChrome.output(self.mode)
+ 
+diff --git a/src/screenFlags.py b/src/screenFlags.py
+index 68b83cb..d72fa63 100644
+--- a/src/screenFlags.py
++++ b/src/screenFlags.py
+@@ -6,30 +6,81 @@
+ # of patent rights can be found in the PATENTS file in the same directory.
+ #
+ from __future__ import print_function
+-
+ import argparse
+ 
++import logger
++
+ 
+ class ScreenFlags(object):
+ 
+-    """A class that just represents what flags we pass into
+-    the screencontrol method -- for instance, if we are in
+-    record mode. Possibly will be expanded in the future."""
++    """A class that just represents the total set of flags
++    available to FPP. Note that some of these are actually
++    processsed by the fpp batch file, and not by python.
++    However, they are documented here because argsparse is
++    clean and easy to use for that purpose.
++
++    The flags that are actually processed and are meaningful
++    are
+ 
+-    def __init__(self, isRecordMode=False):
+-        self.isRecordMode = isRecordMode
++    * c (command)
++    * r (record)
++
++    """
++
++    def __init__(self, args):
++        self.args = args
+ 
+     def getIsRecordMode(self):
+-        return self.isRecordMode
++        return self.args.record
++
++    def getPresetCommand(self):
++        return ' '.join(self.args.command)
++
++    def getIsCleanMode(self):
++        return self.args.clean
+ 
+     @staticmethod
+-    def initFromArgs():
+-        parser = argparse.ArgumentParser()
++    def getArgParser():
++        parser = argparse.ArgumentParser(prog='fpp')
+         parser.add_argument('-r',
+                             '--record',
+-                            help='record input and output',
++                            help='''
++Record input and output. This is
++largely used for testing, but you may find it useful for scripting.''',
++                            default=False,
++                            action='store_true')
++        parser.add_argument('--version',
+                             default=False,
++                            help='''
++Print the version of fpp and exit.''',
+                             action='store_true')
+-        args = parser.parse_args()
++        parser.add_argument('--clean',
++                            default=False,
++                            action='store_true',
++                            help='''
++Remove the state files that fpp uses when starting up, including
++the previous input used and selection pickle. Useful when using fpp
++in a script context where the previous state should be discarded.''')
++        parser.add_argument('-ko',
++                            '--keep-open',
++                            default=False,
++                            action='store_true',
++                            help='''keep PathPicker open once
++a file selection or command is performed. This will loop the program
++until Ctrl-C is used to terminate the process.''')
++        parser.add_argument('-c',
++                            '--command',
++                            help='''You may specify a command while
++invoking fpp that will be run once files have been selected. Normally,
++fpp opens your editor (see discussion of $EDITOR, $VISUAL, and
++$FPP_EDITOR) when you press enter. If you specify a command here,
++it will be invoked instead.''',
++                            default='',
++                            action='store',
++                            nargs='+')
++        return parser
+ 
+-        return ScreenFlags(args.record)
++    @staticmethod
++    def initFromArgs(argv):
++        (args, chars) = ScreenFlags.getArgParser().parse_known_args(argv)
++        return ScreenFlags(args)
+diff --git a/src/stateFiles.py b/src/stateFiles.py
+index 2412ddd..67b47f2 100644
+--- a/src/stateFiles.py
++++ b/src/stateFiles.py
+@@ -45,3 +45,14 @@ def getScriptOutputFilePath():
+ def getLoggerFilePath():
+     assertDirCreated()
+     return os.path.expanduser(os.path.join(FPP_DIR, LOGGER_FILE))
++
++
++def getAllStateFiles():
++    # keep this update to date! We do not include
++    # the script output path since that gets cleaned automatically
++    return [
++        getPickleFilePath(),
++        getSelectionFilePath(),
++        getLoggerFilePath(),
++        getScriptOutputFilePath(),
++    ]
+diff --git a/src/usageStrings.py b/src/usageStrings.py
+index 8002d59..223f929 100644
+--- a/src/usageStrings.py
++++ b/src/usageStrings.py
+@@ -6,7 +6,7 @@
+ # of patent rights can be found in the PATENTS file in the same directory.
+ #
+ from __future__ import print_function
+-
++from screenFlags import ScreenFlags
+ 
+ USAGE_INTRO = '''
+ Welcome to fpp, the Facebook PathPicker! We hope your stay
+@@ -100,12 +100,6 @@ which editor to open the selected files with. If that variable
+ is not set, $VISUAL and then $EDITOR are used as fallbacks,
+ with "vim" as a last resort.
+ 
+-~ Keep-Open ~
+-
+-Use the --keep-open or -ko flag to avoid closing PathPicker once
+-a file selection or command is performed. This will loop the program
+-until Ctrl-C is used to terminate the process.
+-
+ ~ Colors ~
+ 
+ FPP will understand colors if the piped input uses them. In general, most
+@@ -119,6 +113,14 @@ CLICOLOR_FORCE in your environment to anything.)
+ 
+ '''
+ 
++USAGE_COMMAND_LINE = '''
++== Command line arguments ==
++
++
++PathPicker supports some command line arguments, as well.
++
++'''
++
+ USAGE_TAIL = '''
+ That's a fairly in-depth overview of Facebook PathPicker.
+ We also provide help along the way as you
+@@ -131,6 +133,8 @@ USAGE_STR = USAGE_INTRO + \
+     USAGE_COMMAND_HEADER + \
+     USAGE_COMMAND + \
+     USAGE_CONFIGURATION + \
++    USAGE_COMMAND_LINE + \
++    ScreenFlags.getArgParser().format_help() + \
+     USAGE_TAIL
+ 
+ decorator = '*' * 80
+diff --git a/src/version.py b/src/version.py
+new file mode 100755
+index 0000000..aee174d
+--- /dev/null
++++ b/src/version.py
+@@ -0,0 +1,15 @@
++# Copyright (c) 2015-present, Facebook, Inc.
++# All rights reserved.
++#
++# This source code is licensed under the BSD-style license found in the
++# LICENSE file in the root directory of this source tree. An additional grant
++# of patent rights can be found in the PATENTS file in the same directory.
++#
++from __future__ import print_function
++
++
++VERSION = '0.5.7'
++
++
++if __name__ == '__main__':
++    print(VERSION)

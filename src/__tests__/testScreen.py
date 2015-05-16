@@ -65,6 +65,19 @@ screenTestCases = [{
     'name': 'gitDiffWithScroll',
     'input': 'gitDiffNoStat.txt',
     'inputs': ['f', 'j'],
+}, {
+    'name': 'gitDiffWithScrollUp',
+    'input': 'gitLongDiff.txt',
+    'inputs': ['k', 'k'],
+}, {
+    'name': 'gitDiffWithPageDown',
+    'input': 'gitLongDiff.txt',
+    'inputs': [' ', ' '],
+}, {
+    'name': 'gitDiffWithPageDownColor',
+    'input': 'gitLongDiffColor.txt',
+    'inputs': [' ', ' '],
+    'withAttributes': True,
 }]
 
 
