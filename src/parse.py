@@ -81,33 +81,29 @@ PREPEND_PATH = getRepoPath().strip() + '/'
 
 # returns a filename and (optional) line number
 # if it matches
-def matchLine(line):
-    # Homedirs need a separate regex. TODO -- fix this copypasta
+def matchLine(line, validateFileExists=False):
+    return matchLineImpl(line)
+
+def matchLineImpl(line):
+    # Homedirs need a separate regex.
     matches = HOMEDIR_REGEX.search(line)
     if matches:
-        groups = matches.groups()
-        file = groups[0]
-        num = 0 if groups[2] is None else int(groups[2])
-        return (file, num, matches)
+        return unpackMatches(matches)
 
     matches = MASTER_REGEX.search(line)
     # the master regex matches tbgs results with
     # line numbers, so we prefer that and test it first
     if matches:
-        groups = matches.groups()
-        file = groups[0]
-        num = 0 if groups[2] is None else int(groups[2])
         # one real quick check -- did we find a better match
         # earlier in the regex?
         other_matches = OTHER_BGS_RESULT_REGEX.search(line)
         if not other_matches:
-            return (file, num, matches)
+            return unpackMatches(matches)
         if other_matches.start() >= matches.start():
             # return as before
-            return (file, num, matches)
+            return unpackMatches(matches)
         # we actually want the BGS result, not the one after
-        groups = other_matches.groups()
-        return (groups[0], int(groups[2]), other_matches)
+        return unpackMatches(other_matches)
 
     # if something clearly looks like an *bgs result but
     # just has a weird filename (like all caps with no extension)
@@ -116,17 +112,13 @@ def matchLine(line):
     # of a regex.
     matches = OTHER_BGS_RESULT_REGEX.search(line)
     if matches:
-        groups = matches.groups()
-        file = groups[0]
-        num = 0 if groups[2] is None else int(groups[2])
-        return (file, num, matches)
+        return unpackMatches(matches)
 
     # ok maybe its just a normal file (with a dot)
     # so lets test for that if the above fails
     matches = JUST_FILE.search(line)
     if matches:
-        file = matches.groups()[0]
-        return (file, 0, matches)
+        return unpackMatchesNoNum(matches)
 
     # ok finally it might be a file with no periods. we test
     # this last since its more restrictive, because we dont
@@ -134,10 +126,9 @@ def matchLine(line):
     # we require some minimum number of slashes and minimum
     # file name length
     matches = FILE_NO_PERIODS.search(line)
-    if not matches:
-        return None
-    file = matches.groups()[0]
-    return (file, 0, matches)
+    if matches:
+        return unpackMatchesNoNum(matches)
+    return None
 
 
 def prependDir(file):
@@ -153,7 +144,7 @@ def prependDir(file):
 
     # if it starts with ./ (grep), then that's the easiest because abspath
     # will resolve this
-    if file[0:2] in ['./', '..', '~/']:
+    if file[0:2] in ['./', '..']:
         return file
 
     # some peeps do forcedir and expand the path beforehand,
@@ -180,3 +171,14 @@ def prependDir(file):
 
     # hope
     return PREPEND_PATH + '/'.join(splitUp)
+
+def unpackMatchesNoNum(matches):
+    return (matches.groups()[0], 0, matches)
+
+def unpackMatches(matches):
+    numIndex = 2  # 2 is always the index of our line number match
+    groups = matches.groups()
+    file = groups[0]
+    num = 0 if groups[numIndex] is None else int(groups[numIndex])
+    return (file, num, matches)
+
