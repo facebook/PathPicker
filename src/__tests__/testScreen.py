@@ -61,6 +61,10 @@ screenTestCases = [{
         'maxX': 200,
         'maxY': 40,
     },
+}, {
+    'name': 'gitDiffWithScroll',
+    'input': 'gitDiffNoStat.txt',
+    'inputs': ['f', 'j'],
 }]
 
 
