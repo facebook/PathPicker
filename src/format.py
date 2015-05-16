@@ -42,6 +42,8 @@ class SimpleLine(object):
 
 class LineMatch(object):
 
+    ARROW_DECORATOR = '|===>'
+
     def __init__(self, formattedLine, result, index):
         self.formattedLine = formattedLine
         self.index = index
@@ -80,8 +82,13 @@ class LineMatch(object):
         (unused, self.afterText) = self.formattedLine.breakat(self.end)
         self.updateDecoratedMatch()
         self.controller = None
+        self.needsUnselectedPrint = False
 
     def toggleSelect(self):
+        if self.selected:
+            # we need to print ourselves blank at the end of the line
+            # to prevent the lingering text bug
+            self.needsUnselectedPrint = True
         self.setSelect(not self.selected)
 
     def setSelect(self, val):
@@ -151,14 +158,29 @@ class LineMatch(object):
         else:
             attributes = (0, 0, FormattedText.UNDERLINE_ATTRIBUTE)
 
+        decoratorText = self.getDecorator()
         self.decoratedMatch = FormattedText(
             FormattedText.getSequenceForAttributes(*attributes) +
-            self.getDecorator() + self.getMatch())
+            decoratorText + self.getMatch())
+
+        # because decorators add length to the line, when the decorator
+        # is removed, we need to print blank space (aka "erase") the
+        # part of the line that is stale. calculate how much this is based
+        # on the max length decorator.
+        self.endingClearText = FormattedText(
+            FormattedText.getSequenceForAttributes(
+                FormattedText.DEFAULT_COLOR_FOREGROUND,
+                FormattedText.DEFAULT_COLOR_BACKGROUND,
+                0) +
+                " " * (self.getMaxDecoratorLength() - len(decoratorText)))
 
     def getDecorator(self):
         if self.selected:
-            return '|===>'
+            return self.ARROW_DECORATOR
         return ''
+
+    def getMaxDecoratorLength(self):
+        return len(self.ARROW_DECORATOR)
 
     def printUpTo(self, text, printer, y, x, maxLen):
         '''Attempt to print maxLen characters, returning a tuple
@@ -185,3 +207,6 @@ class LineMatch(object):
         soFar = self.printUpTo(self.beforeText, printer, y, *soFar)
         soFar = self.printUpTo(self.decoratedMatch, printer, y, *soFar)
         soFar = self.printUpTo(self.afterText, printer, y, *soFar)
+        if self.needsUnselectedPrint:
+            self.needsUnselectedPrint = False
+            self.printUpTo(self.endingClearText, printer, y, *soFar)
