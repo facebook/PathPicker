@@ -34,7 +34,7 @@ def getLineObjsFromLines(inputLines):
         # screen
         line = line.replace('\n', '')
         formattedLine = FormattedText(line)
-        result = parse.matchLine(str(formattedLine))
+        result = parse.matchLine(str(formattedLine), validateFileExists=True)
 
         if not result:
             line = format.SimpleLine(formattedLine, index)

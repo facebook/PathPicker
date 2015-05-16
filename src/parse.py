@@ -114,7 +114,17 @@ PREPEND_PATH = getRepoPath().strip() + '/'
 # returns a filename and (optional) line number
 # if it matches
 def matchLine(line, validateFileExists=False):
-    return matchLineImpl(line)
+    if not validateFileExists:
+        return matchLineImpl(line)
+    result = matchLineImpl(line)
+    if not result:
+        return result
+    # ok now we are going to check if this result is an actual
+    # file...
+    (filePath, _, _) = result
+    if not os.path.isfile(prependDir(filePath)):
+        return None
+    return result
 
 def matchLineImpl(line):
     for regexConfig in REGEX_WATERFALL:
