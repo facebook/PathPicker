@@ -11,6 +11,15 @@ import sys
 sys.path.insert(0, '../')
 from charCodeMapping import CHAR_TO_CODE
 
+ATTRIBUTE_SYMBOL_MAPPING = {
+    0: ' ',
+    1: ' ',
+    2: 'B',
+    131072: '_',
+    3: '=',
+    4: '4',
+}
+
 
 class ScreenForTest(object):
 
@@ -95,16 +104,17 @@ class ScreenForTest(object):
     def getRowsWithAttributes(self, screen=None):
         if not screen:
             screen = self.output
+
         rows = []
         attributeRows = []
         for y in range(self.maxY):
             row = ''
-            attributeRow = []
+            attributeRow = ''
             for x in range(self.maxX):
                 coord = (x, y)
                 (char, attr) = screen[coord]
                 row += char
-                attributeRow.append(attr)
+                attributeRow += self.getAttributeSymbolForCode(attr)
             rows.append(row)
             attributeRows.append(attributeRow)
         return (rows, attributeRows)
@@ -112,3 +122,9 @@ class ScreenForTest(object):
     def getRows(self, screen=None):
         (rows, _) = self.getRowsWithAttributes(screen)
         return rows
+
+    def getAttributeSymbolForCode(self, code):
+        symbol = ATTRIBUTE_SYMBOL_MAPPING.get(code, None)
+        if symbol is None:
+            raise ValueError('%d not mapped' % code)
+        return symbol

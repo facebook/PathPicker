@@ -45,6 +45,9 @@ screenTestCases = [{
     'inputs': ['f', 'c', 'a'],
     'pastScreen': 1,
     'args': ["-c 'git add'"]
+}, {
+    'name': 'simpleWithAttributes',
+    'withAttributes': True
 }]
 
 
@@ -95,8 +98,7 @@ class TestScreenLogic(unittest.TestCase):
         expectedMergedLines = file.read().split('\n')
         file.close()
 
-        self.assertEqualNumLines(actualMergedLines, expectedMergedLines)
-        self.assertEqualLines(actualMergedLines, expectedMergedLines)
+        self.assertEqualLines(testName, actualMergedLines, expectedMergedLines)
 
     def compareLinesToExpected(self, testName, actualLines):
         self.outputIfNotFile(testName, '\n'.join(actualLines))
@@ -105,7 +107,6 @@ class TestScreenLogic(unittest.TestCase):
         expectedLines = file.read().split('\n')
         file.close()
 
-        self.assertEqualNumLines(actualLines, expectedLines)
         self.assertEqualLines(testName, actualLines, expectedLines)
 
     def outputIfNotFile(self, testName, output):
@@ -129,6 +130,7 @@ class TestScreenLogic(unittest.TestCase):
         )
 
     def assertEqualLines(self, testName, actualLines, expectedLines):
+        self.assertEqualNumLines(actualLines, expectedLines)
         expectedFile = TestScreenLogic.getExpectedFile(testName)
         for index, expectedLine in enumerate(expectedLines):
             actualLine = actualLines[index]
