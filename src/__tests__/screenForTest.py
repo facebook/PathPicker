@@ -18,6 +18,7 @@ ATTRIBUTE_SYMBOL_MAPPING = {
     131072: '_',
     3: '=',
     4: 'R',
+    5: '?',
 }
 
 
