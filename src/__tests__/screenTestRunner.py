@@ -28,8 +28,8 @@ def getLineObjsFromFile(inputFile, validateFileExists):
     file = open(inputFile)
     lines = file.read().split('\n')
     file.close()
-    return processInput.getLineObjsFromLines(lines, \
-        validateFileExists=validateFileExists)
+    return processInput.getLineObjsFromLines(lines,
+                                             validateFileExists=validateFileExists)
 
 
 def getRowsFromScreenRun(
@@ -41,8 +41,8 @@ def getRowsFromScreenRun(
         validateFileExists=False,
         args=[]):
 
-    lineObjs = getLineObjsFromFile(inputFile, \
-        validateFileExists=validateFileExists)
+    lineObjs = getLineObjsFromFile(inputFile,
+                                   validateFileExists=validateFileExists)
     screen = ScreenForTest(
         charInputs,
         maxX=screenConfig.get('maxX', 80),

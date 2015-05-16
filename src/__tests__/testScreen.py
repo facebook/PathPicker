@@ -176,7 +176,7 @@ class TestScreenLogic(unittest.TestCase):
                 'Lines did not match for test %s:\n\nExpected:%s\nActual:%s' % (
                     expectedFile, expectedLine, actualLine),
             )
-        
+
     @staticmethod
     def getExpectedFile(testName):
         return os.path.join(EXPECTED_DIR, testName + '.txt')

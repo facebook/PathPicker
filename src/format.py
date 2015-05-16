@@ -44,14 +44,14 @@ class LineMatch(object):
 
     ARROW_DECORATOR = '|===>'
 
-    def __init__(self, formattedLine, result, index):
+    def __init__(self, formattedLine, result, index, validateFileExists=False):
         self.formattedLine = formattedLine
         self.index = index
 
         (file, num, matches) = result
 
         self.originalFile = file
-        self.file = parse.prependDir(file)
+        self.file = parse.prependDir(file, withFileInspection=validateFileExists)
         self.num = num
 
         line = str(self.formattedLine)
@@ -172,7 +172,7 @@ class LineMatch(object):
                 FormattedText.DEFAULT_COLOR_FOREGROUND,
                 FormattedText.DEFAULT_COLOR_BACKGROUND,
                 0) +
-                " " * (self.getMaxDecoratorLength() - len(decoratorText)))
+            " " * (self.getMaxDecoratorLength() - len(decoratorText)))
 
     def getDecorator(self):
         if self.selected:

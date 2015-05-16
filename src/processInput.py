@@ -34,13 +34,13 @@ def getLineObjsFromLines(inputLines, validateFileExists=True):
         # screen
         line = line.replace('\n', '')
         formattedLine = FormattedText(line)
-        result = parse.matchLine(str(formattedLine), \
-            validateFileExists=validateFileExists)
+        result = parse.matchLine(str(formattedLine),
+                                 validateFileExists=validateFileExists)
 
         if not result:
             line = format.SimpleLine(formattedLine, index)
         else:
-            line = format.LineMatch(formattedLine, result, index)
+            line = format.LineMatch(formattedLine, result, index, validateFileExists=validateFileExists)
 
         lineObjs[index] = line
 

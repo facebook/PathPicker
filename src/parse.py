@@ -122,9 +122,10 @@ def matchLine(line, validateFileExists=False):
     # ok now we are going to check if this result is an actual
     # file...
     (filePath, _, _) = result
-    if not os.path.isfile(prependDir(filePath)):
+    if not os.path.isfile(prependDir(filePath, withFileInspection=True)):
         return None
     return result
+
 
 def matchLineImpl(line):
     for regexConfig in REGEX_WATERFALL:
@@ -132,9 +133,9 @@ def matchLineImpl(line):
         matches = regex.search(line)
         if not matches:
             continue
-        
+
         unpackFunc = unpackMatchesNoNum if regexConfig.get('noNum') \
-                else unpackMatches
+            else unpackMatches
         if not regexConfig.get('preferred_regex'):
             return unpackFunc(matches)
 
@@ -151,20 +152,25 @@ def matchLineImpl(line):
     return None
 
 
-def prependDir(file):
+def prependDir(file, withFileInspection=False):
     if not file or len(file) < 2:
         return file
 
     if file[0] == '/':
         return file
 
+    if file[0:4] == '.../':
+        # these are the gross git abbreviated paths, so
+        # return early since we cant do anything here
+        return file
+
     if file[0:2] == '~/':
         # need to absolute it
         return os.path.expanduser(file)
 
-    # if it starts with ./ (grep), then that's the easiest because abspath
-    # will resolve this
-    if file[0:2] in ['./', '..']:
+    # if it starts with relative dirs (grep), then that's the easiest
+    # because abspath will resolve this
+    if file[0:2] == './' or file[0:3] == '../':
         return file
 
     # some peeps do forcedir and expand the path beforehand,
@@ -181,7 +187,8 @@ def prependDir(file):
         # assume current dir like ./
         return './' + file
 
-    # git show has a/stuff and b/stuff
+    # git show and diff has a/stuff and b/stuff, so handle that. git
+    # status never does this so we dont need to worry about relative dirs
     if file[0:2] == 'a/' or file[0:2] == 'b/':
         return PREPEND_PATH + file[2:]
 
@@ -189,11 +196,23 @@ def prependDir(file):
     if splitUp[0] == 'www':
         return PREPEND_PATH + '/'.join(splitUp[1:])
 
-    # hope
-    return PREPEND_PATH + '/'.join(splitUp)
+    if not withFileInspection:
+        # hope
+        return PREPEND_PATH + '/'.join(splitUp)
+    # Alright we need to handle the case where git status returns
+    # relative paths where every other git command returns paths relative
+    # to the top-level dir. so lets see if PREPEND_PATH is not a file whereas
+    # relative is...
+    topLevelPath = PREPEND_PATH + '/'.join(splitUp)
+    relativePath = './' + '/'.join(splitUp)
+    if not os.path.isfile(topLevelPath) and os.path.isfile(relativePath):
+        return relativePath
+    return topLevelPath
+
 
 def unpackMatchesNoNum(matches):
     return (matches.groups()[0], 0, matches)
+
 
 def unpackMatches(matches):
     numIndex = 2  # 2 is always the index of our line number match
@@ -201,4 +220,3 @@ def unpackMatches(matches):
     file = groups[0]
     num = 0 if groups[numIndex] is None else int(groups[numIndex])
     return (file, num, matches)
-
