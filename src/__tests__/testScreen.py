@@ -77,6 +77,10 @@ screenTestCases = [{
     'name': 'gitDiffWithPageDownColor',
     'input': 'gitLongDiffColor.txt',
     'inputs': [' ', ' '],
+}, {
+    'name': 'gitDiffWithValidation',
+    'input': 'gitDiffSomeExist.txt',
+    'validateFileExists': True,
     'withAttributes': True,
 }]
 
@@ -101,7 +105,8 @@ class TestScreenLogic(unittest.TestCase):
                 screenConfig=testCase.get('screenConfig', {}),
                 printScreen=False,
                 pastScreen=testCase.get('pastScreen', None),
-                args=testCase.get('args', [])
+                args=testCase.get('args', []),
+                validateFileExists=testCase.get('validateFileExists', False)
             )
 
             self.compareToExpected(testCase, testName, screenData)

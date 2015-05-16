@@ -38,10 +38,11 @@ def getRowsFromScreenRun(
         screenConfig={},
         printScreen=True,
         pastScreen=None,
+        validateFileExists=False,
         args=[]):
 
     lineObjs = getLineObjsFromFile(inputFile, \
-        validateFileExists=screenConfig.get('validateFileExists', False))
+        validateFileExists=validateFileExists)
     screen = ScreenForTest(
         charInputs,
         maxX=screenConfig.get('maxX', 80),
