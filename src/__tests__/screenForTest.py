@@ -89,6 +89,9 @@ class ScreenForTest(object):
     def getRowsForPastScreen(self, pastScreen):
         return self.getRows(screen=self.pastScreens[pastScreen])
 
+    def getRowsWithAttributesForPastScreen(self, pastScreen):
+        return self.getRowsWithAttributes(screen=self.pastScreens[pastScreen])
+
     def getRowsWithAttributes(self, screen=None):
         if not screen:
             screen = self.output

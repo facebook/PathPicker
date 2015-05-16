@@ -61,7 +61,8 @@ class TestScreenLogic(unittest.TestCase):
 
             charInputs = ['q']  # we always quit at the end
             charInputs = testCase.get('inputs', []) + charInputs
-            actualLines = screenTestRunner.getRowsFromScreenRun(
+
+            screenData = screenTestRunner.getRowsFromScreenRun(
                 inputFile=testCase.get('input', 'gitDiff.txt'),
                 charInputs=charInputs,
                 screenConfig=testCase.get('screenConfig', {}),
@@ -69,31 +70,66 @@ class TestScreenLogic(unittest.TestCase):
                 pastScreen=testCase.get('pastScreen', None),
                 args=testCase.get('args', [])
             )
-            self.compareToExpected(testName, actualLines)
+
+            self.compareToExpected(testCase, testName, screenData)
             print('Tested %s ' % testName)
 
-    def compareToExpected(self, testName, actualLines):
-        expectedFile = os.path.join(EXPECTED_DIR, testName + '.txt')
-        if not os.path.isdir(EXPECTED_DIR):
-            os.makedirs(EXPECTED_DIR)
-        if not os.path.isfile(expectedFile):
-            print('Could not find file %s so outputting...' % expectedFile)
-            file = open(expectedFile, 'w')
-            file.write('\n'.join(actualLines))
-            file.close()
-            self.fail(
-                'File outputted, please inspect %s for correctness' % expectedFile)
-            return
+    def compareToExpected(self, testCase, testName, screenData):
+        TestScreenLogic.maybeMakeExpectedDir()
+        (actualLines, actualAttributes) = screenData
 
-        file = open(expectedFile)
+        if testCase.get('withAttributes', False):
+            self.compareLinesAndAttributesToExpected(testName, screenData)
+        else:
+            self.compareLinesToExpected(testName, actualLines)
+
+    def compareLinesAndAttributesToExpected(self, testName, screenData):
+        (actualLines, actualAttributes) = screenData
+        actualMergedLines = []
+        for actualLine, attributeLine in zip(actualLines, actualAttributes):
+            actualMergedLines.append(actualLine)
+            actualMergedLines.append(attributeLine)
+
+        self.outputIfNotFile(testName, '\n'.join(actualMergedLines))
+        file = open(TestScreenLogic.getExpectedFile(testName))
+        expectedMergedLines = file.read().split('\n')
+        file.close()
+
+        self.assertEqualNumLines(actualMergedLines, expectedMergedLines)
+        self.assertEqualLines(actualMergedLines, expectedMergedLines)
+
+    def compareLinesToExpected(self, testName, actualLines):
+        self.outputIfNotFile(testName, '\n'.join(actualLines))
+
+        file = open(TestScreenLogic.getExpectedFile(testName))
         expectedLines = file.read().split('\n')
         file.close()
+
+        self.assertEqualNumLines(actualLines, expectedLines)
+        self.assertEqualLines(testName, actualLines, expectedLines)
+
+    def outputIfNotFile(self, testName, output):
+        expectedFile = TestScreenLogic.getExpectedFile(testName)
+        if os.path.isfile(expectedFile):
+            return
+
+        print('Could not find file %s so outputting...' % expectedFile)
+        file = open(expectedFile, 'w')
+        file.write(output)
+        file.close()
+        self.fail(
+            'File outputted, please inspect %s for correctness' % expectedFile)
+
+    def assertEqualNumLines(self, actualLines, expectedLines):
         self.assertEqual(
             len(actualLines),
             len(expectedLines),
             'Actual lines was %d but expected lines was %d' % (
                 len(actualLines), len(expectedLines)),
         )
+
+    def assertEqualLines(self, testName, actualLines, expectedLines):
+        expectedFile = TestScreenLogic.getExpectedFile(testName)
         for index, expectedLine in enumerate(expectedLines):
             actualLine = actualLines[index]
             self.assertEqual(
@@ -102,6 +138,15 @@ class TestScreenLogic(unittest.TestCase):
                 'Lines did not match for test %s:\n\nExpected:%s\nActual:%s' % (
                     expectedFile, expectedLine, actualLine),
             )
+        
+    @staticmethod
+    def getExpectedFile(testName):
+        return os.path.join(EXPECTED_DIR, testName + '.txt')
+
+    @staticmethod
+    def maybeMakeExpectedDir():
+        if not os.path.isdir(EXPECTED_DIR):
+            os.makedirs(EXPECTED_DIR)
 
 if __name__ == '__main__':
     unittest.main()
