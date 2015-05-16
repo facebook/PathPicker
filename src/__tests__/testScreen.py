@@ -77,6 +77,7 @@ screenTestCases = [{
     'name': 'gitDiffWithPageDownColor',
     'input': 'gitLongDiffColor.txt',
     'inputs': [' ', ' '],
+    'withAttributes': True,
 }, {
     'name': 'gitDiffWithValidation',
     'input': 'gitDiffSomeExist.txt',
@@ -156,16 +157,16 @@ class TestScreenLogic(unittest.TestCase):
         self.fail(
             'File outputted, please inspect %s for correctness' % expectedFile)
 
-    def assertEqualNumLines(self, actualLines, expectedLines):
+    def assertEqualNumLines(self, testName, actualLines, expectedLines):
         self.assertEqual(
             len(actualLines),
             len(expectedLines),
-            'Actual lines was %d but expected lines was %d' % (
-                len(actualLines), len(expectedLines)),
+            '%s test: Actual lines was %d but expected lines was %d' % (
+                testName, len(actualLines), len(expectedLines)),
         )
 
     def assertEqualLines(self, testName, actualLines, expectedLines):
-        self.assertEqualNumLines(actualLines, expectedLines)
+        self.assertEqualNumLines(testName, actualLines, expectedLines)
         expectedFile = TestScreenLogic.getExpectedFile(testName)
         for index, expectedLine in enumerate(expectedLines):
             actualLine = actualLines[index]
