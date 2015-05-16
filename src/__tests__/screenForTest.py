@@ -17,7 +17,7 @@ ATTRIBUTE_SYMBOL_MAPPING = {
     2: 'B',
     131072: '_',
     3: '=',
-    4: '4',
+    4: 'R',
 }
 
 

@@ -48,6 +48,10 @@ screenTestCases = [{
 }, {
     'name': 'simpleWithAttributes',
     'withAttributes': True
+}, {
+    'name': 'simpleSelectWithAttributes',
+    'withAttributes': True,
+    'inputs': ['f', 'j'],
 }]
 
 
