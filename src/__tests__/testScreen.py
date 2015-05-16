@@ -52,6 +52,15 @@ screenTestCases = [{
     'name': 'simpleSelectWithAttributes',
     'withAttributes': True,
     'inputs': ['f', 'j'],
+}, {
+    'name': 'simpleSelectWithColor',
+    'input': 'gitDiffColor.txt',
+    'withAttributes': True,
+    'inputs': ['f', 'j'],
+    'screenConfig': {
+        'maxX': 200,
+        'maxY': 40,
+    },
 }]
 
 
