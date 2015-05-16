@@ -1,0 +1,80 @@
+ |===>assets/launch_page.css                             |  4 +
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!                                  G                                                                                                                                         
+ fpp                                                |  4 +
+                                                         G                                                                                                                                              
+ fpp.rb                                             |  4 +-
+ BBBBBB                                                  GR                                                                                                                                             
+ index.html                                         | 11 ++-
+ __________                                              GGR                                                                                                                                            
+ scripts/makeDist.sh                                |  2 +-
+ ___________________                                     GR                                                                                                                                             
+ .../expected/selectCommandWithPassedCommand.txt    | 30 +++++++
+ _______________________________________________         GGGGGGG                                                                                                                                        
+ src/__tests__/expected/selectDownSelectInverse.txt |  4 +-
+ __________________________________________________      GR                                                                                                                                             
+ .../expected/simpleSelectWithAttributes.txt        | 60 ++++++++++++++
+ ___________________________________________             GGGGGGGGGGGGGG                                                                                                                                 
+ src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++
+ _______________________________________________         GGGGGGGGGGGGGG                                                                                                                                 
+ src/__tests__/screenForTest.py                     | 40 +++++++--
+ ______________________________                          GGGGGGGRR                                                                                                                                      
+ src/__tests__/screenTestRunner.py                  | 17 ++--
+ _________________________________                       GGRR                                                                                                                                           
+ src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----
+ ___________________________                             GGGGGGGGGGGGGGGGGGRRRR                                                                                                                         
+ src/format.py                                      | 29 ++++++-
+ _____________                                           GGGGGGR                                                                                                                                        
+ src/formattedText.py                               |  3 +
+ ____________________                                    G                                                                                                                                              
+ src/processInput.py                                | 10 +++
+ ___________________                                     GGG                                                                                                                                            
+ src/screenControl.py                               | 23 ++++++
+ ____________________                                    GGGGGG                                                                                                                                         
+ src/screenFlags.py                                 | 18 +++-
+ __________________                                      GGGR                                                                                                                                           
+ src/stateFiles.py                                  | 11 +++
+ _________________                                       GGG                                                                                                                                            
+ src/version.py                                     | 15 ++++
+ ______________                                          GGGG                                                                                                                                           
+ 19 files changed, 404 insertions(+), 37 deletions(-)
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+
+                                                                                                                                                                                                        
+________________________________________________________________________________________________________________________________________________________________________________________________________
+                                                                                                                                                                                                        
+[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [c] command mode
+                                                                                                                                                                                                        
