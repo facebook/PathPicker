@@ -45,17 +45,22 @@ def getRowsFromScreenRun(
         maxX=screenConfig.get('maxX', 80),
         maxY=screenConfig.get('maxY', 30),
     )
+
     # mock our flags with the passed arg list
     flags = ScreenFlags.initFromArgs(args)
+    # we run our program and throw a StopIteration exception
+    # instead of sys.exit-ing
     try:
         choose.doProgram(screen, flags, CursesForTest(), lineObjs)
     except StopIteration:
         pass
+
     if printScreen:
         screen.printOldScreens()
+
     if pastScreen:
-        return screen.getRowsForPastScreen(pastScreen)
-    return screen.getRows()
+        return screen.getRowsWithAttributesForPastScreen(pastScreen)
+    return screen.getRowsWithAttributes()
 
 if __name__ == '__main__':
     getRowsFromScreenRun(
