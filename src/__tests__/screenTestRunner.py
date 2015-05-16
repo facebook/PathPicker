@@ -23,12 +23,13 @@ from cursesForTest import CursesForTest
 INPUT_DIR = './inputs/'
 
 
-def getLineObjsFromFile(inputFile):
+def getLineObjsFromFile(inputFile, validateFileExists):
     inputFile = os.path.join(INPUT_DIR, inputFile)
     file = open(inputFile)
     lines = file.read().split('\n')
     file.close()
-    return processInput.getLineObjsFromLines(lines)
+    return processInput.getLineObjsFromLines(lines, \
+        validateFileExists=validateFileExists)
 
 
 def getRowsFromScreenRun(
@@ -39,7 +40,8 @@ def getRowsFromScreenRun(
         pastScreen=None,
         args=[]):
 
-    lineObjs = getLineObjsFromFile(inputFile)
+    lineObjs = getLineObjsFromFile(inputFile, \
+        validateFileExists=screenConfig.get('validateFileExists', False))
     screen = ScreenForTest(
         charInputs,
         maxX=screenConfig.get('maxX', 80),

@@ -25,7 +25,7 @@ def getLineObjs():
     return getLineObjsFromLines(inputLines)
 
 
-def getLineObjsFromLines(inputLines):
+def getLineObjsFromLines(inputLines, validateFileExists=True):
     lineObjs = {}
     for index, line in enumerate(inputLines):
         line = line.replace('\t', '    ')
@@ -34,7 +34,8 @@ def getLineObjsFromLines(inputLines):
         # screen
         line = line.replace('\n', '')
         formattedLine = FormattedText(line)
-        result = parse.matchLine(str(formattedLine), validateFileExists=True)
+        result = parse.matchLine(str(formattedLine), \
+            validateFileExists=validateFileExists)
 
         if not result:
             line = format.SimpleLine(formattedLine, index)
