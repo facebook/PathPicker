@@ -54,7 +54,7 @@ for opt in "$@"; do
     # http://unix.stackexchange.com/a/48432
     trap "exit" INT
     while true; do
-      doProgram $@
+      doProgram "$@"
       # connect tty back to stdin since we closed it
       # earlier. this also works since we will only read
       # from stdin once and then go permanent interactive mode
@@ -64,4 +64,4 @@ for opt in "$@"; do
   fi
 done
 
-doProgram $@
+doProgram "$@"
