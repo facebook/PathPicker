@@ -148,7 +148,6 @@ def matchLine(line, validateFileExists=False):
     # ok now we are going to check if this result is an actual
     # file...
     (filePath, _, _) = result
-    filePath = filePath.strip()
     if not os.path.isfile(prependDir(filePath, withFileInspection=True)):
         return None
     return result
