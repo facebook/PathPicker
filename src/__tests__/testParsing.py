@@ -184,6 +184,17 @@ fileTestCases = [{
     'num': 22,
     'file': './inputs/evilFile With Space.txt',
     'validateFileExists': True,
+}, {
+    'input': './inputs/annoying Spaces Folder/evilFile With Space2.txt',
+    'validateFileExists': True,
+    'match': True,
+    'file': './inputs/annoying Spaces Folder/evilFile With Space2.txt',
+}, {
+    'input': './inputs/annoying Spaces Folder/evilFile With Space2.txt:42',
+    'validateFileExists': True,
+    'match': True,
+    'num': 42,
+    'file': './inputs/annoying Spaces Folder/evilFile With Space2.txt',
 }]
 
 prependDirTestCases = [

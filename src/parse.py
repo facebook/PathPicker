@@ -41,13 +41,21 @@ FILE_NO_PERIODS = re.compile(''.join((
     '(\s|$|:)+'
 )))
 MASTER_REGEX_WITH_SPACES = re.compile(''.join((
-    # directories as normal
-    '(\/?([a-z.A-Z0-9\-_]+\/)+',
+    #begin the capture
+    '(',
+    #a leading / for absolute dirs if its there
+    '\/?',
+    # now we look at directories, where we allow either normal chars
+    # or a single whitespace char followed by legit chars
+    '(([a-z.A-Z0-9\-_]|\s[a-zA-Z0-9\-_])+\/)+',
     # you can have either a space followed by a real char OR real chars.
     # we dont just throw in a space since otherwise it could be all spaces
     '([@a-zA-Z0-9\-_+.]|\s[@a-zA-Z0-9\-_+.])+',
     # extensions dont allow spaces
-    '\.[a-zA-Z0-9]{1,10})',
+    '\.[a-zA-Z0-9]{1,10}'
+    # end capture
+    ')',
+    # optionally capture the line number
     '[:-]{0,1}(\d+)?',
 )))
 
@@ -74,7 +82,7 @@ REGEX_WATERFALL = [{
     # allowed spaces everywhere, but with filesystem validation
     # and the final fallback we can include them.
     'regex': MASTER_REGEX_WITH_SPACES,
-    'numIndex': 3,
+    'numIndex': 4,
     'onlyWithFileInspection': True,
 }, {
     # ok maybe its just a normal file (with a dot)
