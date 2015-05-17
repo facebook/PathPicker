@@ -40,9 +40,16 @@ FILE_NO_PERIODS = re.compile(''.join((
     # Regardless of the above case, here's how the file name should terminate
     '(\s|$|:)+'
 )))
-MASTER_REGEX_WITH_SPACES = re.compile(
-    # we dont allow spaces in the extension
-    '(\/?([a-z. A-Z0-9\-_]+\/)+[@a-z A-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
+MASTER_REGEX_WITH_SPACES = re.compile(''.join((
+    # directories as normal
+    '(\/?([a-z.A-Z0-9\-_]+\/)+',
+    # you can have either a space followed by a real char OR real chars.
+    # we dont just throw in a space since otherwise it could be all spaces
+    '([@a-zA-Z0-9\-_+.]|\s[@a-zA-Z0-9\-_+.])+',
+    # extensions dont allow spaces
+    '\.[a-zA-Z0-9]{1,10})',
+    '[:-]{0,1}(\d+)?',
+)))
 
 
 REGEX_WATERFALL = [{
@@ -67,6 +74,7 @@ REGEX_WATERFALL = [{
     # allowed spaces everywhere, but with filesystem validation
     # and the final fallback we can include them.
     'regex': MASTER_REGEX_WITH_SPACES,
+    'numIndex': 3,
     'onlyWithFileInspection': True,
 }, {
     # ok maybe its just a normal file (with a dot)
@@ -80,7 +88,7 @@ REGEX_WATERFALL = [{
     # we require some minimum number of slashes and minimum
     # file name length
     'regex': FILE_NO_PERIODS,
-    'noNum': True
+    'noNum': True,
 }]
 
 
@@ -133,29 +141,23 @@ def matchLine(line, validateFileExists=False):
     # file...
     (filePath, _, _) = result
     filePath = filePath.strip()
-    print('i got', filePath.strip())
-    print('the prepend', prependDir(filePath, withFileInspection=True))
     if not os.path.isfile(prependDir(filePath, withFileInspection=True)):
         return None
     return result
 
 
 def matchLineImpl(line, withFileInspection=False):
-    print('checking', line)
     for regexConfig in REGEX_WATERFALL:
         regex = regexConfig['regex']
         if regexConfig.get('onlyWithFileInspection') and not withFileInspection:
             continue
-        if regexConfig.get('onlyWithFileInspection'):
-            print('checking this', line)
-            print(regex.search(line))
 
         matches = regex.search(line)
         if not matches:
             continue
-
-        unpackFunc = unpackMatchesNoNum if regexConfig.get('noNum') \
-            else unpackMatches
+        unpackFunc = unpackMatchesNoNum if \
+                regexConfig.get('noNum') else \
+                lambda x: unpackMatches(x, numIndex=regexConfig.get('numIndex', 2))
         if not regexConfig.get('preferred_regex'):
             return unpackFunc(matches)
 
@@ -234,8 +236,7 @@ def unpackMatchesNoNum(matches):
     return (matches.groups()[0], 0, matches)
 
 
-def unpackMatches(matches):
-    numIndex = 2  # 2 is always the index of our line number match
+def unpackMatches(matches, numIndex):
     groups = matches.groups()
     file = groups[0]
     num = 0 if groups[numIndex] is None else int(groups[numIndex])
