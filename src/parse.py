@@ -40,6 +40,10 @@ FILE_NO_PERIODS = re.compile(''.join((
     # Regardless of the above case, here's how the file name should terminate
     '(\s|$|:)+'
 )))
+MASTER_REGEX_WITH_SPACES = re.compile(
+    # we dont allow spaces in the extension
+    '(\/?([a-z. A-Z0-9\-_]+\/)+[@a-z A-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
+
 
 REGEX_WATERFALL = [{
     # Homedirs need a separate regex.
@@ -58,6 +62,12 @@ REGEX_WATERFALL = [{
     # the line number match since otherwise this would be too lax
     # of a regex.
     'regex': OTHER_BGS_RESULT_REGEX,
+}, {
+    # We would overmatch on wayyyyy too many things if we
+    # allowed spaces everywhere, but with filesystem validation
+    # and the final fallback we can include them.
+    'regex': MASTER_REGEX_WITH_SPACES,
+    'onlyWithFileInspection': True,
 }, {
     # ok maybe its just a normal file (with a dot)
     # so lets test for that if the above fails
@@ -116,20 +126,30 @@ PREPEND_PATH = getRepoPath().strip() + '/'
 def matchLine(line, validateFileExists=False):
     if not validateFileExists:
         return matchLineImpl(line)
-    result = matchLineImpl(line)
+    result = matchLineImpl(line, withFileInspection=True)
     if not result:
         return result
     # ok now we are going to check if this result is an actual
     # file...
     (filePath, _, _) = result
+    filePath = filePath.strip()
+    print('i got', filePath.strip())
+    print('the prepend', prependDir(filePath, withFileInspection=True))
     if not os.path.isfile(prependDir(filePath, withFileInspection=True)):
         return None
     return result
 
 
-def matchLineImpl(line):
+def matchLineImpl(line, withFileInspection=False):
+    print('checking', line)
     for regexConfig in REGEX_WATERFALL:
         regex = regexConfig['regex']
+        if regexConfig.get('onlyWithFileInspection') and not withFileInspection:
+            continue
+        if regexConfig.get('onlyWithFileInspection'):
+            print('checking this', line)
+            print(regex.search(line))
+
         matches = regex.search(line)
         if not matches:
             continue
