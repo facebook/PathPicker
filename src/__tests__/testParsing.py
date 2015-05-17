@@ -173,6 +173,42 @@ fileTestCases = [{
     'input': '~/src/categories/NSDate+Category.h',
     'match': True,
     'file': '~/src/categories/NSDate+Category.h'
+}, {
+    'input': 'M    ./inputs/evilFile With Space.txt',
+    'match': True,
+    'file': './inputs/evilFile With Space.txt',
+    'validateFileExists': True,
+}, {
+    'input': './inputs/evilFile With Space.txt:22',
+    'match': True,
+    'num': 22,
+    'file': './inputs/evilFile With Space.txt',
+    'validateFileExists': True,
+}, {
+    'input': './inputs/annoying Spaces Folder/evilFile With Space2.txt',
+    'validateFileExists': True,
+    'match': True,
+    'file': './inputs/annoying Spaces Folder/evilFile With Space2.txt',
+}, {
+    'input': './inputs/annoying Spaces Folder/evilFile With Space2.txt:42',
+    'validateFileExists': True,
+    'match': True,
+    'num': 42,
+    'file': './inputs/annoying Spaces Folder/evilFile With Space2.txt',
+}, {
+    # with leading space
+    'input': ' ./inputs/annoying Spaces Folder/evilFile With Space2.txt:42',
+    'validateFileExists': True,
+    'match': True,
+    'num': 42,
+    'file': './inputs/annoying Spaces Folder/evilFile With Space2.txt',
+}, {
+    # git style
+    'input': 'M     ./inputs/annoying Spaces Folder/evilFile With Space2.txt:42',
+    'validateFileExists': True,
+    'match': True,
+    'num': 42,
+    'file': './inputs/annoying Spaces Folder/evilFile With Space2.txt',
 }]
 
 prependDirTestCases = [
@@ -257,7 +293,8 @@ class TestParseFunction(unittest.TestCase):
         print('Tested %d cases.' % len(fileTestCases))
 
     def checkFileResult(self, testCase):
-        result = parse.matchLine(testCase['input'])
+        result = parse.matchLine(testCase['input'], \
+            validateFileExists=testCase.get('validateFileExists', False))
         if not result:
             self.assertFalse(testCase['match'],
                              'Line "%s" did not match any regex' %

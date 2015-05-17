@@ -40,6 +40,25 @@ FILE_NO_PERIODS = re.compile(''.join((
     # Regardless of the above case, here's how the file name should terminate
     '(\s|$|:)+'
 )))
+MASTER_REGEX_WITH_SPACES = re.compile(''.join((
+    #begin the capture
+    '(',
+    #a leading / for absolute dirs if its there
+    '\/?',
+    # now we look at directories, where we allow either normal chars
+    # or a single whitespace char followed by legit chars
+    '(([a-z.A-Z0-9\-_]|\s[a-zA-Z0-9\-_])+\/)+',
+    # you can have either a space followed by a real char OR real chars.
+    # we dont just throw in a space since otherwise it could be all spaces
+    '([@a-zA-Z0-9\-_+.]|\s[@a-zA-Z0-9\-_+.])+',
+    # extensions dont allow spaces
+    '\.[a-zA-Z0-9]{1,10}'
+    # end capture
+    ')',
+    # optionally capture the line number
+    '[:-]{0,1}(\d+)?',
+)))
+
 
 REGEX_WATERFALL = [{
     # Homedirs need a separate regex.
@@ -59,6 +78,13 @@ REGEX_WATERFALL = [{
     # of a regex.
     'regex': OTHER_BGS_RESULT_REGEX,
 }, {
+    # We would overmatch on wayyyyy too many things if we
+    # allowed spaces everywhere, but with filesystem validation
+    # and the final fallback we can include them.
+    'regex': MASTER_REGEX_WITH_SPACES,
+    'numIndex': 4,
+    'onlyWithFileInspection': True,
+}, {
     # ok maybe its just a normal file (with a dot)
     # so lets test for that if the above fails
     'regex': JUST_FILE,
@@ -70,7 +96,7 @@ REGEX_WATERFALL = [{
     # we require some minimum number of slashes and minimum
     # file name length
     'regex': FILE_NO_PERIODS,
-    'noNum': True
+    'noNum': True,
 }]
 
 
@@ -116,7 +142,7 @@ PREPEND_PATH = getRepoPath().strip() + '/'
 def matchLine(line, validateFileExists=False):
     if not validateFileExists:
         return matchLineImpl(line)
-    result = matchLineImpl(line)
+    result = matchLineImpl(line, withFileInspection=True)
     if not result:
         return result
     # ok now we are going to check if this result is an actual
@@ -127,15 +153,18 @@ def matchLine(line, validateFileExists=False):
     return result
 
 
-def matchLineImpl(line):
+def matchLineImpl(line, withFileInspection=False):
     for regexConfig in REGEX_WATERFALL:
         regex = regexConfig['regex']
+        if regexConfig.get('onlyWithFileInspection') and not withFileInspection:
+            continue
+
         matches = regex.search(line)
         if not matches:
             continue
-
-        unpackFunc = unpackMatchesNoNum if regexConfig.get('noNum') \
-            else unpackMatches
+        unpackFunc = unpackMatchesNoNum if \
+                regexConfig.get('noNum') else \
+                lambda x: unpackMatches(x, numIndex=regexConfig.get('numIndex', 2))
         if not regexConfig.get('preferred_regex'):
             return unpackFunc(matches)
 
@@ -214,8 +243,7 @@ def unpackMatchesNoNum(matches):
     return (matches.groups()[0], 0, matches)
 
 
-def unpackMatches(matches):
-    numIndex = 2  # 2 is always the index of our line number match
+def unpackMatches(matches, numIndex):
     groups = matches.groups()
     file = groups[0]
     num = 0 if groups[numIndex] is None else int(groups[numIndex])
