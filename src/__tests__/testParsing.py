@@ -195,6 +195,20 @@ fileTestCases = [{
     'match': True,
     'num': 42,
     'file': './inputs/annoying Spaces Folder/evilFile With Space2.txt',
+}, {
+    # with leading space
+    'input': ' ./inputs/annoying Spaces Folder/evilFile With Space2.txt:42',
+    'validateFileExists': True,
+    'match': True,
+    'num': 42,
+    'file': './inputs/annoying Spaces Folder/evilFile With Space2.txt',
+}, {
+    # git style
+    'input': 'M     ./inputs/annoying Spaces Folder/evilFile With Space2.txt:42',
+    'validateFileExists': True,
+    'match': True,
+    'num': 42,
+    'file': './inputs/annoying Spaces Folder/evilFile With Space2.txt',
 }]
 
 prependDirTestCases = [
