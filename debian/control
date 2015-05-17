@@ -1,0 +1,12 @@
+Source: pathpicker
+Maintainer: Peter Cottle <pcottle@fb.com>
+Priority: optional
+Section: misc
+Standards-Version: 3.9.5
+Build-Depends: debhelper (>=9)
+
+Package: pathpicker
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Bash Output File Picker
+ PathPicker parses piped input for files and presents it in a convenient UI.
