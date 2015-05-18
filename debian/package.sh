@@ -1,4 +1,4 @@
-PTH="."
+PTH="$(pwd)"
 VERSION="$(python $PTH/../src/version.py)"
 DATETIME=$(date '+%a, %d %b %Y %H:%M:%S %z')
 sed s#__version__#"$VERSION"# < $PTH/DEBIAN/control > $PTH/DEBIAN/control.modif
