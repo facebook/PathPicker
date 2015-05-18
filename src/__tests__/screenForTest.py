@@ -39,7 +39,7 @@ class ScreenForTest(object):
         self.output = {}
         self.pastScreens = []
         self.charInputs = charInputs
-        self.clear()
+        self.erase()
         self.currentAttribute = 0
 
     def getmaxyx(self):
@@ -56,7 +56,7 @@ class ScreenForTest(object):
                 return True
         return False
 
-    def clear(self):
+    def erase(self):
         if self.containsContent(self.output):
             # we have an old screen, so add it
             self.pastScreens.append(self.output)
@@ -79,6 +79,11 @@ class ScreenForTest(object):
         for deltaX in range(len(string)):
             coord = (x + deltaX, y)
             self.output[coord] = (string[deltaX], self.currentAttribute)
+
+    def delch(self, y, x):
+        '''Delete a character. We implement this by removing the output,
+        NOT by printing a space'''
+        self.output[(x, y)] = ('', 1)
 
     def getch(self):
         return CHAR_TO_CODE[self.charInputs.pop(0)]

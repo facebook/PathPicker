@@ -40,7 +40,8 @@ def getLineObjsFromLines(inputLines, validateFileExists=True):
         if not result:
             line = format.SimpleLine(formattedLine, index)
         else:
-            line = format.LineMatch(formattedLine, result, index, validateFileExists=validateFileExists)
+            line = format.LineMatch(formattedLine, result,
+                                    index, validateFileExists=validateFileExists)
 
         lineObjs[index] = line
 

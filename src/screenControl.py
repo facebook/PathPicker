@@ -213,18 +213,19 @@ class Controller(object):
         (self.oldmaxy, self.oldmaxx) = self.getScreenDimensions()
         self.mode = SELECT_MODE
 
-        self.simpleLines = []
-        self.lineMatches = []
         # lets loop through and split
+        self.lineMatches = []
+
         for lineObj in self.lineObjs.values():
             lineObj.controller = self
-            if (lineObj.isSimple()):
-                self.simpleLines.append(lineObj)
-            else:
+            if not lineObj.isSimple():
                 self.lineMatches.append(lineObj)
 
         self.numLines = len(lineObjs.keys())
         self.numMatches = len(self.lineMatches)
+
+        # begin tracking dirty state
+        self.resetDirty()
 
         self.setHover(self.hoverIndex, True)
 
@@ -233,6 +234,7 @@ class Controller(object):
         # down the screen -- so lets init it to
         # a valid value after we have all our line objects
         self.updateScrollOffset()
+
         logger.addEvent('init')
 
     def getScrollOffset(self):
@@ -257,7 +259,6 @@ class Controller(object):
         self.lineMatches[index].setHover(val)
 
     def toggleSelect(self):
-        self.dirtyHoverIndex()
         self.lineMatches[self.hoverIndex].toggleSelect()
 
     def toggleSelectAll(self):
@@ -266,8 +267,6 @@ class Controller(object):
             if line.getFile() not in files:
                 files.add(line.getFile())
                 line.toggleSelect()
-
-        self.dirtyLines()
 
     def setSelect(self, val):
         self.lineMatches[self.hoverIndex].setSelect(val)
@@ -321,7 +320,7 @@ class Controller(object):
             # need to reassign now we have gone too far
             self.scrollOffset = newOffset
         if oldOffset is not self.scrollOffset:
-            self.dirtyLines()
+            self.dirtyAll()
 
         # also update our scroll bar
         self.scrollBar.calcBoxFractions()
@@ -340,11 +339,8 @@ class Controller(object):
 
     def jumpToIndex(self, newIndex):
         self.setHover(self.hoverIndex, False)
-        self.dirtyHoverIndex()
-
         self.hoverIndex = newIndex
         self.setHover(self.hoverIndex, True)
-        self.dirtyHoverIndex()
         self.updateScrollOffset()
 
     def processInput(self, key):
@@ -443,7 +439,7 @@ class Controller(object):
         return command
 
     def beginEnterCommand(self):
-        self.stdscr.clear()
+        self.stdscr.erase()
         # first check if they are trying to enter command mode
         # but already have a command...
         if len(self.flags.getPresetCommand()):
@@ -453,7 +449,7 @@ class Controller(object):
             self.printProvidedCommandWarning(yStart)
             self.getKey()
             self.mode = SELECT_MODE
-            self.dirtyLines()
+            self.dirtyAll()
             return
 
         self.mode = COMMAND_MODE
@@ -465,7 +461,7 @@ class Controller(object):
             # go back to selection mode and repaint
             self.mode = SELECT_MODE
             self.cursesAPI.noecho()
-            self.dirtyLines()
+            self.dirtyAll()
             logger.addEvent('exit_command_mode')
             return
         lineObjs = self.getFilesToUse()
@@ -490,27 +486,34 @@ class Controller(object):
 
     def resetDirty(self):
         # reset all dirty state for our components
-        self.linesDirty = False
+        self.dirty = False
         self.dirtyIndexes = []
 
-    def dirtyHoverIndex(self):
-        self.dirtyIndexes.append(self.hoverIndex)
+    def dirtyLine(self, index):
+        self.dirtyIndexes.append(index)
 
-    def dirtyLines(self):
-        self.linesDirty = True
+    def dirtyAll(self):
+        self.dirty = True
 
     def processDirty(self):
-        if self.linesDirty:
+        if self.dirty:
             self.printAll()
-        for index in self.dirtyIndexes:
-            self.lineMatches[index].output(self.colorPrinter)
-        if self.helperChrome.getIsSidebarMode():
-            # need to output since lines can override
-            # the sidebar stuff
-            self.printChrome()
+        else:
+            (minx, miny, maxx, maxy) = self.getChromeBoundaries()
+            for index in self.dirtyIndexes:
+                y = miny + index + self.getScrollOffset()
+                if y >= miny or y < maxy:
+                    self.clearLine(y)
+                    self.lineObjs[index].output(self.colorPrinter)
+
+    def clearLine(self, y):
+        '''Clear a line of content, excluding the chrome'''
+        (minx, miny, maxx, maxy) = self.getChromeBoundaries()
+        for x in range(minx, maxx):
+            self.stdscr.delch(y, x)
 
     def printAll(self):
-        self.stdscr.clear()
+        self.stdscr.erase()
         self.printLines()
         self.printScroll()
         self.printChrome()
