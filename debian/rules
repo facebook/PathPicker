@@ -1,8 +1,0 @@
-#!/usr/bin/make -f
-%:
-	dh $@
-override_dh_usrlocal:
-	dh_install src/* usr/share/pathpicker/src/
-	dh_install ./fpp usr/share/pathpicker/
-	dh_fixperms
-

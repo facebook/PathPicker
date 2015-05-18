@@ -1,0 +1,9 @@
+Package: pathpicker
+Version: __version__
+Architecture: all
+Maintainer: Peter Cottle <pcottle@fb.com>
+Installed-Size: 209
+Section: misc
+Priority: optional
+Description: Bash Output File Picker
+ PathPicker parses piped input for files and presents it in a convenient UI.
