@@ -5,7 +5,8 @@ sed s#__version__#"$VERSION"# < $PTH/DEBIAN/control > $PTH/DEBIAN/control.modif
 mv $PTH/DEBIAN/control.modif $PTH/DEBIAN/control
 cp -R $PTH/../src $PTH/usr/share/pathpicker
 cp $PTH/../fpp $PTH/usr/share/pathpicker/fpp
-ln --symbolic $PTH/usr/share/pathpicker/fpp $PTH/usr/bin/
+cd $PTH/usr/bin/
+ln --symbolic ../share/pathpicker/fpp fpp
 sed s#__version__#"$VERSION"# < $PTH/usr/share/doc/pathpicker/changelog > $PTH/usr/share/doc/pathpicker/changelog.modif
 sed s#__date_timestamp__#"$DATETIME"# < $PTH/usr/share/doc/pathpicker/changelog.modif > $PTH/usr/share/doc/pathpicker/changelog
 gzip -9 $PTH/usr/share/doc/pathpicker/changelog
