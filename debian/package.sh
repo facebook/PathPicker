@@ -1,4 +1,4 @@
-PTH="./"
+PTH="."
 VERSION="$(python $PTH/../src/version.py)"
 DATETIME=$(date '+%a, %d %b %Y %H:%M:%S %z')
 sed s#__version__#"$VERSION"# < $PTH/DEBIAN/control > $PTH/DEBIAN/control.modif
@@ -8,7 +8,7 @@ cp $PTH/../fpp $PTH/usr/share/pathpicker/fpp
 ln --symbolic $PTH/usr/share/pathpicker/fpp $PTH/usr/bin/
 sed s#__version__#"$VERSION"# < $PTH/usr/share/doc/pathpicker/changelog > $PTH/usr/share/doc/pathpicker/changelog.modif
 sed s#__date_timestamp__#"$DATETIME"# < $PTH/usr/share/doc/pathpicker/changelog.modif > $PTH/usr/share/doc/pathpicker/changelog
-gzip -9 $PTH/usr/share/doc/changelog
+gzip -9 $PTH/usr/share/doc/pathpicker/changelog
 rm $PTH/usr/share/doc/pathpicker/changelog.modif
 cd $PTH
 find . -type d -exec chmod 755 {} \;
