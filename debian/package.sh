@@ -1,6 +1,8 @@
 PTH="$(pwd)"
 VERSION="$(python $PTH/../src/version.py)"
 DATETIME=$(date '+%a, %d %b %Y %H:%M:%S %z')
+mkdir $PTH/usr/bin
+mkdir -p $PTH/usr/share/pathpicker/src/
 sed s#__version__#"$VERSION"# < $PTH/DEBIAN/control > $PTH/DEBIAN/control.modif
 mv $PTH/DEBIAN/control.modif $PTH/DEBIAN/control
 cp -R $PTH/../src $PTH/usr/share/pathpicker
