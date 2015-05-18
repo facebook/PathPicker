@@ -76,6 +76,8 @@ class FormattedText(object):
         occur, the attribute set is changed and not restored"""
         printedSoFar = 0
         for index, val in enumerate(self.segments):
+            if printedSoFar >= maxLen:
+                break
             if index % 2 == 1:
                 # text
                 toPrint = val[0:maxLen - printedSoFar]
