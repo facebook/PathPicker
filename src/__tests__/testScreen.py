@@ -83,6 +83,15 @@ screenTestCases = [{
     'input': 'gitDiffSomeExist.txt',
     'validateFileExists': True,
     'withAttributes': True,
+}, {
+    'name': 'longFileNames',
+    'input': 'longFileNames.txt',
+    'validateFileExists': False,
+    'withAttributes': False,
+    'screenConfig': {
+        'maxX': 20,
+        'maxY': 30,
+    }
 }]
 
 
@@ -173,7 +182,7 @@ class TestScreenLogic(unittest.TestCase):
             self.assertEqual(
                 expectedLine,
                 actualLine,
-                'Lines did not match for test %s:\n\nExpected:"%s"\nActual:"%s"' % (
+                'Lines did not match for test %s:\n\nExpected:"%s"\nActual  :"%s"' % (
                     expectedFile, expectedLine, actualLine),
             )
 
