@@ -447,6 +447,7 @@ class Controller(object):
             (_, minY, _, maxY) = self.getChromeBoundaries()
             yStart = (maxY + minY) / 2 - 3
             self.printProvidedCommandWarning(yStart)
+            self.stdscr.refresh()
             self.getKey()
             self.mode = SELECT_MODE
             self.dirtyAll()
@@ -509,8 +510,8 @@ class Controller(object):
     def clearLine(self, y):
         '''Clear a line of content, excluding the chrome'''
         (minx, miny, maxx, maxy) = self.getChromeBoundaries()
-        for x in range(minx, maxx):
-            self.stdscr.delch(y, x)
+        self.stdscr.addstr(y, minx, " " * (maxx - minx),
+                           ColorPrinter.DEFAULT_COLOR_INDEX)
 
     def printAll(self):
         self.stdscr.erase()

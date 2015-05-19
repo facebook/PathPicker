@@ -46,8 +46,9 @@ class ScreenForTest(object):
         return (self.maxY, self.maxX)
 
     def refresh(self):
-        # TODO -- nothing to do here?
-        pass
+        if self.containsContent(self.output):
+            # we have an old screen, so add it
+            self.pastScreens.append(dict(self.output))
 
     def containsContent(self, screen):
         for coord, pair in screen.items():
@@ -57,9 +58,6 @@ class ScreenForTest(object):
         return False
 
     def erase(self):
-        if self.containsContent(self.output):
-            # we have an old screen, so add it
-            self.pastScreens.append(self.output)
         self.output = {}
         for x in range(self.maxX):
             for y in range(self.maxY):
@@ -79,11 +77,6 @@ class ScreenForTest(object):
         for deltaX in range(len(string)):
             coord = (x + deltaX, y)
             self.output[coord] = (string[deltaX], self.currentAttribute)
-
-    def delch(self, y, x):
-        '''Delete a character. We implement this by removing the output,
-        NOT by printing a space'''
-        self.output[(x, y)] = ('', 1)
 
     def getch(self):
         return CHAR_TO_CODE[self.charInputs.pop(0)]
@@ -108,7 +101,16 @@ class ScreenForTest(object):
         return self.getRows(screen=self.pastScreens[pastScreen])
 
     def getRowsWithAttributesForPastScreen(self, pastScreen):
-        return self.getRowsWithAttributes(screen=self.pastScreens[pastScreen])
+        if pastScreen is None:
+            pastScreen = [self.getNumPastScreens()]
+        elif not isinstance(pastScreen, list):
+            pastScreen = [pastScreen]
+
+        pages = map(lambda screenIndex: self.getRowsWithAttributes(
+            screen=self.pastScreens[screenIndex]), pastScreen)
+        lines, attributes = zip(*pages)
+        return ([line for page in lines for line in page],
+                [line for page in attributes for line in page])
 
     def getRowsWithAttributes(self, screen=None):
         if not screen:

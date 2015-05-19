@@ -36,7 +36,7 @@ screenTestCases = [{
     'name': 'selectTwoCommandMode',
     'input': 'absoluteGitDiff.txt',
     'inputs': ['f', 'j', 'f', 'c'],
-    'pastScreen': 1
+    'pastScreen': 3
 }, {
     'name': 'selectCommandWithPassedCommand',
     'input': 'absoluteGitDiff.txt',
@@ -92,6 +92,17 @@ screenTestCases = [{
         'maxX': 20,
         'maxY': 30,
     }
+}, {
+    'name': 'dontWipeChrome',
+    'input': 'gitDiffColor.txt',
+    'withAttributes': True,
+    'validatesFileExists': False,
+    'inputs': ['DOWN', 'f', 'f', 'f', 'UP'],
+    'screenConfig': {
+        'maxX': 201,
+        'maxY': 40
+    },
+    'pastScreen': [0, 1, 2, 3, 4]
 }]
 
 
@@ -196,4 +207,16 @@ class TestScreenLogic(unittest.TestCase):
             os.makedirs(EXPECTED_DIR)
 
 if __name__ == '__main__':
+    # monkey patch clearLine to clear the input region, not print spaces
+    # this matches the intent of the function and makes sure we don't
+    # generate empty spaces in the output for comparing against the expected
+    # input
+
+    def clearLine(self, y):
+        (minx, miny, maxx, maxy) = self.getChromeBoundaries()
+        for x in range(minx, maxx):
+            self.stdscr.output[(x, y)] = ('', 1)
+
+    screenTestRunner.choose.screenControl.Controller.clearLine = clearLine
+
     unittest.main()
