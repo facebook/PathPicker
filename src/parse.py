@@ -45,14 +45,24 @@ MASTER_REGEX_WITH_SPACES = re.compile(''.join((
     '(',
     # a leading / for absolute dirs if its there
     '\/?',
-    # now we look at directories. The 'character' allowed before the '/'
-    # is either a real character or a character and a space. this allows
-    # multiple spaces in a directory part, but it doesn't allow a ending
-    # space before the '/', nor something like 'two  spaces', which are
-    # unfortunately still legal directories.
+    # now we look at directories. The 'character class ' allowed before the '/'
+    # is either a real character or a character and a space. This allows
+    # multiple spaces in a directory as long as each space is followed by
+    # a normal character, but it does not allow multiple continguous spaces
+    # which would otherwise gobble up too much whitespace.
+    #
+    # Thus, these directories will match:
+    #   /something foo/
+    #   / a b c d e/
+    #   /normal/
+    #
+    # but these will not:
+    #   /two  spaces  here/
+    #   /ending in a space /
     '(([a-z.A-Z0-9\-_]|\s[a-zA-Z0-9\-_])+\/)+',
     # we do similar for the filename part. the 'character class' is
-    # char or char with space following.
+    # char or char with space following, with some added tokens like @
+    # for retina files.
     '([@a-zA-Z0-9\-_+.]|\s[@a-zA-Z0-9\-_+.])+',
     # extensions dont allow spaces
     '\.[a-zA-Z0-9]{1,10}'
