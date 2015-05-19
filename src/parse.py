@@ -41,9 +41,9 @@ FILE_NO_PERIODS = re.compile(''.join((
     '(\s|$|:)+'
 )))
 MASTER_REGEX_WITH_SPACES = re.compile(''.join((
-    #begin the capture
+    # begin the capture
     '(',
-    #a leading / for absolute dirs if its there
+    # a leading / for absolute dirs if its there
     '\/?',
     # now we look at directories, where we allow either normal chars
     # or a single whitespace char followed by legit chars
@@ -163,8 +163,8 @@ def matchLineImpl(line, withFileInspection=False):
         if not matches:
             continue
         unpackFunc = unpackMatchesNoNum if \
-                regexConfig.get('noNum') else \
-                lambda x: unpackMatches(x, numIndex=regexConfig.get('numIndex', 2))
+            regexConfig.get('noNum') else \
+            lambda x: unpackMatches(x, numIndex=regexConfig.get('numIndex', 2))
         if not regexConfig.get('preferred_regex'):
             return unpackFunc(matches)
 

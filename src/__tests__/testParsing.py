@@ -293,8 +293,8 @@ class TestParseFunction(unittest.TestCase):
         print('Tested %d cases.' % len(fileTestCases))
 
     def checkFileResult(self, testCase):
-        result = parse.matchLine(testCase['input'], \
-            validateFileExists=testCase.get('validateFileExists', False))
+        result = parse.matchLine(testCase['input'],
+                                 validateFileExists=testCase.get('validateFileExists', False))
         if not result:
             self.assertFalse(testCase['match'],
                              'Line "%s" did not match any regex' %
