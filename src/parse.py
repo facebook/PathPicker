@@ -45,11 +45,14 @@ MASTER_REGEX_WITH_SPACES = re.compile(''.join((
     '(',
     # a leading / for absolute dirs if its there
     '\/?',
-    # now we look at directories, where we allow either normal chars
-    # or a single whitespace char followed by legit chars
+    # now we look at directories. The 'character' allowed before the '/'
+    # is either a real character or a character and a space. this allows
+    # multiple spaces in a directory part, but it doesn't allow a ending
+    # space before the '/', nor something like 'two  spaces', which are
+    # unfortunately still legal directories.
     '(([a-z.A-Z0-9\-_]|\s[a-zA-Z0-9\-_])+\/)+',
-    # you can have either a space followed by a real char OR real chars.
-    # we dont just throw in a space since otherwise it could be all spaces
+    # we do similar for the filename part. the 'character class' is
+    # char or char with space following.
     '([@a-zA-Z0-9\-_+.]|\s[@a-zA-Z0-9\-_+.])+',
     # extensions dont allow spaces
     '\.[a-zA-Z0-9]{1,10}'
