@@ -498,13 +498,13 @@ class Controller(object):
     def processDirty(self):
         if self.dirty:
             self.printAll()
-        else:
-            (minx, miny, maxx, maxy) = self.getChromeBoundaries()
-            for index in self.dirtyIndexes:
-                y = miny + index + self.getScrollOffset()
-                if y >= miny or y < maxy:
-                    self.clearLine(y)
-                    self.lineObjs[index].output(self.colorPrinter)
+            return
+        (minx, miny, maxx, maxy) = self.getChromeBoundaries()
+        for index in self.dirtyIndexes:
+            y = miny + index + self.getScrollOffset()
+            if y >= miny or y < maxy:
+                self.clearLine(y)
+                self.lineObjs[index].output(self.colorPrinter)
 
     def clearLine(self, y):
         '''Clear a line of content, excluding the chrome'''
