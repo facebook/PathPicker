@@ -37,6 +37,7 @@ def doProgram(stdscr, flags, cursesAPI=None, lineObjs=None):
         cursesAPI = CursesAPI()
     if not lineObjs:
         lineObjs = getLineObjs()
+
     output.clearFile()
     logger.clearFile()
     screen = screenControl.Controller(flags, stdscr, lineObjs, cursesAPI)
@@ -81,7 +82,6 @@ def setSelectionsFromPickle(selectionPath, lineObjs):
         else:
             error = 'Line %d was selected but is not LineMatch' % index
             output.appendError(error)
-
 
 if __name__ == '__main__':
     filePath = stateFiles.getPickleFilePath()
