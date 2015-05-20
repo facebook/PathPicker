@@ -500,16 +500,28 @@ class Controller(object):
             self.printAll()
             return
         (minx, miny, maxx, maxy) = self.getChromeBoundaries()
+        didClearLine = False
         for index in self.dirtyIndexes:
             y = miny + index + self.getScrollOffset()
             if y >= miny or y < maxy:
+                didClearLine = True
                 self.clearLine(y)
                 self.lineObjs[index].output(self.colorPrinter)
+        if didClearLine and self.helperChrome.getIsSidebarMode():
+            # now we need to output the chrome again since on wide
+            # monitors we will have cleared out a line of the chrome
+            self.helperChrome.output(self.mode)
 
     def clearLine(self, y):
         '''Clear a line of content, excluding the chrome'''
-        (minx, miny, maxx, maxy) = self.getChromeBoundaries()
-        for x in range(minx, maxx):
+        (minx, _, maxx, _) = self.getChromeBoundaries()
+        charsToDelete = range(minx, maxx)
+        # we go in the **reverse** order since the original documentation
+        # of delchar (http://dell9.ma.utexas.edu/cgi-bin/man-cgi?delch+3)
+        # mentions that delchar actually moves all the characters to the right
+        # of the cursor
+        charsToDelete.reverse()
+        for x in charsToDelete:
             self.stdscr.delch(y, x)
 
     def printAll(self):
