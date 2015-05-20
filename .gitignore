@@ -6,3 +6,5 @@
 # hg merge conflicts
 *.orig
 dist/*
+fpp.deb
+debian/usr/
