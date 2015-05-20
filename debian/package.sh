@@ -46,5 +46,6 @@ fakeroot -- sh -c ' chown -R root:root * && dpkg --build ./ ../fpp.deb ;'
 echo "Restoring template files..."
 cd -
 git checkout HEAD -- "$PTH/DEBIAN/control" "$PTH/usr/share/doc/pathpicker/changelog"
+chmod 777 "$PTH/package.sh"
 
 echo 'Done! Check out fpp.deb'
