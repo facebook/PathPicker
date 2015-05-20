@@ -520,8 +520,7 @@ class Controller(object):
         # of delchar (http://dell9.ma.utexas.edu/cgi-bin/man-cgi?delch+3)
         # mentions that delchar actually moves all the characters to the right
         # of the cursor
-        charsToDelete.reverse()
-        for x in charsToDelete:
+        for x in reversed(charsToDelete):
             self.stdscr.delch(y, x)
 
     def printAll(self):
