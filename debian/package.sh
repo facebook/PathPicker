@@ -36,9 +36,9 @@ gzip -9 "$PTH/usr/share/doc/pathpicker/changelog" &&
   rm "$PTH/usr/share/doc/pathpicker/changelog.modif"
 
 echo "Setting permissions..."
-cd "$PTH" &&
-  find . -type d -exec chmod 755 {} \ &&
-  find . -type f -exec chmod 644 {} \
+cd "$PTH"
+find . -type d -exec chmod 755 {} \;
+find . -type f -exec chmod 644 {} \;
 
 echo "Building package..."
 chmod 755 usr/share/pathpicker/fpp
