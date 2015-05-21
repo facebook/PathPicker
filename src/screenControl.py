@@ -513,15 +513,26 @@ class Controller(object):
             self.helperChrome.output(self.mode)
 
     def clearLine(self, y):
-        '''Clear a line of content, excluding the chrome'''
-        (minx, _, maxx, _) = self.getChromeBoundaries()
-        charsToDelete = range(minx, maxx)
-        # we go in the **reverse** order since the original documentation
-        # of delchar (http://dell9.ma.utexas.edu/cgi-bin/man-cgi?delch+3)
-        # mentions that delchar actually moves all the characters to the right
-        # of the cursor
-        for x in reversed(charsToDelete):
-            self.stdscr.delch(y, x)
+        '''Clear a line of content, including chrome to the right, but not
+        to the left of the content window'''
+        # Q. Why do we have to delete the entire line?
+        # A. Because delchar deletes the character and moves the characters
+        # left on the line (to the right of the x spot) leftwards.
+        # If we only delete the characters "up to the chrome", the chrome
+        # itself will now be flush against the x spot.
+        # Q. Why do we delete the same location again and again?
+        # A. Delchar removes the character under the cursor, and moves all the
+        # characters to the right of the cursor to the left one, and inserts
+        # a blank space to fill the line back up.
+        # (https://www.mkssoftware.com/docs/man3/curs_delch.3.asp)
+        # So, by deleting the cursor N times, we remove everything to the right
+        # of the minx (when the chrome ends on the left).
+
+        (minx, _, _, _) = self.getChromeBoundaries()
+        (_, maxx) = self.stdscr.getmaxyx()
+
+        for x in range(minx, maxx):
+            self.stdscr.delch(y, minx)
 
     def printAll(self):
         self.stdscr.erase()
