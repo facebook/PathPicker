@@ -174,8 +174,9 @@ class LineMatch(object):
             # decorated match and glue them together with our
             # truncation decorator
             spaceAllowed = maxLen - len(self.TRUNCATE_DECORATOR)
-            beginMatch = plainText[0:(spaceAllowed / 2)]
-            endMatch = plainText[-(spaceAllowed / 2):]
+            midPoint = int(spaceAllowed / 2)
+            beginMatch = plainText[0:midPoint]
+            endMatch = plainText[-midPoint:len(plainText)]
             plainText = beginMatch + self.TRUNCATE_DECORATOR + endMatch
 
         self.decoratedMatch = FormattedText(
