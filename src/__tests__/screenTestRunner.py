@@ -15,6 +15,7 @@ sys.path.insert(0, '../')
 
 import choose
 import processInput
+
 from screenFlags import ScreenFlags
 
 from screenForTest import ScreenForTest
@@ -38,6 +39,7 @@ def getRowsFromScreenRun(
         screenConfig={},
         printScreen=True,
         pastScreen=None,
+        pastScreens=None,
         validateFileExists=False,
         args=[]):
 
@@ -63,10 +65,7 @@ def getRowsFromScreenRun(
 
     if pastScreen:
         return screen.getRowsWithAttributesForPastScreen(pastScreen)
-    return screen.getRowsWithAttributes()
+    elif pastScreens:
+        return screen.getRowsWithAttributesForPastScreens(pastScreens)
 
-if __name__ == '__main__':
-    getRowsFromScreenRun(
-        inputFile='gitDiff.txt',
-        charInputs=['q'],
-    )
+    return screen.getRowsWithAttributes()

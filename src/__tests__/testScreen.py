@@ -36,7 +36,7 @@ screenTestCases = [{
     'name': 'selectTwoCommandMode',
     'input': 'absoluteGitDiff.txt',
     'inputs': ['f', 'j', 'f', 'c'],
-    'pastScreen': 1
+    'pastScreen': 3
 }, {
     'name': 'selectCommandWithPassedCommand',
     'input': 'absoluteGitDiff.txt',
@@ -92,6 +92,17 @@ screenTestCases = [{
         'maxX': 20,
         'maxY': 30,
     }
+}, {
+    'name': 'dontWipeChrome',
+    'input': 'gitDiffColor.txt',
+    'withAttributes': True,
+    'validatesFileExists': False,
+    'inputs': ['DOWN', 'f', 'f', 'f', 'UP'],
+    'screenConfig': {
+        'maxX': 201,
+        'maxY': 40
+    },
+    'pastScreens': [0, 1, 2, 3, 4]
 }]
 
 
@@ -115,6 +126,7 @@ class TestScreenLogic(unittest.TestCase):
                 screenConfig=testCase.get('screenConfig', {}),
                 printScreen=False,
                 pastScreen=testCase.get('pastScreen', None),
+                pastScreens=testCase.get('pastScreens', None),
                 args=testCase.get('args', []),
                 validateFileExists=testCase.get('validateFileExists', False)
             )

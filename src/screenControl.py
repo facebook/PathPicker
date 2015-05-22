@@ -447,6 +447,7 @@ class Controller(object):
             (_, minY, _, maxY) = self.getChromeBoundaries()
             yStart = (maxY + minY) / 2 - 3
             self.printProvidedCommandWarning(yStart)
+            self.stdscr.refresh()
             self.getKey()
             self.mode = SELECT_MODE
             self.dirtyAll()
