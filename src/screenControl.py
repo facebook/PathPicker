@@ -514,7 +514,8 @@ class Controller(object):
 
     def clearLine(self, y):
         '''Clear a line of content, excluding the chrome'''
-        (minx, _, maxx, _) = self.getChromeBoundaries()
+        (minx, _, _, _) = self.getChromeBoundaries()
+        (_, maxx) = self.stdscr.getmaxyx()
         charsToDelete = range(minx, maxx)
         # we go in the **reverse** order since the original documentation
         # of delchar (http://dell9.ma.utexas.edu/cgi-bin/man-cgi?delch+3)
