@@ -21,13 +21,13 @@ import logger
 REPOS = ['www']
 
 MASTER_REGEX = re.compile(
-    '(\/?([a-z.A-Z0-9\-_]+\/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
+    '(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
 HOMEDIR_REGEX = re.compile(
     '(~\/([a-z.A-Z0-9\-_]+\/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
 OTHER_BGS_RESULT_REGEX = re.compile(
     '(\/?([a-z.A-Z0-9\-_]+\/)+[a-zA-Z0-9_.]{3,})[:-]{0,1}(\d+)')
 JUST_FILE = re.compile(
-    '([a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
+    '([@+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
 FILE_NO_PERIODS = re.compile(''.join((
     '(',
     # Recognized files starting with a dot followed by at least 3 characters

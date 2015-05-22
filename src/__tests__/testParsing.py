@@ -209,6 +209,23 @@ fileTestCases = [{
     'match': True,
     'num': 42,
     'file': './inputs/annoying Spaces Folder/evilFile With Space2.txt',
+}, {
+    # files with + in them, silly objective c
+    'input': 'M     ./objectivec/NSArray+Utils.h',
+    'match': True,
+    'file': './objectivec/NSArray+Utils.h',
+}, {
+    'input': 'NSArray+Utils.h',
+    'match': True,
+    'file': 'NSArray+Utils.h',
+}, {
+    # And with filesystem validation just in case
+    # the + breaks something
+    'input': './inputs/NSArray+Utils.h:42',
+    'validateFileExists': True,
+    'match': True,
+    'num': 42,
+    'file': './inputs/NSArray+Utils.h',
 }]
 
 prependDirTestCases = [
