@@ -215,7 +215,7 @@ def prependDir(file, withFileInspection=False):
         return '/' + file
 
     if first in REPOS:
-        return '~/' + file
+        return os.path.expanduser('~/' + file)
 
     if '/' not in file:
         # assume current dir like ./
