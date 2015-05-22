@@ -392,6 +392,7 @@ class Controller(object):
                 if index == self.hoverIndex]
 
     def showAndGetCommand(self):
+        self.stdscr.attrset(0)
         fileObjs = self.getFilesToUse()
         files = [fileObj.getFile() for fileObj in fileObjs]
         (maxy, maxx) = self.getScreenDimensions()
