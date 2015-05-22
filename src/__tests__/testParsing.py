@@ -237,12 +237,6 @@ prependDirTestCases = [
         'in': 'home/absolute/path.py',
         'out': '/home/absolute/path.py'
     }, {
-        'in': '~/www/asd.py',
-        'out': '~/www/asd.py'
-    }, {
-        'in': 'www/asd.py',
-        'out': '~/www/asd.py'
-    }, {
         'in': 'foo/bar/baz/asd.py',
         'out': parse.PREPEND_PATH + 'foo/bar/baz/asd.py'
     }, {
