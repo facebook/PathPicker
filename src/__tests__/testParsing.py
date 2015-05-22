@@ -14,6 +14,7 @@ sys.path.insert(0, '../')
 
 import format
 from formattedText import FormattedText
+from localTestCases import LOCAL_TEST_CASES
 import parse
 
 fileTestCases = [{
@@ -227,6 +228,9 @@ fileTestCases = [{
     'num': 42,
     'file': './inputs/NSArray+Utils.h',
 }]
+
+# local test cases get added as well
+fileTestCases += LOCAL_TEST_CASES
 
 prependDirTestCases = [
     {

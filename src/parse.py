@@ -10,15 +10,7 @@ import os
 import subprocess
 
 import logger
-
-# If you are using a code grep query service and want to resolve
-# certain global symbols to local directories,
-# add them as REPOS below. We will essentially replace a global
-# match against something like:
-#   www/myFile.py
-# to:
-#   ~/www/myFile.py
-REPOS = ['www']
+from repos import REPOS
 
 MASTER_REGEX = re.compile(
     '(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
