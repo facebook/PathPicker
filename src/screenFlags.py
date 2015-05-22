@@ -39,6 +39,9 @@ class ScreenFlags(object):
     def getIsCleanMode(self):
         return self.args.clean
 
+    def getDisableFileChecks(self):
+        return self.args.no_file_checks
+
     @staticmethod
     def getArgParser():
         parser = argparse.ArgumentParser(prog='fpp')
@@ -78,6 +81,17 @@ it will be invoked instead.''',
                             default='',
                             action='store',
                             nargs='+')
+        parser.add_argument('-nfc',
+                            '--no-file-checks',
+                            default=False,
+                            action="store_true",
+                            help='''You may want to turn off file
+system validation for a particular instance of PathPicker; this flag
+disables our internal logic for checking if a regex match is an actual file
+on the system. This is particularly useful when using PathPicker for an input
+of, say, deleted files in git status that you would like to restore to a given
+revision. It enables you to select the deleted files even though they
+do not exist on the system anymore.''')
         return parser
 
     @staticmethod
