@@ -103,6 +103,15 @@ screenTestCases = [{
         'maxY': 40
     },
     'pastScreens': [0, 1, 2, 3, 4]
+}, {
+    'name': 'longFileTruncation',
+    'input': 'superLongFileNames.txt',
+    'withAttributes': True,
+    'inputs': ['DOWN', 'f'],
+    'screenConfig': {
+        'maxX': 60,
+        'maxY': 20
+    },
 }]
 
 
