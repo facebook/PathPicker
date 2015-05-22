@@ -20,9 +20,11 @@ from usageStrings import USAGE_STR
 from screenFlags import ScreenFlags
 
 
-def getLineObjs():
+def getLineObjs(flags):
     inputLines = sys.stdin.readlines()
-    return getLineObjsFromLines(inputLines)
+    return getLineObjsFromLines(inputLines,
+                                validateFileExists=False if
+                                flags.getDisableFileChecks() else True)
 
 
 def getLineObjsFromLines(inputLines, validateFileExists=True):
@@ -48,9 +50,9 @@ def getLineObjsFromLines(inputLines, validateFileExists=True):
     return lineObjs
 
 
-def doProgram():
+def doProgram(flags):
     filePath = stateFiles.getPickleFilePath()
-    lineObjs = getLineObjs()
+    lineObjs = getLineObjs(flags)
     # pickle it so the next program can parse it
     pickle.dump(lineObjs, open(filePath, 'wb'))
 
@@ -82,5 +84,5 @@ if __name__ == '__main__':
         if os.path.isfile(selectionPath):
             os.remove(selectionPath)
 
-        doProgram()
+        doProgram(flags)
         sys.exit(0)
