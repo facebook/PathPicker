@@ -114,7 +114,7 @@ class ScreenForTest(object):
         pages = map(lambda screenIndex: self.getRowsWithAttributes(
             screen=self.pastScreens[screenIndex]), pastScreens)
 
-        #join the pages together into one stream
+        # join the pages together into one stream
         lines, attributes = zip(*pages)
         return ([line for page in lines for line in page],
                 [line for page in attributes for line in page])

@@ -392,7 +392,6 @@ class Controller(object):
                 if index == self.hoverIndex]
 
     def showAndGetCommand(self):
-        self.stdscr.attrset(0)
         fileObjs = self.getFilesToUse()
         files = [fileObj.getFile() for fileObj in fileObjs]
         (maxy, maxx) = self.getScreenDimensions()
@@ -409,26 +408,26 @@ class Controller(object):
         # first lets print all the files
         startHeight = halfHeight - 1 - len(files)
         try:
-            self.stdscr.addstr(startHeight - 3, 0, borderLine)
-            self.stdscr.addstr(startHeight - 2, 0, SHORT_FILES_HEADER)
-            self.stdscr.addstr(startHeight - 1, 0, borderLine)
+            self.colorPrinter.addstr(startHeight - 3, 0, borderLine)
+            self.colorPrinter.addstr(startHeight - 2, 0, SHORT_FILES_HEADER)
+            self.colorPrinter.addstr(startHeight - 1, 0, borderLine)
             for index, file in enumerate(files):
-                self.stdscr.addstr(startHeight + index, 0,
-                                   file[0:maxFileLength])
+                self.colorPrinter.addstr(startHeight + index, 0,
+                                         file[0:maxFileLength])
         except curses.error:
             pass
 
         # first print prompt
         try:
-            self.stdscr.addstr(halfHeight, 0, SHORT_COMMAND_PROMPT)
-            self.stdscr.addstr(halfHeight + 1, 0, SHORT_COMMAND_PROMPT2)
+            self.colorPrinter.addstr(halfHeight, 0, SHORT_COMMAND_PROMPT)
+            self.colorPrinter.addstr(halfHeight + 1, 0, SHORT_COMMAND_PROMPT2)
         except curses.error:
             pass
         # then line to distinguish and prompt line
         try:
-            self.stdscr.addstr(halfHeight - 1, 0, borderLine)
-            self.stdscr.addstr(halfHeight + 2, 0, borderLine)
-            self.stdscr.addstr(halfHeight + 3, 0, promptLine)
+            self.colorPrinter.addstr(halfHeight - 1, 0, borderLine)
+            self.colorPrinter.addstr(halfHeight + 2, 0, borderLine)
+            self.colorPrinter.addstr(halfHeight + 3, 0, promptLine)
         except curses.error:
             pass
 

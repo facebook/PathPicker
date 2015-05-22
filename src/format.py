@@ -206,12 +206,12 @@ class LineMatch(object):
         if (y < miny or y >= maxy):
             # wont be displayed!
             return
-        
+
         # we dont care about the after text, but we should be able to see
         # all of the decorated match (which means we need to see up to
         # the end of the decoratedMatch, aka include beforeText)
         importantTextLength = len(str(self.beforeText)) + \
-                              len(str(self.decoratedMatch))
+            len(str(self.decoratedMatch))
         spaceForPrinting = maxx - minx
         if importantTextLength > spaceForPrinting:
             # hrm, we need to update our decorated match to show
@@ -223,7 +223,7 @@ class LineMatch(object):
         else:
             # first check what our expanded size would be:
             expandedSize = len(str(self.beforeText)) + \
-              len(self.getMatch())
+                len(self.getMatch())
             if expandedSize < spaceForPrinting and self.isTruncated:
                 # if the screen gets resized, we might be truncated
                 # from a previous render but **now** we have room.
