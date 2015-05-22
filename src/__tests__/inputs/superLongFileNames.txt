@@ -1,0 +1,2 @@
+./hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-client/hadoop-mapreduce-project/hadoop-mapreduce-client/LongFileNamereallylongfileName.txt
+./hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-client/hadoop-mapreduce-project/hadoop-mapreduce-client/some/deeper/dir/source.py
