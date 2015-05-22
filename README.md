@@ -46,7 +46,7 @@ Installing PathPicker is easiest with [Homebrew for mac](http://brew.sh/):
 
 ### Linux
 
-On debian systems, installation can be done by installing the debian package from [here](https://github.com/facebook/PathPicker/releases/download/0.5.7/fpp.deb)
+On debian systems, installation can be done by installing the debian package from [here](https://github.com/facebook/PathPicker/releases/download/0.6.0/fpp.deb)
 
 On Arch Linux, PathPicker can be installed from Arch User Repository (AUR). 
 [the AUR fpp-git package](https://aur.archlinux.org/packages/fpp-git/).
