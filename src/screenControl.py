@@ -14,6 +14,7 @@ import processInput
 import usageStrings
 import output
 import logger
+import format
 from charCodeMapping import CODE_TO_CHAR
 from colorPrinter import ColorPrinter
 
@@ -112,7 +113,11 @@ class HelperChrome(object):
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         borderY = maxy - 2
         # first output text since we might throw an exception during border
-        usageStr = SHORT_NAV_USAGE if self.mode == SELECT_MODE or X_MODE else SHORT_COMMAND_USAGE
+        usageStr = {
+                    SELECT_MODE: SHORT_NAV_USAGE,
+                    X_MODE: SHORT_NAV_USAGE,
+                    COMMAND_MODE: SHORT_COMMAND_USAGE
+        }[self.mode]
         borderStr = '_' * (maxx - self.getMinX() - 0)
         self.printer.addstr(borderY, self.getMinX(), borderStr)
         self.printer.addstr(borderY + 1, self.getMinX(), usageStr)
@@ -571,12 +576,8 @@ class Controller(object):
         charCode = self.stdscr.getch()
         return CODE_TO_CHAR.get(charCode, '')
 
-
     def toggleXMode(self):
-        if self.mode != X_MODE:
-            self.mode = X_MODE
-        else:
-            self.mode = SELECT_MODE
+        self.mode = X_MODE if self.mode != X_MODE else SELECT_MODE
         self.printAll()
 
     def printXMode(self):
@@ -589,7 +590,7 @@ class Controller(object):
 
     def selectXMode(self, key):
         lineObj = self.lineObjs[lbls.index(key) + int(self.scrollBar.activated) - self.scrollOffset]
-        if hasattr(lineObj, "toggleSelect"):
+        if type(lineObj) == format.LineMatch:
             lineMatchIndex = self.lineMatches.index(lineObj)
             self.hoverIndex = lineMatchIndex
             self.toggleSelect()
