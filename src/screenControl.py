@@ -591,4 +591,5 @@ class Controller(object):
         lineObj = self.lineObjs[lbls.index(key) + int(self.scrollBar.activated) - self.scrollOffset]
         if hasattr(lineObj, "toggleSelect"):
             lineMatchIndex = self.lineMatches.index(lineObj)
-            self.dirtyHoverIndex(lineMatchIndex)
+            self.hoverIndex = lineMatchIndex
+            self.toggleSelect()
