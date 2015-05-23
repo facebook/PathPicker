@@ -1,7 +1,7 @@
 class Fpp < Formula
   homepage "https://facebook.github.io/PathPicker/"
-  url "https://github.com/facebook/PathPicker/releases/download/0.5.6/fpp.0.5.6.tar.gz"
-  sha256 "c06a8733471074104099a21957f1f391e1d68969c4671443f4a0518314ecc509"
+  url "https://github.com/facebook/PathPicker/releases/download/0.6.0/fpp.0.6.0.tar.gz"
+  sha256 "5e3f9e8ffa5e5d0f4608af521458a93010f2f504ce936ac33cf376505099dc65"
   head "https://github.com/facebook/pathpicker.git"
 
   bottle do

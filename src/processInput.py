@@ -17,14 +17,17 @@ import format
 import stateFiles
 from formattedText import FormattedText
 from usageStrings import USAGE_STR
+from screenFlags import ScreenFlags
 
 
-def getLineObjs():
+def getLineObjs(flags):
     inputLines = sys.stdin.readlines()
-    return getLineObjsFromLines(inputLines)
+    return getLineObjsFromLines(inputLines,
+                                validateFileExists=False if
+                                flags.getDisableFileChecks() else True)
 
 
-def getLineObjsFromLines(inputLines):
+def getLineObjsFromLines(inputLines, validateFileExists=True):
     lineObjs = {}
     for index, line in enumerate(inputLines):
         line = line.replace('\t', '    ')
@@ -33,21 +36,23 @@ def getLineObjsFromLines(inputLines):
         # screen
         line = line.replace('\n', '')
         formattedLine = FormattedText(line)
-        result = parse.matchLine(str(formattedLine))
+        result = parse.matchLine(str(formattedLine),
+                                 validateFileExists=validateFileExists)
 
         if not result:
             line = format.SimpleLine(formattedLine, index)
         else:
-            line = format.LineMatch(formattedLine, result, index)
+            line = format.LineMatch(formattedLine, result,
+                                    index, validateFileExists=validateFileExists)
 
         lineObjs[index] = line
 
     return lineObjs
 
 
-def doProgram():
+def doProgram(flags):
     filePath = stateFiles.getPickleFilePath()
-    lineObjs = getLineObjs()
+    lineObjs = getLineObjs(flags)
     # pickle it so the next program can parse it
     pickle.dump(lineObjs, open(filePath, 'wb'))
 
@@ -57,6 +62,15 @@ def usage():
 
 
 if __name__ == '__main__':
+    flags = ScreenFlags.initFromArgs(sys.argv[1:])
+    if (flags.getIsCleanMode()):
+        print('Cleaning out state files...')
+        for filePath in stateFiles.getAllStateFiles():
+            if os.path.isfile(filePath):
+                os.remove(filePath)
+        print('Done! Removed %d files ' % len(stateFiles.getAllStateFiles()))
+        sys.exit(0)
+
     if sys.stdin.isatty():
         if os.path.isfile(stateFiles.getPickleFilePath()):
             print('Using old result...')
@@ -66,10 +80,9 @@ if __name__ == '__main__':
         sys.exit(0)
     else:
         # delete the old selection
-        print('getting input')
         selectionPath = stateFiles.getSelectionFilePath()
         if os.path.isfile(selectionPath):
             os.remove(selectionPath)
 
-        doProgram()
+        doProgram(flags)
         sys.exit(0)

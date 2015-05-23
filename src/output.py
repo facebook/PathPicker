@@ -159,7 +159,7 @@ def composeFileCommand(command, lineObjs):
 
 
 def outputNothing():
-    appendToFile('echo "nothing to do!"')
+    appendToFile('echo "nothing to do!" && exit 1')
 
 
 def clearFile():

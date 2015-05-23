@@ -23,6 +23,9 @@ class FormattedText(object):
     FOREGROUND_RANGE = Range(30, 39)
     BACKGROUND_RANGE = Range(40, 49)
 
+    DEFAULT_COLOR_FOREGROUND = -1
+    DEFAULT_COLOR_BACKGROUND = -1
+
     def __init__(self, text=None):
         self.text = text
 
@@ -73,6 +76,8 @@ class FormattedText(object):
         occur, the attribute set is changed and not restored"""
         printedSoFar = 0
         for index, val in enumerate(self.segments):
+            if printedSoFar >= maxLen:
+                break
             if index % 2 == 1:
                 # text
                 toPrint = val[0:maxLen - printedSoFar]

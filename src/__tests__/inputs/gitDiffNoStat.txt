@@ -1,0 +1,41 @@
+diff --git a/src/__tests__/screenTestRunner.py b/src/__tests__/screenTestRunner.py
+index f1f6f7a..5c71551 100644
+--- a/src/__tests__/screenTestRunner.py
++++ b/src/__tests__/screenTestRunner.py
+@@ -36,24 +36,31 @@ def getRowsFromScreenRun(
+         charInputs,
+         screenConfig={},
+         printScreen=True,
+-        pastScreen=None):
++        pastScreen=None,
++        args=[]):
++
+     lineObjs = getLineObjsFromFile(inputFile)
+     screen = ScreenForTest(
+         charInputs,
+         maxX=screenConfig.get('maxX', 80),
+         maxY=screenConfig.get('maxY', 30),
+     )
+-    # mock our flags with an empty command line for now
+-    flags = ScreenFlags.initFromArgs([])
++
++    # mock our flags with the passed arg list
++    flags = ScreenFlags.initFromArgs(args)
++    # we run our program and throw a StopIteration exception
++    # instead of sys.exit-ing
+     try:
+         choose.doProgram(screen, flags, CursesForTest(), lineObjs)
+     except StopIteration:
+         pass
++
+     if printScreen:
+         screen.printOldScreens()
++
+     if pastScreen:
+-        return screen.getRowsForPastScreen(pastScreen)
+-    return screen.getRows()
++        return screen.getRowsWithAttributesForPastScreen(pastScreen)
++    return screen.getRowsWithAttributes()
+ 
+ if __name__ == '__main__':
+     getRowsFromScreenRun(

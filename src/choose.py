@@ -11,6 +11,7 @@ import curses
 import pickle
 import sys
 import os
+import argparse
 
 import output
 import screenControl
@@ -29,18 +30,16 @@ this error will go away)
 '''
 
 
-def doProgram(stdscr, cursesAPI=None, lineObjs=None, flags=None):
+def doProgram(stdscr, flags, cursesAPI=None, lineObjs=None):
     # curses and lineObjs get dependency injected for
     # our tests, so init these if they are not provided
     if not cursesAPI:
         cursesAPI = CursesAPI()
     if not lineObjs:
         lineObjs = getLineObjs()
-    if not flags:
-        flags = ScreenFlags.initFromArgs()
     output.clearFile()
     logger.clearFile()
-    screen = screenControl.Controller(stdscr, lineObjs, cursesAPI)
+    screen = screenControl.Controller(flags, stdscr, lineObjs, cursesAPI)
     screen.control()
 
 
@@ -51,13 +50,13 @@ def getLineObjs():
     except:
         output.appendError(LOAD_SELECTION_WARNING)
         sys.exit(1)
-    logger.addEvent('total_num_files', len(lineObjs.items()))
+    logger.addEvent('total_num_files', len(lineObjs))
 
     selectionPath = stateFiles.getSelectionFilePath()
     if os.path.isfile(selectionPath):
         setSelectionsFromPickle(selectionPath, lineObjs)
 
-    matches = [lineObj for i, lineObj in lineObjs.items()
+    matches = [lineObj for lineObj in lineObjs.values()
                if not lineObj.isSimple()]
     if not len(matches):
         output.writeToFile('echo "No lines matched!!"')
@@ -91,4 +90,8 @@ if __name__ == '__main__':
         output.writeToFile('echo ":D"')
         sys.exit(0)
     output.clearFile()
-    curses.wrapper(doProgram)
+    # we initialize our args *before* we move into curses
+    # so we can benefit from the default argparse
+    # behavior:
+    flags = ScreenFlags.initFromArgs(sys.argv[1:])
+    curses.wrapper(lambda x: doProgram(x, flags))

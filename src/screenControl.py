@@ -201,11 +201,12 @@ class ScrollBar(object):
 
 class Controller(object):
 
-    def __init__(self, stdscr, lineObjs, cursesAPI):
+    def __init__(self, flags, stdscr, lineObjs, cursesAPI):
         self.stdscr = stdscr
         self.cursesAPI = cursesAPI
         self.cursesAPI.useDefaultColors()
         self.colorPrinter = ColorPrinter(self.stdscr, cursesAPI)
+        self.flags = flags
 
         self.lineObjs = lineObjs
         self.hoverIndex = 0
@@ -215,18 +216,19 @@ class Controller(object):
         (self.oldmaxy, self.oldmaxx) = self.getScreenDimensions()
         self.mode = SELECT_MODE
 
-        self.simpleLines = []
-        self.lineMatches = []
         # lets loop through and split
-        for key, lineObj in self.lineObjs.items():
-            lineObj.setController(self)
-            if (lineObj.isSimple()):
-                self.simpleLines.append(lineObj)
-            else:
+        self.lineMatches = []
+
+        for lineObj in self.lineObjs.values():
+            lineObj.controller = self
+            if not lineObj.isSimple():
                 self.lineMatches.append(lineObj)
 
         self.numLines = len(lineObjs.keys())
         self.numMatches = len(self.lineMatches)
+
+        # begin tracking dirty state
+        self.resetDirty()
 
         self.setHover(self.hoverIndex, True)
 
@@ -235,6 +237,7 @@ class Controller(object):
         # down the screen -- so lets init it to
         # a valid value after we have all our line objects
         self.updateScrollOffset()
+
         logger.addEvent('init')
 
     def getScrollOffset(self):
@@ -259,7 +262,6 @@ class Controller(object):
         self.lineMatches[index].setHover(val)
 
     def toggleSelect(self):
-        self.dirtyHoverIndex()
         self.lineMatches[self.hoverIndex].toggleSelect()
 
     def toggleSelectAll(self):
@@ -268,8 +270,6 @@ class Controller(object):
             if line.getFile() not in files:
                 files.add(line.getFile())
                 line.toggleSelect()
-
-        self.dirtyLines()
 
     def setSelect(self, val):
         self.lineMatches[self.hoverIndex].setSelect(val)
@@ -323,7 +323,7 @@ class Controller(object):
             # need to reassign now we have gone too far
             self.scrollOffset = newOffset
         if oldOffset is not self.scrollOffset:
-            self.dirtyLines()
+            self.dirtyAll()
 
         # also update our scroll bar
         self.scrollBar.calcBoxFractions()
@@ -342,11 +342,8 @@ class Controller(object):
 
     def jumpToIndex(self, newIndex):
         self.setHover(self.hoverIndex, False)
-        self.dirtyHoverIndex()
-
         self.hoverIndex = newIndex
         self.setHover(self.hoverIndex, True)
-        self.dirtyHoverIndex()
         self.updateScrollOffset()
 
     def processInput(self, key):
@@ -418,37 +415,51 @@ class Controller(object):
         # first lets print all the files
         startHeight = halfHeight - 1 - len(files)
         try:
-            self.stdscr.addstr(startHeight - 3, 0, borderLine)
-            self.stdscr.addstr(startHeight - 2, 0, SHORT_FILES_HEADER)
-            self.stdscr.addstr(startHeight - 1, 0, borderLine)
+            self.colorPrinter.addstr(startHeight - 3, 0, borderLine)
+            self.colorPrinter.addstr(startHeight - 2, 0, SHORT_FILES_HEADER)
+            self.colorPrinter.addstr(startHeight - 1, 0, borderLine)
             for index, file in enumerate(files):
-                self.stdscr.addstr(startHeight + index, 0,
-                                   file[0:maxFileLength])
+                self.colorPrinter.addstr(startHeight + index, 0,
+                                         file[0:maxFileLength])
         except curses.error:
             pass
 
         # first print prompt
         try:
-            self.stdscr.addstr(halfHeight, 0, SHORT_COMMAND_PROMPT)
-            self.stdscr.addstr(halfHeight + 1, 0, SHORT_COMMAND_PROMPT2)
+            self.colorPrinter.addstr(halfHeight, 0, SHORT_COMMAND_PROMPT)
+            self.colorPrinter.addstr(halfHeight + 1, 0, SHORT_COMMAND_PROMPT2)
         except curses.error:
             pass
         # then line to distinguish and prompt line
         try:
-            self.stdscr.addstr(halfHeight - 1, 0, borderLine)
-            self.stdscr.addstr(halfHeight + 2, 0, borderLine)
-            self.stdscr.addstr(halfHeight + 3, 0, promptLine)
+            self.colorPrinter.addstr(halfHeight - 1, 0, borderLine)
+            self.colorPrinter.addstr(halfHeight + 2, 0, borderLine)
+            self.colorPrinter.addstr(halfHeight + 3, 0, promptLine)
         except curses.error:
             pass
 
         self.stdscr.refresh()
         self.cursesAPI.echo()
         maxX = int(round(maxx - 1))
+
         command = self.stdscr.getstr(halfHeight + 3, 0, maxX)
         return command
 
     def beginEnterCommand(self):
-        self.stdscr.clear()
+        self.stdscr.erase()
+        # first check if they are trying to enter command mode
+        # but already have a command...
+        if len(self.flags.getPresetCommand()):
+            self.helperChrome.output(self.mode)
+            (_, minY, _, maxY) = self.getChromeBoundaries()
+            yStart = (maxY + minY) / 2 - 3
+            self.printProvidedCommandWarning(yStart)
+            self.stdscr.refresh()
+            self.getKey()
+            self.mode = SELECT_MODE
+            self.dirtyAll()
+            return
+
         self.mode = COMMAND_MODE
         self.helperChrome.output(self.mode)
         logger.addEvent('enter_command_mode')
@@ -458,7 +469,7 @@ class Controller(object):
             # go back to selection mode and repaint
             self.mode = SELECT_MODE
             self.cursesAPI.noecho()
-            self.dirtyLines()
+            self.dirtyAll()
             logger.addEvent('exit_command_mode')
             return
         lineObjs = self.getFilesToUse()
@@ -471,43 +482,81 @@ class Controller(object):
             # nothing selected, assume we want hovered
             lineObjs = self.getHoveredFiles()
         logger.addEvent('selected_num_files', len(lineObjs))
-        output.editFiles(lineObjs)
+
+        # commands passed from the command line get used immediately
+        presetCommand = self.flags.getPresetCommand()
+        if len(presetCommand) > 0:
+            output.execComposedCommand(presetCommand, lineObjs)
+        else:
+            output.editFiles(lineObjs)
+
         sys.exit(0)
 
     def resetDirty(self):
         # reset all dirty state for our components
-        self.linesDirty = False
+        self.dirty = False
         self.dirtyIndexes = []
 
-    def dirtyHoverIndex(self, idx=-1):
-        self.dirtyIndexes.append(idx if idx > 0 else self.hoverIndex)
 
-    def dirtyLines(self):
-        self.linesDirty = True
+    def dirtyLine(self, index):
+        self.dirtyIndexes.append(index)
+
+    def dirtyAll(self):
+        self.dirty = True
 
     def processDirty(self):
-        if self.linesDirty:
+        if self.dirty:
             self.printAll()
+            return
+        (minx, miny, maxx, maxy) = self.getChromeBoundaries()
+        didClearLine = False
         for index in self.dirtyIndexes:
-            self.lineMatches[index].output(self.colorPrinter)
-        if self.helperChrome.getIsSidebarMode():
-            # need to output since lines can override
-            # the sidebar stuff
-            self.printChrome()
+            y = miny + index + self.getScrollOffset()
+            if y >= miny or y < maxy:
+                didClearLine = True
+                self.clearLine(y)
+                self.lineObjs[index].output(self.colorPrinter)
+        if didClearLine and self.helperChrome.getIsSidebarMode():
+            # now we need to output the chrome again since on wide
+            # monitors we will have cleared out a line of the chrome
+            self.helperChrome.output(self.mode)
+
+    def clearLine(self, y):
+        '''Clear a line of content, excluding the chrome'''
+        (minx, _, _, _) = self.getChromeBoundaries()
+        (_, maxx) = self.stdscr.getmaxyx()
+        charsToDelete = range(minx, maxx)
+        # we go in the **reverse** order since the original documentation
+        # of delchar (http://dell9.ma.utexas.edu/cgi-bin/man-cgi?delch+3)
+        # mentions that delchar actually moves all the characters to the right
+        # of the cursor
+        for x in reversed(charsToDelete):
+            self.stdscr.delch(y, x)
 
     def printAll(self):
-        self.stdscr.clear()
+        self.stdscr.erase()
         self.printLines()
         self.printScroll()
         self.printXMode()
         self.printChrome()
 
     def printLines(self):
-        for key, lineObj in self.lineObjs.items():
+        for lineObj in self.lineObjs.values():
             lineObj.output(self.colorPrinter)
 
     def printScroll(self):
         self.scrollBar.output()
+
+    def printProvidedCommandWarning(self, yStart):
+        self.colorPrinter.setAttributes(
+            curses.COLOR_WHITE, curses.COLOR_RED, 0)
+        self.stdscr.addstr(yStart, 0, 'Oh no! You already provided a command so ' +
+                           'you cannot enter command mode.')
+        self.stdscr.attrset(0)
+        self.stdscr.addstr(
+            yStart + 1, 0, 'The command you provided was "%s" ' % self.flags.getPresetCommand())
+        self.stdscr.addstr(
+            yStart + 2, 0, 'Press any key to go back to selecting files.')
 
     def printChrome(self):
         self.helperChrome.output(self.mode)
