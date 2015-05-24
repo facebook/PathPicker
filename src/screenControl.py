@@ -584,14 +584,13 @@ class Controller(object):
         if self.mode == X_MODE:
             (maxy, _) = self.scrollBar.screenControl.getScreenDimensions()
             topY = maxy - 2
-            minY = self.scrollBar.getMinY() - \
-                (1 if not self.scrollBar.activated else 0)
+            minY = self.scrollBar.getMinY() - 1
             for i in range(minY, topY + 1):
                 self.stdscr.addstr(i, 1, lbls[i - minY])
 
     def selectXMode(self, key):
         lineObj = self.lineObjs[
-            lbls.index(key) + int(self.scrollBar.activated) - self.scrollOffset]
+            lbls.index(key) - self.scrollOffset]
         if type(lineObj) == format.LineMatch:
             lineMatchIndex = self.lineMatches.index(lineObj)
             self.hoverIndex = lineMatchIndex
