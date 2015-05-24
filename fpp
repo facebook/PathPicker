@@ -25,6 +25,9 @@ PYTHONCMD="python"
 function doProgram {
   # process input from pipe and store as pickled file
   $PYTHONCMD "$BASEDIR/src/processInput.py" "$@"
+  # if it failed, just fail now and exit the script
+  # this works for the looping -ko case as well
+  if [[ $? != 0 ]]; then exit $?; fi
   # now close stdin and choose input...
   exec 0<&-
 
