@@ -16,6 +16,7 @@ class ColorPrinter(object):
     attribute state"""
 
     DEFAULT_COLOR_INDEX = 1
+    CURRENT_COLORS = -1
 
     def __init__(self, screen, cursesAPI):
         self.colors = {}
@@ -28,6 +29,10 @@ class ColorPrinter(object):
         self.currentAttributes = False  # initialized in setAttributes
 
     def setAttributes(self, foreColor, backColor, other):
+        self.currentAttributes = self.getAttributes(foreColor, backColor,
+                                                    other)
+
+    def getAttributes(self, foreColor, backColor, other):
         colorIndex = -1
         colorPair = (foreColor, backColor)
         if not colorPair in self.colors:
@@ -43,15 +48,12 @@ class ColorPrinter(object):
 
         attr = attr | other
 
-        self.currentAttributes = attr
-
-        self.screen.attrset(self.currentAttributes)
-
-    def restoreAttributes(self):
-        self.screen.attrset(self.currentAttributes)
+        return attr
 
     def addstr(self, y, x, text, attr=None):
         if attr is None:
             attr = self.cursesAPI.colorPair(self.DEFAULT_COLOR_INDEX)
+        elif attr == self.CURRENT_COLORS:
+            attr = self.currentAttributes
 
         self.screen.addstr(y, x, text, attr)

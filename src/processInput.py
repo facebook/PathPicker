@@ -23,8 +23,7 @@ from screenFlags import ScreenFlags
 def getLineObjs(flags):
     inputLines = sys.stdin.readlines()
     return getLineObjsFromLines(inputLines,
-                                validateFileExists=False if
-                                flags.getDisableFileChecks() else True)
+                                validateFileExists=not flags.getDisableFileChecks())
 
 
 def getLineObjsFromLines(inputLines, validateFileExists=True):
@@ -69,7 +68,6 @@ if __name__ == '__main__':
             if os.path.isfile(filePath):
                 os.remove(filePath)
         print('Done! Removed %d files ' % len(stateFiles.getAllStateFiles()))
-        sys.exit(0)
 
     if sys.stdin.isatty():
         if os.path.isfile(stateFiles.getPickleFilePath()):
@@ -77,7 +75,6 @@ if __name__ == '__main__':
         else:
             usage()
         # let the next stage parse the old version
-        sys.exit(0)
     else:
         # delete the old selection
         selectionPath = stateFiles.getSelectionFilePath()
@@ -85,4 +82,5 @@ if __name__ == '__main__':
             os.remove(selectionPath)
 
         doProgram(flags)
-        sys.exit(0)
+
+    sys.exit(0)
