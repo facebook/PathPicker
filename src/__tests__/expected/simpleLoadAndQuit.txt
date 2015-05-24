@@ -27,4 +27,4 @@
 
 
 ________________________________________________________________________________
-[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [c] command mod
+[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick selec

@@ -114,9 +114,9 @@ class HelperChrome(object):
         borderY = maxy - 2
         # first output text since we might throw an exception during border
         usageStr = {
-                    SELECT_MODE: SHORT_NAV_USAGE,
-                    X_MODE: SHORT_NAV_USAGE,
-                    COMMAND_MODE: SHORT_COMMAND_USAGE
+            SELECT_MODE: SHORT_NAV_USAGE,
+            X_MODE: SHORT_NAV_USAGE,
+            COMMAND_MODE: SHORT_COMMAND_USAGE
         }[self.mode]
         borderStr = '_' * (maxx - self.getMinX() - 0)
         self.printer.addstr(borderY, self.getMinX(), borderStr)
@@ -253,7 +253,8 @@ class Controller(object):
 
     def getChromeBoundaries(self):
         (maxy, maxx) = self.stdscr.getmaxyx()
-        minx = CHROME_MIN_X if self.scrollBar.getIsActivated() or self.mode == X_MODE else 0
+        minx = CHROME_MIN_X if self.scrollBar.getIsActivated(
+        ) or self.mode == X_MODE else 0
         maxy = self.helperChrome.reduceMaxY(maxy)
         maxx = self.helperChrome.reduceMaxX(maxx)
         # format of (MINX, MINY, MAXX, MAXY)
@@ -502,7 +503,6 @@ class Controller(object):
         self.dirty = False
         self.dirtyIndexes = []
 
-
     def dirtyLine(self, index):
         self.dirtyIndexes.append(index)
 
@@ -584,12 +584,14 @@ class Controller(object):
         if self.mode == X_MODE:
             (maxy, _) = self.scrollBar.screenControl.getScreenDimensions()
             topY = maxy - 2
-            minY = self.scrollBar.getMinY() - (1 if not self.scrollBar.activated else 0)
+            minY = self.scrollBar.getMinY() - \
+                (1 if not self.scrollBar.activated else 0)
             for i in range(minY, topY + 1):
                 self.stdscr.addstr(i, 1, lbls[i - minY])
 
     def selectXMode(self, key):
-        lineObj = self.lineObjs[lbls.index(key) + int(self.scrollBar.activated) - self.scrollOffset]
+        lineObj = self.lineObjs[
+            lbls.index(key) + int(self.scrollBar.activated) - self.scrollOffset]
         if type(lineObj) == format.LineMatch:
             lineMatchIndex = self.lineMatches.index(lineObj)
             self.hoverIndex = lineMatchIndex
