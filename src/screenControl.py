@@ -541,12 +541,12 @@ class Controller(object):
     def printProvidedCommandWarning(self, yStart):
         self.colorPrinter.setAttributes(
             curses.COLOR_WHITE, curses.COLOR_RED, 0)
-        self.stdscr.addstr(yStart, 0, 'Oh no! You already provided a command so ' +
+        self.colorPrinter.addstr(yStart, 0, 'Oh no! You already provided a command so ' +
                            'you cannot enter command mode.')
-        self.stdscr.attrset(0)
-        self.stdscr.addstr(
+
+        self.colorPrinter.addstr(
             yStart + 1, 0, 'The command you provided was "%s" ' % self.flags.getPresetCommand())
-        self.stdscr.addstr(
+        self.colorPrinter.addstr(
             yStart + 2, 0, 'Press any key to go back to selecting files.')
 
     def printChrome(self):
