@@ -42,6 +42,7 @@ screenTestCases = [{
     'input': 'absoluteGitDiff.txt',
     # the last key "a" is so we quit from command mode
     # after seeing the warning
+    'withAttributes': True,
     'inputs': ['f', 'c', 'a'],
     'pastScreen': 1,
     'args': ["-c 'git add'"]
