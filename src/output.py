@@ -167,7 +167,11 @@ def clearFile():
 
 
 def appendAliasExpansion():
-    appendToFile('shopt -s expand_aliases')
+    appendToFile("""
+if type shopt > /dev/null; then
+  shopt -s expand_aliases
+fi
+""")
     for sourceFile in FILES_TO_SOURCE:
         appendToFile('if [ -f %s ]; then' % sourceFile)
         appendToFile('  source %s' % sourceFile)
