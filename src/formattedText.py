@@ -104,7 +104,7 @@ class FormattedText(object):
             else:
                 # snip from the middle
                 # be careful of integer rounding
-                skipStartingAt = (len(self.plainText) - amountToSkip) / 2
+                skipStartingAt = int((len(self.plainText) - amountToSkip) / 2)
                 skipEndingAt = skipStartingAt + amountToSkip
         else:
             # no truncation
