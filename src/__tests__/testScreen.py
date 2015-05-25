@@ -111,7 +111,25 @@ screenTestCases = [{
     'screenConfig': {
         'maxX': 60,
         'maxY': 20
-    },
+    }
+}, {
+    'name': 'longFileTruncationOddSize',
+    'input': 'superLongFileNames.txt',
+    'withAttributes': True,
+    'inputs': ['DOWN', 'f'],
+    'screenConfig': {
+        'maxX': 61,
+        'maxY': 20
+    }
+}, {
+    'name': 'longFileTruncationTinyScreen',
+    'input': 'superLongFileNames.txt',
+    'withAttributes': True,
+    'inputs': ['DOWN', 'f'],
+    'screenConfig': {
+        'maxX': 4,
+        'maxY': 20
+    }
 }]
 
 
