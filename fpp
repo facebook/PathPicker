@@ -30,7 +30,7 @@ function doProgram {
 
   $PYTHONCMD "$BASEDIR/src/choose.py" "$@" < /dev/tty
   # execute the output bash script
-  sh ~/.fpp/.fpp.sh < /dev/tty
+  $SHELL -i ~/.fpp/.fpp.sh < /dev/tty
 }
 
 # we need to handle the --help option outside the python

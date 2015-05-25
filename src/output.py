@@ -29,12 +29,6 @@ versions which cannot be resolved.
 
 CONTINUE_WARNING = 'Are you sure you want to continue? Ctrl-C to quit'
 
-FILES_TO_SOURCE = [
-    '~/.zshrc',
-    '~/.bashrc',
-    '~/.bash_profile',
-    '~/.bash_aliases'
-]
 
 # The two main entry points into this module:
 #
@@ -167,15 +161,17 @@ def clearFile():
 
 
 def appendAliasExpansion():
+    # zsh by default expands aliases when running in interactive mode
+    # (see ../fpp). bash (on this author's Yosemite box) seems to have
+    # alias expansion off when run with -i present and -c absent,
+    # despite documentation hinting otherwise.
+    #
+    # so here we must ask bash to turn on alias expansion.
     appendToFile("""
 if type shopt > /dev/null; then
   shopt -s expand_aliases
 fi
 """)
-    for sourceFile in FILES_TO_SOURCE:
-        appendToFile('if [ -f %s ]; then' % sourceFile)
-        appendToFile('  source %s' % sourceFile)
-        appendToFile('fi')
 
 
 def appendFriendlyCommand(command):
