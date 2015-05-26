@@ -68,6 +68,7 @@ if __name__ == '__main__':
             if os.path.isfile(filePath):
                 os.remove(filePath)
         print('Done! Removed %d files ' % len(stateFiles.getAllStateFiles()))
+        sys.exit(0)
 
     if sys.stdin.isatty():
         if os.path.isfile(stateFiles.getPickleFilePath()):
