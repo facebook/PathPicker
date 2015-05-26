@@ -8,7 +8,7 @@
 import re
 import curses
 from collections import namedtuple
-
+from colorPrinter import ColorPrinter
 
 class FormattedText(object):
 
@@ -81,7 +81,8 @@ class FormattedText(object):
             if index % 2 == 1:
                 # text
                 toPrint = val[0:maxLen - printedSoFar]
-                printer.screen.addstr(y, x + printedSoFar, toPrint)
+                printer.addstr(y, x + printedSoFar, toPrint,
+                               ColorPrinter.CURRENT_COLORS)
                 printedSoFar += len(toPrint)
             else:
                 # formatting

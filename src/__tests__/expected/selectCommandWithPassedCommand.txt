@@ -1,30 +1,60 @@
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 Oh no! You already provided a command so you cannot enter command mode.
+GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG         
 The command you provided was " 'git add'" 
+                                                                                
 Press any key to go back to selecting files.
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 
+                                                                                
 ________________________________________________________________________________
+                                                                                
 [f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [c] command mod
+                                                                                
