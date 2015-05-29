@@ -82,7 +82,6 @@ class LineMatch(object):
 
         self.selected = False
         self.hovered = False
-        self.isTruncated = False
 
         # precalculate the pre, post, and match strings
         (self.beforeText, unused) = self.formattedLine.breakat(self.start)
@@ -149,7 +148,7 @@ class LineMatch(object):
                 + '||' + self.getAfter() + '||' +
                 str(self.num))
 
-    def updateDecoratedMatch(self, maxLen=None):
+    def updateDecoratedMatch(self):
         '''Update the cached decorated match formatted string, and
         dirty the line, if needed'''
         if self.hovered and self.selected:
@@ -168,27 +167,16 @@ class LineMatch(object):
         if self.controller:
             self.controller.dirtyLine(self.index)
 
-        plainText = decoratorText + self.getMatch()
-        if maxLen and len(plainText) > maxLen:
-            # alright, we need to chop the ends off of our
-            # decorated match and glue them together with our
-            # truncation decorator
-            spaceAllowed = maxLen - len(self.TRUNCATE_DECORATOR)
-            midPoint = int(spaceAllowed / 2)
-            beginMatch = plainText[0:midPoint]
-            endMatch = plainText[-midPoint:len(plainText)]
-            plainText = beginMatch + self.TRUNCATE_DECORATOR + endMatch
-
         self.decoratedMatch = FormattedText(
             FormattedText.getSequenceForAttributes(*attributes) +
-            plainText)
+            decoratorText + self.getMatch())
 
     def getDecorator(self):
         if self.selected:
             return self.ARROW_DECORATOR
         return ''
 
-    def printUpTo(self, text, printer, y, x, maxLen):
+    def printUpTo(self, text, printer, y, x, maxLen, truncate=False):
         '''Attempt to print maxLen characters, returning a tuple
         (x, maxLen) updated with the actual number of characters
         printed'''
@@ -196,7 +184,13 @@ class LineMatch(object):
             return (x, maxLen)
 
         maxPrintable = min(len(str(text)), maxLen)
-        text.printText(y, x, printer, maxPrintable)
+
+        if truncate:
+            text.truncateAndPrintText(y, x, printer, maxPrintable,
+                                      self.TRUNCATE_DECORATOR)
+        else:
+            text.printText(y, x, printer, maxPrintable)
+
         return (x + maxPrintable, maxLen - maxPrintable)
 
     def output(self, printer):
@@ -207,33 +201,11 @@ class LineMatch(object):
             # wont be displayed!
             return
 
-        # we dont care about the after text, but we should be able to see
-        # all of the decorated match (which means we need to see up to
-        # the end of the decoratedMatch, aka include beforeText)
-        importantTextLength = len(str(self.beforeText)) + \
-            len(str(self.decoratedMatch))
-        spaceForPrinting = maxx - minx
-        if importantTextLength > spaceForPrinting:
-            # hrm, we need to update our decorated match to show
-            # a truncated version since right now we will print off
-            # the screen. lets also dump the beforeText for more
-            # space
-            self.updateDecoratedMatch(maxLen=spaceForPrinting)
-            self.isTruncated = True
-        else:
-            # first check what our expanded size would be:
-            expandedSize = len(str(self.beforeText)) + \
-                len(self.getMatch())
-            if expandedSize < spaceForPrinting and self.isTruncated:
-                # if the screen gets resized, we might be truncated
-                # from a previous render but **now** we have room.
-                # in that case lets expand back out
-                self.updateDecoratedMatch()
-                self.isTruncated = False
-
         maxLen = maxx - minx
         soFar = (minx, maxLen)
 
         soFar = self.printUpTo(self.beforeText, printer, y, *soFar)
-        soFar = self.printUpTo(self.decoratedMatch, printer, y, *soFar)
+        # print and truncate the match if needed.
+        soFar = self.printUpTo(self.decoratedMatch, printer, y, *soFar,
+                               truncate=True)
         soFar = self.printUpTo(self.afterText, printer, y, *soFar)

@@ -88,6 +88,72 @@ class FormattedText(object):
                 # formatting
                 printer.setAttributes(*self.parseFormatting(val))
 
+    def truncateAndPrintText(self, y, x, printer, maxLen, truncation):
+        """Print out the string. If it's too long, truncate at len/2
+        so that it fits. If we cannot even print the truncation string,
+        print as much as we can from the end."""
+        excessTextLength = len(self.plainText) - maxLen
+
+        if excessTextLength > 0:
+            amountToSkip = excessTextLength + len(truncation)
+
+            if amountToSkip >= len(self.plainText):
+                # crap, we can't even print the truncation.
+                # print what we can from the very end and call it a day
+                skipStartingAt = -1
+                skipEndingAt = excessTextLength
+            else:
+                # snip from the middle
+                # be careful of integer rounding
+                skipStartingAt = int((len(self.plainText) - amountToSkip) / 2)
+                skipEndingAt = skipStartingAt + amountToSkip
+        else:
+            # no truncation
+            self.printText(y, x, printer, maxLen)
+            return
+
+        printedSoFar = 0
+        xIndex = x
+
+        for index, val in enumerate(self.segments):
+            if index % 2 == 1:
+                # there are 3 options possible for a segment.
+                # VISIBLE: entire segment is before skipStart or after skipEnd
+                # PARTIALLY VISBILE: segment straddles skipStart or skipEnd
+                # INVISIBLE: completely within the skipStart..skipEnd
+
+                segBegin = printedSoFar
+                segEnd = printedSoFar + len(val)
+
+                printedSoFar += len(val)
+
+                if segEnd < skipStartingAt or segBegin > skipEndingAt:
+                    # completely visible
+                    printer.screen.addstr(y, xIndex, val)
+                    xIndex += len(val)
+                elif segBegin > skipStartingAt and segEnd < skipEndingAt:
+                    # completely invisible
+                    pass
+                else:
+                    # partially visible. check each side; note that the same
+                    # segment might straddle both before and after:
+                    if segBegin <= skipStartingAt and skipStartingAt <= segEnd:
+                        toPrint = val[0:skipStartingAt - segBegin]
+                        printer.screen.addstr(y, xIndex, toPrint)
+                        xIndex += len(toPrint)
+                        # print the truncation text now as well:
+                        printer.screen.addstr(y, xIndex, truncation)
+                        xIndex += len(truncation)
+
+                    if segBegin <= skipEndingAt and skipEndingAt <= segEnd:
+                        toPrint = val[skipEndingAt - segEnd:]
+                        printer.screen.addstr(y, xIndex, toPrint)
+                        xIndex += len(toPrint)
+
+            else:
+                # formatting
+                printer.setAttributes(*self.parseFormatting(val))
+
     def findSegmentPlace(self, toGo):
         index = 1
 

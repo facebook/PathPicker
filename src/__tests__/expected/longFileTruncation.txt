@@ -1,7 +1,7 @@
-./hadoop-mapreduce-project/|...|eNamereallylongfileName.txt
-___________________________________________________________ 
-|===>./hadoop-mapreduce-pro|...|t/some/deeper/dir/source.py
-GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG 
+./hadoop-mapreduce-project/|...|leNamereallylongfileName.txt
+____________________________________________________________
+|===>./hadoop-mapreduce-pro|...|nt/some/deeper/dir/source.py
+GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
 
                                                             
 
