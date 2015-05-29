@@ -98,6 +98,8 @@ def getEditFileCommand(filePath, lineNum):
         return '\'%s\' +%d' % (filePath, lineNum)
     elif editor in ['joe', 'emacs'] and lineNum != 0:
         return '+%d \'%s\'' % (lineNum, filePath)
+    elif 'subl' in editor and lineNum != 0:
+        return '\'%s:%d\'' % (filePath, lineNum)
     else:
         return "'%s'" % filePath
 
