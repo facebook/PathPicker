@@ -5,6 +5,7 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
+from __future__ import print_function
 import re
 import os
 import subprocess
@@ -14,6 +15,8 @@ from repos import REPOS
 
 MASTER_REGEX = re.compile(
     '(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
+MASTER_REGEX_MORE_EXTENSIONS = re.compile(
+    '(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9-]{1,30})[:-]{0,1}(\d+)?')
 HOMEDIR_REGEX = re.compile(
     '(~\/([a-z.A-Z0-9\-_]+\/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
 OTHER_BGS_RESULT_REGEX = re.compile(
@@ -83,6 +86,9 @@ REGEX_WATERFALL = [{
     # of a regex.
     'regex': OTHER_BGS_RESULT_REGEX,
 }, {
+    'regex': MASTER_REGEX_MORE_EXTENSIONS,
+    'onlyWithFileInspection': True,
+}, {
     # We would overmatch on wayyyyy too many things if we
     # allowed spaces everywhere, but with filesystem validation
     # and the final fallback we can include them.
@@ -146,19 +152,25 @@ PREPEND_PATH = getRepoPath().strip() + '/'
 # if it matches
 def matchLine(line, validateFileExists=False):
     if not validateFileExists:
-        return matchLineImpl(line)
-    result = matchLineImpl(line, withFileInspection=True)
-    if not result:
-        return result
+        results = matchLineImpl(line)
+        return results[0] if results else None
+    results = matchLineImpl(line, withFileInspection=True)
+    if not results:
+        return None
     # ok now we are going to check if this result is an actual
     # file...
-    (filePath, _, _) = result
-    if not os.path.isfile(prependDir(filePath, withFileInspection=True)):
-        return None
-    return result
+    for result in results:
+        (filePath, _, _) = result
+        if os.path.isfile(prependDir(filePath, withFileInspection=True)):
+            return result
+    return None
 
 
 def matchLineImpl(line, withFileInspection=False):
+    # ok new behavior -- we will actually collect **ALL** results
+    # of the regexes since filesystem validation might filter some
+    # of the earlier ones out (particulary those with hyphens)
+    results = []
     for regexConfig in REGEX_WATERFALL:
         regex = regexConfig['regex']
         if regexConfig.get('onlyWithFileInspection') and not withFileInspection:
@@ -171,19 +183,22 @@ def matchLineImpl(line, withFileInspection=False):
             regexConfig.get('noNum') else \
             lambda x: unpackMatches(x, numIndex=regexConfig.get('numIndex', 2))
         if not regexConfig.get('preferred_regex'):
-            return unpackFunc(matches)
+            results.append(unpackFunc(matches))
+            continue
 
         # check the preferred_regex
         preferred_regex = regexConfig.get('preferred_regex')
         other_matches = preferred_regex.search(line)
         if not other_matches:
-            return unpackFunc(matches)
+            results.append(unpackFunc(matches))
+            continue
         if other_matches.start() < matches.start():
             # we found a better result earlier, so return that
-            return unpackFunc(other_matches)
-        return unpackFunc(matches)
+            results.append(unpackFunc(other_matches))
+            continue
+        results.append(unpackFunc(matches))
     # nothing matched at all
-    return None
+    return results
 
 
 def prependDir(file, withFileInspection=False):
