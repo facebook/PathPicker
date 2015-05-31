@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
     if sys.stdin.isatty():
         if os.path.isfile(stateFiles.getPickleFilePath()):
-            print('Using old result...')
+            print('Using previous input piped to fpp...')
         else:
             usage()
         # let the next stage parse the old version
