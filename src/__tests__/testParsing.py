@@ -227,6 +227,26 @@ fileTestCases = [{
     'match': True,
     'num': 42,
     'file': './inputs/NSArray+Utils.h',
+}, {
+    # and our hyphen extension file
+    'input': './inputs/blogredesign.sublime-workspace:42',
+    'validateFileExists': True,
+    'match': True,
+    'num': 42,
+    'file': './inputs/blogredesign.sublime-workspace',
+}, {
+    # and our hyphen extension file with no dir
+    'input': 'inputs/blogredesign.sublime-workspace:42',
+    'validateFileExists': True,
+    'match': True,
+    'num': 42,
+    'file': 'inputs/blogredesign.sublime-workspace',
+}, {
+    # and our hyphen extension file with no dir or number
+    'input': 'inputs/blogredesign.sublime-workspace',
+    'validateFileExists': True,
+    'match': True,
+    'file': 'inputs/blogredesign.sublime-workspace',
 }]
 
 # local test cases get added as well
