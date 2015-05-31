@@ -10,6 +10,7 @@ import curses
 from collections import namedtuple
 from colorPrinter import ColorPrinter
 
+
 class FormattedText(object):
 
     """A piece of ANSI escape formatted text which responds
