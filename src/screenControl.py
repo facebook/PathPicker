@@ -65,10 +65,11 @@ class HelperChrome(object):
                 pass
 
     def toggleCursor(self):
-        if self.mode == SELECT_MODE:
-            curses.curs_set(INVISIBLE_CURSOR)
-        else:
+        # only include cursor when in command mode
+        if self.mode == COMMAND_MODE:
             curses.curs_set(BLOCK_CURSOR)
+        else:
+            curses.curs_set(INVISIBLE_CURSOR)
 
     def reduceMaxY(self, maxy):
         if self.getIsSidebarMode():
