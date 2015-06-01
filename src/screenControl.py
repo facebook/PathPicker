@@ -14,6 +14,7 @@ import processInput
 import usageStrings
 import output
 import logger
+import format
 from charCodeMapping import CODE_TO_CHAR
 from colorPrinter import ColorPrinter
 
@@ -30,8 +31,11 @@ CHROME_MIN_Y = 0
 
 SELECT_MODE = 'SELECT'
 COMMAND_MODE = 'COMMAND_MODE'
+X_MODE = 'X_MODE'
 
-SHORT_NAV_USAGE = '[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [c] command mode'
+lbls = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'"
+
+SHORT_NAV_USAGE = '[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick select mode, [c] command mode'
 SHORT_COMMAND_USAGE = 'command examples: | git add | git checkout HEAD~1 -- | mv $F ../here/ |'
 SHORT_COMMAND_PROMPT = 'Type a command below! Files will be appended or replace $F'
 SHORT_COMMAND_PROMPT2 = 'Enter a blank line to go back to the selection process'
@@ -109,7 +113,11 @@ class HelperChrome(object):
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         borderY = maxy - 2
         # first output text since we might throw an exception during border
-        usageStr = SHORT_NAV_USAGE if self.mode == SELECT_MODE else SHORT_COMMAND_USAGE
+        usageStr = {
+            SELECT_MODE: SHORT_NAV_USAGE,
+            X_MODE: SHORT_NAV_USAGE,
+            COMMAND_MODE: SHORT_COMMAND_USAGE
+        }[self.mode]
         borderStr = '_' * (maxx - self.getMinX() - 0)
         self.printer.addstr(borderY, self.getMinX(), borderStr)
         self.printer.addstr(borderY + 1, self.getMinX(), usageStr)
@@ -245,7 +253,8 @@ class Controller(object):
 
     def getChromeBoundaries(self):
         (maxy, maxx) = self.stdscr.getmaxyx()
-        minx = CHROME_MIN_X if self.scrollBar.getIsActivated() else 0
+        minx = CHROME_MIN_X if self.scrollBar.getIsActivated(
+        ) or self.mode == X_MODE else 0
         maxy = self.helperChrome.reduceMaxY(maxy)
         maxx = self.helperChrome.reduceMaxX(maxx)
         # format of (MINX, MINY, MAXX, MAXY)
@@ -348,6 +357,8 @@ class Controller(object):
             self.moveIndex(-1)
         elif key == 'DOWN' or key == 'j':
             self.moveIndex(1)
+        elif key == 'x':
+            self.toggleXMode()
         elif key == 'c':
             self.beginEnterCommand()
         elif key == ' ' or key == 'PAGE_DOWN':
@@ -356,11 +367,11 @@ class Controller(object):
             self.pageUp()
         elif key == 'g':
             self.jumpToIndex(0)
-        elif key == 'G':
+        elif key == 'G' and not self.mode == X_MODE:
             self.jumpToIndex(self.numMatches - 1)
         elif key == 'f':
             self.toggleSelect()
-        elif key == 'A':
+        elif key == 'A' and not self.mode == X_MODE:
             self.toggleSelectAll()
         elif key == 'ENTER':
             self.onEnter()
@@ -370,6 +381,8 @@ class Controller(object):
             # before exiting the program
             self.getFilesToUse()
             self.cursesAPI.exit()
+        elif self.mode == X_MODE and key in lbls:
+            self.selectXMode(key)
         pass
 
     def getFilesToUse(self):
@@ -529,6 +542,7 @@ class Controller(object):
         self.stdscr.erase()
         self.printLines()
         self.printScroll()
+        self.printXMode()
         self.printChrome()
 
     def printLines(self):
@@ -562,3 +576,23 @@ class Controller(object):
     def getKey(self):
         charCode = self.stdscr.getch()
         return CODE_TO_CHAR.get(charCode, '')
+
+    def toggleXMode(self):
+        self.mode = X_MODE if self.mode != X_MODE else SELECT_MODE
+        self.printAll()
+
+    def printXMode(self):
+        if self.mode == X_MODE:
+            (maxy, _) = self.scrollBar.screenControl.getScreenDimensions()
+            topY = maxy - 2
+            minY = self.scrollBar.getMinY() - 1
+            for i in range(minY, topY + 1):
+                self.stdscr.addstr(i, 1, lbls[i - minY])
+
+    def selectXMode(self, key):
+        lineObj = self.lineObjs[
+            lbls.index(key) - self.scrollOffset]
+        if type(lineObj) == format.LineMatch:
+            lineMatchIndex = self.lineMatches.index(lineObj)
+            self.hoverIndex = lineMatchIndex
+            self.toggleSelect()

@@ -56,5 +56,5 @@
                                                                                 
  .  ___________________________________________________________________________
                                                                                 
-=== [f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [c] comman
+=== [f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick 
                                                                                 
