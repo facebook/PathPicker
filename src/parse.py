@@ -60,7 +60,7 @@ MASTER_REGEX_WITH_SPACES = re.compile(''.join((
     # for retina files.
     '([@a-zA-Z0-9\-_+.]|\s[@a-zA-Z0-9\-_+.])+',
     # extensions dont allow spaces
-    '\.[a-zA-Z0-9]{1,10}'
+    '\.[a-zA-Z0-9-]{1,30}'
     # end capture
     ')',
     # optionally capture the line number

@@ -247,6 +247,26 @@ fileTestCases = [{
     'validateFileExists': True,
     'match': True,
     'file': 'inputs/blogredesign.sublime-workspace',
+}, {
+    # and a huge combo of stuff
+    'input': './inputs/annoying-hyphen-dir/Package Control.system-bundle',
+    'validateFileExists': True,
+    'match': True,
+    'file': './inputs/annoying-hyphen-dir/Package Control.system-bundle',
+}, {
+    # and a huge combo of stuff with no prepend
+    'input': 'inputs/annoying-hyphen-dir/Package Control.system-bundle',
+    'validateFileExists': True,
+    'match': True,
+    'disableFuzzTest': True,
+    'file': 'inputs/annoying-hyphen-dir/Package Control.system-bundle',
+}, {
+    # and a huge combo of stuff with line
+    'input': './inputs/annoying-hyphen-dir/Package Control.system-bundle:42',
+    'validateFileExists': True,
+    'match': True,
+    'num': 42,
+    'file': './inputs/annoying-hyphen-dir/Package Control.system-bundle',
 }]
 
 # local test cases get added as well
@@ -298,6 +318,8 @@ class TestParseFunction(unittest.TestCase):
                   ':0:7: var AdsErrorCodeStore', ' jkk asdad']
 
         for testCase in fileTestCases:
+            if testCase.get('disableFuzzTest'):
+                continue
             for before in befores:
                 for after in afters:
                     testInput = '%s%s%s' % (before, testCase['input'], after)
