@@ -76,5 +76,5 @@
                                                                                                                                                                                                         
 ________________________________________________________________________________________________________________________________________________________________________________________________________
                                                                                                                                                                                                         
-[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [c] command mode
+[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick select mode, [c] command mode
                                                                                                                                                                                                         
