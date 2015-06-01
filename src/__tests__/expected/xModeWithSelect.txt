@@ -1,0 +1,60 @@
+A README.md                      |  8 ++++-
+      BBBBBBBBB                                                                 
+B fpp                            |  6 ++--
+                                                                                
+C src/__tests__/__init__.py      |  0
+      _________________________                                                 
+D src/__tests__/cursesForTest.py | 45 ++++++++++++++++++++++++++++
+      ______________________________                                            
+E |===>src/__tests__/initTest.py      | 28 ++++++++++++++++++
+      GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG                                            
+F src/__tests__/screenForTest.py | 67 ++++++++++++++++++++++++++++++++++++++
+      ______________________________                                            
+G src/charCodeMapping.py         | 20 +++++++++++++
+      ______________________                                                    
+H |===>src/choose.py                  | 15 ++++++++--
+      GGGGGGGGGGGGGGGGGG                                                        
+I src/colorPrinter.py            | 21 ++++++++-----
+      ___________________                                                       
+J src/cursesAPI.py               | 40 +++++++++++++++++++++++++
+      ________________                                                          
+K src/format.py                  |  4 +--
+      _____________                                                             
+L src/processInput.py            |  7 +++++
+      ___________________                                                       
+M src/screenControl.py           | 28 +++++++-----------
+      ____________________                                                      
+N src/screenFlags.py             | 34 +++++++++++++++++++++
+      __________________                                                        
+O 14 files changed, 290 insertions(+), 33 deletions(-)
+                                                                                
+P
+                                                                                
+Q
+                                                                                
+R
+                                                                                
+S
+                                                                                
+T
+                                                                                
+U
+                                                                                
+V
+                                                                                
+W
+                                                                                
+X
+                                                                                
+Y
+                                                                                
+Z
+                                                                                
+1
+                                                                                
+2
+                                                                                
+3___________________________________________________________________________
+                                                                                
+[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick 
+                                                                                

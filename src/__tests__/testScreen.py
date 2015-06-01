@@ -113,6 +113,11 @@ screenTestCases = [{
         'maxX': 60,
         'maxY': 20
     },
+}, {
+    'name': 'xModeWithSelect',
+    'input': 'gitDiff.txt',
+    'withAttributes': True,
+    'inputs': ['x', 'E', 'H'],
 }]
 
 
