@@ -12,27 +12,27 @@
  _______________________________________________         GGGGGGG                                                                                                                                         
  src/__tests__/expected/selectDownSelectInverse.txt |  4 +-|    * [b] page up
  __________________________________________________      GR                                                                                                                                              
- .../expected/simpleSelectWithAttributes.txt        | 60 ++++++++++++++|
+ .../expected/simpleSelectWithAttributes.txt        | 60 ++++++++++++++|    * [x] quick select mode
  ___________________________________________             GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|Once you have your files selected, you can
+ src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|
  _______________________________________________         GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/screenForTest.py                     | 40 +++++++--|either open them in your favorite
+ src/__tests__/screenForTest.py                     | 40 +++++++--|Once you have your files selected, you can
  ______________________________                          GGGGGGGRR                                                                                                                                       
- src/__tests__/screenTestRunner.py                  | 17 ++--|text editor or execute commands with
+ src/__tests__/screenTestRunner.py                  | 17 ++--|either open them in your favorite
  _________________________________                       GGRR                                                                                                                                            
- src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|them via command mode:
+ src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|text editor or execute commands with
  ___________________________                             GGGGGGGGGGGGGGGGGGRRRR                                                                                                                          
- src/format.py                                      | 29 ++++++-|
+ src/format.py                                      | 29 ++++++-|them via command mode:
  _____________                                           GGGGGGR                                                                                                                                         
- src/formattedText.py                               |  3 +|    * [<Enter>] open all selected files
+ src/formattedText.py                               |  3 +|
  ____________________                                    G                                                                                                                                               
- src/processInput.py                                | 10 +++|        (or file under cursor if none selected)
+ src/processInput.py                                | 10 +++|    * [<Enter>] open all selected files
  ___________________                                     GGG                                                                                                                                             
- src/screenControl.py                               | 23 ++++++|        in $EDITOR
+ src/screenControl.py                               | 23 ++++++|        (or file under cursor if none selected)
  ____________________                                    GGGGGG                                                                                                                                          
- src/screenFlags.py                                 | 18 +++-|    * [c] enter command mode
+ src/screenFlags.py                                 | 18 +++-|        in $EDITOR
  __________________                                      GGGR                                                                                                                                            
- src/stateFiles.py                                  | 11 +++|
+ src/stateFiles.py                                  | 11 +++|    * [c] enter command mode
  _________________                                       GGG                                                                                                                                             
  src/version.py                                     | 15 ++++|
  ______________                                          GGGG                                                                                                                                            
@@ -92,27 +92,27 @@
  _______________________________________________         GGGGGGG                                                                                                                                         
  src/__tests__/expected/selectDownSelectInverse.txt |  4 +-|    * [b] page up
  __________________________________________________      GR                                                                                                                                              
- .../expected/simpleSelectWithAttributes.txt        | 60 ++++++++++++++|
+ .../expected/simpleSelectWithAttributes.txt        | 60 ++++++++++++++|    * [x] quick select mode
  ___________________________________________             GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|Once you have your files selected, you can
+ src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|
  _______________________________________________         GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/screenForTest.py                     | 40 +++++++--|either open them in your favorite
+ src/__tests__/screenForTest.py                     | 40 +++++++--|Once you have your files selected, you can
  ______________________________                          GGGGGGGRR                                                                                                                                       
- src/__tests__/screenTestRunner.py                  | 17 ++--|text editor or execute commands with
+ src/__tests__/screenTestRunner.py                  | 17 ++--|either open them in your favorite
  _________________________________                       GGRR                                                                                                                                            
- src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|them via command mode:
+ src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|text editor or execute commands with
  ___________________________                             GGGGGGGGGGGGGGGGGGRRRR                                                                                                                          
- src/format.py                                      | 29 ++++++-|
+ src/format.py                                      | 29 ++++++-|them via command mode:
  _____________                                           GGGGGGR                                                                                                                                         
- src/formattedText.py                               |  3 +|    * [<Enter>] open all selected files
+ src/formattedText.py                               |  3 +|
  ____________________                                    G                                                                                                                                               
- src/processInput.py                                | 10 +++|        (or file under cursor if none selected)
+ src/processInput.py                                | 10 +++|    * [<Enter>] open all selected files
  ___________________                                     GGG                                                                                                                                             
- src/screenControl.py                               | 23 ++++++|        in $EDITOR
+ src/screenControl.py                               | 23 ++++++|        (or file under cursor if none selected)
  ____________________                                    GGGGGG                                                                                                                                          
- src/screenFlags.py                                 | 18 +++-|    * [c] enter command mode
+ src/screenFlags.py                                 | 18 +++-|        in $EDITOR
  __________________                                      GGGR                                                                                                                                            
- src/stateFiles.py                                  | 11 +++|
+ src/stateFiles.py                                  | 11 +++|    * [c] enter command mode
  _________________                                       GGG                                                                                                                                             
  src/version.py                                     | 15 ++++|
  ______________                                          GGGG                                                                                                                                            
@@ -172,27 +172,27 @@
  _______________________________________________         GGGGGGG                                                                                                                                         
  src/__tests__/expected/selectDownSelectInverse.txt |  4 +-|    * [b] page up
  __________________________________________________      GR                                                                                                                                              
- .../expected/simpleSelectWithAttributes.txt        | 60 ++++++++++++++|
+ .../expected/simpleSelectWithAttributes.txt        | 60 ++++++++++++++|    * [x] quick select mode
  ___________________________________________             GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|Once you have your files selected, you can
+ src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|
  _______________________________________________         GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/screenForTest.py                     | 40 +++++++--|either open them in your favorite
+ src/__tests__/screenForTest.py                     | 40 +++++++--|Once you have your files selected, you can
  ______________________________                          GGGGGGGRR                                                                                                                                       
- src/__tests__/screenTestRunner.py                  | 17 ++--|text editor or execute commands with
+ src/__tests__/screenTestRunner.py                  | 17 ++--|either open them in your favorite
  _________________________________                       GGRR                                                                                                                                            
- src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|them via command mode:
+ src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|text editor or execute commands with
  ___________________________                             GGGGGGGGGGGGGGGGGGRRRR                                                                                                                          
- src/format.py                                      | 29 ++++++-|
+ src/format.py                                      | 29 ++++++-|them via command mode:
  _____________                                           GGGGGGR                                                                                                                                         
- src/formattedText.py                               |  3 +|    * [<Enter>] open all selected files
+ src/formattedText.py                               |  3 +|
  ____________________                                    G                                                                                                                                               
- src/processInput.py                                | 10 +++|        (or file under cursor if none selected)
+ src/processInput.py                                | 10 +++|    * [<Enter>] open all selected files
  ___________________                                     GGG                                                                                                                                             
- src/screenControl.py                               | 23 ++++++|        in $EDITOR
+ src/screenControl.py                               | 23 ++++++|        (or file under cursor if none selected)
  ____________________                                    GGGGGG                                                                                                                                          
- src/screenFlags.py                                 | 18 +++-|    * [c] enter command mode
+ src/screenFlags.py                                 | 18 +++-|        in $EDITOR
  __________________                                      GGGR                                                                                                                                            
- src/stateFiles.py                                  | 11 +++|
+ src/stateFiles.py                                  | 11 +++|    * [c] enter command mode
  _________________                                       GGG                                                                                                                                             
  src/version.py                                     | 15 ++++|
  ______________                                          GGGG                                                                                                                                            
@@ -252,27 +252,27 @@
  _______________________________________________         GGGGGGG                                                                                                                                         
  src/__tests__/expected/selectDownSelectInverse.txt |  4 +-|    * [b] page up
  __________________________________________________      GR                                                                                                                                              
- .../expected/simpleSelectWithAttributes.txt        | 60 ++++++++++++++|
+ .../expected/simpleSelectWithAttributes.txt        | 60 ++++++++++++++|    * [x] quick select mode
  ___________________________________________             GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|Once you have your files selected, you can
+ src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|
  _______________________________________________         GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/screenForTest.py                     | 40 +++++++--|either open them in your favorite
+ src/__tests__/screenForTest.py                     | 40 +++++++--|Once you have your files selected, you can
  ______________________________                          GGGGGGGRR                                                                                                                                       
- src/__tests__/screenTestRunner.py                  | 17 ++--|text editor or execute commands with
+ src/__tests__/screenTestRunner.py                  | 17 ++--|either open them in your favorite
  _________________________________                       GGRR                                                                                                                                            
- src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|them via command mode:
+ src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|text editor or execute commands with
  ___________________________                             GGGGGGGGGGGGGGGGGGRRRR                                                                                                                          
- src/format.py                                      | 29 ++++++-|
+ src/format.py                                      | 29 ++++++-|them via command mode:
  _____________                                           GGGGGGR                                                                                                                                         
- src/formattedText.py                               |  3 +|    * [<Enter>] open all selected files
+ src/formattedText.py                               |  3 +|
  ____________________                                    G                                                                                                                                               
- src/processInput.py                                | 10 +++|        (or file under cursor if none selected)
+ src/processInput.py                                | 10 +++|    * [<Enter>] open all selected files
  ___________________                                     GGG                                                                                                                                             
- src/screenControl.py                               | 23 ++++++|        in $EDITOR
+ src/screenControl.py                               | 23 ++++++|        (or file under cursor if none selected)
  ____________________                                    GGGGGG                                                                                                                                          
- src/screenFlags.py                                 | 18 +++-|    * [c] enter command mode
+ src/screenFlags.py                                 | 18 +++-|        in $EDITOR
  __________________                                      GGGR                                                                                                                                            
- src/stateFiles.py                                  | 11 +++|
+ src/stateFiles.py                                  | 11 +++|    * [c] enter command mode
  _________________                                       GGG                                                                                                                                             
  src/version.py                                     | 15 ++++|
  ______________                                          GGGG                                                                                                                                            
@@ -332,27 +332,27 @@
  _______________________________________________         GGGGGGG                                                                                                                                         
  src/__tests__/expected/selectDownSelectInverse.txt |  4 +-|    * [b] page up
  __________________________________________________      GR                                                                                                                                              
- .../expected/simpleSelectWithAttributes.txt        | 60 ++++++++++++++|
+ .../expected/simpleSelectWithAttributes.txt        | 60 ++++++++++++++|    * [x] quick select mode
  ___________________________________________             GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|Once you have your files selected, you can
+ src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|
  _______________________________________________         GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/screenForTest.py                     | 40 +++++++--|either open them in your favorite
+ src/__tests__/screenForTest.py                     | 40 +++++++--|Once you have your files selected, you can
  ______________________________                          GGGGGGGRR                                                                                                                                       
- src/__tests__/screenTestRunner.py                  | 17 ++--|text editor or execute commands with
+ src/__tests__/screenTestRunner.py                  | 17 ++--|either open them in your favorite
  _________________________________                       GGRR                                                                                                                                            
- src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|them via command mode:
+ src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|text editor or execute commands with
  ___________________________                             GGGGGGGGGGGGGGGGGGRRRR                                                                                                                          
- src/format.py                                      | 29 ++++++-|
+ src/format.py                                      | 29 ++++++-|them via command mode:
  _____________                                           GGGGGGR                                                                                                                                         
- src/formattedText.py                               |  3 +|    * [<Enter>] open all selected files
+ src/formattedText.py                               |  3 +|
  ____________________                                    G                                                                                                                                               
- src/processInput.py                                | 10 +++|        (or file under cursor if none selected)
+ src/processInput.py                                | 10 +++|    * [<Enter>] open all selected files
  ___________________                                     GGG                                                                                                                                             
- src/screenControl.py                               | 23 ++++++|        in $EDITOR
+ src/screenControl.py                               | 23 ++++++|        (or file under cursor if none selected)
  ____________________                                    GGGGGG                                                                                                                                          
- src/screenFlags.py                                 | 18 +++-|    * [c] enter command mode
+ src/screenFlags.py                                 | 18 +++-|        in $EDITOR
  __________________                                      GGGR                                                                                                                                            
- src/stateFiles.py                                  | 11 +++|
+ src/stateFiles.py                                  | 11 +++|    * [c] enter command mode
  _________________                                       GGG                                                                                                                                             
  src/version.py                                     | 15 ++++|
  ______________                                          GGGG                                                                                                                                            
