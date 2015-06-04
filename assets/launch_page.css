@@ -15,6 +15,17 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+#brew-install-button {
+  background-color: #4EC099;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  margin-left: 4px;
+  font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium", "Segoe UI", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 12px;
+  line-height: 20px;
+}
+
 body {
   font-family: "HelveticaNeue", "Helvetica Neue", "Segoe UI", Helvetica, Arial, "Lucida Grande", sans-serif;
 }

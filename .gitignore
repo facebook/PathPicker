@@ -1,5 +1,5 @@
 # Vim swaps
-*.sw*
+*.swo
 *.swp
 # python compiled files
 *.pyc
