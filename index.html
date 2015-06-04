@@ -32,6 +32,8 @@
     <link href="assets/bootstrap.min.css" rel="stylesheet">
     <!-- our overrides -->
     <link href="assets/launch_page.css" rel="stylesheet">
+    <!-- font awesome for the copy button -->
+    <link rel="stylesheet" href="assets/font-awesome.css" type="text/css" charset="utf-8">
 
   </head>
 
@@ -76,7 +78,17 @@
         </div>
       </div>
       <div class="callToAction">
-        <p>brew update; brew install fpp; fpp</p>
+        <p>
+          brew update; brew install fpp; fpp
+          <button
+            id="brew-install-button"
+            class="btn btn-success"
+            data-clipboard-text="brew update; brew install fpp; fpp"
+            title="Copy to Clipboard!">
+            Copy
+            <i class="icon-paste"></i>
+          </button>
+        </p>
       </div>
     </div>
     <div class="container">
@@ -123,6 +135,7 @@
     -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="assets/ZeroClipboard.min.js"></script>
     <script>
       $(window).resize(function() {
         if ($(window).width() < 768) {
@@ -131,7 +144,11 @@
           $("nav").removeClass("navbar-fixed-top");
         }
       });
-      resize();
+
+      // also wire up the clipboard listener
+      var client = new ZeroClipboard(
+        document.getElementById('brew-install-button')
+      );
     </script>
     <!--
     ==================================================
