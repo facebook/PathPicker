@@ -83,9 +83,10 @@
           <button
             id="brew-install-button"
             class="btn btn-success"
+            data-toggle="tooltip"
+            data-placement="bottom"
             data-clipboard-text="brew update; brew install fpp; fpp"
             title="Copy to Clipboard!">
-            Copy
             <i class="icon-paste"></i>
           </button>
         </p>
@@ -144,6 +145,9 @@
           $("nav").removeClass("navbar-fixed-top");
         }
       });
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
 
       // also wire up the clipboard listener
       var client = new ZeroClipboard(
