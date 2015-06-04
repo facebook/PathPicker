@@ -106,6 +106,7 @@ div.row a.btn.btn-success {
   margin-top: 20px;
 }
 
+#brew-install-button.zeroclipboard-is-hover,
 div.row a.btn.btn-success:hover {
   background-color: #4AB691;
 }
