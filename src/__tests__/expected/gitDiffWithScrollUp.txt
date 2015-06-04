@@ -1,0 +1,30 @@
+===  We also provide help along the way as you
+ .  @@ -131,6 +133,8 @@ USAGE_STR = USAGE_INTRO + \
+ .       USAGE_COMMAND_HEADER + \
+ .       USAGE_COMMAND + \
+ .       USAGE_CONFIGURATION + \
+ .  +    USAGE_COMMAND_LINE + \
+ .  +    ScreenFlags.getArgParser().format_help() + \
+ .       USAGE_TAIL
+ .   
+ .   decorator = '*' * 80
+ .  diff --git a/src/version.py b/src/version.py
+ .  new file mode 100755
+ .  index 0000000..aee174d
+ .  --- /dev/null
+ .  +++ b/src/version.py
+ .  @@ -0,0 +1,15 @@
+ .  +# Copyright (c) 2015-present, Facebook, Inc.
+ .  +# All rights reserved.
+ .  +#
+ .  +# This source code is licensed under the BSD-style license found in the
+ .  +# LICENSE file in the root directory of this source tree. An additional gr
+ .  +# of patent rights can be found in the PATENTS file in the same directory.
+ .  +#
+ .  +from __future__ import print_function
+ .  +
+ .  +
+/-\ 
+\-/ 
+ .  ___________________________________________________________________________
+=== [f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick 

@@ -39,6 +39,7 @@ USAGE_PAGE = '''
     * [up arrow|k] move upward by 1
     * [<space>] page down
     * [b] page up
+    * [x] quick select mode
 
 Once you have your files selected, you can
 either open them in your favorite

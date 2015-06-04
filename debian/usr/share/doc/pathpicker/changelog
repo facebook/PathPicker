@@ -1,0 +1,5 @@
+pathpicker (__version__) UNRELEASED; urgency=low
+
+  * Release version __version__.
+
+ -- Peter Cottle <pcottle@fb.comn>  __date_timestamp__

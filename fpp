@@ -25,12 +25,15 @@ PYTHONCMD="python"
 function doProgram {
   # process input from pipe and store as pickled file
   $PYTHONCMD "$BASEDIR/src/processInput.py" "$@"
+  # if it failed, just fail now and exit the script
+  # this works for the looping -ko case as well
+  if [[ $? != 0 ]]; then exit $?; fi
   # now close stdin and choose input...
   exec 0<&-
 
   $PYTHONCMD "$BASEDIR/src/choose.py" "$@" < /dev/tty
   # execute the output bash script
-  sh ~/.fpp/.fpp.sh < /dev/tty
+  $SHELL -i ~/.fpp/.fpp.sh < /dev/tty
 }
 
 # we need to handle the --help option outside the python
@@ -54,7 +57,7 @@ for opt in "$@"; do
     # http://unix.stackexchange.com/a/48432
     trap "exit" INT
     while true; do
-      doProgram $@
+      doProgram "$@"
       # connect tty back to stdin since we closed it
       # earlier. this also works since we will only read
       # from stdin once and then go permanent interactive mode
@@ -64,4 +67,4 @@ for opt in "$@"; do
   fi
 done
 
-doProgram $@
+doProgram "$@"

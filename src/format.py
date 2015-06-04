@@ -43,15 +43,21 @@ class SimpleLine(object):
 class LineMatch(object):
 
     ARROW_DECORATOR = '|===>'
+    # this is inserted between long files, so it looks like
+    # ./src/foo/bar/something|...|baz/foo.py
+    TRUNCATE_DECORATOR = '|...|'
 
-    def __init__(self, formattedLine, result, index):
+    def __init__(self, formattedLine, result, index, validateFileExists=False):
+        self.controller = None
+
         self.formattedLine = formattedLine
         self.index = index
 
         (file, num, matches) = result
 
         self.originalFile = file
-        self.file = parse.prependDir(file)
+        self.file = parse.prependDir(file,
+                                     withFileInspection=validateFileExists)
         self.num = num
 
         line = str(self.formattedLine)
@@ -76,19 +82,15 @@ class LineMatch(object):
 
         self.selected = False
         self.hovered = False
+        self.isTruncated = False
 
         # precalculate the pre, post, and match strings
         (self.beforeText, unused) = self.formattedLine.breakat(self.start)
         (unused, self.afterText) = self.formattedLine.breakat(self.end)
+
         self.updateDecoratedMatch()
-        self.controller = None
-        self.needsUnselectedPrint = False
 
     def toggleSelect(self):
-        if self.selected:
-            # we need to print ourselves blank at the end of the line
-            # to prevent the lingering text bug
-            self.needsUnselectedPrint = True
         self.setSelect(not self.selected)
 
     def setSelect(self, val):
@@ -147,8 +149,9 @@ class LineMatch(object):
                 + '||' + self.getAfter() + '||' +
                 str(self.num))
 
-    def updateDecoratedMatch(self):
-        '''Update the cached decorated match formatted string'''
+    def updateDecoratedMatch(self, maxLen=None):
+        '''Update the cached decorated match formatted string, and
+        dirty the line, if needed'''
         if self.hovered and self.selected:
             attributes = (curses.COLOR_WHITE, curses.COLOR_RED, 0)
         elif self.hovered:
@@ -159,28 +162,31 @@ class LineMatch(object):
             attributes = (0, 0, FormattedText.UNDERLINE_ATTRIBUTE)
 
         decoratorText = self.getDecorator()
+
+        # we may not be connected to a controller (during processInput,
+        # for example)
+        if self.controller:
+            self.controller.dirtyLine(self.index)
+
+        plainText = decoratorText + self.getMatch()
+        if maxLen and len(plainText) > maxLen:
+            # alright, we need to chop the ends off of our
+            # decorated match and glue them together with our
+            # truncation decorator
+            spaceAllowed = maxLen - len(self.TRUNCATE_DECORATOR)
+            midPoint = int(spaceAllowed / 2)
+            beginMatch = plainText[0:midPoint]
+            endMatch = plainText[-midPoint:len(plainText)]
+            plainText = beginMatch + self.TRUNCATE_DECORATOR + endMatch
+
         self.decoratedMatch = FormattedText(
             FormattedText.getSequenceForAttributes(*attributes) +
-            decoratorText + self.getMatch())
-
-        # because decorators add length to the line, when the decorator
-        # is removed, we need to print blank space (aka "erase") the
-        # part of the line that is stale. calculate how much this is based
-        # on the max length decorator.
-        self.endingClearText = FormattedText(
-            FormattedText.getSequenceForAttributes(
-                FormattedText.DEFAULT_COLOR_FOREGROUND,
-                FormattedText.DEFAULT_COLOR_BACKGROUND,
-                0) +
-                " " * (self.getMaxDecoratorLength() - len(decoratorText)))
+            plainText)
 
     def getDecorator(self):
         if self.selected:
             return self.ARROW_DECORATOR
         return ''
-
-    def getMaxDecoratorLength(self):
-        return len(self.ARROW_DECORATOR)
 
     def printUpTo(self, text, printer, y, x, maxLen):
         '''Attempt to print maxLen characters, returning a tuple
@@ -201,12 +207,33 @@ class LineMatch(object):
             # wont be displayed!
             return
 
+        # we dont care about the after text, but we should be able to see
+        # all of the decorated match (which means we need to see up to
+        # the end of the decoratedMatch, aka include beforeText)
+        importantTextLength = len(str(self.beforeText)) + \
+            len(str(self.decoratedMatch))
+        spaceForPrinting = maxx - minx
+        if importantTextLength > spaceForPrinting:
+            # hrm, we need to update our decorated match to show
+            # a truncated version since right now we will print off
+            # the screen. lets also dump the beforeText for more
+            # space
+            self.updateDecoratedMatch(maxLen=spaceForPrinting)
+            self.isTruncated = True
+        else:
+            # first check what our expanded size would be:
+            expandedSize = len(str(self.beforeText)) + \
+                len(self.getMatch())
+            if expandedSize < spaceForPrinting and self.isTruncated:
+                # if the screen gets resized, we might be truncated
+                # from a previous render but **now** we have room.
+                # in that case lets expand back out
+                self.updateDecoratedMatch()
+                self.isTruncated = False
+
         maxLen = maxx - minx
         soFar = (minx, maxLen)
 
         soFar = self.printUpTo(self.beforeText, printer, y, *soFar)
         soFar = self.printUpTo(self.decoratedMatch, printer, y, *soFar)
         soFar = self.printUpTo(self.afterText, printer, y, *soFar)
-        if self.needsUnselectedPrint:
-            self.needsUnselectedPrint = False
-            self.printUpTo(self.endingClearText, printer, y, *soFar)

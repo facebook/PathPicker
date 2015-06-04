@@ -5,11 +5,7 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
-from __future__ import print_function
 
-
-VERSION = '0.6.0'
-
-
-if __name__ == '__main__':
-    print(VERSION)
+# If you have specific test cases local to your dev environment,
+# add them here
+LOCAL_TEST_CASES = []

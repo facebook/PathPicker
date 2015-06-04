@@ -20,7 +20,7 @@ ATTRIBUTE_SYMBOL_MAPPING = {
     4: 'R',
     5: '?',
     6: '!',
-    2097153: '?',
+    2097153: 'W',
     7: '?',
 }
 
@@ -39,15 +39,16 @@ class ScreenForTest(object):
         self.output = {}
         self.pastScreens = []
         self.charInputs = charInputs
-        self.clear()
+        self.erase()
         self.currentAttribute = 0
 
     def getmaxyx(self):
         return (self.maxY, self.maxX)
 
     def refresh(self):
-        # TODO -- nothing to do here?
-        pass
+        if self.containsContent(self.output):
+            # we have an old screen, so add it
+            self.pastScreens.append(dict(self.output))
 
     def containsContent(self, screen):
         for coord, pair in screen.items():
@@ -56,10 +57,7 @@ class ScreenForTest(object):
                 return True
         return False
 
-    def clear(self):
-        if self.containsContent(self.output):
-            # we have an old screen, so add it
-            self.pastScreens.append(self.output)
+    def erase(self):
         self.output = {}
         for x in range(self.maxX):
             for y in range(self.maxY):
@@ -79,6 +77,11 @@ class ScreenForTest(object):
         for deltaX in range(len(string)):
             coord = (x + deltaX, y)
             self.output[coord] = (string[deltaX], self.currentAttribute)
+
+    def delch(self, y, x):
+        '''Delete a character. We implement this by removing the output,
+        NOT by printing a space'''
+        self.output[(x, y)] = ('', 1)
 
     def getch(self):
         return CHAR_TO_CODE[self.charInputs.pop(0)]
@@ -104,6 +107,17 @@ class ScreenForTest(object):
 
     def getRowsWithAttributesForPastScreen(self, pastScreen):
         return self.getRowsWithAttributes(screen=self.pastScreens[pastScreen])
+
+    def getRowsWithAttributesForPastScreens(self, pastScreens):
+        '''Get the rows & attributes for the array of screens as one stream
+        (there is no extra new line or extra space between pages)'''
+        pages = map(lambda screenIndex: self.getRowsWithAttributes(
+            screen=self.pastScreens[screenIndex]), pastScreens)
+
+        # join the pages together into one stream
+        lines, attributes = zip(*pages)
+        return ([line for page in lines for line in page],
+                [line for page in attributes for line in page])
 
     def getRowsWithAttributes(self, screen=None):
         if not screen:

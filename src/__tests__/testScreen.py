@@ -36,12 +36,13 @@ screenTestCases = [{
     'name': 'selectTwoCommandMode',
     'input': 'absoluteGitDiff.txt',
     'inputs': ['f', 'j', 'f', 'c'],
-    'pastScreen': 1
+    'pastScreen': 3
 }, {
     'name': 'selectCommandWithPassedCommand',
     'input': 'absoluteGitDiff.txt',
     # the last key "a" is so we quit from command mode
     # after seeing the warning
+    'withAttributes': True,
     'inputs': ['f', 'c', 'a'],
     'pastScreen': 1,
     'args': ["-c 'git add'"]
@@ -65,6 +66,58 @@ screenTestCases = [{
     'name': 'gitDiffWithScroll',
     'input': 'gitDiffNoStat.txt',
     'inputs': ['f', 'j'],
+}, {
+    'name': 'gitDiffWithScrollUp',
+    'input': 'gitLongDiff.txt',
+    'inputs': ['k', 'k'],
+}, {
+    'name': 'gitDiffWithPageDown',
+    'input': 'gitLongDiff.txt',
+    'inputs': [' ', ' '],
+}, {
+    'name': 'gitDiffWithPageDownColor',
+    'input': 'gitLongDiffColor.txt',
+    'inputs': [' ', ' '],
+    'withAttributes': True,
+}, {
+    'name': 'gitDiffWithValidation',
+    'input': 'gitDiffSomeExist.txt',
+    'validateFileExists': True,
+    'withAttributes': True,
+}, {
+    'name': 'longFileNames',
+    'input': 'longFileNames.txt',
+    'validateFileExists': False,
+    'withAttributes': False,
+    'screenConfig': {
+        'maxX': 20,
+        'maxY': 30,
+    }
+}, {
+    'name': 'dontWipeChrome',
+    'input': 'gitDiffColor.txt',
+    'withAttributes': True,
+    'validatesFileExists': False,
+    'inputs': ['DOWN', 'f', 'f', 'f', 'UP'],
+    'screenConfig': {
+        'maxX': 201,
+        'maxY': 40
+    },
+    'pastScreens': [0, 1, 2, 3, 4]
+}, {
+    'name': 'longFileTruncation',
+    'input': 'superLongFileNames.txt',
+    'withAttributes': True,
+    'inputs': ['DOWN', 'f'],
+    'screenConfig': {
+        'maxX': 60,
+        'maxY': 20
+    },
+}, {
+    'name': 'xModeWithSelect',
+    'input': 'gitDiff.txt',
+    'withAttributes': True,
+    'inputs': ['x', 'E', 'H'],
 }]
 
 
@@ -88,7 +141,9 @@ class TestScreenLogic(unittest.TestCase):
                 screenConfig=testCase.get('screenConfig', {}),
                 printScreen=False,
                 pastScreen=testCase.get('pastScreen', None),
-                args=testCase.get('args', [])
+                pastScreens=testCase.get('pastScreens', None),
+                args=testCase.get('args', []),
+                validateFileExists=testCase.get('validateFileExists', False)
             )
 
             self.compareToExpected(testCase, testName, screenData)
@@ -138,26 +193,26 @@ class TestScreenLogic(unittest.TestCase):
         self.fail(
             'File outputted, please inspect %s for correctness' % expectedFile)
 
-    def assertEqualNumLines(self, actualLines, expectedLines):
+    def assertEqualNumLines(self, testName, actualLines, expectedLines):
         self.assertEqual(
             len(actualLines),
             len(expectedLines),
-            'Actual lines was %d but expected lines was %d' % (
-                len(actualLines), len(expectedLines)),
+            '%s test: Actual lines was %d but expected lines was %d' % (
+                testName, len(actualLines), len(expectedLines)),
         )
 
     def assertEqualLines(self, testName, actualLines, expectedLines):
-        self.assertEqualNumLines(actualLines, expectedLines)
+        self.assertEqualNumLines(testName, actualLines, expectedLines)
         expectedFile = TestScreenLogic.getExpectedFile(testName)
         for index, expectedLine in enumerate(expectedLines):
             actualLine = actualLines[index]
             self.assertEqual(
                 expectedLine,
                 actualLine,
-                'Lines did not match for test %s:\n\nExpected:%s\nActual:%s' % (
+                'Lines did not match for test %s:\n\nExpected:"%s"\nActual  :"%s"' % (
                     expectedFile, expectedLine, actualLine),
             )
-        
+
     @staticmethod
     def getExpectedFile(testName):
         return os.path.join(EXPECTED_DIR, testName + '.txt')

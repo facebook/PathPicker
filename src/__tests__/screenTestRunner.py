@@ -15,6 +15,7 @@ sys.path.insert(0, '../')
 
 import choose
 import processInput
+
 from screenFlags import ScreenFlags
 
 from screenForTest import ScreenForTest
@@ -23,12 +24,13 @@ from cursesForTest import CursesForTest
 INPUT_DIR = './inputs/'
 
 
-def getLineObjsFromFile(inputFile):
+def getLineObjsFromFile(inputFile, validateFileExists):
     inputFile = os.path.join(INPUT_DIR, inputFile)
     file = open(inputFile)
     lines = file.read().split('\n')
     file.close()
-    return processInput.getLineObjsFromLines(lines)
+    return processInput.getLineObjsFromLines(lines,
+                                             validateFileExists=validateFileExists)
 
 
 def getRowsFromScreenRun(
@@ -37,9 +39,12 @@ def getRowsFromScreenRun(
         screenConfig={},
         printScreen=True,
         pastScreen=None,
+        pastScreens=None,
+        validateFileExists=False,
         args=[]):
 
-    lineObjs = getLineObjsFromFile(inputFile)
+    lineObjs = getLineObjsFromFile(inputFile,
+                                   validateFileExists=validateFileExists)
     screen = ScreenForTest(
         charInputs,
         maxX=screenConfig.get('maxX', 80),
@@ -60,10 +65,7 @@ def getRowsFromScreenRun(
 
     if pastScreen:
         return screen.getRowsWithAttributesForPastScreen(pastScreen)
-    return screen.getRowsWithAttributes()
+    elif pastScreens:
+        return screen.getRowsWithAttributesForPastScreens(pastScreens)
 
-if __name__ == '__main__':
-    getRowsFromScreenRun(
-        inputFile='gitDiff.txt',
-        charInputs=['q'],
-    )
+    return screen.getRowsWithAttributes()

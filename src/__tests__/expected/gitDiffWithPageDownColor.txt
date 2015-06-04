@@ -1,0 +1,60 @@
+=== +    def getMaxDecoratorLength(self):
+     RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR                                      
+ .  +        return len(self.ARROW_DECORATOR)
+     RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR                                  
+ .  +
+     R                                                                          
+ .       def printUpTo(self, text, printer, y, x, maxLen):
+                                                                                
+ .           '''Attempt to print maxLen characters, returning a tuple
+                                                                                
+ .           (x, maxLen) updated with the actual number of characters
+                                                                                
+ .  @@ -189,3 +207,6 @@ class LineMatch(object):
+     GGGGGGGGGGGGGGGGGGG                                                        
+ .           soFar = self.printUpTo(self.beforeText, printer, y, *soFar)
+                                                                                
+/-\          soFar = self.printUpTo(self.decoratedMatch, printer, y, *soFar)
+                                                                                
+\-/          soFar = self.printUpTo(self.afterText, printer, y, *soFar)
+                                                                                
+ .  +        if self.needsUnselectedPrint:
+     RRRRRRRRRRRRRRRR______________________                                     
+ .  +            self.needsUnselectedPrint = False
+     RRRRRRRRRRRRRRRRR_____________________RRRRRRRR                             
+ .  +            self.printUpTo(self.endingClearText, printer, y, *soFar)
+     RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR      
+ .  diff --git a/src/formattedText.py b/src/formattedText.py
+     WWWWWWWWWWWBBBBBBBBBBBBBBBBBBBBBBWWWWWWWWWWWWWWWWWWWWWWW                   
+ .  index f02d1ca..e495352 100644
+     WWWWWWWWWWWWWW________WWWWWWW                                              
+ .  --- a/src/formattedText.py
+     WWWW______________________                                                 
+ .  +++ b/src/formattedText.py
+     WWWW______________________                                                 
+ .  @@ -23,6 +23,9 @@ class FormattedText(object):
+     GGGGGGGGGGGGGGGGG                                                          
+ .       FOREGROUND_RANGE = Range(30, 39)
+                                                                                
+ .       BACKGROUND_RANGE = Range(40, 49)
+                                                                                
+ .   
+                                                                                
+ .  +    DEFAULT_COLOR_FOREGROUND = -1
+     RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR                                         
+ .  +    DEFAULT_COLOR_BACKGROUND = -1
+     RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR                                         
+ .  +
+     R                                                                          
+ .       def __init__(self, text=None):
+                                                                                
+ .           self.text = text
+              _________                                                         
+ .  
+                                                                                
+ .  
+                                                                                
+ .  ___________________________________________________________________________
+                                                                                
+=== [f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick 
+                                                                                

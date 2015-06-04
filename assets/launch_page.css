@@ -6,35 +6,52 @@
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  */
+
+html {
+  background-color:#fff;
+  text-rendering: optimizelegibility;
+  -webkit-text-size-adjust: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: "HelveticaNeue", "Helvetica Neue", "Segoe UI", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
 .jumbotron.pathPickerHeader {
   background-color: #003945;
   color: white;
   font-family: "HelveticaNeue-Light","Helvetica Neue Light", "Helvetica Neue", "Segoe UI", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 100;
   font-weight: lighter;
-  padding: 30px 0 0 0;
+  padding: 0;
 }
 
 .heading p.lead {
-  color: #739198;
-  font-family: Menlo;
-  font-size: 15px;
-  font-weight: ligher;
+  font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium", "Segoe UI", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 14px;
+  color: #809CA2;
+  line-height: 24px;
 }
 
-.heading img {
-  height: 84px;
-  width: 183px;
+.navbar-inverse .navbar-brand {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 18px;
+  color: #fff;
+}
+
+#logo {
+  height: 40px;
+  margin: 20px auto 20px auto;
 }
 
 .jumbotron .heading {
   text-align: center;
-  padding: 64px 16px;
-  padding-bottom: 40px;
-}
-
-.jumbotron p.lead {
-  margin-top: 32px;
-  margin-bottom: 0;
+  padding: 0px 16px;
+  padding-bottom: 60px;
+  padding-top: 108px;
 }
 
 .container .row .asciiDemo {
@@ -42,18 +59,18 @@
   text-align: center;
 }
 
-.container .row .asciiDemo.extraHeight {
-  height: 550px;
-}
-
 .callToAction {
   text-align: center;
-  background-color: #4EC099;
+  background-color: #1F242A;
   padding: 24px 0;
 }
 
-.callToAction div {
-  margin-bottom: 12px;
+.callToAction p {
+  font-family: "Menlo-Regular", "Menlo Regular", "Menlo";
+  font-size: 12px;
+  color: #809CA2;
+  line-height: 18px;
+  margin-bottom: 0;
 }
 
 .callToAction pre {
@@ -63,4 +80,189 @@
 
 div.row a.btn.btn-success {
   background-color: #4EC099;
+  border-radius: 4px;
+  border-style: none;
+  font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium", "Segoe UI", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 12px;
+  color: #FFFFFF;
+  line-height: 18px;
+  padding: 8px 16px;
+  margin-top: 20px;
+}
+
+div.row a.btn.btn-success:hover {
+  background-color: #4AB691;
+}
+
+.jumbotron {
+  margin-bottom: 0;
+}
+
+h1 {
+  font-family: "HelveticaNeue-Thin","Helvetica Neue Thin", "Helvetica Neue", "Segoe UI", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 64px;
+  color: #FFFFFF;
+  line-height: 80px;
+}
+
+h2 {
+  font-family: "HelveticaNeue-Light","Helvetica Neue Light", "Helvetica Neue", "Segoe UI", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 36px;
+  color: #1F242A;
+  line-height: 54px;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 16px;
+  color: #787B7F;
+  line-height: 24px;
+  margin-bottom: 20px;
+}
+
+.row {
+  margin: 80px auto;
+}
+
+.row:last-of-type {
+  border-style: 1px solid red;
+  margin-bottom: 80px;
+}
+
+.content {
+  padding: 0px 36px 60px 36px;
+}
+
+hr {
+  margin: 60px auto;
+  border-top: 1px solid #EEE;
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+#navbar {
+  padding-right: 36px;
+  background-color: #1F242A;
+  border: none;
+  border-top: 1px solid #111;
+}
+
+.navbar-inverse {
+  background-color: #1F242A;
+  border: none;
+}
+
+.navbar-inverse .navbar-collapse {
+  border: none;
+  border-color: none;
+}
+
+.navbar-collapse {
+  border-top: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.navbar-inverse .navbar-toggle {
+  border: none;
+}
+
+.navbar-toggle {
+  float: right;
+  margin-left: 5px;
+}
+
+.navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
+  background-color: #1F242A;
+}
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover {
+  background-color: rgba(0,0,0,0);
+  display: none;
+}
+
+.navbar-right {
+  float: left;
+}
+
+.navbar-nav {
+  margin: 0 0px;
+}
+
+.nav>li>a {
+  padding-left: 0;
+}
+
+.github-counter {
+  margin-left: 0px;
+  padding-top: 20px;
+  padding-bottom: 48px;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+  padding-top: 20px;
+  padding-bottom: 12px;
+  color: #fff;
+}
+
+
+@media (min-width: 768px) {
+  .navbar-inverse {
+    background-color: #003945;
+    border-style: none;
+  }
+
+  .nav iframe {
+    padding: 15px auto;
+  }
+
+  .navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+  }
+
+  #navbar {
+    background-color: #003945;
+    padding-left: 36px;
+    padding-right: 36px;
+  }
+
+  .navbar-inverse .navbar-brand {
+    display: none;
+  }
+
+  .navbar-inverse .navbar-nav>li>a {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    color: #809CA2;
+    padding-top: 44px;
+    padding-bottom: 44px;
+    padding-right: 24px;
+  }
+
+  .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover {
+    background-color: #003945;
+    display: inline-block;
+  }
+
+  .navbar-inverse .navbar-nav>li>a:first-of-type {
+    padding-left: 0;
+  }
+
+  .github-counter {
+    padding-top: 44px;
+    padding-bottom: 44px;
+  }
+
+  .jumbotron .heading {
+    padding-top: 0;
+  }
+
+  .container {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 }

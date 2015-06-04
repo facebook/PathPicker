@@ -1,0 +1,30 @@
+=== +    def getMaxDecoratorLength(self):
+ .  +        return len(self.ARROW_DECORATOR)
+ .  +
+ .       def printUpTo(self, text, printer, y, x, maxLen):
+ .           '''Attempt to print maxLen characters, returning a tuple
+ .           (x, maxLen) updated with the actual number of characters
+ .  @@ -189,3 +207,6 @@ class LineMatch(object):
+ .           soFar = self.printUpTo(self.beforeText, printer, y, *soFar)
+/-\          soFar = self.printUpTo(self.decoratedMatch, printer, y, *soFar)
+\-/          soFar = self.printUpTo(self.afterText, printer, y, *soFar)
+ .  +        if self.needsUnselectedPrint:
+ .  +            self.needsUnselectedPrint = False
+ .  +            self.printUpTo(self.endingClearText, printer, y, *soFar)
+ .  diff --git a/src/formattedText.py b/src/formattedText.py
+ .  index f02d1ca..e495352 100644
+ .  --- a/src/formattedText.py
+ .  +++ b/src/formattedText.py
+ .  @@ -23,6 +23,9 @@ class FormattedText(object):
+ .       FOREGROUND_RANGE = Range(30, 39)
+ .       BACKGROUND_RANGE = Range(40, 49)
+ .   
+ .  +    DEFAULT_COLOR_FOREGROUND = -1
+ .  +    DEFAULT_COLOR_BACKGROUND = -1
+ .  +
+ .       def __init__(self, text=None):
+ .           self.text = text
+ .  
+ .  
+ .  ___________________________________________________________________________
+=== [f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick 

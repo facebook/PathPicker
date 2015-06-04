@@ -5,3 +5,5 @@
 *.pyc
 # hg merge conflicts
 *.orig
+fpp.deb
+debian/usr/

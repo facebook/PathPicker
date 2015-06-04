@@ -37,20 +37,32 @@
 
   <body cz-shortcut-listen="true">
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse">
       <div class="container">
         <div class="navbar-header">
+          <a class="navbar-brand" href="https://facebook.github.io/PathPicker/">Facebook PathPicker</a>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="https://facebook.github.io/PathPicker/">Facebook PathPicker</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">About</a></li>
-            <li><a href="https://github.com/facebook/pathpicker/">GitHub</a></li>
+            <li class="active"><a href="#">Facebook PathPicker</a></li>
+            <li><a href="https://github.com/facebook/pathpicker/">View on GitHub</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="github-counter">
+              <iframe
+                src="https://ghbtns.com/github-btn.html?user=facebook&repo=pathpicker&type=star&count=true"
+                frameborder="0"
+                scrolling="0"
+                width="94px"
+                height="30px"
+                align="right">
+              </iframe>
+            </li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -59,26 +71,17 @@
     <div class="jumbotron pathPickerHeader">
       <div class="container">
         <div class="heading">
-          <img src="assets/heading@2x.png" />
+          <img id="logo" src="assets/heading@2x.png" />
           <p class="lead">Why Pipe when you can Pick?</p>
         </div>
       </div>
       <div class="callToAction">
-        <div>
-          <pre>brew update; brew install fpp; fpp</pre>
-        </div>
-        <iframe
-          src="https://ghbtns.com/github-btn.html?user=facebook&repo=pathpicker&type=star&count=true&size=large" 
-          frameborder="0"
-          scrolling="0"
-          width="160px"
-          height="30px">
-        </iframe>
+        <p>brew update; brew install fpp; fpp</p>
       </div>
     </div>
     <div class="container">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 content">
           <h2>Any Input</h2>
           <p>
             PathPicker accepts a wide range of input -- output from git commands, grep results, searches -- pretty much anything.
@@ -87,19 +90,16 @@
             After parsing the input, PathPicker presents you with a nice UI to select which files you're interested in. After that
             you can open them in your favorite editor or execute arbitrary commands.
           </p>
-          <p><a class="btn btn-success" href="https://github.com/facebook/pathpicker/" role="button">More on GitHub »</a></p>
+          <p><a class="btn btn-success" href="https://github.com/facebook/pathpicker/" role="button">More on GitHub</a></p>
         </div>
         <div class="asciiDemo col-md-6">
           <script type="text/javascript" src="https://asciinema.org/a/19519.js" id="asciicast-19519" async>
           </script>
         </div>
       </div>
-      <div style="margin-top: 80px"></div>
+      <hr>
       <div class="row">
-        <div class="asciiDemo extraHeight col-md-6">
-          <script type="text/javascript" src="https://asciinema.org/a/19520.js" id="asciicast-19520" async></script>
-        </div>
-        <div class="col-md-6">
+        <div class="col-md-6 content">
           <h2>Arbitrary Commands</h2>
           <p>
             Besides opening files in your editor, PathPicker also allows you to execute arbitrary commands with the selected
@@ -109,7 +109,10 @@
             You can use your selection to add files to version control, change permissions, scp, delete -- pretty much
             whatever you want!
           </p>
-          <p><a class="btn btn-success" href="https://github.com/facebook/pathpicker/" role="button">More on GitHub »</a></p>
+          <a class="btn btn-success" href="https://github.com/facebook/pathpicker/" role="button">More on GitHub</a>
+        </div>
+        <div class="asciiDemo col-md-6">
+          <script type="text/javascript" src="https://asciinema.org/a/19520.js" id="asciicast-19520" async></script>
         </div>
       </div>
     </div>
@@ -120,6 +123,16 @@
     -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script>
+      $(window).resize(function() {
+        if ($(window).width() < 768) {
+          $("nav").addClass("navbar-fixed-top");
+        } else {
+          $("nav").removeClass("navbar-fixed-top");
+        }
+      });
+      resize();
+    </script>
     <!--
     ==================================================
     GA tracking and FB pixel

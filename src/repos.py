@@ -5,11 +5,12 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
-from __future__ import print_function
 
-
-VERSION = '0.6.0'
-
-
-if __name__ == '__main__':
-    print(VERSION)
+# If you are using a code grep query service and want to resolve
+# certain global symbols to local directories,
+# add them as REPOS below. We will essentially replace a global
+# match against something like:
+#   www/myFile.py
+# to:
+#   ~/www/myFile.py
+REPOS = ['www']
