@@ -22,8 +22,13 @@ html {
   padding: 4px 8px;
   margin-left: 4px;
   font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium", "Segoe UI", Helvetica, Arial, "Lucida Grande", sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 20px;
+}
+
+#brew-install-button i {
+  position: relative;
+  top: 1px;
 }
 
 body {
