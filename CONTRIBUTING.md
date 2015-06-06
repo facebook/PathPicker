@@ -23,7 +23,7 @@ Send them over! Our bot will ask you to sign the CLA and after that someone
 from the team will start reviewing.
 
 Before sending them over, make sure the tests pass with:
-`python src/test.py`
+`./scripts/buildAndTest.sh`
 
 ### Contributor License Agreement ("CLA")
 
