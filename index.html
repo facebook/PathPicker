@@ -86,7 +86,7 @@
             data-toggle="tooltip"
             data-placement="bottom"
             data-clipboard-text="brew update; brew install fpp; fpp"
-            title="Copy to Clipboard!">
+            title="Copy to Clipboard">
             <i class="icon-paste"></i>
           </button>
         </p>
@@ -153,6 +153,18 @@
       var client = new ZeroClipboard(
         document.getElementById('brew-install-button')
       );
+
+      client.on('ready', function() {
+        client.on('aftercopy', function() {
+          // I weep at how manual this is :(
+          var toolTip = $('div.tooltip-inner');
+          toolTip.text('Copied!');
+          var parentLeft = toolTip.parent().css('left');
+          // we have to shift over the whole thing manually
+          parentLeft = parseInt(parentLeft, 10) + 30 + 'px';
+          toolTip.parent().css('left', parentLeft);
+        });
+      });
     </script>
     <!--
     ==================================================
