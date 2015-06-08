@@ -27,11 +27,20 @@ screenTestCases = [{
     'name': 'selectFirst',
     'inputs': ['f'],
 }, {
+    'name': 'selectFirstWithDown',
+    'inputs': ['F'],
+}, {
     'name': 'selectDownSelect',
     'inputs': ['f', 'j', 'f'],
 }, {
+    'name': 'selectWithDownSelect',
+    'inputs': ['F', 'f'],
+}, {
     'name': 'selectDownSelectInverse',
     'inputs': ['f', 'j', 'f', 'A'],
+}, {
+    'name': 'selectWithDownSelectInverse',
+    'inputs': ['F', 'F', 'A'],
 }, {
     'name': 'selectTwoCommandMode',
     'input': 'absoluteGitDiff.txt',
