@@ -34,7 +34,7 @@ USAGE_PAGE_HEADER = '''
 
 USAGE_PAGE = '''
     * [f] toggle the selection of a file
-    * [F] toggle the selection of a file and move downward by 1
+    * [F] toggle and move downward by 1
     * [A] toggle selection of all (unique) files
     * [down arrow|j] move downward by 1
     * [up arrow|k] move upward by 1
