@@ -372,6 +372,9 @@ class Controller(object):
             self.jumpToIndex(self.numMatches - 1)
         elif key == 'f':
             self.toggleSelect()
+        elif key == 'F':
+            self.toggleSelect()
+            self.moveIndex(1)
         elif key == 'A' and not self.mode == X_MODE:
             self.toggleSelectAll()
         elif key == 'ENTER':
