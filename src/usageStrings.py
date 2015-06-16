@@ -179,8 +179,6 @@ MANPAGE_STR = '\n\n'.join([
     USAGE_COMMAND_HEADER,
     USAGE_COMMAND,
     USAGE_CONFIGURATION,
-    USAGE_COMMAND_LINE,
-    USAGE_TAIL,
 ])
 
 if __name__ == '__main__':

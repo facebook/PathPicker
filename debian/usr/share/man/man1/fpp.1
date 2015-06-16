@@ -2,12 +2,12 @@
 .\"     Title: fpp
 .\"    Author: [FIXME: author] [see http://docbook.sf.net/el/author]
 .\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
-.\"      Date: 06/14/2015
+.\"      Date: 06/15/2015
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "FPP" "1" "06/14/2015" "\ \&" "\ \&"
+.TH "FPP" "1" "06/15/2015" "\ \&" "\ \&"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -34,6 +34,7 @@ fpp \- Facebook PathPicker; a command line tool for selecting files out of bash 
 usage: fpp [\-h] [\-r] [\-\-version] [\-\-clean] [\-ko] [\-c COMMAND [COMMAND \&...]] [\-nfc]
 .sp
 optional arguments: \-h, \-\-help show this help message and exit \-r, \-\-record Record input and output\&. This is largely used for testing, but you may find it useful for scripting\&. \-\-version Print the version of fpp and exit\&. \-\-clean Remove the state files that fpp uses when starting up, including the previous input used and selection pickle\&. Useful when using fpp in a script context where the previous state should be discarded\&. \-ko, \-\-keep\-open keep PathPicker open once a file selection or command is performed\&. This will loop the program until Ctrl\-C is used to terminate the process\&. \-c COMMAND [COMMAND \&...], \-\-command COMMAND [COMMAND \&...] You may specify a command while invoking fpp that will be run once files have been selected\&. Normally, fpp opens your editor (see discussion of $EDITOR, $VISUAL, and $FPP_EDITOR) when you press enter\&. If you specify a command here, it will be invoked instead\&. \-nfc, \-\-no\-file\-checks You may want to turn off file system validation for a particular instance of PathPicker; this flag disables our internal logic for checking if a regex match is an actual file on the system\&. This is particularly useful when using PathPicker for an input of, say, deleted files in git status that you would like to restore to a given revision\&. It enables you to select the deleted files even though they do not exist on the system anymore\&.
+.SH "INTRO"
 .sp
 To get started with fpp, pipe some kind of terminal output into the program\&. Examples include:
 .sp
@@ -296,8 +297,3 @@ FPP will understand colors if the piped input uses them\&. In general, most tool
 For git, try git config \-\-global color\&.ui always or use the command line option \-\-color\&.
 .sp
 For built in commands like ls, try \-G (on Mac, additionally export CLICOLOR_FORCE in your environment to anything\&.)
-.SH "COMMAND LINE ARGUMENTS"
-.sp
-PathPicker supports some command line arguments, as well\&.
-.sp
-That\(cqs a fairly in\-depth overview of Facebook PathPicker\&. We also provide help along the way as you use the app, so don\(cqt worry and jump on in!
