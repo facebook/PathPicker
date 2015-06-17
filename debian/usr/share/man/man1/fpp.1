@@ -1,0 +1,299 @@
+'\" t
+.\"     Title: fpp
+.\"    Author: [FIXME: author] [see http://docbook.sf.net/el/author]
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 06/15/2015
+.\"    Manual: \ \&
+.\"    Source: \ \&
+.\"  Language: English
+.\"
+.TH "FPP" "1" "06/15/2015" "\ \&" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+fpp \- Facebook PathPicker; a command line tool for selecting files out of bash output
+.SH "SYNOPSIS"
+.sp
+usage: fpp [\-h] [\-r] [\-\-version] [\-\-clean] [\-ko] [\-c COMMAND [COMMAND \&...]] [\-nfc]
+.sp
+optional arguments: \-h, \-\-help show this help message and exit \-r, \-\-record Record input and output\&. This is largely used for testing, but you may find it useful for scripting\&. \-\-version Print the version of fpp and exit\&. \-\-clean Remove the state files that fpp uses when starting up, including the previous input used and selection pickle\&. Useful when using fpp in a script context where the previous state should be discarded\&. \-ko, \-\-keep\-open keep PathPicker open once a file selection or command is performed\&. This will loop the program until Ctrl\-C is used to terminate the process\&. \-c COMMAND [COMMAND \&...], \-\-command COMMAND [COMMAND \&...] You may specify a command while invoking fpp that will be run once files have been selected\&. Normally, fpp opens your editor (see discussion of $EDITOR, $VISUAL, and $FPP_EDITOR) when you press enter\&. If you specify a command here, it will be invoked instead\&. \-nfc, \-\-no\-file\-checks You may want to turn off file system validation for a particular instance of PathPicker; this flag disables our internal logic for checking if a regex match is an actual file on the system\&. This is particularly useful when using PathPicker for an input of, say, deleted files in git status that you would like to restore to a given revision\&. It enables you to select the deleted files even though they do not exist on the system anymore\&.
+.SH "INTRO"
+.sp
+To get started with fpp, pipe some kind of terminal output into the program\&. Examples include:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+git status | fpp
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+git show | fpp
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+git diff HEAD master | fpp
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+git diff HEAD~10 \-\-numstat | fpp
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+grep \-r "Banana" \&. | fpp
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+find \&. \-iname "*\&.js" | fpp
+.RE
+.sp
+Once fpp parses your input (and something that looks like a file matches), it will put you inside a pager that will allow you to select files with the following commands:
+.SH "NAVIGATION"
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+[f] toggle the selection of a file
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+[F] toggle and move downward by 1
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+[A] toggle selection of all (unique) files
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+[down arrow|j] move downward by 1
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+[up arrow|k] move upward by 1
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+[<space>] page down
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+[b] page up
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+[x] quick select mode
+.RE
+.sp
+Once you have your files selected, you can either open them in your favorite text editor or execute commands with them via command mode:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+[<Enter>] open all selected files (or file under cursor if none selected) in $EDITOR
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+[c] enter command mode
+.RE
+.SH "COMMAND MODE"
+.sp
+Command mode is helpful when you want to execute bash commands with the filenames you have selected\&. By default the filenames are appended automatically to command you enter before it is executed, so all you have to do is type the prefix\&. Some examples:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+git add
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+git checkout HEAD~1 \-\-
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+rm \-rf
+.RE
+.sp
+These commands get formatted into: * git add file1 file2 # etc * git checkout HEAD~1 \(em file1 file2 * rm \-rf file1 file2 # etc
+.sp
+If your command needs filenames in the middle, the token "$F" will be replaced with your selected filenames if it is found in the command string\&. Examples include:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+scp $F dev:~/backup
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+mv $F \&.\&./over/here
+.RE
+.sp
+Which format to: * scp file1 file2 dev:~/backup * mv file1 file2 \&.\&./over/here
+.SH "CONFIGURATION"
+.sp
+PathPicker offers a bit of configuration currently with more to come in the future\&.
+.sp
+Editor
+.sp
+The $FPP_EDITOR environment variable can be set to tell PathPicker which editor to open the selected files with\&. If that variable is not set, $VISUAL and then $EDITOR are used as fallbacks, with "vim" as a last resort\&.
+.sp
+Colors
+.sp
+FPP will understand colors if the piped input uses them\&. In general, most tools do not unless requested to do so\&.
+.sp
+For git, try git config \-\-global color\&.ui always or use the command line option \-\-color\&.
+.sp
+For built in commands like ls, try \-G (on Mac, additionally export CLICOLOR_FORCE in your environment to anything\&.)
