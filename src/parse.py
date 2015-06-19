@@ -23,7 +23,7 @@ OTHER_BGS_RESULT_REGEX = re.compile(
     '(\/?([a-z.A-Z0-9\-_]+\/)+[a-zA-Z0-9_.]{3,})[:-]{0,1}(\d+)')
 JUST_FILE = re.compile(
     '([@+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
-    # start with a normal char for ls -l
+# start with a normal char for ls -l
 JUST_FILE_WITH_SPACES = re.compile(
     '([a-zA-Z][@+a-z. A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
 FILE_NO_PERIODS = re.compile(''.join((
