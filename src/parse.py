@@ -23,6 +23,9 @@ OTHER_BGS_RESULT_REGEX = re.compile(
     '(\/?([a-z.A-Z0-9\-_]+\/)+[a-zA-Z0-9_.]{3,})[:-]{0,1}(\d+)')
 JUST_FILE = re.compile(
     '([@+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
+# start with a normal char for ls -l
+JUST_FILE_WITH_SPACES = re.compile(
+    '([a-zA-Z][@+a-z. A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
 FILE_NO_PERIODS = re.compile(''.join((
     '(',
     # Recognized files starting with a dot followed by at least 3 characters
@@ -100,6 +103,12 @@ REGEX_WATERFALL = [{
     # so lets test for that if the above fails
     'regex': JUST_FILE,
     'noNum': True
+}, {
+    # ok if thats not there, try do to filesystem validation
+    # for just files with spaces
+    'regex': JUST_FILE_WITH_SPACES,
+    'noNum': True,
+    'onlyWithFileInspection': True,
 }, {
     # ok finally it might be a file with no periods. we test
     # this last since its more restrictive, because we dont
