@@ -267,6 +267,12 @@ fileTestCases = [{
     'match': True,
     'num': 42,
     'file': './inputs/annoying-hyphen-dir/Package Control.system-bundle',
+}, {
+    'input': 'evilFile No Prepend.txt',
+    'validateFileExists': True,
+    'match': True,
+    'disableFuzzTest': True,
+    'file': 'evilFile No Prepend.txt',
 }]
 
 # local test cases get added as well
