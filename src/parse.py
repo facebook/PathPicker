@@ -170,7 +170,8 @@ def matchLine(line, validateFileExists=False):
     # file...
     for result in results:
         (filePath, _, _) = result
-        if os.path.isfile(prependDir(filePath, withFileInspection=True)):
+        if os.path.isfile(prependDir(filePath, withFileInspection=True)) or \
+           filePath[0:4] == '.../':
             return result
     return None
 
