@@ -273,6 +273,17 @@ fileTestCases = [{
     'match': True,
     'disableFuzzTest': True,
     'file': 'evilFile No Prepend.txt',
+}, {
+    'input': 'Gemfile',
+    'validateFileExists': False,
+    'match': True,
+    'disableFuzzTest': True,
+    'file': 'Gemfile',
+}, {
+    'input': 'Gemfilenope',
+    'validateFileExists': False,
+    'match': False,
+    'disableFuzzTest': True,
 }]
 
 # local test cases get added as well
