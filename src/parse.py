@@ -34,6 +34,11 @@ FILE_NO_PERIODS = re.compile(''.join((
     '|',
     # Recognize files containing at least one slash
     '([a-z.A-Z0-9\-_\/]{1,}\/[a-zA-Z0-9\-_]{1,})',
+    # or
+    '|',
+    # Recognize files starting with capital letter and ending in "file".
+    # eg. Makefile
+    '([A-Z][a-zA-Z]{2,}file)',
     ')',
     # Regardless of the above case, here's how the file name should terminate
     '(\s|$|:)+'
