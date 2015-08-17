@@ -140,7 +140,7 @@ def getRepoPath():
         logger.addEvent('using_hg')
         return stdout
 
-    # Not a git or hg repo, go with ~/www as a default
+    # Not a git or hg repo, go with current dir as a default
     logger.addEvent('used_outside_repo')
     return './'
 
