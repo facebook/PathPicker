@@ -521,7 +521,7 @@ class Controller(object):
         didClearLine = False
         for index in self.dirtyIndexes:
             y = miny + index + self.getScrollOffset()
-            if y >= miny or y < maxy:
+            if y >= miny and y < maxy:
                 didClearLine = True
                 self.clearLine(y)
                 self.lineObjs[index].output(self.colorPrinter)

@@ -1,0 +1,30 @@
+=== diff --git |===>a/src/choose.py b/src/choose.py
+/-\ index d184f91.|===>.5d7f2f9 100755
+\-/ --- a/src/choose.py
+ .  +++ b/src/choose.py
+ .  @@ -11,6 +11,7 @@ import curses
+ .   import pickle
+ .   import sys
+ .   import os
+ .  +import argparse
+ .   
+ .   import output
+ .   import screenControl
+ .  @@ -29,18 +30,16 @@ this error will go away)
+ .   '''
+ .   
+ .   
+ .  -def doProgram(stdscr, cursesAPI=None, lineObjs=None, flags=None):
+ .  +def doProgram(stdscr, flags, cursesAPI=None, lineObjs=None):
+ .       # curses and lineObjs get dependency injected for
+ .       # our tests, so init these if they are not provided
+ .       if not cursesAPI:
+ .           cursesAPI = CursesAPI()
+ .       if not lineObjs:
+ .           lineObjs = getLineObjs()
+ .  -    if not flags:
+ .  -        flags = ScreenFlags.initFromArgs()
+ .  
+ .  
+ .  ___________________________________________________________________________
+=== [f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick 
