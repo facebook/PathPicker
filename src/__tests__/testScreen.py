@@ -132,6 +132,10 @@ screenTestCases = [{
     'input': 'gitAbbreviatedFiles.txt',
     'withAttributes': True,
     'inputs': ['f', 'j'],
+}, {
+    'name': 'selectAllBug',
+    'input': 'gitLongDiff.txt',
+    'inputs': ['A'],
 }]
 
 
