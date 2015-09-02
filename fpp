@@ -32,8 +32,13 @@ function doProgram {
   exec 0<&-
 
   $PYTHONCMD "$BASEDIR/src/choose.py" "$@" < /dev/tty
+  # Determine if running from within vim shell
+  IFLAG=""
+  if [ -z "$VIMRUNTIME" ]; then
+    IFLAG="-i"
+  fi
   # execute the output bash script
-  $SHELL -i ~/.fpp/.fpp.sh < /dev/tty
+  $SHELL $IFLAG ~/.fpp/.fpp.sh < /dev/tty
 }
 
 # we need to handle the --help option outside the python
