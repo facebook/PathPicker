@@ -87,13 +87,17 @@ in the middle of your command, you can use the `$F` token instead, like:
 
 `cat $F | wc -l`
 
+Another important note is that PathPicker by default only selects files that exist on the filesystem. If you
+want to skip this (perhaps to selected deleted files in `git status`), just run PathPicker with the `--no-file-checks` flag.
+
 ## How PathPicker works
 PathPicker is a combination of a bash script and some small Python modules.
 It essentially has three steps:
 
-* First in the bash script, it redirects all standardout in to a python module that
-parses and extracts out the filenames. This data is saved in a temporary file
-and the python script exits.
+* First in the bash script, it redirects all standard out in to a python module that
+parses and extracts out filename candidates. Each candidate is then checked against
+the actual filesystem to ensure it exists; after that, we save the data
+in a temporary file and the python script exits.
 * Next, the bash script switches to terminal input mode and
 another python module reads out the saved entries and presents them in a
 selector UI built with `curses`. The user either selects a few files to edit or inputs a command
