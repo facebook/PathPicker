@@ -54,7 +54,6 @@ def getLineObjs():
     logger.addEvent('total_num_files', len(lineObjs))
 
     selectionPath = stateFiles.getSelectionFilePath()
-    print('debug ' + selectionPath)
     if os.path.isfile(selectionPath):
         setSelectionsFromPickle(selectionPath, lineObjs)
 
