@@ -43,6 +43,7 @@ def execComposedCommand(command, lineObjs):
     appendAliasExpansion()
     appendIfInvalid(lineObjs)
     appendFriendlyCommand(command)
+    appendExit()
 
 
 def editFiles(lineObjs):
@@ -54,6 +55,7 @@ def editFiles(lineObjs):
     command = joinEditCommands(partialCommands)
     appendIfInvalid(lineObjs)
     appendToFile(command)
+    appendExit()
 
 
 # Private helpers
@@ -192,6 +194,9 @@ def appendToFile(command):
     file.write(command + '\n')
     file.close()
     logger.output()
+
+def appendExit():
+    appendToFile('exit $?;')
 
 
 def writeToFile(command):
