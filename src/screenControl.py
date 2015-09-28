@@ -591,7 +591,9 @@ class Controller(object):
             topY = maxy - 2
             minY = self.scrollBar.getMinY() - 1
             for i in range(minY, topY + 1):
-                self.colorPrinter.addstr(i, 1, lbls[i - minY])
+                idx = i - minY
+                if idx < len(lbls):
+                    self.colorPrinter.addstr(i, 1, lbls[idx])
 
     def selectXMode(self, key):
         lineObj = self.lineObjs[
