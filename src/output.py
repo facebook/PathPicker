@@ -195,6 +195,7 @@ def appendToFile(command):
     file.close()
     logger.output()
 
+
 def appendExit():
     appendToFile('exit $?;')
 
