@@ -117,10 +117,7 @@ def expandPath(filePath):
 def joinEditCommands(partialCommands):
     editor, editor_path = getEditorAndPath()
     if editor in ['vim', 'mvim']:
-        if len(partialCommands) > 1:
-            return editor_path + ' -O ' + ' '.join(partialCommands)
-        else:
-            return editor_path + ' ' + partialCommands[0]
+        return editor_path + ' -O ' + ' '.join(partialCommands)
     # Assume that all other editors behave like emacs
     return editor_path + ' ' + ' '.join(partialCommands)
 
