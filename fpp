@@ -37,8 +37,18 @@ function doProgram {
   if [ -z "$VIMRUNTIME" ]; then
     IFLAG="-i"
   fi
-  # execute the output bash script
-  $SHELL $IFLAG ~/.fpp/.fpp.sh < /dev/tty
+  # execute the output bash script. For zsh or bash
+  # shells, we delegate to $SHELL, but for all others
+  # (fish, csh, etc) we delegate to bash.
+  #
+  # We use the following heuristics from
+  # http://stackoverflow.com/questions/3327013/
+  # in order to determine which shell we are on
+  if [ -n "$BASH" -o -n "$ZSH_NAME" ]; then
+    $SHELL $IFLAG ~/.fpp/.fpp.sh < /dev/tty
+  else
+    /bin/sh $IFLAG ~/.fpp/.fpp.sh < /dev/tty
+  fi
 }
 
 # we need to handle the --help option outside the python
