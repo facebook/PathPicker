@@ -47,7 +47,7 @@ function doProgram {
   if [ -n "$BASH" -o -n "$ZSH_NAME" ]; then
     $SHELL $IFLAG ~/.fpp/.fpp.sh < /dev/tty
   else
-    /bin/sh $IFLAG ~/.fpp/.fpp.sh < /dev/tty
+    /bin/bash $IFLAG ~/.fpp/.fpp.sh < /dev/tty
   fi
 }
 
