@@ -159,7 +159,7 @@ def getRepoPath():
     return './'
 
 
-PREPEND_PATH = getRepoPath().strip() + '/'
+PREPEND_PATH = str(getRepoPath().strip()) + '/'
 
 
 # returns a filename and (optional) line number
