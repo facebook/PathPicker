@@ -16,7 +16,7 @@ from repos import REPOS
 MASTER_REGEX = re.compile(
     '(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
 MASTER_REGEX_MORE_EXTENSIONS = re.compile(
-    '(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9-]{1,30})[:-]{0,1}(\d+)?')
+    '(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9-~]{1,30})[:-]{0,1}(\d+)?')
 HOMEDIR_REGEX = re.compile(
     '(~\/([a-z.A-Z0-9\-_]+\/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
 OTHER_BGS_RESULT_REGEX = re.compile(
@@ -66,7 +66,7 @@ MASTER_REGEX_WITH_SPACES = re.compile(''.join((
     # we do similar for the filename part. the 'character class' is
     # char or char with space following, with some added tokens like @
     # for retina files.
-    '([@a-zA-Z0-9\-_+.]|\s[@a-zA-Z0-9\-_+.])+',
+    '([\(\),@a-zA-Z0-9\-_+.]|\s[,\(\)@a-zA-Z0-9\-_+.])+',
     # extensions dont allow spaces
     '\.[a-zA-Z0-9-]{1,30}'
     # end capture

@@ -268,6 +268,32 @@ fileTestCases = [{
     'num': 42,
     'file': './inputs/annoying-hyphen-dir/Package Control.system-bundle',
 }, {
+    'input': './inputs/svo (install the zip, not me).xml',
+    'validateFileExists': True,
+    'match': True,
+    'file': './inputs/svo (install the zip, not me).xml',
+}, {
+    'input': './inputs/svo (install the zip not me).xml',
+    'validateFileExists': True,
+    'match': True,
+    'file': './inputs/svo (install the zip not me).xml',
+}, {
+    'input': './inputs/svo install the zip, not me.xml',
+    'validateFileExists': True,
+    'match': True,
+    'file': './inputs/svo install the zip, not me.xml',
+}, {
+    'input': './inputs/svo install the zip not me.xml',
+    'validateFileExists': True,
+    'match': True,
+    'file': './inputs/svo install the zip not me.xml',
+}, {
+    'input': './inputs/annoyingTildeExtension.txt~:42',
+    'validateFileExists': True,
+    'match': True,
+    'num': 42,
+    'file': './inputs/annoyingTildeExtension.txt~',
+}, {
     'input': 'evilFile No Prepend.txt',
     'validateFileExists': True,
     'match': True,
