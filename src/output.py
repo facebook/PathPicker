@@ -195,7 +195,7 @@ def appendToFile(command):
 
 
 def appendExit():
-    appendToFile('exit $?;')
+    appendToFile('exit;')
 
 
 def writeToFile(command):
