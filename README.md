@@ -73,7 +73,7 @@ to `/usr/local/bin/` which is assumed to be in the current
 
 ### Add-ons
 
-For tmux users, you can additionally install `tmux-fpp` which adds a key combination to run PathPicker on the last received `stdout`. It makes jumping into file selection mode even easier -- [check it out here](https://github.com/jbnicolai/tmux-fpp).
+For tmux users, you can additionally install `tmux-fpp` which adds a key combination to run PathPicker on the last received `stdout`. It makes jumping into file selection mode even easier -- [check it out here](https://github.com/tmux-plugins/tmux-fpp).
 
 
 ## Advanced Functionality
