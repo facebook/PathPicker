@@ -47,17 +47,18 @@ class LineMatch(object):
     # ./src/foo/bar/something|...|baz/foo.py
     TRUNCATE_DECORATOR = '|...|'
 
-    def __init__(self, formattedLine, result, index, validateFileExists=False):
+    def __init__(self, formattedLine, result, index, validateFileExists=False, allInput=False):
         self.controller = None
 
         self.formattedLine = formattedLine
         self.index = index
+        self.allInput = allInput
 
-        (file, num, matches) = result
+        (path, num, matches) = result
 
-        self.originalFile = file
-        self.file = parse.prependDir(file,
-                                     withFileInspection=validateFileExists)
+        self.originalPath = path
+        self.path = path if allInput else parse.prependDir(path,
+                                                           withFileInspection=validateFileExists)
         self.num = num
 
         line = str(self.formattedLine)
@@ -104,15 +105,15 @@ class LineMatch(object):
     def getScreenIndex(self):
         return self.index
 
-    def getFile(self):
-        return self.file
+    def getPath(self):
+        return self.path
 
     def getDir(self):
         # for the cd command and the like. file is a string like
         # ./asd.py or ~/www/asdasd/dsada.php, so since it already
         # has the directory appended we can just split on / and drop
         # the last
-        parts = self.file.split('/')[0:-1]
+        parts = self.path.split('/')[0:-1]
         return '/'.join(parts)
 
     def isResolvable(self):
@@ -121,7 +122,7 @@ class LineMatch(object):
     def isGitAbbreviatedPath(self):
         # this method mainly serves as a warning for when we get
         # git-abbrievated paths like ".../" that confuse users.
-        parts = self.file.split('/')
+        parts = self.path.split('/')
         if len(parts) and parts[0] == '...':
             return True
         return False
@@ -158,8 +159,10 @@ class LineMatch(object):
             attributes = (curses.COLOR_WHITE, curses.COLOR_BLUE, 0)
         elif self.selected:
             attributes = (curses.COLOR_WHITE, curses.COLOR_GREEN, 0)
-        else:
+        elif not self.allInput:
             attributes = (0, 0, FormattedText.UNDERLINE_ATTRIBUTE)
+        else:
+            attributes = (0, 0, 0)
 
         decoratorText = self.getDecorator()
 

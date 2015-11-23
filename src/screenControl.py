@@ -35,11 +35,17 @@ X_MODE = 'X_MODE'
 
 lbls = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'"
 
-SHORT_NAV_USAGE = '[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick select mode, [c] command mode'
+# options for displayed to the user at the bottom of the screen
+SHORT_NAV_OPTION_SELECTION_STR = '[f|A] selection'
+SHORT_NAV_OPTION_NAVIGATION_STR = '[down|j|up|k|space|b] navigation'
+SHORT_NAV_OPTION_OPEN_STR = '[enter] open'
+SHORT_NAV_OPTION_QUICK_SELECT_STR = '[x] quick select mode'
+SHORT_NAV_OPTION_COMMAND_STR = '[c] command mode'
+
 SHORT_COMMAND_USAGE = 'command examples: | git add | git checkout HEAD~1 -- | mv $F ../here/ |'
-SHORT_COMMAND_PROMPT = 'Type a command below! Files will be appended or replace $F'
+SHORT_COMMAND_PROMPT = 'Type a command below! Paths will be appended or replace $F'
 SHORT_COMMAND_PROMPT2 = 'Enter a blank line to go back to the selection process'
-SHORT_FILES_HEADER = 'Files you have selected:'
+SHORT_PATHS_HEADER = 'Paths you have selected:'
 
 INVISIBLE_CURSOR = 0
 BLOCK_CURSOR = 2
@@ -47,9 +53,10 @@ BLOCK_CURSOR = 2
 
 class HelperChrome(object):
 
-    def __init__(self, printer, screenControl):
+    def __init__(self, printer, screenControl, flags):
         self.printer = printer
         self.screenControl = screenControl
+        self.flags = flags
         self.WIDTH = 50
         if self.getIsSidebarMode():
             logger.addEvent('init_wide_mode')
@@ -115,13 +122,26 @@ class HelperChrome(object):
         borderY = maxy - 2
         # first output text since we might throw an exception during border
         usageStr = {
-            SELECT_MODE: SHORT_NAV_USAGE,
-            X_MODE: SHORT_NAV_USAGE,
+            SELECT_MODE: self.getShortNavUsageString(),
+            X_MODE: self.getShortNavUsageString(),
             COMMAND_MODE: SHORT_COMMAND_USAGE
         }[self.mode]
         borderStr = '_' * (maxx - self.getMinX() - 0)
         self.printer.addstr(borderY, self.getMinX(), borderStr)
         self.printer.addstr(borderY + 1, self.getMinX(), usageStr)
+
+    def getShortNavUsageString(self):
+        navOptions = [SHORT_NAV_OPTION_SELECTION_STR,
+                      SHORT_NAV_OPTION_NAVIGATION_STR,
+                      SHORT_NAV_OPTION_QUICK_SELECT_STR,
+                      SHORT_NAV_OPTION_COMMAND_STR]
+
+        # it does not make sense to give the user the option to "open" the selection
+        # in all-input mode
+        if not self.flags.getAllInput():
+            navOptions.insert(2, SHORT_NAV_OPTION_OPEN_STR)
+
+        return ', '.join(navOptions)
 
 
 class ScrollBar(object):
@@ -218,7 +238,7 @@ class Controller(object):
         self.hoverIndex = 0
         self.scrollOffset = 0
         self.scrollBar = ScrollBar(self.colorPrinter, lineObjs, self)
-        self.helperChrome = HelperChrome(self.colorPrinter, self)
+        self.helperChrome = HelperChrome(self.colorPrinter, self, flags)
         (self.oldmaxy, self.oldmaxx) = self.getScreenDimensions()
         self.mode = SELECT_MODE
 
@@ -272,10 +292,10 @@ class Controller(object):
         self.lineMatches[self.hoverIndex].toggleSelect()
 
     def toggleSelectAll(self):
-        files = set()
+        paths = set()
         for line in self.lineMatches:
-            if line.getFile() not in files:
-                files.add(line.getFile())
+            if line.getPath() not in paths:
+                paths.add(line.getPath())
                 line.toggleSelect()
 
     def setSelect(self, val):
@@ -377,60 +397,62 @@ class Controller(object):
             self.moveIndex(1)
         elif key == 'A' and not self.mode == X_MODE:
             self.toggleSelectAll()
-        elif key == 'ENTER':
+        elif key == 'ENTER' and (not self.flags.getAllInput() or len(self.flags.getPresetCommand())):
+            # it does not make sense to process an 'ENTER' keypress if we're in the allInput
+            # mode and there is not a preset command.
             self.onEnter()
         elif key == 'q':
             output.outputNothing()
             # this will get the appropriate selection and save it to a file for reuse
             # before exiting the program
-            self.getFilesToUse()
+            self.getPathsToUse()
             self.cursesAPI.exit()
         elif self.mode == X_MODE and key in lbls:
             self.selectXMode(key)
         pass
 
-    def getFilesToUse(self):
-        # if we have select files, those, otherwise hovered
-        toUse = self.getSelectedFiles()
+    def getPathsToUse(self):
+        # if we have selected paths, those, otherwise hovered
+        toUse = self.getSelectedPaths()
         if not toUse:
-            toUse = self.getHoveredFiles()
+            toUse = self.getHoveredPaths()
 
         # save the selection we are using
         if self.cursesAPI.allowFileOutput():
             output.outputSelection(toUse)
         return toUse
 
-    def getSelectedFiles(self):
+    def getSelectedPaths(self):
         return [lineObj for (index, lineObj) in enumerate(self.lineMatches)
                 if lineObj.getSelected()]
 
-    def getHoveredFiles(self):
+    def getHoveredPaths(self):
         return [lineObj for (index, lineObj) in enumerate(self.lineMatches)
                 if index == self.hoverIndex]
 
     def showAndGetCommand(self):
-        fileObjs = self.getFilesToUse()
-        files = [fileObj.getFile() for fileObj in fileObjs]
+        pathObjs = self.getPathsToUse()
+        paths = [pathObj.getPath() for pathObj in pathObjs]
         (maxy, maxx) = self.getScreenDimensions()
-        halfHeight = int(round(maxy / 2) - len(files) / 2.0)
+        halfHeight = int(round(maxy / 2) - len(paths) / 2.0)
 
         borderLine = '=' * len(SHORT_COMMAND_PROMPT)
         promptLine = '.' * len(SHORT_COMMAND_PROMPT)
         # from helper chrome code
-        maxFileLength = maxx - 5
+        maxPathLength = maxx - 5
         if self.helperChrome.getIsSidebarMode():
             # need to be shorter to not go into side bar
-            maxFileLength = len(SHORT_COMMAND_PROMPT) + 18
+            maxPathLength = len(SHORT_COMMAND_PROMPT) + 18
 
-        # first lets print all the files
-        startHeight = halfHeight - 1 - len(files)
+        # first lets print all the paths
+        startHeight = halfHeight - 1 - len(paths)
         try:
             self.colorPrinter.addstr(startHeight - 3, 0, borderLine)
-            self.colorPrinter.addstr(startHeight - 2, 0, SHORT_FILES_HEADER)
+            self.colorPrinter.addstr(startHeight - 2, 0, SHORT_PATHS_HEADER)
             self.colorPrinter.addstr(startHeight - 1, 0, borderLine)
-            for index, file in enumerate(files):
+            for index, path in enumerate(paths):
                 self.colorPrinter.addstr(startHeight + index, 0,
-                                         file[0:maxFileLength])
+                                         path[0:maxPathLength])
         except curses.error:
             pass
 
@@ -482,15 +504,15 @@ class Controller(object):
             self.dirtyAll()
             logger.addEvent('exit_command_mode')
             return
-        lineObjs = self.getFilesToUse()
+        lineObjs = self.getPathsToUse()
         output.execComposedCommand(command, lineObjs)
         sys.exit(0)
 
     def onEnter(self):
-        lineObjs = self.getFilesToUse()
+        lineObjs = self.getPathsToUse()
         if not lineObjs:
             # nothing selected, assume we want hovered
-            lineObjs = self.getHoveredFiles()
+            lineObjs = self.getHoveredPaths()
         logger.addEvent('selected_num_files', len(lineObjs))
 
         # commands passed from the command line get used immediately
@@ -566,7 +588,7 @@ class Controller(object):
         self.colorPrinter.addstr(
             yStart + 1, xStart, 'The command you provided was "%s" ' % self.flags.getPresetCommand())
         self.colorPrinter.addstr(
-            yStart + 2, xStart, 'Press any key to go back to selecting files.')
+            yStart + 2, xStart, 'Press any key to go back to selecting paths.')
 
     def printChrome(self):
         self.helperChrome.output(self.mode)

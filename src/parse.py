@@ -21,6 +21,8 @@ HOMEDIR_REGEX = re.compile(
     '(~\/([a-z.A-Z0-9\-_]+\/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?')
 OTHER_BGS_RESULT_REGEX = re.compile(
     '(\/?([a-z.A-Z0-9\-_]+\/)+[a-zA-Z0-9_.]{3,})[:-]{0,1}(\d+)')
+ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE = re.compile(
+    '(\S.*\S|\S)')
 JUST_FILE = re.compile(
     '([@+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
 # start with a normal char for ls -l
@@ -122,6 +124,10 @@ REGEX_WATERFALL = [{
     # file name length
     'regex': FILE_NO_PERIODS,
     'noNum': True,
+}, {
+    'regex': ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE,
+    'noNum': True,
+    'withAllLinesMatched': True
 }]
 
 
@@ -164,11 +170,11 @@ PREPEND_PATH = str(getRepoPath().strip()) + '/'
 
 # returns a filename and (optional) line number
 # if it matches
-def matchLine(line, validateFileExists=False):
+def matchLine(line, validateFileExists=False, allInput=False):
     if not validateFileExists:
-        results = matchLineImpl(line)
+        results = matchLineImpl(line, withAllLinesMatched=allInput)
         return results[0] if results else None
-    results = matchLineImpl(line, withFileInspection=True)
+    results = matchLineImpl(line, withFileInspection=True, withAllLinesMatched=allInput)
     if not results:
         return None
     # ok now we are going to check if this result is an actual
@@ -181,13 +187,15 @@ def matchLine(line, validateFileExists=False):
     return None
 
 
-def matchLineImpl(line, withFileInspection=False):
+def matchLineImpl(line, withFileInspection=False, withAllLinesMatched=False):
     # ok new behavior -- we will actually collect **ALL** results
     # of the regexes since filesystem validation might filter some
     # of the earlier ones out (particulary those with hyphens)
     results = []
     for regexConfig in REGEX_WATERFALL:
         regex = regexConfig['regex']
+        if regexConfig.get('withAllLinesMatched') and not withAllLinesMatched:
+            continue
         if regexConfig.get('onlyWithFileInspection') and not withFileInspection:
             continue
 
