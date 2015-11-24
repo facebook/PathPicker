@@ -22,7 +22,7 @@ Oh no! You already provided a command so you cannot enter command mode.
 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG         
 The command you provided was " 'git add'" 
                                                                                 
-Press any key to go back to selecting files.
+Press any key to go back to selecting paths.
                                                                                 
 
                                                                                 

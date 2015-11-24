@@ -40,7 +40,10 @@ class ScreenFlags(object):
         return self.args.clean
 
     def getDisableFileChecks(self):
-        return self.args.no_file_checks
+        return self.args.no_file_checks or self.args.all_input
+
+    def getAllInput(self):
+        return self.args.all_input
 
     @staticmethod
     def getArgParser():
@@ -92,6 +95,13 @@ on the system. This is particularly useful when using PathPicker for an input
 of, say, deleted files in git status that you would like to restore to a given
 revision. It enables you to select the deleted files even though they
 do not exist on the system anymore.''')
+        parser.add_argument('-ai',
+                            '--all-input',
+                            default=False,
+                            action="store_true",
+                            help='''You may force PathPicker to recognize all
+lines as acceptible input. Typically, PathPicker will scan the input for references
+to file paths. Passing this option will disable those scans and the program will assume that every input line is a match.''')
         return parser
 
     @staticmethod

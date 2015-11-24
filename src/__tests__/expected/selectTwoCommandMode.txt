@@ -7,12 +7,12 @@
 
 
 ==========================================================
-Files you have selected:
+Paths you have selected:
 ==========================================================
 /foo/bar/README.md
 /foo/bar/fpp
 ==========================================================
-Type a command below! Files will be appended or replace $F
+Type a command below! Paths will be appended or replace $F
 Enter a blank line to go back to the selection process
 ==========================================================
 ..........................................................

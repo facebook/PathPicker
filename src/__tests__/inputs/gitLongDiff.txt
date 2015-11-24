@@ -285,7 +285,7 @@ index d8483fa..53f4739 100755
 +        self.stdscr.addstr(
 +            yStart + 1, 0, 'The command you provided was "%s" ' % self.flags.getPresetCommand())
 +        self.stdscr.addstr(
-+            yStart + 2, 0, 'Press any key to go back to selecting files.')
++            yStart + 2, 0, 'Press any key to go back to selecting paths.')
 +
      def printChrome(self):
          self.helperChrome.output(self.mode)
