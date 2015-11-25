@@ -133,13 +133,14 @@ class HelperChrome(object):
     def getShortNavUsageString(self):
         navOptions = [SHORT_NAV_OPTION_SELECTION_STR,
                       SHORT_NAV_OPTION_NAVIGATION_STR,
+                      SHORT_NAV_OPTION_OPEN_STR,
                       SHORT_NAV_OPTION_QUICK_SELECT_STR,
                       SHORT_NAV_OPTION_COMMAND_STR]
 
         # it does not make sense to give the user the option to "open" the selection
         # in all-input mode
-        if not self.flags.getAllInput():
-            navOptions.insert(2, SHORT_NAV_OPTION_OPEN_STR)
+        if self.flags.getAllInput():
+            navOptions.remove(SHORT_NAV_OPTION_OPEN_STR)
 
         return ', '.join(navOptions)
 

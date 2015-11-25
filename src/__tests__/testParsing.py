@@ -362,8 +362,17 @@ allInputTestCases = [
         'input': 'foo bar    ',
         'match': 'foo bar'
     }, {
+        'input': '    foo bar    ',
+        'match': 'foo bar'
+    }, {
         'input': 'foo bar baz',
         'match': 'foo bar baz'
+    }, {
+        'input': '	modified:   Classes/Media/YPMediaLibraryViewController.m',
+        'match': 'modified:   Classes/Media/YPMediaLibraryViewController.m'
+    }, {
+        'input': 'no changes added to commit (use "git add" and/or "git commit -a")',
+        'match': 'no changes added to commit (use "git add" and/or "git commit -a")'
     }]
 
 class TestParseFunction(unittest.TestCase):
@@ -432,7 +441,6 @@ class TestParseFunction(unittest.TestCase):
                 self.assertTrue(testCase['match'] is None,
                                 'Expected a match "%s" where one did not occur.' %
                                 testCase['match'])
-
                 continue
 
             (match, _, _) = result

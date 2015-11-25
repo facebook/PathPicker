@@ -101,7 +101,7 @@ do not exist on the system anymore.''')
                             action="store_true",
                             help='''You may force PathPicker to recognize all
 lines as acceptible input. Typically, PathPicker will scan the input for references
-to file paths. Passing this option will disable those scans and the program will assume that every input line is a match.''')
+to file paths. Passing this option will disable those scans and the program will assume that every input line is a match. In practice, this option allows for input selection for a variety of sources that would otherwise be unsupported -- git branches, mercurial bookmarks, etc.''')
         return parser
 
     @staticmethod

@@ -196,6 +196,8 @@ def matchLineImpl(line, withFileInspection=False, withAllLinesMatched=False):
         regex = regexConfig['regex']
         if regexConfig.get('withAllLinesMatched') and not withAllLinesMatched:
             continue
+        if withAllLinesMatched and not regexConfig.get('withAllLinesMatched'):
+            continue
         if regexConfig.get('onlyWithFileInspection') and not withFileInspection:
             continue
 
