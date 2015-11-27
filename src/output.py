@@ -150,7 +150,7 @@ def composeFileCommand(command, lineObjs):
     if '$F' in command:
         command = command.replace('$F', path_str)
     else:
-        command = command + ' ' + path_str 
+        command = command + ' ' + path_str
     return command
 
 

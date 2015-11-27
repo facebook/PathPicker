@@ -375,6 +375,7 @@ allInputTestCases = [
         'match': 'no changes added to commit (use "git add" and/or "git commit -a")'
     }]
 
+
 class TestParseFunction(unittest.TestCase):
 
     def testPrependDir(self):
@@ -445,9 +446,10 @@ class TestParseFunction(unittest.TestCase):
 
             (match, _, _) = result
             self.assertEqual(match, testCase['match'], 'Line "%s" did not match.' %
-                            testCase['input'])
+                             testCase['input'])
 
-        print('Tested %d cases for all-input matching.' % len(allInputTestCases))
+        print('Tested %d cases for all-input matching.' %
+              len(allInputTestCases))
 
     def checkFileResult(self, testCase):
         result = parse.matchLine(testCase['input'],
