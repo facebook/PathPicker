@@ -136,6 +136,11 @@ screenTestCases = [{
     'name': 'selectAllBug',
     'input': 'gitLongDiff.txt',
     'inputs': ['A'],
+}, {
+    'name': 'allInputBranch',
+    'input': 'gitBranch.txt',
+    'args': ['-ai'],
+    'inputs': ['j', 'f'],
 }]
 
 
@@ -153,6 +158,7 @@ class TestScreenLogic(unittest.TestCase):
             charInputs = ['q']  # we always quit at the end
             charInputs = testCase.get('inputs', []) + charInputs
 
+            args = testCase.get('args', [])
             screenData = screenTestRunner.getRowsFromScreenRun(
                 inputFile=testCase.get('input', 'gitDiff.txt'),
                 charInputs=charInputs,
@@ -160,8 +166,9 @@ class TestScreenLogic(unittest.TestCase):
                 printScreen=False,
                 pastScreen=testCase.get('pastScreen', None),
                 pastScreens=testCase.get('pastScreens', None),
-                args=testCase.get('args', []),
-                validateFileExists=testCase.get('validateFileExists', False)
+                args=args,
+                validateFileExists=testCase.get('validateFileExists', False),
+                allInput=('-ai' in args or '--all-input' in args),
             )
 
             self.compareToExpected(testCase, testName, screenData)

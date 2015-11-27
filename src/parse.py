@@ -174,7 +174,8 @@ def matchLine(line, validateFileExists=False, allInput=False):
     if not validateFileExists:
         results = matchLineImpl(line, withAllLinesMatched=allInput)
         return results[0] if results else None
-    results = matchLineImpl(line, withFileInspection=True, withAllLinesMatched=allInput)
+    results = matchLineImpl(
+        line, withFileInspection=True, withAllLinesMatched=allInput)
     if not results:
         return None
     # ok now we are going to check if this result is an actual
