@@ -28,11 +28,13 @@ a wide variety of input -- try it with all the options below:
 and anything else you can dream up!
 
 ## Requirements
-PathPicker should work with most Bash environments and requires Python >2.6
-and <3.0.
+PathPicker requires Python >2.6 or >3.0.
 
-ZSH is supported as well but won't have a few features like alias expansion
-in command line mode.
+*Supported Shells*:
+
+* Bash is fully supported and works the best.
+* ZSH is supported as well but won't have a few features like alias expansion in command line mode. 
+* fish/csh are supported in the latest version, but might have quirks or issues in older versions of PathPicker.
 
 ## Installing PathPicker
 
