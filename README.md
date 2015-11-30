@@ -30,7 +30,7 @@ and anything else you can dream up!
 ## Requirements
 PathPicker requires Python >2.6 or >3.0.
 
-*Supported Shells*:
+### Supported Shells:
 
 * Bash is fully supported and works the best.
 * ZSH is supported as well but won't have a few features like alias expansion in command line mode. 
