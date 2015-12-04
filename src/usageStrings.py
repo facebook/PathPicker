@@ -124,6 +124,9 @@ which editor to open the selected files with. If that variable
 is not set, $VISUAL and then $EDITOR are used as fallbacks,
 with "vim" as a last resort.
 
+The $FPP_DISABLE_SPLIT environment variable will disable splitting
+files into panes for vim clients (aka sequential editing).
+
 ~ Colors ~
 
 FPP will understand colors if the piped input uses them. In general, most

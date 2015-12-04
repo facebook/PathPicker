@@ -116,7 +116,8 @@ def expandPath(filePath):
 
 def joinEditCommands(partialCommands):
     editor, editor_path = getEditorAndPath()
-    if editor in ['vim', 'mvim']:
+    if editor in ['vim', 'mvim'] and \
+        not os.environ.get('FPP_DISABLE_SPLIT'):
         return editor_path + ' -O ' + ' '.join(partialCommands)
     # Assume that all other editors behave like emacs
     return editor_path + ' ' + ' '.join(partialCommands)
