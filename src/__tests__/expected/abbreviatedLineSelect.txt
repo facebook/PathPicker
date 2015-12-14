@@ -1,6 +1,6 @@
  src/__tests__/expected/allInputBranch.txt          | 30 ++++++++
  src/__tests__/expected/selectTwoCommandMode.txt    |  4 +-
- |===>src/__tests__/baz/bar/banana/foo|...|ppa/inputs/annoyingTildeExtension.txt
+ |===>src/__tests__/baz/bar/banana/|...|/inputs/annoyingTildeExtension.txt   |  
  src/__tests__/inputs/gitBranch.txt                 |  5 ++
  src/__tests__/inputs/gitLongDiff.txt               |  2 +-
  src/__tests__/inputs/gitLongDiffColor.txt          |  2 +-
