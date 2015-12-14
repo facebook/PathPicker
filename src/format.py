@@ -175,8 +175,11 @@ class LineMatch(object):
         if maxLen and len(plainText) > maxLen:
             # alright, we need to chop the ends off of our
             # decorated match and glue them together with our
-            # truncation decorator
-            spaceAllowed = maxLen - len(self.TRUNCATE_DECORATOR)
+            # truncation decorator. We subtract the length of the
+            # before text since we consider that important too.
+            spaceAllowed = maxLen - len(self.TRUNCATE_DECORATOR) \
+                - len(decoratorText) \
+                - len(str(self.beforeText))
             midPoint = int(spaceAllowed / 2)
             beginMatch = plainText[0:midPoint]
             endMatch = plainText[-midPoint:len(plainText)]
