@@ -141,6 +141,11 @@ screenTestCases = [{
     'input': 'gitBranch.txt',
     'args': ['-ai'],
     'inputs': ['j', 'f'],
+}, {
+    'name': 'abbreviatedLineSelect',
+    'input': 'longLineAbbreviated.txt',
+    'validateFileExists': False,
+    'inputs': ['j', 'j', 'f'],
 }]
 
 
