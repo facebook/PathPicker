@@ -41,11 +41,12 @@ find . -type d -exec chmod 755 {} \;
 find . -type f -exec chmod 644 {} \;
 
 echo "Building package..."
+rm "$PTH/package.sh"
 chmod 755 usr/share/pathpicker/fpp
 fakeroot -- sh -c ' chown -R root:root * && dpkg --build ./ ../fpp.deb ;'
 echo "Restoring template files..."
 cd -
-git checkout HEAD -- "$PTH/DEBIAN/control" "$PTH/usr/share/doc/pathpicker/changelog"
+git checkout HEAD -- "$PTH/DEBIAN/control" "$PTH/usr/share/doc/pathpicker/changelog" "$PTH/package.sh"
 chmod 777 "$PTH/package.sh"
 
 echo 'Done! Check out fpp.deb'
