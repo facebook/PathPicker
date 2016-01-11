@@ -43,7 +43,7 @@ find . -type f -exec chmod 644 {} \;
 echo "Building package..."
 rm "$PTH/package.sh"
 chmod 755 usr/share/pathpicker/fpp
-fakeroot -- sh -c ' chown -R root:root * && dpkg --build ./ ../fpp.deb ;'
+fakeroot -- sh -c "chown -R root:root * && dpkg --build ./ ../fpp_${VERSION}_noarch.deb ;"
 echo "Restoring template files..."
 cd -
 git checkout HEAD -- "$PTH/DEBIAN/control" "$PTH/usr/share/doc/pathpicker/changelog" "$PTH/package.sh"
