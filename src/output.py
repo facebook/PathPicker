@@ -96,7 +96,7 @@ def getEditorAndPath():
 
 def getEditFileCommand(filePath, lineNum):
     editor, _editor_path = getEditorAndPath()
-    if editor == 'vim' and lineNum != 0:
+    if editor in ['vim', 'vim -p'] and lineNum != 0:
         return '\'%s\' +%d' % (filePath, lineNum)
     elif editor in ['vi', 'nvim', 'nano', 'joe', 'emacs',
                     'emacsclient'] and lineNum != 0:
