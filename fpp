@@ -68,7 +68,7 @@ for opt in "$@"; do
     exit 0
   elif [ "$opt" == "--record" -o "$opt" == "-r" ]; then
     echo "Recording input and output..."
-  elif [ "$opt" == "--non-interactive" -o "$opt" == "-n" ]; then
+  elif [ "$opt" == "--non-interactive" -o "$opt" == "-ni" ]; then
     NONINTERACTIVE=true
   elif [ "$opt" == "--keep-open" -o "$opt" == "-ko" ]; then
     # allow control-c to exit the loop
