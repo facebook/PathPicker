@@ -45,6 +45,9 @@ class ScreenFlags(object):
     def getAllInput(self):
         return self.args.all_input
 
+    def getIsNonInteractive(self):
+        return self.args.non_interactive
+
     @staticmethod
     def getArgParser():
         parser = argparse.ArgumentParser(prog='fpp')
@@ -102,6 +105,16 @@ do not exist on the system anymore.''')
                             help='''You may force PathPicker to recognize all
 lines as acceptible input. Typically, PathPicker will scan the input for references
 to file paths. Passing this option will disable those scans and the program will assume that every input line is a match. In practice, this option allows for input selection for a variety of sources that would otherwise be unsupported -- git branches, mercurial bookmarks, etc.''')
+        parser.add_argument('-ni',
+                            '--non-interactive',
+                            default=False,
+                            action="store_true",
+                            help='''Normally, the command that runs after you've
+chosen files to operate on is spawned in an interactive subshell.  This allows you
+to use aliases and have access to environment variables defined in your startup
+files, but can have strange side-effects when starting and stopping jobs
+and redirecting inputs.  Using this flag runs your commands in a non-interactive subshell,
+like a normal shell script.''')
         return parser
 
     @staticmethod
