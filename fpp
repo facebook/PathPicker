@@ -21,6 +21,7 @@ done
 BASEDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 PYTHONCMD="python"
+NONINTERACTIVE=false
 
 function doProgram {
   # process input from pipe and store as pickled file
@@ -34,7 +35,7 @@ function doProgram {
   $PYTHONCMD "$BASEDIR/src/choose.py" "$@" < /dev/tty
   # Determine if running from within vim shell
   IFLAG=""
-  if [ -z "$VIMRUNTIME" ]; then
+  if [ -z "$VIMRUNTIME" -a "$NONINTERACTIVE" = false ]; then
     IFLAG="-i"
   fi
   # execute the output bash script. For zsh or bash
@@ -67,6 +68,8 @@ for opt in "$@"; do
     exit 0
   elif [ "$opt" == "--record" -o "$opt" == "-r" ]; then
     echo "Recording input and output..."
+  elif [ "$opt" == "--non-interactive" -o "$opt" == "-n" ]; then
+    NONINTERACTIVE=true
   elif [ "$opt" == "--keep-open" -o "$opt" == "-ko" ]; then
     # allow control-c to exit the loop
     # http://unix.stackexchange.com/a/48432
