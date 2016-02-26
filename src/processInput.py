@@ -10,7 +10,6 @@ from __future__ import print_function
 import sys
 import os
 import pickle
-import re
 
 import parse
 import format
