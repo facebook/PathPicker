@@ -294,6 +294,11 @@ fileTestCases = [{
     'num': 42,
     'file': './inputs/annoyingTildeExtension.txt~',
 }, {
+    'input': 'inputs/.DS_KINDA_STORE',
+    'validateFileExists': True,
+    'match': True,
+    'file': 'inputs/.DS_KINDA_STORE',
+}, {
     'input': 'evilFile No Prepend.txt',
     'validateFileExists': True,
     'match': True,

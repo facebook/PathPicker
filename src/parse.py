@@ -41,10 +41,12 @@ FILE_NO_PERIODS = re.compile(''.join((
     # Recognize files starting with capital letter and ending in "file".
     # eg. Makefile
     '([A-Z][a-zA-Z]{2,}file)',
+    # end trying to capture
     ')',
     # Regardless of the above case, here's how the file name should terminate
     '(\s|$|:)+'
 )))
+
 MASTER_REGEX_WITH_SPACES = re.compile(''.join((
     # begin the capture
     '(',
@@ -68,9 +70,9 @@ MASTER_REGEX_WITH_SPACES = re.compile(''.join((
     # we do similar for the filename part. the 'character class' is
     # char or char with space following, with some added tokens like @
     # for retina files.
-    '([\(\),@a-zA-Z0-9\-_+.]|\s[,\(\)@a-zA-Z0-9\-_+.])+',
+    '([\(\),@\.a-zA-Z0-9\-_+.]|\s[,\(\)@a-zA-Z0-9\-_+.])+',
     # extensions dont allow spaces
-    '\.[a-zA-Z0-9-]{1,30}'
+    '\.[a-zA-Z0-9-]{1,30}',
     # end capture
     ')',
     # optionally capture the line number
