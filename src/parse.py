@@ -41,15 +41,55 @@ FILE_NO_PERIODS = re.compile(''.join((
     # Recognize files starting with capital letter and ending in "file".
     # eg. Makefile
     '([A-Z][a-zA-Z]{2,}file)',
+    # end trying to capture
     ')',
     # Regardless of the above case, here's how the file name should terminate
     '(\s|$|:)+'
 )))
+
+MASTER_REGEX_WITH_SPACES_AND_WEIRD_FILES = re.compile(''.join((
+    # begin the capture
+    '(',
+    # capture some pre-dir stuff like / and ./
+    '(?:',
+        '\.?\/'
+    ')?', # thats optional
+    # now we look at directories. The 'character class ' allowed before the '/'
+    # is either a real character or a character and a space. This allows
+    # multiple spaces in a directory as long as each space is followed by
+    # a normal character, but it does not allow multiple continguous spaces
+    # which would otherwise gobble up too much whitespace.
+    #
+    # Thus, these directories will match:
+    #   /something foo/
+    #   / a b c d e/
+    #   /normal/
+    #
+    # but these will not:
+    #   /two  spaces  here/
+    #   /ending in a space /
+    '(([a-z.A-Z0-9\-_]|\s[a-zA-Z0-9\-_])+\/)+',
+    # Recognized files starting with a dot followed by at least 3 characters
+    '((\/?([a-z.A-Z0-9\-_]+\/))?\.[a-zA-Z0-9\-_]{3,}[a-zA-Z0-9\-_\/]*)',
+    # or
+    '|',
+    # Recognize files containing at least one slash
+    '([a-z.A-Z0-9\-_\/]{1,}\/[a-zA-Z0-9\-_]{1,})',
+    # or
+    '|',
+    # Recognize files starting with capital letter and ending in "file".
+    # eg. Makefile
+    '([A-Z][a-zA-Z]{2,}file)',
+    ')',
+)))
+
 MASTER_REGEX_WITH_SPACES = re.compile(''.join((
     # begin the capture
     '(',
-    # a leading / for absolute dirs if its there
-    '\/?',
+    # capture some pre-dir stuff like / and ./
+    '(?:',
+        '\.?\/'
+    ')?', # thats optional
     # now we look at directories. The 'character class ' allowed before the '/'
     # is either a real character or a character and a space. This allows
     # multiple spaces in a directory as long as each space is followed by
@@ -70,7 +110,7 @@ MASTER_REGEX_WITH_SPACES = re.compile(''.join((
     # for retina files.
     '([\(\),@a-zA-Z0-9\-_+.]|\s[,\(\)@a-zA-Z0-9\-_+.])+',
     # extensions dont allow spaces
-    '\.[a-zA-Z0-9-]{1,30}'
+    '\.[a-zA-Z0-9-]{1,30}',
     # end capture
     ')',
     # optionally capture the line number
@@ -81,10 +121,12 @@ MASTER_REGEX_WITH_SPACES = re.compile(''.join((
 REGEX_WATERFALL = [{
     # Homedirs need a separate regex.
     'regex': HOMEDIR_REGEX,
+    'name': 'HOMEDIR_REGEX',
 }, {
     # the master regex matches tbgs results with
     # line numbers, so we prefer that and test it first
     'regex': MASTER_REGEX,
+    'name': 'MASTER_REGEX',
     # one real quick check -- did we find a better match
     # earlier in the regex?
     'preferred_regex': OTHER_BGS_RESULT_REGEX,
@@ -95,25 +137,35 @@ REGEX_WATERFALL = [{
     # the line number match since otherwise this would be too lax
     # of a regex.
     'regex': OTHER_BGS_RESULT_REGEX,
+    'name': 'OTHER_BGS_RESULT_REGEX',
 }, {
     'regex': MASTER_REGEX_MORE_EXTENSIONS,
+    'name': 'MASTER_REGEX_MORE_EXTENSIONS',
     'onlyWithFileInspection': True,
 }, {
     # We would overmatch on wayyyyy too many things if we
     # allowed spaces everywhere, but with filesystem validation
     # and the final fallback we can include them.
     'regex': MASTER_REGEX_WITH_SPACES,
+    'name': 'MASTER_REGEX_WITH_SPACES',
+    'numIndex': 4,
+    'onlyWithFileInspection': True,
+}, {
+    'regex': MASTER_REGEX_WITH_SPACES_AND_WEIRD_FILES,
+    'name': 'MASTER_REGEX_WITH_SPACES_AND_WEIRD_FILES',
     'numIndex': 4,
     'onlyWithFileInspection': True,
 }, {
     # ok maybe its just a normal file (with a dot)
     # so lets test for that if the above fails
     'regex': JUST_FILE,
+    'name': 'JUST_FILE',
     'noNum': True
 }, {
     # ok if thats not there, try do to filesystem validation
     # for just files with spaces
     'regex': JUST_FILE_WITH_SPACES,
+    'name': 'JUST_FILE_WITH_SPACES',
     'noNum': True,
     'onlyWithFileInspection': True,
 }, {
@@ -123,9 +175,11 @@ REGEX_WATERFALL = [{
     # we require some minimum number of slashes and minimum
     # file name length
     'regex': FILE_NO_PERIODS,
+    'name': 'FILE_NO_PERIODS',
     'noNum': True,
 }, {
     'regex': ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE,
+    'name': 'ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE',
     'noNum': True,
     'withAllLinesMatched': True
 }]
@@ -205,9 +259,11 @@ def matchLineImpl(line, withFileInspection=False, withAllLinesMatched=False):
         matches = regex.search(line)
         if not matches:
             continue
+
         unpackFunc = unpackMatchesNoNum if \
             regexConfig.get('noNum') else \
             lambda x: unpackMatches(x, numIndex=regexConfig.get('numIndex', 2))
+
         if not regexConfig.get('preferred_regex'):
             results.append(unpackFunc(matches))
             continue
