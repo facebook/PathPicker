@@ -170,7 +170,9 @@ def appendAliasExpansion():
     # despite documentation hinting otherwise.
     #
     # so here we must ask bash to turn on alias expansion.
-    appendToFile("""
+    shell = os.environ.get('SHELL')
+    if 'fish' not in shell:
+        appendToFile("""
 if type shopt > /dev/null; then
   shopt -s expand_aliases
 fi
