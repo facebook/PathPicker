@@ -146,6 +146,11 @@ screenTestCases = [{
     'input': 'longLineAbbreviated.txt',
     'validateFileExists': False,
     'inputs': ['j', 'j', 'f'],
+}, {
+    'name': 'longListPageUpAndDown',
+    'input': 'longList.txt',
+    'inputs': ['NPAGE', 'NPAGE','NPAGE', 'PPAGE'],
+    'validateFileExists': False,
 }]
 
 

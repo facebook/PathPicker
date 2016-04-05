@@ -13,8 +13,6 @@ CODE_TO_CHAR = dict((i, chr(i)) for i in range(256))
 CODE_TO_CHAR.update((value, name[4:]) for name, value in vars(curses).items()
                     if name.startswith('KEY_'))
 # special exceptions
-CODE_TO_CHAR[4] = 'PAGE_DOWN'
 CODE_TO_CHAR[10] = 'ENTER'
-CODE_TO_CHAR[21] = 'PAGE_UP'
 
 CHAR_TO_CODE = dict((v, k) for k, v in CODE_TO_CHAR.items())

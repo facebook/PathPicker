@@ -383,9 +383,9 @@ class Controller(object):
             self.toggleXMode()
         elif key == 'c':
             self.beginEnterCommand()
-        elif key == ' ' or key == 'PAGE_DOWN':
+        elif key == ' ' or key == 'NPAGE':
             self.pageDown()
-        elif key == 'b' or key == 'PAGE_UP':
+        elif key == 'b' or key == 'PPAGE':
             self.pageUp()
         elif key == 'g':
             self.jumpToIndex(0)
