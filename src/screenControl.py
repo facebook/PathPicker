@@ -387,9 +387,9 @@ class Controller(object):
             self.pageDown()
         elif key == 'b' or key == 'PPAGE':
             self.pageUp()
-        elif key == 'g':
+        elif key == 'g' or key == 'HOME':
             self.jumpToIndex(0)
-        elif key == 'G' and not self.mode == X_MODE:
+        elif (key == 'G' and not self.mode == X_MODE) or key == 'END':
             self.jumpToIndex(self.numMatches - 1)
         elif key == 'f':
             self.toggleSelect()
