@@ -9,7 +9,7 @@ from __future__ import print_function
 
 import os
 
-FPP_DIR = '~/.fpp'
+FPP_DIR = os.environ.get('FPP_DIR') or '~/.fpp'
 PICKLE_FILE = '.pickle'
 SELECTION_PICKLE = '.selection.pickle'
 OUTPUT_FILE = '.fpp.sh'

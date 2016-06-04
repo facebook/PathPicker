@@ -127,6 +127,13 @@ with "vim" as a last resort.
 The $FPP_DISABLE_SPLIT environment variable will disable splitting
 files into panes for vim clients (aka sequential editing).
 
+~ Directory ~
+
+PathPicker saves state files for use when starting up, including the
+previous input used and selection pickle. By default, these files are saved
+in ~/.fpp, but the $FPP_DIR environment variable can be used to tell
+PathPicker to use another directory.
+
 ~ Colors ~
 
 FPP will understand colors if the piped input uses them. In general, most
