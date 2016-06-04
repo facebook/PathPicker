@@ -23,10 +23,6 @@ BASEDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 PYTHONCMD="python"
 NONINTERACTIVE=false
 
-if [ -z "$FPP_DIR" ]; then
-  FPP_DIR=~/.fpp
-fi
-
 function doProgram {
   # process input from pipe and store as pickled file
   $PYTHONCMD "$BASEDIR/src/processInput.py" "$@"
