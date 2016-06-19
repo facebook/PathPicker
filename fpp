@@ -23,6 +23,10 @@ BASEDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 PYTHONCMD="python"
 NONINTERACTIVE=false
 
+if [ -z "$FPP_DIR" ]; then
+  FPP_DIR="$HOME/.fpp"
+fi
+
 function doProgram {
   # process input from pipe and store as pickled file
   $PYTHONCMD "$BASEDIR/src/processInput.py" "$@"
@@ -46,9 +50,9 @@ function doProgram {
   # http://stackoverflow.com/questions/3327013/
   # in order to determine which shell we are on
   if [ -n "$BASH" -o -n "$ZSH_NAME" ]; then
-    $SHELL $IFLAG ~/.fpp/.fpp.sh < /dev/tty
+    $SHELL $IFLAG "$FPP_DIR/.fpp.sh" < /dev/tty
   else
-    /bin/bash $IFLAG ~/.fpp/.fpp.sh < /dev/tty
+    /bin/bash $IFLAG "$FPP_DIR/.fpp.sh" < /dev/tty
   fi
 }
 
