@@ -7,6 +7,8 @@
 #
 from __future__ import print_function
 
+import os, time
+
 import curses
 import parse
 from formattedText import FormattedText
@@ -107,6 +109,27 @@ class LineMatch(object):
 
     def getPath(self):
         return self.path
+
+    def getSizeInBytes(self):
+        size = os.stat(self.path).st_size
+        return 'size: ' + str(size) + ' bytes'
+
+    def getLengthInLines(self):
+        num_lines = sum(1 for line in open(self.path))
+        return 'length: ' + str(num_lines) + ' lines'
+
+    def getTimeLastAccessed(self):
+        timeAccessed = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime(os.stat(self.path).st_atime))
+        return 'last accessed: ' + timeAccessed
+
+    def getTimeLastModified(self):
+        timeModified = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime(os.stat(self.path).st_mtime))
+        return 'last modified: ' + timeModified
+
+    def getOwnerId(self):
+        userOwnerId = os.stat(self.path).st_uid
+        groupOwnerId = os.stat(self.path).st_gid
+        return 'owned by: ' + str(userOwnerId) + ' (user), ' + str(groupOwnerId) + ' (group)'
 
     def getDir(self):
         # for the cd command and the like. file is a string like

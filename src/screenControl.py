@@ -58,6 +58,7 @@ class HelperChrome(object):
         self.screenControl = screenControl
         self.flags = flags
         self.WIDTH = 50
+        self.SIDEBAR_Y = 0
         if self.getIsSidebarMode():
             logger.addEvent('init_wide_mode')
         else:
@@ -70,6 +71,9 @@ class HelperChrome(object):
                 func()
             except curses.error:
                 pass
+
+    def outputDescription(self, lineObj):
+        self.outputDescriptionPane(lineObj)
 
     def toggleCursor(self):
         # only include cursor when in command mode
@@ -100,6 +104,26 @@ class HelperChrome(object):
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         return maxx > 200
 
+    def outputDescriptionPane(self, lineObj):
+        if not self.getIsSidebarMode():
+            return
+        (maxy, maxx) = self.screenControl.getScreenDimensions()
+        borderX = maxx - self.WIDTH
+        startY = self.SIDEBAR_Y + 1
+        headerLine = 'Description for ' + lineObj.path + ' :'
+        descLines = [
+                        lineObj.getTimeLastAccessed(),
+                        lineObj.getTimeLastModified(),
+                        lineObj.getOwnerId(),
+                        lineObj.getSizeInBytes(),
+                        lineObj.getLengthInLines()
+                    ]
+        self.printer.addstr(startY, borderX + 2, headerLine)
+        y = startY + 2
+        for descLine in descLines:
+            self.printer.addstr(y, borderX + 2, '    * ' + descLine)
+            y = y + 1
+
     def outputSide(self):
         if not self.getIsSidebarMode():
             return
@@ -112,6 +136,7 @@ class HelperChrome(object):
             usageLines = usageStrings.USAGE_COMMAND.split('\n')
         for index, usageLine in enumerate(usageLines):
             self.printer.addstr(self.getMinY() + index, borderX + 2, usageLine)
+            self.SIDEBAR_Y = self.getMinY() + index
         for y in range(self.getMinY(), maxy):
             self.printer.addstr(y, borderX, '|')
 
@@ -302,6 +327,9 @@ class Controller(object):
     def setSelect(self, val):
         self.lineMatches[self.hoverIndex].setSelect(val)
 
+    def describeFile(self):
+        self.helperChrome.outputDescription(self.lineMatches[self.hoverIndex])
+
     def control(self):
         # we start out by printing everything we need to
         self.printAll()
@@ -391,6 +419,8 @@ class Controller(object):
             self.jumpToIndex(0)
         elif (key == 'G' and not self.mode == X_MODE) or key == 'END':
             self.jumpToIndex(self.numMatches - 1)
+        elif key == 'd':
+            self.describeFile()
         elif key == 'f':
             self.toggleSelect()
         elif key == 'F':
