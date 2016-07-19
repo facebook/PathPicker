@@ -59,6 +59,7 @@ class HelperChrome(object):
         self.flags = flags
         self.WIDTH = 50
         self.SIDEBAR_Y = 0
+        self.DESCRIPTION_CLEAR = True
         if self.getIsSidebarMode():
             logger.addEvent('init_wide_mode')
         else:
@@ -123,6 +124,18 @@ class HelperChrome(object):
         for descLine in descLines:
             self.printer.addstr(y, borderX + 2, '    * ' + descLine)
             y = y + 1
+        self.DESCRIPTION_CLEAR = False
+
+    # to fix bug where description pane may not clear on scroll
+    def clearDescriptionPane(self):
+        if self.DESCRIPTION_CLEAR:
+            return
+        (maxy, maxx) = self.screenControl.getScreenDimensions()
+        borderX = maxx - self.WIDTH
+        startY = self.SIDEBAR_Y + 1
+        for i in range(startY, maxy - 1):
+            self.printer.clearseg(i, borderX + 2, maxx)
+        self.DESCRIPTION_CLEAR = True
 
     def outputSide(self):
         if not self.getIsSidebarMode():
@@ -395,6 +408,8 @@ class Controller(object):
     def moveIndex(self, delta):
         newIndex = (self.hoverIndex + delta) % self.numMatches
         self.jumpToIndex(newIndex)
+        # also clear the description pane if necessary
+        self.helperChrome.clearDescriptionPane()
 
     def jumpToIndex(self, newIndex):
         self.setHover(self.hoverIndex, False)

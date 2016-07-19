@@ -57,3 +57,12 @@ class ColorPrinter(object):
             attr = self.currentAttributes
 
         self.screen.addstr(y, x, text, attr)
+
+    # perhaps there's a more elegant way to do this
+    def clearseg(self, y, startX, endX):
+        spaceStr = '';
+        for x in range(startX, endX):
+            spaceStr += ' '
+        attr = self.cursesAPI.colorPair(self.DEFAULT_COLOR_INDEX)
+
+        self.screen.addstr(y, startX, spaceStr, attr)
