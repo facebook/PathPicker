@@ -111,8 +111,10 @@ class LineMatch(object):
         return self.path
 
     def getSizeInBytes(self):
-        size = os.stat(self.path).st_size
-        return 'size: ' + str(size) + ' bytes'
+        bashCommand = "ls -lh " + self.path
+        output = subprocess.check_output(bashCommand.split())
+        size = output.split()[4]
+        return 'size: ' + str(size)
 
     def getLengthInLines(self):
         bashCommand = "wc -l " + self.path
