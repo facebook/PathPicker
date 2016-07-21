@@ -58,11 +58,14 @@ class ColorPrinter(object):
 
         self.screen.addstr(y, x, text, attr)
 
+    def clearSquare(self, topY, bottomY, leftX, rightX):
+        # clear out square from top to bottom
+        for i in range(topY, bottomY):
+            self.clearSegment(i, leftX, rightX)
+
     # perhaps there's a more elegant way to do this
-    def clearseg(self, y, startX, endX):
-        spaceStr = '';
-        for x in range(startX, endX):
-            spaceStr += ' '
+    def clearSegment(self, y, startX, endX):
+        spaceStr = ' ' * (endX - startX)
         attr = self.cursesAPI.colorPair(self.DEFAULT_COLOR_INDEX)
 
         self.screen.addstr(y, startX, spaceStr, attr)

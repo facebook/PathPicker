@@ -58,12 +58,13 @@ USAGE_PAGE = '''
     * [f] toggle the selection of a file
     * [F] toggle and move downward by 1
     * [A] toggle selection of all (unique) files
-    * [d] describe file
     * [down arrow|j] move downward by 1
     * [up arrow|k] move upward by 1
     * [<space>] page down
     * [b] page up
     * [x] quick select mode
+    * [d] describe file
+
 
 Once you have your files selected, you can
 either open them in your favorite

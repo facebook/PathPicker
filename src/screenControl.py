@@ -105,24 +105,31 @@ class HelperChrome(object):
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         return maxx > 200
 
+    def trimLine(self, str, width):
+        return str[:width]
+
     def outputDescriptionPane(self, lineObj):
         if not self.getIsSidebarMode():
             return
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         borderX = maxx - self.WIDTH
         startY = self.SIDEBAR_Y + 1
+        startX = borderX + 2
         headerLine = 'Description for ' + lineObj.path + ' :'
+        linePrefix = '    * '
         descLines = [
                         lineObj.getTimeLastAccessed(),
                         lineObj.getTimeLastModified(),
-                        lineObj.getOwnerId(),
+                        lineObj.getOwnerUser(),
+                        lineObj.getOwnerGroup(),
                         lineObj.getSizeInBytes(),
                         lineObj.getLengthInLines()
                     ]
-        self.printer.addstr(startY, borderX + 2, headerLine)
+        self.printer.addstr(startY, startX, headerLine)
         y = startY + 2
         for descLine in descLines:
-            self.printer.addstr(y, borderX + 2, '    * ' + descLine)
+            descLine = self.trimLine(descLine, maxx - startX - len(linePrefix))
+            self.printer.addstr(y, startX, linePrefix + descLine)
             y = y + 1
         self.DESCRIPTION_CLEAR = False
 
@@ -133,8 +140,7 @@ class HelperChrome(object):
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         borderX = maxx - self.WIDTH
         startY = self.SIDEBAR_Y + 1
-        for i in range(startY, maxy - 1):
-            self.printer.clearseg(i, borderX + 2, maxx)
+        self.printer.clearSquare(startY, maxy - 1, borderX + 2, maxx)
         self.DESCRIPTION_CLEAR = True
 
     def outputSide(self):
