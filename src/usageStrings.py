@@ -63,6 +63,8 @@ USAGE_PAGE = '''
     * [<space>] page down
     * [b] page up
     * [x] quick select mode
+    * [d] describe file
+
 
 Once you have your files selected, you can
 either open them in your favorite
