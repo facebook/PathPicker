@@ -1,0 +1,60 @@
+src/charCodeMapping.py         | 20 +++++++++++++
+BBBBBBBBBBBBBBBBBBBBBB                                                          
+src/choose.py                  | 15 ++++++++--
+_____________                                                                   
+src/colorPrinter.py            | 21 ++++++++-----
+___________________                                                             
+src/cursesAPI.py               | 40 +++++++++++++++++++++++++
+________________                                                                
+src/format.py                  |  4 +--
+_____________                                                                   
+src/processInput.py            |  7 +++++
+___________________                                                             
+/foo/bar/src/charCodeMapping.py         | 20 +++++++++++++
+                                                                                
+/foo/bar/src/choose.py                  | 15 ++++++++--
+                                                                                
+/foo/bar/src/colorPrinter.py            | 21 ++++++++-----
+                                                                                
+/foo/bar/src/cursesAPI.py               | 40 +++++++++++++++++++++++++
+                                                                                
+/foo/bar/src/format.py                  |  4 +--
+                                                                                
+/foo/bar/src/processInput.py            |  7 +++++
+                                                                                
+/foo/bar/src/screenControl.py           | 28 +++++++-----------
+                                                                                
+/foo/bar/src/screenFlags.py             | 34 +++++++++++++++++++++
+                                                                                
+14 files changed, 290 insertions(+), 33 deletions(-)
+                                                                                
+
+                                                                                
+
+                                                                                
+
+                                                                                
+
+                                                                                
+
+                                                                                
+
+                                                                                
+
+                                                                                
+
+                                                                                
+
+                                                                                
+
+                                                                                
+
+                                                                                
+
+                                                                                
+
+                                                                                
+________________________________________________________________________________
+                                                                                
+[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick selec
+                                                                                
