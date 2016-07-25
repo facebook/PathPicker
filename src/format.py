@@ -121,10 +121,6 @@ class LineMatch(object):
         output = subprocess.check_output(bashCommand.split())
         return 'length: ' + str(output.strip().split()[0]) + ' lines'
 
-    def getTimeLastAccessed(self):
-        timeAccessed = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime(os.stat(self.path).st_atime))
-        return 'last accessed: ' + timeAccessed
-
     def getTimeLastModified(self):
         timeModified = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime(os.stat(self.path).st_mtime))
         return 'last modified: ' + timeModified
