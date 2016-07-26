@@ -178,7 +178,7 @@ screenTestCases = [{
     'screenConfig': {
         'maxX': 201,
         'maxY': 40
-    },
+    }
 }]
 
 
