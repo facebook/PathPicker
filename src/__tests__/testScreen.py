@@ -103,6 +103,16 @@ screenTestCases = [{
         'maxY': 30,
     }
 }, {
+    'name': 'longFileNamesWithBeforeTextBug',
+    'input': 'longFileNamesWithBeforeText.txt',
+    'validateFileExists': False,
+    'withAttributes': False,
+    'inputs': ['f'],
+    'screenConfig': {
+        'maxX': 95,
+        'maxY': 40,
+    }
+}, {
     'name': 'dontWipeChrome',
     'input': 'gitDiffColor.txt',
     'withAttributes': True,

@@ -207,7 +207,7 @@ class LineMatch(object):
             self.controller.dirtyLine(self.index)
 
         plainText = decoratorText + self.getMatch()
-        if maxLen and len(plainText) > maxLen:
+        if maxLen and len(plainText + str(self.beforeText)) > maxLen:
             # alright, we need to chop the ends off of our
             # decorated match and glue them together with our
             # truncation decorator. We subtract the length of the
