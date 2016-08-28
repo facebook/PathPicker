@@ -1,5 +1,5 @@
 === dummy1.txt
-     BBBBBBBBBB                                                                 
+     **********                                                                 
 \-/ dummy2.txt
      __________                                                                 
  .  dummy3.txt

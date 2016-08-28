@@ -5,7 +5,7 @@
  .  dummy99.txt
      ___________                                                                
  .  dummy100.txt
-     BBBBBBBBBBBB                                                               
+     ************                                                               
  .  
                                                                                 
  .  

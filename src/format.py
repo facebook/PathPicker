@@ -191,7 +191,7 @@ class LineMatch(object):
         if self.hovered and self.selected:
             attributes = (curses.COLOR_WHITE, curses.COLOR_RED, 0)
         elif self.hovered:
-            attributes = (curses.COLOR_WHITE, curses.COLOR_BLUE, 0)
+            attributes = (curses.COLOR_WHITE, curses.COLOR_BLUE, FormattedText.BOLD_ATTRIBUTE)
         elif self.selected:
             attributes = (curses.COLOR_WHITE, curses.COLOR_GREEN, 0)
         elif not self.allInput:

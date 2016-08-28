@@ -3,7 +3,7 @@
  fpp                            |  6 ++--
                                                                                 
  src/__tests__/__init__.py      |  0
- BBBBBBBBBBBBBBBBBBBBBBBBB                                                      
+ *************************                                                      
  src/__tests__/cursesForTest.py | 45 ++++++++++++++++++++++++++++
  ______________________________                                                 
  src/__tests__/initTest.py      | 28 ++++++++++++++++++

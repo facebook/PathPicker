@@ -15,6 +15,7 @@ ATTRIBUTE_SYMBOL_MAPPING = {
     0: ' ',
     1: ' ',
     2: 'B',
+    2097154: '*',  # bold white
     131072: '_',
     3: 'G',
     4: 'R',

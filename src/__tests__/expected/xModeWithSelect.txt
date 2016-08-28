@@ -1,5 +1,5 @@
 A README.md                      |  8 ++++-
-      BBBBBBBBB                                                                 
+      *********                                                                 
 B fpp                            |  6 ++--
                                                                                 
 C src/__tests__/__init__.py      |  0
