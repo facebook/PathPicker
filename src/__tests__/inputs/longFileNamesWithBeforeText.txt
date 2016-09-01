@@ -1,0 +1,2 @@
+-rw-r--r--@  1 pcottle  THEFACEBOOK\Domain Users    401 Jun  4  2015 longfilenamereallylongfilenameitssuperlongareyoutiredoftryingtoreadthisyetding.txt
+-rw-r--r--@  1 pcottle  THEFACEBOOK\Domain Users    401 Jun  4  2015 foo.txt
