@@ -204,11 +204,11 @@ def appendExit():
     shell = os.environ['SHELL']
     # ``csh``, fish`` and, ``rc`` uses ``$status`` instead of ``$?``.
     if shell.endswith('csh') or shell.endswith('fish') or shell.endswith['rc']:
-        exist_status = '$status'
+        exit_status = '$status'
     # Otherwise we assume a Bournal-like shell, e.g. bash and zsh.
     else:
-        exist_status = '$?'
-    appendToFile('exit {status};'.format(status=exist_status))
+        exit_status = '$?'
+    appendToFile('exit {status};'.format(status=exit_status))
 
 
 def writeToFile(command):
