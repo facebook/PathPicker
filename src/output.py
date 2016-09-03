@@ -156,7 +156,7 @@ def composeFileCommand(command, lineObjs):
 
 
 def outputNothing():
-    appendToFile('echo "nothing to do!" && exit 1')
+    appendToFile('echo "nothing to do!"; exit 1')
 
 
 def clearFile():
@@ -198,7 +198,17 @@ def appendToFile(command):
 
 
 def appendExit():
-    appendToFile('exit;')
+    # The `$SHELL` environment variable points to the default shell,
+    # not the current shell. But they are often the same. And there
+    # is no other simple and reliable way to detect the current shell.
+    shell = os.environ['SHELL']
+    # ``csh``, fish`` and, ``rc`` uses ``$status`` instead of ``$?``.
+    if shell.endswith('csh') or shell.endswith('fish') or shell.endswith['rc']:
+        exit_status = '$status'
+    # Otherwise we assume a Bournal-like shell, e.g. bash and zsh.
+    else:
+        exit_status = '$?'
+    appendToFile('exit {status};'.format(status=exit_status))
 
 
 def writeToFile(command):
