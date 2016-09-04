@@ -203,7 +203,7 @@ def appendExit():
     # is no other simple and reliable way to detect the current shell.
     shell = os.environ['SHELL']
     # ``csh``, fish`` and, ``rc`` uses ``$status`` instead of ``$?``.
-    if shell.endswith('csh') or shell.endswith('fish') or shell.endswith['rc']:
+    if shell.endswith('csh') or shell.endswith('fish') or shell.endswith('rc'):
         exit_status = '$status'
     # Otherwise we assume a Bournal-like shell, e.g. bash and zsh.
     else:
