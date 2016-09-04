@@ -189,11 +189,11 @@ class LineMatch(object):
         '''Update the cached decorated match formatted string, and
         dirty the line, if needed'''
         if self.hovered and self.selected:
-            attributes = (curses.COLOR_WHITE, curses.COLOR_RED, 0)
+            attributes = (curses.COLOR_WHITE, curses.COLOR_RED, FormattedText.BOLD_ATTRIBUTE)
         elif self.hovered:
             attributes = (curses.COLOR_WHITE, curses.COLOR_BLUE, FormattedText.BOLD_ATTRIBUTE)
         elif self.selected:
-            attributes = (curses.COLOR_WHITE, curses.COLOR_GREEN, 0)
+            attributes = (curses.COLOR_WHITE, curses.COLOR_GREEN, FormattedText.BOLD_ATTRIBUTE)
         elif not self.allInput:
             attributes = (0, 0, FormattedText.UNDERLINE_ATTRIBUTE)
         else:

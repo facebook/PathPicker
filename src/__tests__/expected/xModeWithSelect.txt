@@ -7,13 +7,13 @@ C src/__tests__/__init__.py      |  0
 D src/__tests__/cursesForTest.py | 45 ++++++++++++++++++++++++++++
       ______________________________                                            
 E |===>src/__tests__/initTest.py      | 28 ++++++++++++++++++
-      GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG                                            
+      ||||||||||||||||||||||||||||||                                            
 F src/__tests__/screenForTest.py | 67 ++++++++++++++++++++++++++++++++++++++
       ______________________________                                            
 G src/charCodeMapping.py         | 20 +++++++++++++
       ______________________                                                    
 H |===>src/choose.py                  | 15 ++++++++--
-      GGGGGGGGGGGGGGGGGG                                                        
+      ||||||||||||||||||                                                        
 I src/colorPrinter.py            | 21 ++++++++-----
       ___________________                                                       
 J src/cursesAPI.py               | 40 +++++++++++++++++++++++++

@@ -83,7 +83,7 @@
  fpp                                                |  4 +|    * [f] toggle the selection of a file
                                                          G                                                                                                                                               
  |===>fpp.rb                                             |  4 +-|    * [F] toggle and move downward by 1
- ???????????                                                  GR                                                                                                                                         
+ @@@@@@@@@@@                                                  GR                                                                                                                                         
  index.html                                         | 11 ++-|    * [A] toggle selection of all (unique) files
  __________                                              GGR                                                                                                                                             
  scripts/makeDist.sh                                |  2 +-|    * [down arrow|j] move downward by 1
@@ -243,7 +243,7 @@
  fpp                                                |  4 +|    * [f] toggle the selection of a file
                                                          G                                                                                                                                               
  |===>fpp.rb                                             |  4 +-|    * [F] toggle and move downward by 1
- ???????????                                                  GR                                                                                                                                         
+ @@@@@@@@@@@                                                  GR                                                                                                                                         
  index.html                                         | 11 ++-|    * [A] toggle selection of all (unique) files
  __________                                              GGR                                                                                                                                             
  scripts/makeDist.sh                                |  2 +-|    * [down arrow|j] move downward by 1
@@ -323,7 +323,7 @@
  fpp                                                |  4 +|    * [f] toggle the selection of a file
                                                          G                                                                                                                                               
  |===>fpp.rb                                             |  4 +-|    * [F] toggle and move downward by 1
- !!!!!!!!!!!                                                  GR                                                                                                                                         
+ ~~~~~~~~~~~                                                  GR                                                                                                                                         
  index.html                                         | 11 ++-|    * [A] toggle selection of all (unique) files
  __________                                              GGR                                                                                                                                             
  scripts/makeDist.sh                                |  2 +-|    * [down arrow|j] move downward by 1
