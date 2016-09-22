@@ -118,6 +118,8 @@ def joinEditCommands(partialCommands):
     editor, editor_path = getEditorAndPath()
     if editor in ['vim', 'mvim'] and \
             not os.environ.get('FPP_DISABLE_SPLIT'):
+        if partialCommands.__len__() > 1:
+            editor_path = 'vimdiff'
         return editor_path + ' -O ' + ' '.join(partialCommands)
     # Assume that all other editors behave like emacs
     return editor_path + ' ' + ' '.join(partialCommands)

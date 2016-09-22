@@ -37,6 +37,7 @@ lbls = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'"
 
 # options for displayed to the user at the bottom of the screen
 SHORT_NAV_OPTION_SELECTION_STR = '[f|A] selection'
+SHORT_NAV_OPTION_UNSELECTIONALL_STR = '[D] unselect all'
 SHORT_NAV_OPTION_NAVIGATION_STR = '[down|j|up|k|space|b] navigation'
 SHORT_NAV_OPTION_OPEN_STR = '[enter] open'
 SHORT_NAV_OPTION_QUICK_SELECT_STR = '[x] quick select mode'
@@ -176,6 +177,7 @@ class HelperChrome(object):
 
     def getShortNavUsageString(self):
         navOptions = [SHORT_NAV_OPTION_SELECTION_STR,
+                      SHORT_NAV_OPTION_UNSELECTIONALL_STR,
                       SHORT_NAV_OPTION_NAVIGATION_STR,
                       SHORT_NAV_OPTION_OPEN_STR,
                       SHORT_NAV_OPTION_QUICK_SELECT_STR,
@@ -343,6 +345,11 @@ class Controller(object):
                 paths.add(line.getPath())
                 line.toggleSelect()
 
+    def disableAll(self):
+        for line in self.lineMatches:
+            if line.selected:
+                line.toggleSelect()
+
     def setSelect(self, val):
         self.lineMatches[self.hoverIndex].setSelect(val)
 
@@ -449,6 +456,8 @@ class Controller(object):
             self.moveIndex(1)
         elif key == 'A' and not self.mode == X_MODE:
             self.toggleSelectAll()
+        elif key == 'D':
+            self.disableAll()
         elif key == 'ENTER' and (not self.flags.getAllInput() or len(self.flags.getPresetCommand())):
             # it does not make sense to process an 'ENTER' keypress if we're in the allInput
             # mode and there is not a preset command.
