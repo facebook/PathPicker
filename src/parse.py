@@ -307,7 +307,8 @@ def prependDir(file, withFileInspection=False):
     # some peeps do forcedir and expand the path beforehand,
     # so lets check for that case here
     first = file.split(os.sep)[0]
-    if first == 'home':
+    if first == 'home' and \
+            not os.environ.get('FPP_DISABLE_PREPENDING_HOME_WITH_SLASH'):
         # already absolute, easy
         return '/' + file
 
