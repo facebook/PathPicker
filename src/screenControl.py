@@ -37,7 +37,6 @@ lbls = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'"
 
 # options for displayed to the user at the bottom of the screen
 SHORT_NAV_OPTION_SELECTION_STR = '[f|A] selection'
-SHORT_NAV_OPTION_UNSELECTIONALL_STR = '[D] unselect all'
 SHORT_NAV_OPTION_NAVIGATION_STR = '[down|j|up|k|space|b] navigation'
 SHORT_NAV_OPTION_OPEN_STR = '[enter] open'
 SHORT_NAV_OPTION_QUICK_SELECT_STR = '[x] quick select mode'
@@ -180,8 +179,7 @@ class HelperChrome(object):
                       SHORT_NAV_OPTION_NAVIGATION_STR,
                       SHORT_NAV_OPTION_OPEN_STR,
                       SHORT_NAV_OPTION_QUICK_SELECT_STR,
-                      SHORT_NAV_OPTION_COMMAND_STR,
-                      SHORT_NAV_OPTION_UNSELECTIONALL_STR]
+                      SHORT_NAV_OPTION_COMMAND_STR]
 
         # it does not make sense to give the user the option to "open" the selection
         # in all-input mode
