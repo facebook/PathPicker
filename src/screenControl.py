@@ -118,7 +118,6 @@ class HelperChrome(object):
         headerLine = 'Description for ' + lineObj.path + ' :'
         linePrefix = '    * '
         descLines = [
-                        lineObj.getTimeLastAccessed(),
                         lineObj.getTimeLastModified(),
                         lineObj.getOwnerUser(),
                         lineObj.getOwnerGroup(),

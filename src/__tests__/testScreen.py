@@ -179,6 +179,16 @@ screenTestCases = [{
     'screenConfig': {
         'maxY': 10
     }
+}, {
+    'name': 'testDescribeFile',
+    'inputs': ['d'],
+    'input': 'gitDiffSomeExist.txt',
+    'validateFileExists': True,
+    'withAttributes': True,
+    'screenConfig': {
+        'maxX': 201,
+        'maxY': 40
+    }
 }]
 
 
