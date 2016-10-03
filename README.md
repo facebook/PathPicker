@@ -62,7 +62,7 @@ PathPicker since it's essentially just a bash script that calls some Python. The
 steps more-or-less outline the process:
 
 * `cd /usr/local/ # or wherever you install apps`
-* `git clone git@github.com:facebook/PathPicker.git`
+* `git clone https://github.com/facebook/PathPicker.git`
 * `cd PathPicker/`
 
 Here we make a symbolic link from the bash script in the repo
