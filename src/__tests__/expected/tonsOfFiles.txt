@@ -1,0 +1,30 @@
+./drivers/acpi/acpica/utxferror.c
+./drivers/acpi/acpica/utascii.c
+./drivers/acpi/acpica/tbinstal.c
+./drivers/acpi/acpica/utprint.c
+./drivers/acpi/acpica/evevent.c
+./drivers/acpi/acpica/dsdebug.c
+./drivers/acpi/acpica/psloop.c
+./drivers/acpi/acpica/utstrtoul64.c
+./drivers/acpi/acpica/utaddress.c
+./drivers/acpi/acpica/evgpeutil.c
+./drivers/acpi/acpica/dsobject.c
+./drivers/acpi/acpica/exregion.c
+./drivers/acpi/acpica/nsload.c
+./drivers/acpi/acpica/utnonansi.c
+./drivers/acpi/acpica/utxfinit.c
+./drivers/acpi/acpica/evxface.c
+./drivers/acpi/acpica/exconvrt.c
+./drivers/acpi/acpica/hwtimer.c
+./drivers/acpi/acpica/utdebug.c
+./drivers/acpi/acpica/exoparg1.c
+./drivers/acpi/acpica/utexcep.c
+./drivers/acpi/acpica/nsxfobj.c
+./drivers/acpi/acpica/hwgpe.c
+==========================================================
+Type a command below! Paths will be appended or replace $F
+Enter a blank line to go back to the selection process
+==========================================================
+..........................................................
+________________________________________________________________________________
+command examples: | git add | git checkout HEAD~1 -- | mv $F ../here/ |

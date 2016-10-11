@@ -486,7 +486,19 @@ class Controller(object):
         pathObjs = self.getPathsToUse()
         paths = [pathObj.getPath() for pathObj in pathObjs]
         (maxy, maxx) = self.getScreenDimensions()
-        halfHeight = int(round(maxy / 2) - len(paths) / 2.0)
+
+        # Alright this is a bit tricy -- for tall screens, we try to aim
+        # the command prompt right at the middle of the screen so you dont
+        # have to shift your eyes down or up a bunch
+        beginHeight = int(round(maxy / 2) - len(paths) / 2.0)
+        # but if you have a TON of paths, we are going to start printing
+        # way off screen. in this case lets just slap the prompt
+        # at the bottom so we can fit as much as possible.
+        #
+        # There could better option here to slowly increase the prompt
+        # height to the bottom, but this is good enough for now...
+        if beginHeight <= 1:
+            beginHeight = maxy - 6
 
         borderLine = '=' * len(SHORT_COMMAND_PROMPT)
         promptLine = '.' * len(SHORT_COMMAND_PROMPT)
@@ -497,28 +509,35 @@ class Controller(object):
             maxPathLength = len(SHORT_COMMAND_PROMPT) + 18
 
         # first lets print all the paths
-        startHeight = halfHeight - 1 - len(paths)
+        startHeight = beginHeight - 1 - len(paths)
         try:
             self.colorPrinter.addstr(startHeight - 3, 0, borderLine)
             self.colorPrinter.addstr(startHeight - 2, 0, SHORT_PATHS_HEADER)
             self.colorPrinter.addstr(startHeight - 1, 0, borderLine)
-            for index, path in enumerate(paths):
-                self.colorPrinter.addstr(startHeight + index, 0,
-                                         path[0:maxPathLength])
         except curses.error:
             pass
 
+        for index, path in enumerate(paths):
+            try:
+                self.colorPrinter.addstr(
+                    startHeight + index,
+                    0,
+                    path[0:maxPathLength]
+                )
+            except curses.error:
+                pass
+
         # first print prompt
         try:
-            self.colorPrinter.addstr(halfHeight, 0, SHORT_COMMAND_PROMPT)
-            self.colorPrinter.addstr(halfHeight + 1, 0, SHORT_COMMAND_PROMPT2)
+            self.colorPrinter.addstr(beginHeight, 0, SHORT_COMMAND_PROMPT)
+            self.colorPrinter.addstr(beginHeight + 1, 0, SHORT_COMMAND_PROMPT2)
         except curses.error:
             pass
         # then line to distinguish and prompt line
         try:
-            self.colorPrinter.addstr(halfHeight - 1, 0, borderLine)
-            self.colorPrinter.addstr(halfHeight + 2, 0, borderLine)
-            self.colorPrinter.addstr(halfHeight + 3, 0, promptLine)
+            self.colorPrinter.addstr(beginHeight - 1, 0, borderLine)
+            self.colorPrinter.addstr(beginHeight + 2, 0, borderLine)
+            self.colorPrinter.addstr(beginHeight + 3, 0, promptLine)
         except curses.error:
             pass
 
@@ -526,7 +545,7 @@ class Controller(object):
         self.cursesAPI.echo()
         maxX = int(round(maxx - 1))
 
-        command = self.stdscr.getstr(halfHeight + 3, 0, maxX)
+        command = self.stdscr.getstr(beginHeight + 3, 0, maxX)
         return command
 
     def beginEnterCommand(self):

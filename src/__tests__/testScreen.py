@@ -179,6 +179,15 @@ screenTestCases = [{
     'screenConfig': {
         'maxY': 10
     }
+}, {
+    'name': 'tonsOfFiles',
+    'input': 'tonsOfFiles.txt',
+    'inputs': ['A', 'c'],
+    'validateFileExists': False,
+    'pastScreen': 1,
+    'screenConfig': {
+        'maxY': 30
+    }
 }]
 
 
