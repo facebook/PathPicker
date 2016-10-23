@@ -7,7 +7,9 @@
 #
 from __future__ import print_function
 
-import os, time, subprocess
+import os
+import time
+import subprocess
 
 import curses
 import parse
@@ -122,11 +124,13 @@ class LineMatch(object):
         return 'length: ' + str(output.strip().split()[0]) + ' lines'
 
     def getTimeLastAccessed(self):
-        timeAccessed = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime(os.stat(self.path).st_atime))
+        timeAccessed = time.strftime(
+            '%m/%d/%Y %H:%M:%S', time.localtime(os.stat(self.path).st_atime))
         return 'last accessed: ' + timeAccessed
 
     def getTimeLastModified(self):
-        timeModified = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime(os.stat(self.path).st_mtime))
+        timeModified = time.strftime(
+            '%m/%d/%Y %H:%M:%S', time.localtime(os.stat(self.path).st_mtime))
         return 'last modified: ' + timeModified
 
     def getOwnerUser(self):
@@ -189,11 +193,14 @@ class LineMatch(object):
         '''Update the cached decorated match formatted string, and
         dirty the line, if needed'''
         if self.hovered and self.selected:
-            attributes = (curses.COLOR_WHITE, curses.COLOR_RED, FormattedText.BOLD_ATTRIBUTE)
+            attributes = (curses.COLOR_WHITE, curses.COLOR_RED,
+                          FormattedText.BOLD_ATTRIBUTE)
         elif self.hovered:
-            attributes = (curses.COLOR_WHITE, curses.COLOR_BLUE, FormattedText.BOLD_ATTRIBUTE)
+            attributes = (curses.COLOR_WHITE, curses.COLOR_BLUE,
+                          FormattedText.BOLD_ATTRIBUTE)
         elif self.selected:
-            attributes = (curses.COLOR_WHITE, curses.COLOR_GREEN, FormattedText.BOLD_ATTRIBUTE)
+            attributes = (curses.COLOR_WHITE, curses.COLOR_GREEN,
+                          FormattedText.BOLD_ATTRIBUTE)
         elif not self.allInput:
             attributes = (0, 0, FormattedText.UNDERLINE_ATTRIBUTE)
         else:

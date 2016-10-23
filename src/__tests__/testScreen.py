@@ -159,12 +159,12 @@ screenTestCases = [{
 }, {
     'name': 'longListPageUpAndDown',
     'input': 'longList.txt',
-    'inputs': ['NPAGE', 'NPAGE','NPAGE', 'PPAGE'],
+    'inputs': ['NPAGE', 'NPAGE', 'NPAGE', 'PPAGE'],
     'validateFileExists': False,
 }, {
     'name': 'longListHomeKey',
     'input': 'longList.txt',
-    'inputs': [' ', ' ','HOME'],
+    'inputs': [' ', ' ', 'HOME'],
     'withAttributes': True,
     'validateFileExists': False,
     'screenConfig': {
