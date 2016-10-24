@@ -25,6 +25,10 @@ from the team will start reviewing.
 Before sending them over, make sure the tests pass with:
 `./scripts/buildAndTest.sh`
 
+#### Test dependencies
+
+* [autopep8](https://github.com/hhatto/autopep8)
+
 ### Contributor License Agreement ("CLA")
 
 In order to accept your pull request, we need you to submit a CLA. You only need to do this once, so if you've done this for another Facebook open source project, you're good to go. If you are submitting a pull request for the first time, just let us know that you have completed the CLA and we can cross-check with your GitHub username.

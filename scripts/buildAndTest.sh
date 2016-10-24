@@ -1,4 +1,10 @@
 #!/bin/bash
+
+if ! type autopep8 > /dev/null; then
+  echo "'autopep8' required for build."
+  exit 1;
+fi
+
 PEPLINES=$(autopep8 --recursive ./src/ --diff | wc -l)
 if (( PEPLINES > 0 )); then
   echo "Not Pep8 compliant:";

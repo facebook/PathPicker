@@ -118,13 +118,13 @@ class HelperChrome(object):
         headerLine = 'Description for ' + lineObj.path + ' :'
         linePrefix = '    * '
         descLines = [
-                        lineObj.getTimeLastAccessed(),
-                        lineObj.getTimeLastModified(),
-                        lineObj.getOwnerUser(),
-                        lineObj.getOwnerGroup(),
-                        lineObj.getSizeInBytes(),
-                        lineObj.getLengthInLines()
-                    ]
+            lineObj.getTimeLastAccessed(),
+            lineObj.getTimeLastModified(),
+            lineObj.getOwnerUser(),
+            lineObj.getOwnerGroup(),
+            lineObj.getSizeInBytes(),
+            lineObj.getLengthInLines()
+        ]
         self.printer.addstr(startY, startX, headerLine)
         y = startY + 2
         for descLine in descLines:
