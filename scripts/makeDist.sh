@@ -2,7 +2,7 @@
 VERSION="$(python ./src/version.py)"
 DEST="./dist/fpp.$VERSION.tar.gz"
 mkdir -p ./dist/
-tar -cf $DEST src/*.py fpp
+tar -czf $DEST src/*.py fpp
 
 sed -i '' -e "s#url .*#url \"https://github.com/facebook/PathPicker/releases/download/$VERSION/fpp.$VERSION.tar.gz\"#g" ./fpp.rb
 HASH=$(cat $DEST | shasum -a 256 | cut -d " " -f 1)
