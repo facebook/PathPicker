@@ -343,6 +343,11 @@ class Controller(object):
                 paths.add(line.getPath())
                 line.toggleSelect()
 
+    def disableAll(self):
+        for line in self.lineMatches:
+            if line.selected:
+                line.toggleSelect()
+
     def setSelect(self, val):
         self.lineMatches[self.hoverIndex].setSelect(val)
 
@@ -449,6 +454,8 @@ class Controller(object):
             self.moveIndex(1)
         elif key == 'A' and not self.mode == X_MODE:
             self.toggleSelectAll()
+        elif key == 'D':
+            self.disableAll()
         elif key == 'ENTER' and (not self.flags.getAllInput() or len(self.flags.getPresetCommand())):
             # it does not make sense to process an 'ENTER' keypress if we're in the allInput
             # mode and there is not a preset command.
