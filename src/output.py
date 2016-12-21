@@ -48,7 +48,8 @@ def execComposedCommand(command, lineObjs):
 
 def editFiles(lineObjs):
     logger.addEvent('editing_num_files', len(lineObjs))
-    filesAndLineNumbers = [(lineObj.getPath(), lineObj.getLineNum()) for lineObj in lineObjs]
+    filesAndLineNumbers = [(lineObj.getPath(), lineObj.getLineNum())
+                           for lineObj in lineObjs]
     command = joinFilesIntoCommand(filesAndLineNumbers)
     appendIfInvalid(lineObjs)
     appendToFile(command)
@@ -91,26 +92,30 @@ def getEditorAndPath():
     return 'vim', 'vim'
 
 
-
 def expandPath(filePath):
     # expand ~/ paths
     filePath = os.path.expanduser(filePath)
     # and in case of grep, expand ./ as well
     return os.path.abspath(filePath)
 
+
 def joinFilesIntoCommand(filesAndLineNumbers):
     editor, editor_path = getEditorAndPath()
     cmd = editor_path + ' '
-    if editor in ['vim', 'vim -p']:
+    if editor == 'vim -p':
         firstFilePath, firstLineNum = filesAndLineNumbers[0]
         cmd += ' +%d %s' % (firstLineNum, firstFilePath)
         for (filePath, lineNum) in filesAndLineNumbers[1:]:
             cmd += ' +"tabnew +%d %s"' % (lineNum, filePath)
+    elif editor == 'vim':
+        firstFilePath, firstLineNum = filesAndLineNumbers[0]
+        cmd += ' +%d %s' % (firstLineNum, firstFilePath)
+        for (filePath, lineNum) in filesAndLineNumbers[1:]:
+            cmd += ' +"vsp +%d %s"' % (lineNum, filePath)
     else:
         for (filePath, lineNum) in filesAndLineNumbers:
-            logger.addEvent('cLINE', filePath);
             if editor in ['vi', 'nvim', 'nano', 'joe', 'emacs',
-                        'emacsclient'] and lineNum != 0:
+                          'emacsclient'] and lineNum != 0:
                 cmd += ' +%d \'%s\'' % (lineNum, filePath)
             elif editor in ['subl', 'sublime', 'atom'] and lineNum != 0:
                 cmd += ' \'%s:%d\'' % (filePath, lineNum)
