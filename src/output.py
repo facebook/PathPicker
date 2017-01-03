@@ -47,12 +47,10 @@ def execComposedCommand(command, lineObjs):
 
 
 def editFiles(lineObjs):
-    partialCommands = []
     logger.addEvent('editing_num_files', len(lineObjs))
-    for lineObj in lineObjs:
-        (path, num) = (lineObj.getPath(), lineObj.getLineNum())
-        partialCommands.append(getEditFileCommand(path, num))
-    command = joinEditCommands(partialCommands)
+    filesAndLineNumbers = [(lineObj.getPath(), lineObj.getLineNum())
+                           for lineObj in lineObjs]
+    command = joinFilesIntoCommand(filesAndLineNumbers)
     appendIfInvalid(lineObjs)
     appendToFile(command)
     appendExit()
@@ -94,19 +92,6 @@ def getEditorAndPath():
     return 'vim', 'vim'
 
 
-def getEditFileCommand(filePath, lineNum):
-    editor, _editor_path = getEditorAndPath()
-    if editor in ['vim', 'vim -p'] and lineNum != 0:
-        return '\'%s\' +%d' % (filePath, lineNum)
-    elif editor in ['vi', 'nvim', 'nano', 'joe', 'emacs',
-                    'emacsclient'] and lineNum != 0:
-        return '+%d \'%s\'' % (lineNum, filePath)
-    elif editor in ['subl', 'sublime', 'atom'] and lineNum != 0:
-        return '\'%s:%d\'' % (filePath, lineNum)
-    else:
-        return "'%s'" % filePath
-
-
 def expandPath(filePath):
     # expand ~/ paths
     filePath = os.path.expanduser(filePath)
@@ -114,13 +99,29 @@ def expandPath(filePath):
     return os.path.abspath(filePath)
 
 
-def joinEditCommands(partialCommands):
+def joinFilesIntoCommand(filesAndLineNumbers):
     editor, editor_path = getEditorAndPath()
-    if editor in ['vim', 'mvim'] and \
-            not os.environ.get('FPP_DISABLE_SPLIT'):
-        return editor_path + ' -O ' + ' '.join(partialCommands)
-    # Assume that all other editors behave like emacs
-    return editor_path + ' ' + ' '.join(partialCommands)
+    cmd = editor_path + ' '
+    if editor == 'vim -p':
+        firstFilePath, firstLineNum = filesAndLineNumbers[0]
+        cmd += ' +%d %s' % (firstLineNum, firstFilePath)
+        for (filePath, lineNum) in filesAndLineNumbers[1:]:
+            cmd += ' +"tabnew +%d %s"' % (lineNum, filePath)
+    elif editor == 'vim':
+        firstFilePath, firstLineNum = filesAndLineNumbers[0]
+        cmd += ' +%d %s' % (firstLineNum, firstFilePath)
+        for (filePath, lineNum) in filesAndLineNumbers[1:]:
+            cmd += ' +"vsp +%d %s"' % (lineNum, filePath)
+    else:
+        for (filePath, lineNum) in filesAndLineNumbers:
+            if editor in ['vi', 'nvim', 'nano', 'joe', 'emacs',
+                          'emacsclient'] and lineNum != 0:
+                cmd += ' +%d \'%s\'' % (lineNum, filePath)
+            elif editor in ['subl', 'sublime', 'atom'] and lineNum != 0:
+                cmd += ' \'%s:%d\'' % (filePath, lineNum)
+            else:
+                cmd += " '%s'" % filePath
+    return cmd
 
 
 def composeCdCommand(command, lineObjs):
