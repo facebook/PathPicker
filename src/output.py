@@ -107,7 +107,7 @@ def joinFilesIntoCommand(filesAndLineNumbers):
         cmd += ' +%d %s' % (firstLineNum, firstFilePath)
         for (filePath, lineNum) in filesAndLineNumbers[1:]:
             cmd += ' +"tabnew +%d %s"' % (lineNum, filePath)
-    elif editor == 'vim':
+    elif editor in ['vim', 'mvim'] and not os.environ.get('FPP_DISABLE_SPLIT'):
         firstFilePath, firstLineNum = filesAndLineNumbers[0]
         cmd += ' +%d %s' % (firstLineNum, firstFilePath)
         for (filePath, lineNum) in filesAndLineNumbers[1:]:
