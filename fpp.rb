@@ -1,15 +1,11 @@
 class Fpp < Formula
+  desc "CLI program that accepts piped input and presents files for selection"
   homepage "https://facebook.github.io/PathPicker/"
   url "https://github.com/facebook/PathPicker/releases/download/0.7.2/fpp.0.7.2.tar.gz"
   sha256 "bf49a971a3af710aafcd0adf1084df556dd94476d71bbe39eb058f5970ec4378"
   head "https://github.com/facebook/pathpicker.git"
 
-  bottle do
-    cellar :any
-    sha256 "2deb167b4dd052e599b7585a12bc43313e1a255da930022378f1cf53aee3c78e" => :yosemite
-    sha256 "29e5e0a547a363f544d39f12b712000e18e555c7b16f1d548af47e138cd4185f" => :mavericks
-    sha256 "21bf8171dce1011c411674f00869b067290247ffced0fa1e6170d827503ca46f" => :mountain_lion
-  end
+  bottle :unneeded
 
   depends_on :python if MacOS.version <= :snow_leopard
 
