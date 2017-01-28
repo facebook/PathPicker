@@ -11,7 +11,6 @@ import curses
 import pickle
 import sys
 import os
-import argparse
 
 import output
 import screenControl

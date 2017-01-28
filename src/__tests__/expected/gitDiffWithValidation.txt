@@ -1,5 +1,5 @@
 src/charCodeMapping.py         | 20 +++++++++++++
-BBBBBBBBBBBBBBBBBBBBBB                                                          
+**********************                                                          
 src/choose.py                  | 15 ++++++++--
 _____________                                                                   
 src/colorPrinter.py            | 21 ++++++++-----

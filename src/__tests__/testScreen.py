@@ -103,6 +103,16 @@ screenTestCases = [{
         'maxY': 30,
     }
 }, {
+    'name': 'longFileNamesWithBeforeTextBug',
+    'input': 'longFileNamesWithBeforeText.txt',
+    'validateFileExists': False,
+    'withAttributes': False,
+    'inputs': ['f'],
+    'screenConfig': {
+        'maxX': 95,
+        'maxY': 40,
+    }
+}, {
     'name': 'dontWipeChrome',
     'input': 'gitDiffColor.txt',
     'withAttributes': True,
@@ -136,6 +146,48 @@ screenTestCases = [{
     'name': 'selectAllBug',
     'input': 'gitLongDiff.txt',
     'inputs': ['A'],
+}, {
+    'name': 'allInputBranch',
+    'input': 'gitBranch.txt',
+    'args': ['-ai'],
+    'inputs': ['j', 'f'],
+}, {
+    'name': 'abbreviatedLineSelect',
+    'input': 'longLineAbbreviated.txt',
+    'validateFileExists': False,
+    'inputs': ['j', 'j', 'f'],
+}, {
+    'name': 'longListPageUpAndDown',
+    'input': 'longList.txt',
+    'inputs': ['NPAGE', 'NPAGE', 'NPAGE', 'PPAGE'],
+    'validateFileExists': False,
+}, {
+    'name': 'longListHomeKey',
+    'input': 'longList.txt',
+    'inputs': [' ', ' ', 'HOME'],
+    'withAttributes': True,
+    'validateFileExists': False,
+    'screenConfig': {
+        'maxY': 10
+    }
+}, {
+    'name': 'longListEndKey',
+    'input': 'longList.txt',
+    'inputs': ['END'],
+    'withAttributes': True,
+    'validateFileExists': False,
+    'screenConfig': {
+        'maxY': 10
+    }
+}, {
+    'name': 'tonsOfFiles',
+    'input': 'tonsOfFiles.txt',
+    'inputs': ['A', 'c'],
+    'validateFileExists': False,
+    'pastScreen': 1,
+    'screenConfig': {
+        'maxY': 30
+    }
 }]
 
 
@@ -153,6 +205,7 @@ class TestScreenLogic(unittest.TestCase):
             charInputs = ['q']  # we always quit at the end
             charInputs = testCase.get('inputs', []) + charInputs
 
+            args = testCase.get('args', [])
             screenData = screenTestRunner.getRowsFromScreenRun(
                 inputFile=testCase.get('input', 'gitDiff.txt'),
                 charInputs=charInputs,
@@ -160,8 +213,9 @@ class TestScreenLogic(unittest.TestCase):
                 printScreen=False,
                 pastScreen=testCase.get('pastScreen', None),
                 pastScreens=testCase.get('pastScreens', None),
-                args=testCase.get('args', []),
-                validateFileExists=testCase.get('validateFileExists', False)
+                args=args,
+                validateFileExists=testCase.get('validateFileExists', False),
+                allInput=('-ai' in args or '--all-input' in args),
             )
 
             self.compareToExpected(testCase, testName, screenData)

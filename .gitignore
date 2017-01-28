@@ -7,4 +7,5 @@
 *.orig
 dist/*
 fpp.deb
+fpp*.deb
 debian/usr/

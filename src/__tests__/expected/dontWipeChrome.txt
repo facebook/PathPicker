@@ -3,7 +3,7 @@
  fpp                                                |  4 +|    * [f] toggle the selection of a file
                                                          G                                                                                                                                               
  fpp.rb                                             |  4 +-|    * [F] toggle and move downward by 1
- BBBBBB                                                  GR                                                                                                                                              
+ ******                                                  GR                                                                                                                                              
  index.html                                         | 11 ++-|    * [A] toggle selection of all (unique) files
  __________                                              GGR                                                                                                                                             
  scripts/makeDist.sh                                |  2 +-|    * [down arrow|j] move downward by 1
@@ -16,29 +16,29 @@
  ___________________________________________             GGGGGGGGGGGGGG                                                                                                                                  
  src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|    * [x] quick select mode
  _______________________________________________         GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/screenForTest.py                     | 40 +++++++--|
+ src/__tests__/screenForTest.py                     | 40 +++++++--|    * [d] describe file
  ______________________________                          GGGGGGGRR                                                                                                                                       
- src/__tests__/screenTestRunner.py                  | 17 ++--|Once you have your files selected, you can
+ src/__tests__/screenTestRunner.py                  | 17 ++--|
  _________________________________                       GGRR                                                                                                                                            
- src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|either open them in your favorite
+ src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|
  ___________________________                             GGGGGGGGGGGGGGGGGGRRRR                                                                                                                          
- src/format.py                                      | 29 ++++++-|text editor or execute commands with
+ src/format.py                                      | 29 ++++++-|Once you have your files selected, you can
  _____________                                           GGGGGGR                                                                                                                                         
- src/formattedText.py                               |  3 +|them via command mode:
+ src/formattedText.py                               |  3 +|either open them in your favorite
  ____________________                                    G                                                                                                                                               
- src/processInput.py                                | 10 +++|
+ src/processInput.py                                | 10 +++|text editor or execute commands with
  ___________________                                     GGG                                                                                                                                             
- src/screenControl.py                               | 23 ++++++|    * [<Enter>] open all selected files
+ src/screenControl.py                               | 23 ++++++|them via command mode:
  ____________________                                    GGGGGG                                                                                                                                          
- src/screenFlags.py                                 | 18 +++-|        (or file under cursor if none selected)
+ src/screenFlags.py                                 | 18 +++-|
  __________________                                      GGGR                                                                                                                                            
- src/stateFiles.py                                  | 11 +++|        in $EDITOR
+ src/stateFiles.py                                  | 11 +++|    * [<Enter>] open all selected files
  _________________                                       GGG                                                                                                                                             
- src/version.py                                     | 15 ++++|    * [c] enter command mode
+ src/version.py                                     | 15 ++++|        (or file under cursor if none selected)
  ______________                                          GGGG                                                                                                                                            
- 19 files changed, 404 insertions(+), 37 deletions(-)|
+ 19 files changed, 404 insertions(+), 37 deletions(-)|        in $EDITOR
                                                                                                                                                                                                          
-|
+|    * [c] enter command mode
                                                                                                                                                                                                          
 |
                                                                                                                                                                                                          
@@ -83,7 +83,7 @@
  fpp                                                |  4 +|    * [f] toggle the selection of a file
                                                          G                                                                                                                                               
  |===>fpp.rb                                             |  4 +-|    * [F] toggle and move downward by 1
- ???????????                                                  GR                                                                                                                                         
+ @@@@@@@@@@@                                                  GR                                                                                                                                         
  index.html                                         | 11 ++-|    * [A] toggle selection of all (unique) files
  __________                                              GGR                                                                                                                                             
  scripts/makeDist.sh                                |  2 +-|    * [down arrow|j] move downward by 1
@@ -96,29 +96,29 @@
  ___________________________________________             GGGGGGGGGGGGGG                                                                                                                                  
  src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|    * [x] quick select mode
  _______________________________________________         GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/screenForTest.py                     | 40 +++++++--|
+ src/__tests__/screenForTest.py                     | 40 +++++++--|    * [d] describe file
  ______________________________                          GGGGGGGRR                                                                                                                                       
- src/__tests__/screenTestRunner.py                  | 17 ++--|Once you have your files selected, you can
+ src/__tests__/screenTestRunner.py                  | 17 ++--|
  _________________________________                       GGRR                                                                                                                                            
- src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|either open them in your favorite
+ src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|
  ___________________________                             GGGGGGGGGGGGGGGGGGRRRR                                                                                                                          
- src/format.py                                      | 29 ++++++-|text editor or execute commands with
+ src/format.py                                      | 29 ++++++-|Once you have your files selected, you can
  _____________                                           GGGGGGR                                                                                                                                         
- src/formattedText.py                               |  3 +|them via command mode:
+ src/formattedText.py                               |  3 +|either open them in your favorite
  ____________________                                    G                                                                                                                                               
- src/processInput.py                                | 10 +++|
+ src/processInput.py                                | 10 +++|text editor or execute commands with
  ___________________                                     GGG                                                                                                                                             
- src/screenControl.py                               | 23 ++++++|    * [<Enter>] open all selected files
+ src/screenControl.py                               | 23 ++++++|them via command mode:
  ____________________                                    GGGGGG                                                                                                                                          
- src/screenFlags.py                                 | 18 +++-|        (or file under cursor if none selected)
+ src/screenFlags.py                                 | 18 +++-|
  __________________                                      GGGR                                                                                                                                            
- src/stateFiles.py                                  | 11 +++|        in $EDITOR
+ src/stateFiles.py                                  | 11 +++|    * [<Enter>] open all selected files
  _________________                                       GGG                                                                                                                                             
- src/version.py                                     | 15 ++++|    * [c] enter command mode
+ src/version.py                                     | 15 ++++|        (or file under cursor if none selected)
  ______________                                          GGGG                                                                                                                                            
- 19 files changed, 404 insertions(+), 37 deletions(-)|
+ 19 files changed, 404 insertions(+), 37 deletions(-)|        in $EDITOR
                                                                                                                                                                                                          
-|
+|    * [c] enter command mode
                                                                                                                                                                                                          
 |
                                                                                                                                                                                                          
@@ -163,7 +163,7 @@
  fpp                                                |  4 +|    * [f] toggle the selection of a file
                                                          G                                                                                                                                               
  fpp.rb                                             |  4 +-|    * [F] toggle and move downward by 1
- BBBBBB                                                  GR                                                                                                                                              
+ ******                                                  GR                                                                                                                                              
  index.html                                         | 11 ++-|    * [A] toggle selection of all (unique) files
  __________                                              GGR                                                                                                                                             
  scripts/makeDist.sh                                |  2 +-|    * [down arrow|j] move downward by 1
@@ -176,29 +176,29 @@
  ___________________________________________             GGGGGGGGGGGGGG                                                                                                                                  
  src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|    * [x] quick select mode
  _______________________________________________         GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/screenForTest.py                     | 40 +++++++--|
+ src/__tests__/screenForTest.py                     | 40 +++++++--|    * [d] describe file
  ______________________________                          GGGGGGGRR                                                                                                                                       
- src/__tests__/screenTestRunner.py                  | 17 ++--|Once you have your files selected, you can
+ src/__tests__/screenTestRunner.py                  | 17 ++--|
  _________________________________                       GGRR                                                                                                                                            
- src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|either open them in your favorite
+ src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|
  ___________________________                             GGGGGGGGGGGGGGGGGGRRRR                                                                                                                          
- src/format.py                                      | 29 ++++++-|text editor or execute commands with
+ src/format.py                                      | 29 ++++++-|Once you have your files selected, you can
  _____________                                           GGGGGGR                                                                                                                                         
- src/formattedText.py                               |  3 +|them via command mode:
+ src/formattedText.py                               |  3 +|either open them in your favorite
  ____________________                                    G                                                                                                                                               
- src/processInput.py                                | 10 +++|
+ src/processInput.py                                | 10 +++|text editor or execute commands with
  ___________________                                     GGG                                                                                                                                             
- src/screenControl.py                               | 23 ++++++|    * [<Enter>] open all selected files
+ src/screenControl.py                               | 23 ++++++|them via command mode:
  ____________________                                    GGGGGG                                                                                                                                          
- src/screenFlags.py                                 | 18 +++-|        (or file under cursor if none selected)
+ src/screenFlags.py                                 | 18 +++-|
  __________________                                      GGGR                                                                                                                                            
- src/stateFiles.py                                  | 11 +++|        in $EDITOR
+ src/stateFiles.py                                  | 11 +++|    * [<Enter>] open all selected files
  _________________                                       GGG                                                                                                                                             
- src/version.py                                     | 15 ++++|    * [c] enter command mode
+ src/version.py                                     | 15 ++++|        (or file under cursor if none selected)
  ______________                                          GGGG                                                                                                                                            
- 19 files changed, 404 insertions(+), 37 deletions(-)|
+ 19 files changed, 404 insertions(+), 37 deletions(-)|        in $EDITOR
                                                                                                                                                                                                          
-|
+|    * [c] enter command mode
                                                                                                                                                                                                          
 |
                                                                                                                                                                                                          
@@ -243,7 +243,7 @@
  fpp                                                |  4 +|    * [f] toggle the selection of a file
                                                          G                                                                                                                                               
  |===>fpp.rb                                             |  4 +-|    * [F] toggle and move downward by 1
- ???????????                                                  GR                                                                                                                                         
+ @@@@@@@@@@@                                                  GR                                                                                                                                         
  index.html                                         | 11 ++-|    * [A] toggle selection of all (unique) files
  __________                                              GGR                                                                                                                                             
  scripts/makeDist.sh                                |  2 +-|    * [down arrow|j] move downward by 1
@@ -256,29 +256,29 @@
  ___________________________________________             GGGGGGGGGGGGGG                                                                                                                                  
  src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|    * [x] quick select mode
  _______________________________________________         GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/screenForTest.py                     | 40 +++++++--|
+ src/__tests__/screenForTest.py                     | 40 +++++++--|    * [d] describe file
  ______________________________                          GGGGGGGRR                                                                                                                                       
- src/__tests__/screenTestRunner.py                  | 17 ++--|Once you have your files selected, you can
+ src/__tests__/screenTestRunner.py                  | 17 ++--|
  _________________________________                       GGRR                                                                                                                                            
- src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|either open them in your favorite
+ src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|
  ___________________________                             GGGGGGGGGGGGGGGGGGRRRR                                                                                                                          
- src/format.py                                      | 29 ++++++-|text editor or execute commands with
+ src/format.py                                      | 29 ++++++-|Once you have your files selected, you can
  _____________                                           GGGGGGR                                                                                                                                         
- src/formattedText.py                               |  3 +|them via command mode:
+ src/formattedText.py                               |  3 +|either open them in your favorite
  ____________________                                    G                                                                                                                                               
- src/processInput.py                                | 10 +++|
+ src/processInput.py                                | 10 +++|text editor or execute commands with
  ___________________                                     GGG                                                                                                                                             
- src/screenControl.py                               | 23 ++++++|    * [<Enter>] open all selected files
+ src/screenControl.py                               | 23 ++++++|them via command mode:
  ____________________                                    GGGGGG                                                                                                                                          
- src/screenFlags.py                                 | 18 +++-|        (or file under cursor if none selected)
+ src/screenFlags.py                                 | 18 +++-|
  __________________                                      GGGR                                                                                                                                            
- src/stateFiles.py                                  | 11 +++|        in $EDITOR
+ src/stateFiles.py                                  | 11 +++|    * [<Enter>] open all selected files
  _________________                                       GGG                                                                                                                                             
- src/version.py                                     | 15 ++++|    * [c] enter command mode
+ src/version.py                                     | 15 ++++|        (or file under cursor if none selected)
  ______________                                          GGGG                                                                                                                                            
- 19 files changed, 404 insertions(+), 37 deletions(-)|
+ 19 files changed, 404 insertions(+), 37 deletions(-)|        in $EDITOR
                                                                                                                                                                                                          
-|
+|    * [c] enter command mode
                                                                                                                                                                                                          
 |
                                                                                                                                                                                                          
@@ -319,11 +319,11 @@
 |
                                                                                                                                                                                                          
  assets/launch_page.css                             |  4 +|
- BBBBBBBBBBBBBBBBBBBBBB                                  G                                                                                                                                               
+ **********************                                  G                                                                                                                                               
  fpp                                                |  4 +|    * [f] toggle the selection of a file
                                                          G                                                                                                                                               
  |===>fpp.rb                                             |  4 +-|    * [F] toggle and move downward by 1
- !!!!!!!!!!!                                                  GR                                                                                                                                         
+ ~~~~~~~~~~~                                                  GR                                                                                                                                         
  index.html                                         | 11 ++-|    * [A] toggle selection of all (unique) files
  __________                                              GGR                                                                                                                                             
  scripts/makeDist.sh                                |  2 +-|    * [down arrow|j] move downward by 1
@@ -336,29 +336,29 @@
  ___________________________________________             GGGGGGGGGGGGGG                                                                                                                                  
  src/__tests__/expected/simpleWithAttributes.txt    | 60 ++++++++++++++|    * [x] quick select mode
  _______________________________________________         GGGGGGGGGGGGGG                                                                                                                                  
- src/__tests__/screenForTest.py                     | 40 +++++++--|
+ src/__tests__/screenForTest.py                     | 40 +++++++--|    * [d] describe file
  ______________________________                          GGGGGGGRR                                                                                                                                       
- src/__tests__/screenTestRunner.py                  | 17 ++--|Once you have your files selected, you can
+ src/__tests__/screenTestRunner.py                  | 17 ++--|
  _________________________________                       GGRR                                                                                                                                            
- src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|either open them in your favorite
+ src/__tests__/testScreen.py                        | 96 ++++++++++++++++++----|
  ___________________________                             GGGGGGGGGGGGGGGGGGRRRR                                                                                                                          
- src/format.py                                      | 29 ++++++-|text editor or execute commands with
+ src/format.py                                      | 29 ++++++-|Once you have your files selected, you can
  _____________                                           GGGGGGR                                                                                                                                         
- src/formattedText.py                               |  3 +|them via command mode:
+ src/formattedText.py                               |  3 +|either open them in your favorite
  ____________________                                    G                                                                                                                                               
- src/processInput.py                                | 10 +++|
+ src/processInput.py                                | 10 +++|text editor or execute commands with
  ___________________                                     GGG                                                                                                                                             
- src/screenControl.py                               | 23 ++++++|    * [<Enter>] open all selected files
+ src/screenControl.py                               | 23 ++++++|them via command mode:
  ____________________                                    GGGGGG                                                                                                                                          
- src/screenFlags.py                                 | 18 +++-|        (or file under cursor if none selected)
+ src/screenFlags.py                                 | 18 +++-|
  __________________                                      GGGR                                                                                                                                            
- src/stateFiles.py                                  | 11 +++|        in $EDITOR
+ src/stateFiles.py                                  | 11 +++|    * [<Enter>] open all selected files
  _________________                                       GGG                                                                                                                                             
- src/version.py                                     | 15 ++++|    * [c] enter command mode
+ src/version.py                                     | 15 ++++|        (or file under cursor if none selected)
  ______________                                          GGGG                                                                                                                                            
- 19 files changed, 404 insertions(+), 37 deletions(-)|
+ 19 files changed, 404 insertions(+), 37 deletions(-)|        in $EDITOR
                                                                                                                                                                                                          
-|
+|    * [c] enter command mode
                                                                                                                                                                                                          
 |
                                                                                                                                                                                                          

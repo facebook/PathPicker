@@ -25,7 +25,7 @@
  .  +            self.printUpTo(self.endingClearText, printer, y, *soFar)
      RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR      
  .  diff --git a/src/formattedText.py b/src/formattedText.py
-     WWWWWWWWWWWBBBBBBBBBBBBBBBBBBBBBBWWWWWWWWWWWWWWWWWWWWWWW                   
+     WWWWWWWWWWW**********************WWWWWWWWWWWWWWWWWWWWWWW                   
  .  index f02d1ca..e495352 100644
      WWWWWWWWWWWWWW________WWWWWWW                                              
  .  --- a/src/formattedText.py

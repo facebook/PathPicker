@@ -7,6 +7,10 @@
 #
 from __future__ import print_function
 
+import os
+import time
+import subprocess
+
 import curses
 import parse
 from formattedText import FormattedText
@@ -47,17 +51,18 @@ class LineMatch(object):
     # ./src/foo/bar/something|...|baz/foo.py
     TRUNCATE_DECORATOR = '|...|'
 
-    def __init__(self, formattedLine, result, index, validateFileExists=False):
+    def __init__(self, formattedLine, result, index, validateFileExists=False, allInput=False):
         self.controller = None
 
         self.formattedLine = formattedLine
         self.index = index
+        self.allInput = allInput
 
-        (file, num, matches) = result
+        (path, num, matches) = result
 
-        self.originalFile = file
-        self.file = parse.prependDir(file,
-                                     withFileInspection=validateFileExists)
+        self.originalPath = path
+        self.path = path if allInput else parse.prependDir(path,
+                                                           withFileInspection=validateFileExists)
         self.num = num
 
         line = str(self.formattedLine)
@@ -104,15 +109,50 @@ class LineMatch(object):
     def getScreenIndex(self):
         return self.index
 
-    def getFile(self):
-        return self.file
+    def getPath(self):
+        return self.path
+
+    def getSizeInBytes(self):
+        bashCommand = "ls -lh " + self.path
+        output = subprocess.check_output(bashCommand.split())
+        size = output.split()[4]
+        return 'size: ' + str(size)
+
+    def getLengthInLines(self):
+        bashCommand = "wc -l " + self.path
+        output = subprocess.check_output(bashCommand.split())
+        return 'length: ' + str(output.strip().split()[0]) + ' lines'
+
+    def getTimeLastAccessed(self):
+        timeAccessed = time.strftime(
+            '%m/%d/%Y %H:%M:%S', time.localtime(os.stat(self.path).st_atime))
+        return 'last accessed: ' + timeAccessed
+
+    def getTimeLastModified(self):
+        timeModified = time.strftime(
+            '%m/%d/%Y %H:%M:%S', time.localtime(os.stat(self.path).st_mtime))
+        return 'last modified: ' + timeModified
+
+    def getOwnerUser(self):
+        bashCommand = "ls -ld " + self.path
+        output = subprocess.check_output(bashCommand.split())
+        userOwnerName = output.split()[2]
+        userOwnerId = os.stat(self.path).st_uid
+        return 'owned by user: ' + str(userOwnerName) + ', ' + str(userOwnerId)
+
+    def getOwnerGroup(self):
+        bashCommand = "ls -ld " + self.path
+        output = subprocess.check_output(bashCommand.split())
+        groupOwnerName = output.split()[3]
+        groupOwnerId = os.stat(self.path).st_gid
+        return 'owned by group: ' + str(groupOwnerName) + ', ' + str(groupOwnerId)
 
     def getDir(self):
         # for the cd command and the like. file is a string like
         # ./asd.py or ~/www/asdasd/dsada.php, so since it already
         # has the directory appended we can just split on / and drop
         # the last
-        parts = self.file.split('/')[0:-1]
+        parts = self.path.split('/')[0:-1]
         return '/'.join(parts)
 
     def isResolvable(self):
@@ -121,7 +161,7 @@ class LineMatch(object):
     def isGitAbbreviatedPath(self):
         # this method mainly serves as a warning for when we get
         # git-abbrievated paths like ".../" that confuse users.
-        parts = self.file.split('/')
+        parts = self.path.split('/')
         if len(parts) and parts[0] == '...':
             return True
         return False
@@ -153,13 +193,18 @@ class LineMatch(object):
         '''Update the cached decorated match formatted string, and
         dirty the line, if needed'''
         if self.hovered and self.selected:
-            attributes = (curses.COLOR_WHITE, curses.COLOR_RED, 0)
+            attributes = (curses.COLOR_WHITE, curses.COLOR_RED,
+                          FormattedText.BOLD_ATTRIBUTE)
         elif self.hovered:
-            attributes = (curses.COLOR_WHITE, curses.COLOR_BLUE, 0)
+            attributes = (curses.COLOR_WHITE, curses.COLOR_BLUE,
+                          FormattedText.BOLD_ATTRIBUTE)
         elif self.selected:
-            attributes = (curses.COLOR_WHITE, curses.COLOR_GREEN, 0)
-        else:
+            attributes = (curses.COLOR_WHITE, curses.COLOR_GREEN,
+                          FormattedText.BOLD_ATTRIBUTE)
+        elif not self.allInput:
             attributes = (0, 0, FormattedText.UNDERLINE_ATTRIBUTE)
+        else:
+            attributes = (0, 0, 0)
 
         decoratorText = self.getDecorator()
 
@@ -169,11 +214,14 @@ class LineMatch(object):
             self.controller.dirtyLine(self.index)
 
         plainText = decoratorText + self.getMatch()
-        if maxLen and len(plainText) > maxLen:
+        if maxLen and len(plainText + str(self.beforeText)) > maxLen:
             # alright, we need to chop the ends off of our
             # decorated match and glue them together with our
-            # truncation decorator
-            spaceAllowed = maxLen - len(self.TRUNCATE_DECORATOR)
+            # truncation decorator. We subtract the length of the
+            # before text since we consider that important too.
+            spaceAllowed = maxLen - len(self.TRUNCATE_DECORATOR) \
+                - len(decoratorText) \
+                - len(str(self.beforeText))
             midPoint = int(spaceAllowed / 2)
             beginMatch = plainText[0:midPoint]
             endMatch = plainText[-midPoint:len(plainText)]

@@ -1,0 +1,19 @@
+ src/__tests__/expected/allInputBranch.txt          | 30 ++++++++
+ src/__tests__/expected/selectTwoCommandMode.txt    |  4 +-
+ src/__tests__/baz/bar/banana/fooo/fooooooo/woohoo/foo/bar/baz/banana/happa/inputs/annoyingTildeExtension.txt   |  0
+ src/__tests__/inputs/gitBranch.txt                 |  5 ++
+ src/__tests__/inputs/gitLongDiff.txt               |  2 +-
+ src/__tests__/inputs/gitLongDiffColor.txt          |  2 +-
+ src/__tests__/screenTestRunner.py                  |  9 ++-
+ src/__tests__/testParsing.py                       | 79 ++++++++++++++++++++
+ src/__tests__/testScreen.py                        | 11 ++-
+ src/choose.py                                      |  8 +-
+ src/format.py                                      | 23 +++---
+ src/output.py                                      | 29 +++++---
+ src/parse.py                                       | 25 +++++--
+ src/processInput.py                                | 11 ++-
+ src/screenControl.py                               | 87 ++++++++++++++--------
+ src/screenFlags.py                                 | 12 ++-
+ src/usageStrings.py                                |  3 +
+ src/version.py                                     |  2 +-
+ 26 files changed, 286 insertions(+), 88 deletions(-)

@@ -6,7 +6,7 @@ simple input-output tests to run.
 
 The easiest way to get set up is to:
 * First, clone the repo with:
-  * `git clone git@github.com:facebook/PathPicker.git`
+  * `git clone https://github.com/facebook/PathPicker.git`
 * Second, ensure you have Python installed between version `2.6` and less than `3.0`:
   * `python --version`
 * Go ahead and execute the script!
@@ -24,6 +24,10 @@ from the team will start reviewing.
 
 Before sending them over, make sure the tests pass with:
 `./scripts/buildAndTest.sh`
+
+#### Test dependencies
+
+* [autopep8](https://github.com/hhatto/autopep8)
 
 ### Contributor License Agreement ("CLA")
 

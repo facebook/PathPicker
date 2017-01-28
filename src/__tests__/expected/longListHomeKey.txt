@@ -1,0 +1,20 @@
+=== dummy1.txt
+     **********                                                                 
+\-/ dummy2.txt
+     __________                                                                 
+ .  dummy3.txt
+     __________                                                                 
+ .  dummy4.txt
+     __________                                                                 
+ .  dummy5.txt
+     __________                                                                 
+ .  dummy6.txt
+     __________                                                                 
+ .  
+                                                                                
+ .  
+                                                                                
+ .  ___________________________________________________________________________
+                                                                                
+=== [f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick 
+                                                                                

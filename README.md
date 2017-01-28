@@ -28,14 +28,15 @@ a wide variety of input -- try it with all the options below:
 and anything else you can dream up!
 
 ## Requirements
-PathPicker should work with most Bash environments and requires Python >2.6
-and <3.0.
+PathPicker requires Python >2.6 or >3.0.
 
-ZSH is supported as well but won't have a few features like alias expansion
-in command line mode.
+### Supported Shells:
+
+* Bash is fully supported and works the best.
+* ZSH is supported as well but won't have a few features like alias expansion in command line mode.
+* csh/fish/rc are supported in the latest version, but might have quirks or issues in older versions of PathPicker. Note however if your default shell and current shell is not in the same family (bash/zsh... v.s. fish/rc), you need to manually export environment variable `$SHELL` to your current shell.
 
 ## Installing PathPicker
-
 
 ### Homebrew
 
@@ -48,7 +49,7 @@ Installing PathPicker is easiest with [Homebrew for mac](http://brew.sh/):
 
 On debian systems, installation can be done by installing the debian package from [here](https://github.com/facebook/PathPicker/releases/latest)
 
-On Arch Linux, PathPicker can be installed from Arch User Repository (AUR). 
+On Arch Linux, PathPicker can be installed from Arch User Repository (AUR).
 [the AUR fpp-git package](https://aur.archlinux.org/packages/fpp-git/).
 
 If you are on another system, or prefer manual installation, please
@@ -61,7 +62,7 @@ PathPicker since it's essentially just a bash script that calls some Python. The
 steps more-or-less outline the process:
 
 * `cd /usr/local/ # or wherever you install apps`
-* `git clone git@github.com:facebook/PathPicker.git`
+* `git clone https://github.com/facebook/PathPicker.git`
 * `cd PathPicker/`
 
 Here we make a symbolic link from the bash script in the repo
@@ -73,7 +74,7 @@ to `/usr/local/bin/` which is assumed to be in the current
 
 ### Add-ons
 
-For tmux users, you can additionally install `tmux-fpp` which adds a key combination to run PathPicker on the last received `stdout`. It makes jumping into file selection mode even easier -- [check it out here](https://github.com/jbnicolai/tmux-fpp).
+For tmux users, you can additionally install `tmux-fpp` which adds a key combination to run PathPicker on the last received `stdout`. It makes jumping into file selection mode even easier -- [check it out here](https://github.com/tmux-plugins/tmux-fpp).
 
 
 ## Advanced Functionality

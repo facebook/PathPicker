@@ -294,6 +294,16 @@ fileTestCases = [{
     'num': 42,
     'file': './inputs/annoyingTildeExtension.txt~',
 }, {
+    'input': 'inputs/.DS_KINDA_STORE',
+    'validateFileExists': True,
+    'match': True,
+    'file': 'inputs/.DS_KINDA_STORE',
+}, {
+    'input': './inputs/.DS_KINDA_STORE',
+    'validateFileExists': True,
+    'match': True,
+    'file': './inputs/.DS_KINDA_STORE',
+}, {
     'input': 'evilFile No Prepend.txt',
     'validateFileExists': True,
     'match': True,
@@ -337,6 +347,42 @@ prependDirTestCases = [
     }, {
         'in': '',
         'out': ''
+    }]
+
+allInputTestCases = [
+    {
+        'input': '    ',
+        'match': None
+    }, {
+        'input': ' ',
+        'match': None
+    }, {
+        'input': 'a',
+        'match': 'a'
+    }, {
+        'input': '   a',
+        'match': 'a'
+    }, {
+        'input': 'a    ',
+        'match': 'a'
+    }, {
+        'input': '    foo bar',
+        'match': 'foo bar'
+    }, {
+        'input': 'foo bar    ',
+        'match': 'foo bar'
+    }, {
+        'input': '    foo bar    ',
+        'match': 'foo bar'
+    }, {
+        'input': 'foo bar baz',
+        'match': 'foo bar baz'
+    }, {
+        'input': '	modified:   Classes/Media/YPMediaLibraryViewController.m',
+        'match': 'modified:   Classes/Media/YPMediaLibraryViewController.m'
+    }, {
+        'input': 'no changes added to commit (use "git add" and/or "git commit -a")',
+        'match': 'no changes added to commit (use "git add" and/or "git commit -a")'
     }]
 
 
@@ -397,6 +443,23 @@ class TestParseFunction(unittest.TestCase):
         for testCase in fileTestCases:
             self.checkFileResult(testCase)
         print('Tested %d cases.' % len(fileTestCases))
+
+    def testAllInputMatches(self):
+        for testCase in allInputTestCases:
+            result = parse.matchLine(testCase['input'], False, True)
+
+            if not result:
+                self.assertTrue(testCase['match'] is None,
+                                'Expected a match "%s" where one did not occur.' %
+                                testCase['match'])
+                continue
+
+            (match, _, _) = result
+            self.assertEqual(match, testCase['match'], 'Line "%s" did not match.' %
+                             testCase['input'])
+
+        print('Tested %d cases for all-input matching.' %
+              len(allInputTestCases))
 
     def checkFileResult(self, testCase):
         result = parse.matchLine(testCase['input'],

@@ -63,6 +63,8 @@ USAGE_PAGE = '''
     * [<space>] page down
     * [b] page up
     * [x] quick select mode
+    * [d] describe file
+
 
 Once you have your files selected, you can
 either open them in your favorite
@@ -123,6 +125,16 @@ The $FPP_EDITOR environment variable can be set to tell PathPicker
 which editor to open the selected files with. If that variable
 is not set, $VISUAL and then $EDITOR are used as fallbacks,
 with "vim" as a last resort.
+
+The $FPP_DISABLE_SPLIT environment variable will disable splitting
+files into panes for vim clients (aka sequential editing).
+
+~ Directory ~
+
+PathPicker saves state files for use when starting up, including the
+previous input used and selection pickle. By default, these files are saved
+in ~/.fpp, but the $FPP_DIR environment variable can be used to tell
+PathPicker to use another directory.
 
 ~ Colors ~
 

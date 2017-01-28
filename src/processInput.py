@@ -10,7 +10,6 @@ from __future__ import print_function
 import sys
 import os
 import pickle
-import re
 
 import parse
 import format
@@ -23,10 +22,11 @@ from screenFlags import ScreenFlags
 def getLineObjs(flags):
     inputLines = sys.stdin.readlines()
     return getLineObjsFromLines(inputLines,
-                                validateFileExists=not flags.getDisableFileChecks())
+                                validateFileExists=not flags.getDisableFileChecks(),
+                                allInput=flags.getAllInput())
 
 
-def getLineObjsFromLines(inputLines, validateFileExists=True):
+def getLineObjsFromLines(inputLines, validateFileExists=True, allInput=False):
     lineObjs = {}
     for index, line in enumerate(inputLines):
         line = line.replace('\t', '    ')
@@ -36,13 +36,15 @@ def getLineObjsFromLines(inputLines, validateFileExists=True):
         line = line.replace('\n', '')
         formattedLine = FormattedText(line)
         result = parse.matchLine(str(formattedLine),
-                                 validateFileExists=validateFileExists)
+                                 validateFileExists=validateFileExists,
+                                 allInput=allInput)
 
         if not result:
             line = format.SimpleLine(formattedLine, index)
         else:
             line = format.LineMatch(formattedLine, result,
-                                    index, validateFileExists=validateFileExists)
+                                    index, validateFileExists=validateFileExists,
+                                    allInput=allInput)
 
         lineObjs[index] = line
 
