@@ -50,7 +50,12 @@ function doProgram {
   # http://stackoverflow.com/questions/3327013/
   # in order to determine which shell we are on
   if [ -n "$BASH" -o -n "$ZSH_NAME" ]; then
-    $SHELL $IFLAG "$FPP_DIR/.fpp.sh" < /dev/tty
+    if [ -e "${SHELL}" ]; then
+      $SHELL $IFLAG "$FPP_DIR/.fpp.sh" < /dev/tty
+    else
+      (>&2 echo "Your SHELL bash variable ${SHELL} does not exist, please export it explicitly");
+      $BASH $IFLAG "$FPP_DIR/.fpp.sh" < /dev/tty
+    fi
   else
     /bin/bash $IFLAG "$FPP_DIR/.fpp.sh" < /dev/tty
   fi
