@@ -369,6 +369,7 @@ class Controller(object):
             # we resized so print all!
             self.printAll()
             self.resetDirty()
+            self.updateScrollOffset()
             self.stdscr.refresh()
             logger.addEvent('resize')
         (self.oldmaxy, self.oldmaxx) = self.getScreenDimensions()
