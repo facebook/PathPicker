@@ -690,6 +690,8 @@ class Controller(object):
                     self.colorPrinter.addstr(i, 1, lbls[idx])
 
     def selectXMode(self, key):
+        if (lbls.index(key) >= len(self.lineObjs)):
+            return
         lineObj = self.lineObjs[
             lbls.index(key) - self.scrollOffset]
         if type(lineObj) == format.LineMatch:
