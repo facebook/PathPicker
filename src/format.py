@@ -61,8 +61,7 @@ class LineMatch(object):
         (path, num, matches) = result
 
         self.originalPath = path
-        self.path = path if allInput else parse.prependDir(path,
-                                                           withFileInspection=validateFileExists)
+        self.path = path if allInput else parse.prependDir(path, withFileInspection=validateFileExists)
         self.num = num
 
         line = str(self.formattedLine)
