@@ -272,12 +272,13 @@ class ScrollBar(object):
 
 class Controller(object):
 
-    def __init__(self, flags, stdscr, lineObjs, cursesAPI):
+    def __init__(self, flags, keyBindings, stdscr, lineObjs, cursesAPI):
         self.stdscr = stdscr
         self.cursesAPI = cursesAPI
         self.cursesAPI.useDefaultColors()
         self.colorPrinter = ColorPrinter(self.stdscr, cursesAPI)
         self.flags = flags
+        self.keyBindings = keyBindings
 
         self.lineObjs = lineObjs
         self.hoverIndex = 0
@@ -461,7 +462,10 @@ class Controller(object):
             self.cursesAPI.exit()
         elif self.mode == X_MODE and key in lbls:
             self.selectXMode(key)
-        pass
+
+        for boundKey, command in self.keyBindings.bindings:
+            if key == boundKey:
+                self.executePreconfiguredCommand(command)
 
     def getPathsToUse(self):
         # if we have selected paths, those, otherwise hovered
@@ -575,6 +579,11 @@ class Controller(object):
             self.dirtyAll()
             logger.addEvent('exit_command_mode')
             return
+        lineObjs = self.getPathsToUse()
+        output.execComposedCommand(command, lineObjs)
+        sys.exit(0)
+
+    def executePreconfiguredCommand(self, command):
         lineObjs = self.getPathsToUse()
         output.execComposedCommand(command, lineObjs)
         sys.exit(0)

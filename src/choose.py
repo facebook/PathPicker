@@ -17,6 +17,7 @@ import screenControl
 import logger
 import format
 import stateFiles
+from keyBindings import KeyBindings
 from cursesAPI import CursesAPI
 from screenFlags import ScreenFlags
 
@@ -29,16 +30,19 @@ this error will go away)
 '''
 
 
-def doProgram(stdscr, flags, cursesAPI=None, lineObjs=None):
+def doProgram(stdscr, flags, keyBindings=None, cursesAPI=None, lineObjs=None):
     # curses and lineObjs get dependency injected for
     # our tests, so init these if they are not provided
+    if not keyBindings:
+        keyBindings = KeyBindings()
     if not cursesAPI:
         cursesAPI = CursesAPI()
     if not lineObjs:
         lineObjs = getLineObjs()
     output.clearFile()
     logger.clearFile()
-    screen = screenControl.Controller(flags, stdscr, lineObjs, cursesAPI)
+    screen = screenControl.Controller(
+        flags, keyBindings, stdscr, lineObjs, cursesAPI)
     screen.control()
 
 
