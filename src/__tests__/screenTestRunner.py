@@ -20,6 +20,7 @@ from screenFlags import ScreenFlags
 
 from screenForTest import ScreenForTest
 from cursesForTest import CursesForTest
+from keyBindingsForTest import KeyBindingsForTest
 
 INPUT_DIR = './inputs/'
 
@@ -59,7 +60,8 @@ def getRowsFromScreenRun(
     # we run our program and throw a StopIteration exception
     # instead of sys.exit-ing
     try:
-        choose.doProgram(screen, flags, CursesForTest(), lineObjs)
+        choose.doProgram(screen, flags, KeyBindingsForTest(),
+                         CursesForTest(), lineObjs)
     except StopIteration:
         pass
 

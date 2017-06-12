@@ -15,7 +15,7 @@ else
 fi
 
 cd ./src/__tests__/
-python testParsing.py && python testScreen.py > /dev/null
+python testParsing.py && python testScreen.py && python testKeyBindingsParsing.py > /dev/null
 if [ $? -eq 0 ]
 then
   echo "Tests passed!"
