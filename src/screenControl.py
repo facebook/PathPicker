@@ -296,11 +296,14 @@ class Controller(object):
             if not lineObj.isSimple():
                 self.lineMatches.append(lineObj)
 
-        self.numLines = len(lineObjs.keys())
-        self.numMatches = len(self.lineMatches)
-
         # begin tracking dirty state
         self.resetDirty()
+
+        if self.flags.args.all:
+            self.toggleSelectAll()
+
+        self.numLines = len(lineObjs.keys())
+        self.numMatches = len(self.lineMatches)
 
         self.setHover(self.hoverIndex, True)
 

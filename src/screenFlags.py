@@ -115,6 +115,12 @@ to use aliases and have access to environment variables defined in your startup
 files, but can have strange side-effects when starting and stopping jobs
 and redirecting inputs.  Using this flag runs your commands in a non-interactive subshell,
 like a normal shell script.''')
+        parser.add_argument('-a',
+                            '--all',
+                            default=False,
+                            action="store_true",
+                            help='''Automatically select all available lines
+once the interactive editor has been entered.''')
         return parser
 
     @staticmethod
