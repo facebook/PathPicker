@@ -47,6 +47,10 @@ screenTestCases = [{
     'inputs': ['f', 'j', 'f', 'c'],
     'pastScreen': 3
 }, {
+    'name': 'selectAllFromArg',
+    'input': 'absoluteGitDiff.txt',
+    'args': ["-a"],
+}, {
     'name': 'selectCommandWithPassedCommand',
     'input': 'absoluteGitDiff.txt',
     # the last key "a" is so we quit from command mode
