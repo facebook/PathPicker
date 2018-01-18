@@ -315,10 +315,15 @@ fileTestCases = [{
     'match': True,
     'file': 'file-from-yocto_%.bbappend',
 }, {
-    'input': 'file-from-yocto_3.1%.bbappend',
+    'input': 'otehr thing ./foo/file-from-yocto_3.1%.bbappend',
     'validateFileExists': True,
     'match': True,
     'file': 'file-from-yocto_3.1%.bbappend',
+}, {
+    'input': './file-from-yocto_3.1%.bbappend',
+    'validateFileExists': True,
+    'match': True,
+    'file': './file-from-yocto_3.1%.bbappend',
 }, {
     'input': 'Gemfile',
     'validateFileExists': False,
