@@ -24,7 +24,7 @@ OTHER_BGS_RESULT_REGEX = re.compile(
 ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE = re.compile(
     '(\S.*\S|\S)')
 JUST_FILE = re.compile(
-    '([@+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
+    '([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
 # start with a normal char for ls -l
 JUST_FILE_WITH_SPACES = re.compile(
     '([a-zA-Z][@+a-z. A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
@@ -108,7 +108,7 @@ MASTER_REGEX_WITH_SPACES = re.compile(''.join((
     # we do similar for the filename part. the 'character class' is
     # char or char with space following, with some added tokens like @
     # for retina files.
-    '([\(\),@a-zA-Z0-9\-_+.]|\s[,\(\)@a-zA-Z0-9\-_+.])+',
+    '([\(\),%@a-zA-Z0-9\-_+.]|\s[,\(\)@%a-zA-Z0-9\-_+.])+',
     # extensions dont allow spaces
     '\.[a-zA-Z0-9-]{1,30}',
     # end capture

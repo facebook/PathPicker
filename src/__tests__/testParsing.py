@@ -310,6 +310,16 @@ fileTestCases = [{
     'disableFuzzTest': True,
     'file': 'evilFile No Prepend.txt',
 }, {
+    'input': 'file-from-yocto_%.bbappend',
+    'validateFileExists': True,
+    'match': True,
+    'file': 'file-from-yocto_%.bbappend',
+}, {
+    'input': 'file-from-yocto_3.1%.bbappend',
+    'validateFileExists': True,
+    'match': True,
+    'file': 'file-from-yocto_3.1%.bbappend',
+}, {
     'input': 'Gemfile',
     'validateFileExists': False,
     'match': True,
