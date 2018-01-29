@@ -23,8 +23,14 @@ BASEDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 PYTHONCMD="python"
 NONINTERACTIVE=false
 
+# Setup according to XDG/Freedesktop standards as specified by
+# https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 if [ -z "$FPP_DIR" ]; then
-  FPP_DIR="$HOME/.fpp"
+  if [ -z "$XDG_CACHE_HOME" ]; then
+    FPP_DIR="$HOME/.cache/fpp"
+  else
+    FPP_DIR="$XDG_CACHE_HOME/fpp"
+  fi
 fi
 
 function doProgram {

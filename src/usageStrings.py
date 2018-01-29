@@ -133,7 +133,7 @@ files into panes for vim clients (aka sequential editing).
 
 PathPicker saves state files for use when starting up, including the
 previous input used and selection pickle. By default, these files are saved
-in ~/.fpp, but the $FPP_DIR environment variable can be used to tell
+in $XDG_CACHE_HOME/fpp, but the $FPP_DIR environment variable can be used to tell
 PathPicker to use another directory.
 
 ~ Colors ~
