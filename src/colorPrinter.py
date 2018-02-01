@@ -14,9 +14,9 @@ class ColorPrinter(object):
 
     DEFAULT_COLOR_INDEX = 1
     CURRENT_COLORS = -1
-    colors = {}
 
     def __init__(self, screen, cursesAPI):
+        self.colors = {}
         self.colors[(0, 0)] = 0  # 0,0 = white on black is hardcoded
         # in general, we want to use -1,-1 for most "normal" text printing
         self.colors[(-1, -1)] = self.DEFAULT_COLOR_INDEX

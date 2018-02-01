@@ -44,6 +44,7 @@ def getRowsFromScreenRun(
         validateFileExists=False,
         allInput=False,
         args=[]):
+
     lineObjs = getLineObjsFromFile(inputFile,
                                    validateFileExists=validateFileExists,
                                    allInput=allInput)
