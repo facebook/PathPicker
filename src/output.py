@@ -7,7 +7,6 @@
 #
 import os
 import pickle
-import re
 
 import logger
 import stateFiles
@@ -84,7 +83,7 @@ def outputSelection(lineObjs):
 
 def getEditorAndPath():
     editor_path = os.environ.get('FPP_EDITOR') or os.environ.get('VISUAL') or \
-        os.environ.get('EDITOR')
+                  os.environ.get('EDITOR')
     if editor_path:
         editor = os.path.basename(editor_path)
         logger.addEvent('using_editor_' + editor)

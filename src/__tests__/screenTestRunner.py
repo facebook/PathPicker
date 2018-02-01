@@ -7,9 +7,8 @@
 #
 from __future__ import print_function
 
-import curses
-import sys
 import os
+import sys
 
 sys.path.insert(0, '../')
 

@@ -7,9 +7,10 @@
 #
 from __future__ import print_function
 
+import os
 import sys
 import unittest
-import os
+
 sys.path.insert(0, '../')
 
 import format
@@ -61,7 +62,7 @@ fileTestCases = [{
 
     # For now, don't worry about matching the following case perfectly,
     # simply because it's complicated.
-    #}, {
+    # }, {
     #    'input': '~/.ssh/known_hosts',
     #    'match': True,
 
@@ -116,20 +117,20 @@ fileTestCases = [{
     'file': 'foo/bar/TARGETS'
 }, {
     'input':
-    'fbcode/search/places/scorer/PageScorer.cpp:27:46:#include "search/places/scorer/linear_scores/MinutiaeVerbScorer.h',
+        'fbcode/search/places/scorer/PageScorer.cpp:27:46:#include "search/places/scorer/linear_scores/MinutiaeVerbScorer.h',
     'match': True,
     'num': 27,
     'file': 'fbcode/search/places/scorer/PageScorer.cpp'
 }, {
     # Pretty intense case
     'input':
-    'fbcode/search/places/scorer/TARGETS:590:28:    srcs = ["linear_scores/MinutiaeVerbScorer.cpp"]',
+        'fbcode/search/places/scorer/TARGETS:590:28:    srcs = ["linear_scores/MinutiaeVerbScorer.cpp"]',
     'match': True,
     'num': 590,
     'file': 'fbcode/search/places/scorer/TARGETS'
 }, {
     'input':
-    'fbcode/search/places/scorer/TARGETS:1083:27:      "linear_scores/test/MinutiaeVerbScorerTest.cpp"',
+        'fbcode/search/places/scorer/TARGETS:1083:27:      "linear_scores/test/MinutiaeVerbScorerTest.cpp"',
     'match': True,
     'num': 1083,
     'file': 'fbcode/search/places/scorer/TARGETS'

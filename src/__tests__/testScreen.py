@@ -8,6 +8,7 @@
 from __future__ import print_function
 
 import sys
+
 sys.path.insert(0, '../')
 import unittest
 import os
@@ -297,6 +298,7 @@ class TestScreenLogic(unittest.TestCase):
     def maybeMakeExpectedDir():
         if not os.path.isdir(EXPECTED_DIR):
             os.makedirs(EXPECTED_DIR)
+
 
 if __name__ == '__main__':
     unittest.main()

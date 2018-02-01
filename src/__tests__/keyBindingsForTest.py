@@ -10,5 +10,4 @@ KEY_BINDINGS_FOR_TEST_CONFIG_CONTENT = "[bindings]\nr = rspec\ns = subl\n"
 
 
 class KeyBindingsForTest(object):
-
     bindings = [('r', 'rspec'.encode('utf-8')), ('s', 'subl'.encode('utf-8'))]

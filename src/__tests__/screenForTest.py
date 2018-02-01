@@ -8,6 +8,7 @@
 from __future__ import print_function
 
 import sys
+
 sys.path.insert(0, '../')
 from charCodeMapping import CHAR_TO_CODE
 
@@ -31,7 +32,6 @@ ATTRIBUTE_SYMBOL_MAPPING = {
 
 
 class ScreenForTest(object):
-
     """A dummy object that is dependency-injected in place
     of curses standard screen. Allows us to unit-test parts
     of the UI code"""

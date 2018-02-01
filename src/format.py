@@ -7,11 +7,11 @@
 #
 from __future__ import print_function
 
-import os
-import time
-import subprocess
-
 import curses
+import os
+import subprocess
+import time
+
 import parse
 from formattedText import FormattedText
 
@@ -31,7 +31,7 @@ class SimpleLine(object):
         maxLen = min(maxx - minx, len(str(self)))
         y = miny + self.index + self.controller.getScrollOffset()
 
-        if (y < miny or y >= maxy):
+        if y < miny or y >= maxy:
             # wont be displayed!
             return
 
@@ -45,7 +45,6 @@ class SimpleLine(object):
 
 
 class LineMatch(object):
-
     ARROW_DECORATOR = '|===>'
     # this is inserted between long files, so it looks like
     # ./src/foo/bar/something|...|baz/foo.py
@@ -92,6 +91,8 @@ class LineMatch(object):
         # precalculate the pre, post, and match strings
         (self.beforeText, unused) = self.formattedLine.breakat(self.start)
         (unused, self.afterText) = self.formattedLine.breakat(self.end)
+
+        self.decoratedMatch = None
 
         self.updateDecoratedMatch()
 
@@ -220,8 +221,8 @@ class LineMatch(object):
             # truncation decorator. We subtract the length of the
             # before text since we consider that important too.
             spaceAllowed = maxLen - len(self.TRUNCATE_DECORATOR) \
-                - len(decoratorText) \
-                - len(str(self.beforeText))
+                           - len(decoratorText) \
+                           - len(str(self.beforeText))
             midPoint = int(spaceAllowed / 2)
             beginMatch = plainText[0:midPoint]
             endMatch = plainText[-midPoint:len(plainText)]
@@ -251,7 +252,7 @@ class LineMatch(object):
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
         y = miny + self.index + self.controller.getScrollOffset()
 
-        if (y < miny or y >= maxy):
+        if y < miny or y >= maxy:
             # wont be displayed!
             return
 
@@ -259,7 +260,7 @@ class LineMatch(object):
         # all of the decorated match (which means we need to see up to
         # the end of the decoratedMatch, aka include beforeText)
         importantTextLength = len(str(self.beforeText)) + \
-            len(str(self.decoratedMatch))
+                              len(str(self.decoratedMatch))
         spaceForPrinting = maxx - minx
         if importantTextLength > spaceForPrinting:
             # hrm, we need to update our decorated match to show
@@ -271,7 +272,7 @@ class LineMatch(object):
         else:
             # first check what our expanded size would be:
             expandedSize = len(str(self.beforeText)) + \
-                len(self.getMatch())
+                           len(self.getMatch())
             if expandedSize < spaceForPrinting and self.isTruncated:
                 # if the screen gets resized, we might be truncated
                 # from a previous render but **now** we have room.

@@ -6,15 +6,15 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 from __future__ import print_function
-import curses
-import sys
-import signal
 
-import processInput
-import usageStrings
-import output
-import logger
+import curses
+import signal
+import sys
+
 import format
+import logger
+import output
+import usageStrings
 from charCodeMapping import CODE_TO_CHAR
 from colorPrinter import ColorPrinter
 
@@ -23,8 +23,9 @@ def signal_handler(signal, frame):
     # from http://stackoverflow.com/a/1112350/948126
     # Lets just quit rather than signal.SIGINT printing the stack
     sys.exit(0)
-signal.signal(signal.SIGINT, signal_handler)
 
+
+signal.signal(signal.SIGINT, signal_handler)
 
 CHROME_MIN_X = 5
 CHROME_MIN_Y = 0
@@ -202,7 +203,7 @@ class ScrollBar(object):
         # see if we are activated
         self.activated = True
         (maxy, maxx) = self.screenControl.getScreenDimensions()
-        if (self.numLines < maxy):
+        if self.numLines < maxy:
             self.activated = False
             logger.addEvent('no_scrollbar')
         else:
@@ -369,7 +370,7 @@ class Controller(object):
 
     def checkResize(self):
         (maxy, maxx) = self.getScreenDimensions()
-        if (maxy is not self.oldmaxy or maxx is not self.oldmaxx):
+        if maxy is not self.oldmaxy or maxx is not self.oldmaxx:
             # we resized so print all!
             self.printAll()
             self.resetDirty()
@@ -680,7 +681,7 @@ class Controller(object):
     def moveCursor(self):
         x = CHROME_MIN_X if self.scrollBar.getIsActivated() else 0
         y = self.lineMatches[
-            self.hoverIndex].getScreenIndex() + self.scrollOffset
+                self.hoverIndex].getScreenIndex() + self.scrollOffset
         self.stdscr.move(y, x)
 
     def getKey(self):
@@ -702,7 +703,7 @@ class Controller(object):
                     self.colorPrinter.addstr(i, 1, lbls[idx])
 
     def selectXMode(self, key):
-        if (lbls.index(key) >= len(self.lineObjs)):
+        if lbls.index(key) >= len(self.lineObjs):
             return
         lineObj = self.lineObjs[
             lbls.index(key) - self.scrollOffset]

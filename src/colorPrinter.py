@@ -7,11 +7,8 @@
 #
 from __future__ import print_function
 
-import output
-
 
 class ColorPrinter(object):
-
     """A thin wrapper over screens in ncurses that caches colors and
     attribute state"""
 
@@ -35,7 +32,7 @@ class ColorPrinter(object):
     def getAttributes(self, foreColor, backColor, other):
         colorIndex = -1
         colorPair = (foreColor, backColor)
-        if not colorPair in self.colors:
+        if colorPair not in self.colors:
             newIndex = len(self.colors)
             if newIndex < self.cursesAPI.getColorPairs():
                 self.cursesAPI.initPair(newIndex, foreColor, backColor)

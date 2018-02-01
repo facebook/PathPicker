@@ -10,9 +10,11 @@ import sys
 
 if sys.version_info[0] < 3:
     import ConfigParser
+
     parserModule = ConfigParser
 else:
     import configparser
+
     parserModule = configparser
 
 from stateFiles import FPP_DIR
@@ -21,7 +23,6 @@ KEY_BINDINGS_FILE = os.path.join(FPP_DIR, '.fpp.keys')
 
 
 class KeyBindings(object):
-
     bindings = []
 
     def __init__(self, keyBindingsFile=KEY_BINDINGS_FILE):
