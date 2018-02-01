@@ -6,8 +6,9 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 from __future__ import print_function
-import re
+
 import os
+import re
 import subprocess
 
 import logger
@@ -116,7 +117,6 @@ MASTER_REGEX_WITH_SPACES = re.compile(''.join((
     # optionally capture the line number
     '[:-]{0,1}(\d+)?',
 )))
-
 
 REGEX_WATERFALL = [{
     # Homedirs need a separate regex.
@@ -237,7 +237,7 @@ def matchLine(line, validateFileExists=False, allInput=False):
     for result in results:
         (filePath, _, _) = result
         if os.path.isfile(prependDir(filePath, withFileInspection=True)) or \
-           filePath[0:4] == '.../':
+                filePath[0:4] == '.../':
             return result
     return None
 

@@ -8,17 +8,17 @@
 from __future__ import print_function
 
 import curses
+import os
 import pickle
 import sys
-import os
 
+import format
+import logger
 import output
 import screenControl
-import logger
-import format
 import stateFiles
-from keyBindings import KeyBindings
 from cursesAPI import CursesAPI
+from keyBindings import KeyBindings
 from screenFlags import ScreenFlags
 
 LOAD_SELECTION_WARNING = '''
@@ -50,7 +50,7 @@ def getLineObjs():
     filePath = stateFiles.getPickleFilePath()
     try:
         lineObjs = pickle.load(open(filePath, 'rb'))
-    except:
+    except Exception as _:
         output.appendError(LOAD_SELECTION_WARNING)
         output.appendExit()
         sys.exit(1)
@@ -72,7 +72,7 @@ def getLineObjs():
 def setSelectionsFromPickle(selectionPath, lineObjs):
     try:
         selectedIndices = pickle.load(open(selectionPath, 'rb'))
-    except:
+    except Exception as _:
         output.appendError(LOAD_SELECTION_WARNING)
         output.appendExit()
         sys.exit(1)

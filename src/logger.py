@@ -7,9 +7,9 @@
 #
 import json
 import subprocess
-import os
 
 import stateFiles
+
 
 # This file just outputs some simple log events that are consumed by
 # another service for internal logging at Facebook. Use it if you want

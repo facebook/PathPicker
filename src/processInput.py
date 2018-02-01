@@ -7,16 +7,16 @@
 #
 from __future__ import print_function
 
-import sys
 import os
 import pickle
+import sys
 
-import parse
 import format
+import parse
 import stateFiles
 from formattedText import FormattedText
-from usageStrings import USAGE_STR
 from screenFlags import ScreenFlags
+from usageStrings import USAGE_STR
 
 
 def getLineObjs(flags):

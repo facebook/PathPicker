@@ -9,7 +9,6 @@ from __future__ import print_function
 
 
 class CursesForTest(object):
-
     """The dependency-injected curses wrapper which simply
     stores some state in test runs of the UI"""
 

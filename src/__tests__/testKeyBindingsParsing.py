@@ -10,7 +10,6 @@ import sys
 sys.path.insert(0, '../')
 
 import unittest
-import keyBindings
 import tempfile
 
 from keyBindings import KeyBindings

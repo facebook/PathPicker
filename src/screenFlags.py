@@ -6,13 +6,11 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 from __future__ import print_function
-import argparse
 
-import logger
+import argparse
 
 
 class ScreenFlags(object):
-
     """A class that just represents the total set of flags
     available to FPP. Note that some of these are actually
     processsed by the fpp batch file, and not by python.

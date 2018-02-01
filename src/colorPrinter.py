@@ -7,19 +7,16 @@
 #
 from __future__ import print_function
 
-import output
-
 
 class ColorPrinter(object):
-
     """A thin wrapper over screens in ncurses that caches colors and
     attribute state"""
 
     DEFAULT_COLOR_INDEX = 1
     CURRENT_COLORS = -1
+    colors = {}
 
     def __init__(self, screen, cursesAPI):
-        self.colors = {}
         self.colors[(0, 0)] = 0  # 0,0 = white on black is hardcoded
         # in general, we want to use -1,-1 for most "normal" text printing
         self.colors[(-1, -1)] = self.DEFAULT_COLOR_INDEX
@@ -35,7 +32,7 @@ class ColorPrinter(object):
     def getAttributes(self, foreColor, backColor, other):
         colorIndex = -1
         colorPair = (foreColor, backColor)
-        if not colorPair in self.colors:
+        if colorPair not in self.colors:
             newIndex = len(self.colors)
             if newIndex < self.cursesAPI.getColorPairs():
                 self.cursesAPI.initPair(newIndex, foreColor, backColor)

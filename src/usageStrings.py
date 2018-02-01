@@ -6,6 +6,7 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 from __future__ import print_function
+
 from screenFlags import ScreenFlags
 
 MANPAGE_HEADER = '''= fpp(1)
@@ -164,18 +165,17 @@ use the app, so don't worry and jump on in!
 '''
 
 USAGE_STR = USAGE_INTRO + \
-    USAGE_PAGE_HEADER + \
-    USAGE_PAGE + \
-    USAGE_COMMAND_HEADER + \
-    USAGE_COMMAND + \
-    USAGE_CONFIGURATION + \
-    USAGE_COMMAND_LINE + \
-    ScreenFlags.getArgParser().format_help() + \
-    USAGE_TAIL
+            USAGE_PAGE_HEADER + \
+            USAGE_PAGE + \
+            USAGE_COMMAND_HEADER + \
+            USAGE_COMMAND + \
+            USAGE_CONFIGURATION + \
+            USAGE_COMMAND_LINE + \
+            ScreenFlags.getArgParser().format_help() + \
+            USAGE_TAIL
 
 decorator = '*' * 80
 USAGE_STR = decorator + '\n' + USAGE_STR + '\n' + decorator
-
 
 MANPAGE_STR = '\n\n'.join([
     MANPAGE_HEADER,

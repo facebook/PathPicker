@@ -5,14 +5,14 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
-import re
 import curses
+import re
 from collections import namedtuple
+
 from colorPrinter import ColorPrinter
 
 
 class FormattedText(object):
-
     """A piece of ANSI escape formatted text which responds
     to str() returning the plain text and knows how to print
     itself out using ncurses"""
@@ -30,7 +30,7 @@ class FormattedText(object):
     def __init__(self, text=None):
         self.text = text
 
-        if not self.text is None:
+        if self.text is not None:
             self.segments = re.split(self.ANSI_ESCAPE_FORMATTING, self.text)
             # re.split will insert a empty string if there is a match at the beginning
             # or it will return [string] if there is no match
@@ -51,11 +51,9 @@ class FormattedText(object):
         other = 0
         intValues = [int(value) for value in formatting.split(';') if value]
         for code in intValues:
-            if (code >= cls.FOREGROUND_RANGE.bottom
-                    and code <= cls.FOREGROUND_RANGE.top):
+            if (code >= cls.FOREGROUND_RANGE.bottom and code <= cls.FOREGROUND_RANGE.top):
                 fore = code - cls.FOREGROUND_RANGE.bottom
-            elif (code >= cls.BACKGROUND_RANGE.bottom
-                  and code <= cls.BACKGROUND_RANGE.top):
+            elif (code >= cls.BACKGROUND_RANGE.bottom and code <= cls.BACKGROUND_RANGE.top):
                 back = code - cls.BACKGROUND_RANGE.bottom
             elif code == cls.BOLD_ATTRIBUTE:
                 other = other | curses.A_BOLD
@@ -108,14 +106,14 @@ class FormattedText(object):
         """Break the formatted text at the point given and return
         a new tuple of two FormattedText representing the before and
         after"""
-        #FORMAT, TEXT, FORMAT, TEXT, FORMAT, TEXT
-        #--before----, segF,   seg,  ----after--
+        # FORMAT, TEXT, FORMAT, TEXT, FORMAT, TEXT
+        # --before----, segF,   seg,  ----after--
         #
         # to
         #
-        #FORMAT, TEXT, FORMAT, TEXTBEFORE, FORMAT, TEXTAFTER, FORMAT, TEXT
-        #--before----, segF,   [before],   segF,   [after],   -----after--
-        #----index---------------/
+        # FORMAT, TEXT, FORMAT, TEXTBEFORE, FORMAT, TEXTAFTER, FORMAT, TEXT
+        # --before----, segF,   [before],   segF,   [after],   -----after--
+        # ----index---------------/
         (index, splitPoint) = self.findSegmentPlace(where)
         textSegment = self.segments[index]
         beforeText = textSegment[:splitPoint]
