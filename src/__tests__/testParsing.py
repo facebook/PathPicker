@@ -61,7 +61,7 @@ fileTestCases = [{
 
     # For now, don't worry about matching the following case perfectly,
     # simply because it's complicated.
-    #}, {
+    # }, {
     #    'input': '~/.ssh/known_hosts',
     #    'match': True,
 
@@ -162,7 +162,7 @@ fileTestCases = [{
     'input': 'blarg blah So.MANY.PERIODS.TXT:22',
     'match': True,
     'file': 'So.MANY.PERIODS.TXT',
-    'num': 0  # we ignore the number here
+    'num': 22
 }, {
     'input': 'SO.MANY&&PERIODSTXT',
     'match': False

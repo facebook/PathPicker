@@ -23,6 +23,8 @@ OTHER_BGS_RESULT_REGEX = re.compile(
     '(\/?([a-z.A-Z0-9\-_]+\/)+[a-zA-Z0-9_.]{3,})[:-]{0,1}(\d+)')
 ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE = re.compile(
     '(\S.*\S|\S)')
+JUST_FILE_WITH_NUMBER = re.compile(
+    '([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})[:-](\d+)(\s|$|:)+')
 JUST_FILE = re.compile(
     '([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
 # start with a normal char for ls -l
@@ -155,6 +157,13 @@ REGEX_WATERFALL = [{
     'name': 'MASTER_REGEX_WITH_SPACES_AND_WEIRD_FILES',
     'numIndex': 4,
     'onlyWithFileInspection': True,
+}, {
+    # File (without directory) and a number. Ex:
+    # $ grep -n my_pattern A.txt B.txt
+    # A.txt:100 my_pattern
+    'regex': JUST_FILE_WITH_NUMBER,
+    'name': 'JUST_FILE_WITH_NUMBER',
+    'numIndex': 1
 }, {
     # ok maybe its just a normal file (with a dot)
     # so lets test for that if the above fails
