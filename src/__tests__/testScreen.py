@@ -285,8 +285,8 @@ class TestScreenLogic(unittest.TestCase):
             self.assertEqual(
                 expectedLine,
                 actualLine,
-                'Lines did not match for test %s:\n\nExpected:"%s"\nActual  :"%s"' % (
-                    expectedFile, expectedLine, actualLine),
+                'Line %d did not match for test %s:\n\nExpected:"%s"\nActual  :"%s"' % (
+                    index, expectedFile, expectedLine, actualLine),
             )
 
     @staticmethod
@@ -297,6 +297,7 @@ class TestScreenLogic(unittest.TestCase):
     def maybeMakeExpectedDir():
         if not os.path.isdir(EXPECTED_DIR):
             os.makedirs(EXPECTED_DIR)
+
 
 if __name__ == '__main__':
     unittest.main()

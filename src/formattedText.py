@@ -108,14 +108,14 @@ class FormattedText(object):
         """Break the formatted text at the point given and return
         a new tuple of two FormattedText representing the before and
         after"""
-        #FORMAT, TEXT, FORMAT, TEXT, FORMAT, TEXT
-        #--before----, segF,   seg,  ----after--
+        # FORMAT, TEXT, FORMAT, TEXT, FORMAT, TEXT
+        # --before----, segF,   seg,  ----after--
         #
         # to
         #
-        #FORMAT, TEXT, FORMAT, TEXTBEFORE, FORMAT, TEXTAFTER, FORMAT, TEXT
-        #--before----, segF,   [before],   segF,   [after],   -----after--
-        #----index---------------/
+        # FORMAT, TEXT, FORMAT, TEXTBEFORE, FORMAT, TEXTAFTER, FORMAT, TEXT
+        # --before----, segF,   [before],   segF,   [after],   -----after--
+        # ----index---------------/
         (index, splitPoint) = self.findSegmentPlace(where)
         textSegment = self.segments[index]
         beforeText = textSegment[:splitPoint]
