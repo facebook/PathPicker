@@ -27,6 +27,10 @@ JUST_FILE_WITH_NUMBER = re.compile(
     '([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})[:-](\d+)(\s|$|:)+')
 JUST_FILE = re.compile(
     '([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
+JUST_EMACS_TEMP_FILE = re.compile(
+    '([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10}~)(\s|$|:)+')
+JUST_VIM_TEMP_FILE = re.compile(
+    '(#[@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10}#)(\s|$|:)+')
 # start with a normal char for ls -l
 JUST_FILE_WITH_SPACES = re.compile(
     '([a-zA-Z][@+a-z. A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+')
@@ -157,6 +161,16 @@ REGEX_WATERFALL = [{
     'name': 'MASTER_REGEX_WITH_SPACES_AND_WEIRD_FILES',
     'numIndex': 4,
     'onlyWithFileInspection': True,
+}, {
+    # An Emacs and Vim backup/temporary/save file of the form: #example.txt#
+    'regex': JUST_VIM_TEMP_FILE,
+    'name': 'JUST_VIM_TEMP_FILE',
+    'noNum': True
+}, {
+    # An Emacs backup/temporary/save file with a tilde at the end: example.txt~
+    'regex': JUST_EMACS_TEMP_FILE,
+    'name': 'JUST_EMACS_TEMP_FILE',
+    'noNum': True
 }, {
     # File (without directory) and a number. Ex:
     # $ grep -n my_pattern A.txt B.txt

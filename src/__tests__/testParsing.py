@@ -155,6 +155,14 @@ fileTestCases = [{
     'match': True,
     'file': 'So.many.periods.txt'
 }, {
+    'input': 'So.many.periods.txt~',
+    'match': True,
+    'file': 'So.many.periods.txt~'
+}, {
+    'input': '#So.many.periods.txt#',
+    'match': True,
+    'file': '#So.many.periods.txt#'
+}, {
     'input': 'SO.MANY.PERIODS.TXT',
     'match': True,
     'file': 'SO.MANY.PERIODS.TXT'
