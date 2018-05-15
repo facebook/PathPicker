@@ -96,19 +96,23 @@ in the middle of your command, you can use the `$F` token instead, like:
 `cat $F | wc -l`
 
 Another important note is that PathPicker by default only selects files that exist on the filesystem. If you
-want to skip this (perhaps to selected deleted files in `git status`), just run PathPicker with the `--no-file-checks` flag.
+want to skip this (perhaps to selected deleted files in `git status`), just run PathPicker with the `--no-file-checks` (or `-nfc` for short) flag.
 
 ## How PathPicker works
 PathPicker is a combination of a bash script and some small Python modules.
 It essentially has three steps:
 
-* First in the bash script, it redirects all standard out in to a python module that
-parses and extracts out filename candidates. Each candidate is then checked against
-the actual filesystem to ensure it exists; after that, we save the data
-in a temporary file and the python script exits.
-* Next, the bash script switches to terminal input mode and
-another python module reads out the saved entries and presents them in a
-selector UI built with `curses`. The user either selects a few files to edit or inputs a command
+* First the bash script redirects all standard out in to a python module that
+parses and extracts out filename candidates. These candiates are extracted with a series of
+regular expressions, since the input to PathPicker can be any stdout from another program. Rather
+than make specialized parsers for each program, we treat everything as noisy input and select candidates via
+regexes. To limit the number of calls to the filesystem (to check existence), we are fairly restrictive on the
+candidates we extract.
+
+This has the downside that files that are single words with no extension (like `test`) that are not prepended by
+a directory will fail to match. This is a known limitation to PathPicker, and means that it will sometimes fail to find valid files in the input.
+
+* Next, a selector UI built with `curses` is presented to the user. Here you can select a few files to edit or input a command
 to execute.
 * Lastly, the python script outputs a command to a bash file that is later
 executed by the original bash script.
