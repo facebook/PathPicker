@@ -36,6 +36,9 @@ class ScreenFlags(object):
     def getPresetCommand(self):
         return ' '.join(self.args.command)
 
+    def getExecuteKeys(self):
+        return self.args.execute_keys
+
     def getIsCleanMode(self):
         return self.args.clean
 
@@ -84,6 +87,16 @@ invoking fpp that will be run once files have been selected. Normally,
 fpp opens your editor (see discussion of $EDITOR, $VISUAL, and
 $FPP_EDITOR) when you press enter. If you specify a command here,
 it will be invoked instead.''',
+                            default='',
+                            action='store',
+                            nargs='+')
+
+        parser.add_argument('-e',
+                            '--execute-keys',
+                            help='''Automatically execute the given keys when
+the file list shows up.
+This is useful on certain cases, e.g. using "END" in order to automatically
+go to the last entry when there is a long list.''',
                             default='',
                             action='store',
                             nargs='+')
