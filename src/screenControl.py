@@ -364,9 +364,9 @@ class Controller(object):
         self.moveCursor()
         while True:
             if len(executeKeys) > 0:
-              inKey = executeKeys.pop(0)
+                inKey = executeKeys.pop(0)
             else:
-              inKey = self.getKey()
+                inKey = self.getKey()
             self.checkResize()
             self.processInput(inKey)
             self.processDirty()
