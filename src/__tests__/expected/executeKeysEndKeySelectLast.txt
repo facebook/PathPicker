@@ -1,0 +1,30 @@
+ README.md                      |  8 ++++-
+ fpp                            |  6 ++--
+ src/__tests__/__init__.py      |  0
+ src/__tests__/cursesForTest.py | 45 ++++++++++++++++++++++++++++
+ src/__tests__/initTest.py      | 28 ++++++++++++++++++
+ src/__tests__/screenForTest.py | 67 ++++++++++++++++++++++++++++++++++++++++++
+ src/charCodeMapping.py         | 20 +++++++++++++
+ src/choose.py                  | 15 ++++++++--
+ src/colorPrinter.py            | 21 ++++++++-----
+ src/cursesAPI.py               | 40 +++++++++++++++++++++++++
+ src/format.py                  |  4 +--
+ src/processInput.py            |  7 +++++
+ src/screenControl.py           | 28 +++++++-----------
+ |===>src/screenFlags.py             | 34 +++++++++++++++++++++
+ 14 files changed, 290 insertions(+), 33 deletions(-)
+
+
+
+
+
+
+
+
+
+
+
+
+
+________________________________________________________________________________
+[f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick selec

@@ -51,6 +51,9 @@ screenTestCases = [{
     'input': 'absoluteGitDiff.txt',
     'args': ["-a"],
 }, {
+    'name': 'executeKeysEndKeySelectLast',
+    'args': ["-e", "END", "f"],
+}, {
     'name': 'selectCommandWithPassedCommand',
     'input': 'absoluteGitDiff.txt',
     # the last key "a" is so we quit from command mode

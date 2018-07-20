@@ -356,12 +356,17 @@ class Controller(object):
         self.helperChrome.outputDescription(self.lineMatches[self.hoverIndex])
 
     def control(self):
+        executeKeys = self.flags.getExecuteKeys()
+
         # we start out by printing everything we need to
         self.printAll()
         self.resetDirty()
         self.moveCursor()
         while True:
-            inKey = self.getKey()
+            if len(executeKeys) > 0:
+                inKey = executeKeys.pop(0)
+            else:
+                inKey = self.getKey()
             self.checkResize()
             self.processInput(inKey)
             self.processDirty()
