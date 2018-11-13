@@ -114,10 +114,11 @@ def joinFilesIntoCommand(filesAndLineNumbers):
             cmd += ' +"vsp +%d %s"' % (lineNum, filePath)
     else:
         for (filePath, lineNum) in filesAndLineNumbers:
-            if editor in ['vi', 'nvim', 'nano', 'joe', 'emacs',
-                          'emacsclient'] and lineNum != 0:
+            editor_without_args = editor.split()[0]
+            if editor_without_args in ['vi', 'nvim', 'nano', 'joe', 'emacs',
+                                       'emacsclient'] and lineNum != 0:
                 cmd += ' +%d \'%s\'' % (lineNum, filePath)
-            elif editor in ['subl', 'sublime', 'atom'] and lineNum != 0:
+            elif editor_without_args in ['subl', 'sublime', 'atom'] and lineNum != 0:
                 cmd += ' \'%s:%d\'' % (filePath, lineNum)
             else:
                 cmd += " '%s'" % filePath
