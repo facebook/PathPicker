@@ -147,7 +147,11 @@ def composeCommand(command, lineObjs):
 
 
 def composeFileCommand(command, lineObjs):
-    command = command.encode().decode('utf-8')
+    try:
+        command = command.encode().decode('utf-8')
+    except Exception as error:
+        raise Exception("Unable to handle command %s" % command)
+
     paths = ["'%s'" % lineObj.getPath() for lineObj in lineObjs]
     path_str = ' '.join(paths)
     if '$F' in command:
