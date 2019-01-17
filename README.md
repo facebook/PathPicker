@@ -51,7 +51,7 @@ On debian systems, installation can be done by installing the debian package fro
 
 ```
 $ git clone https://github.com/facebook/PathPicker.git
-$ cd debian
+$ cd PathPicker/debian
 $ ./package.sh 
 $ ls ../fpp_0.7.2_noarch.deb
 ```
