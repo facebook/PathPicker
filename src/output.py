@@ -8,6 +8,7 @@
 import os
 import pickle
 import re
+from builtins import str
 
 import logger
 import stateFiles
@@ -38,6 +39,10 @@ def execComposedCommand(command, lineObjs):
     if not len(command):
         editFiles(lineObjs)
         return
+
+    if not isinstance(command, str):
+        command = command.decode()
+
     logger.addEvent('command_on_num_files', len(lineObjs))
     command = composeCommand(command, lineObjs)
     appendAliasExpansion()
