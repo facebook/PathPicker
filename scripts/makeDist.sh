@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright (c) 2015-present, Facebook, Inc.
 VERSION="$(python ./src/version.py)"
 DEST="./dist/fpp.$VERSION.tar.gz"
 mkdir -p ./dist/

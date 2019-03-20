@@ -1,3 +1,4 @@
+# Copyright (c) 2015-present, Facebook, Inc.
 class Fpp < Formula
   desc "CLI program that accepts piped input and presents files for selection"
   homepage "https://facebook.github.io/PathPicker/"

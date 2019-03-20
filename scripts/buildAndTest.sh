@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright (c) 2015-present, Facebook, Inc.
 
 if ! type autopep8 > /dev/null; then
   echo "'autopep8' required for build."
@@ -23,4 +24,3 @@ else
   echo "Tests failed :*("
   exit 1
 fi
-

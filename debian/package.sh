@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright (c) 2015-present, Facebook, Inc.
 PTH="$(pwd)"
 VERSION="$(python "$PTH/../src/version.py")"
 DATETIME=$(date '+%a, %d %b %Y %H:%M:%S %z')
