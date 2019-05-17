@@ -127,4 +127,4 @@ For all documentation and configuration options, see the output of `fpp --help`.
 See the CONTRIBUTING file for how to help out.
 
 ## License
-PathPicker is BSD-licensed. We also provide an additional patent grant.
+PathPicker is MIT licensed.
