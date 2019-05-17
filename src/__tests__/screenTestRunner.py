@@ -1,10 +1,7 @@
-# Copyright (c) 2015-present, Facebook, Inc.
-# All rights reserved.
+# Copyright (c) Facebook, Inc. and its affiliates.
 #
-# This source code is licensed under the BSD-style license found in the
-# LICENSE file in the root directory of this source tree. An additional grant
-# of patent rights can be found in the PATENTS file in the same directory.
-#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
 from __future__ import print_function
 
 import curses
@@ -13,14 +10,12 @@ import os
 
 sys.path.insert(0, '../')
 
-import choose
-import processInput
-
-from screenFlags import ScreenFlags
-
-from screenForTest import ScreenForTest
-from cursesForTest import CursesForTest
 from keyBindingsForTest import KeyBindingsForTest
+from cursesForTest import CursesForTest
+from screenForTest import ScreenForTest
+from screenFlags import ScreenFlags
+import processInput
+import choose
 
 INPUT_DIR = './inputs/'
 
