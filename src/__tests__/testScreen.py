@@ -4,11 +4,11 @@
 # LICENSE file in the root directory of this source tree.
 from __future__ import print_function
 
+import sys
+sys.path.insert(0, '../')
 import screenTestRunner
 import os
 import unittest
-import sys
-sys.path.insert(0, '../')
 
 
 EXPECTED_DIR = './expected/'

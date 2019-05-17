@@ -2,7 +2,6 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-from stateFiles import FPP_DIR
 import os
 import sys
 
@@ -13,6 +12,8 @@ else:
     import configparser
     parserModule = configparser
 
+
+from stateFiles import FPP_DIR
 
 KEY_BINDINGS_FILE = os.path.join(FPP_DIR, '.fpp.keys')
 

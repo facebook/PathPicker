@@ -4,18 +4,18 @@
 # LICENSE file in the root directory of this source tree.
 from __future__ import print_function
 
-from keyBindingsForTest import KeyBindingsForTest
-from cursesForTest import CursesForTest
-from screenForTest import ScreenForTest
-from screenFlags import ScreenFlags
-import processInput
-import choose
 import curses
 import sys
 import os
 
 sys.path.insert(0, '../')
 
+from keyBindingsForTest import KeyBindingsForTest
+from cursesForTest import CursesForTest
+from screenForTest import ScreenForTest
+from screenFlags import ScreenFlags
+import processInput
+import choose
 
 INPUT_DIR = './inputs/'
 

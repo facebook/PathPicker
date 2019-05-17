@@ -4,15 +4,15 @@
 # LICENSE file in the root directory of this source tree.
 from __future__ import print_function
 
-import parse
-from localTestCases import LOCAL_TEST_CASES
-from formattedText import FormattedText
-import format
 import sys
 import unittest
 import os
 sys.path.insert(0, '../')
 
+import parse
+from localTestCases import LOCAL_TEST_CASES
+from formattedText import FormattedText
+import format
 
 fileTestCases = [{
     'input': 'html/js/hotness.js',

@@ -2,15 +2,16 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
+import sys
+
+sys.path.insert(0, '../')
+
 from keyBindingsForTest import KEY_BINDINGS_FOR_TEST_CONFIG_CONTENT
 from keyBindingsForTest import KeyBindingsForTest
 from keyBindings import KeyBindings
 import tempfile
 import keyBindings
 import unittest
-import sys
-
-sys.path.insert(0, '../')
 
 
 class TestKeyBindingsParser(unittest.TestCase):
