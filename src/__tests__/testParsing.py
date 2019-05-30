@@ -118,6 +118,12 @@ fileTestCases = [{
     'num': 27,
     'file': 'fbcode/search/places/scorer/PageScorer.cpp'
 }, {
+    'input':
+    '(fbcode/search/places/scorer/PageScorer.cpp:27:46):#include "search/places/scorer/linear_scores/MinutiaeVerbScorer.h',
+    'match': True,
+    'num': 27,
+    'file': 'fbcode/search/places/scorer/PageScorer.cpp'
+}, {
     # Pretty intense case
     'input':
     'fbcode/search/places/scorer/TARGETS:590:28:    srcs = ["linear_scores/MinutiaeVerbScorer.cpp"]',
