@@ -1,8 +1,6 @@
 language: python
 python:
-  - "2.6"
   - "2.7"
-  - "3.3"
   - "3.4"
 install: "pip install autopep8==1.2.4 && pip install -r requirements.txt"
 script: "./scripts/buildAndTest.sh"
