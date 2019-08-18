@@ -103,7 +103,7 @@ PathPicker is a combination of a bash script and some small Python modules.
 It essentially has three steps:
 
 * First the bash script redirects all standard out in to a python module that
-parses and extracts out filename candidates. These candiates are extracted with a series of
+parses and extracts out filename candidates. These candidates are extracted with a series of
 regular expressions, since the input to PathPicker can be any stdout from another program. Rather
 than make specialized parsers for each program, we treat everything as noisy input and select candidates via
 regexes. To limit the number of calls to the filesystem (to check existence), we are fairly restrictive on the
