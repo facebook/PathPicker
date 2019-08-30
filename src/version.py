@@ -5,7 +5,7 @@
 from __future__ import print_function
 
 
-VERSION = '0.8.2'
+VERSION = '0.9.2'
 
 
 if __name__ == '__main__':
