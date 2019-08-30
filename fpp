@@ -17,7 +17,7 @@ while [ -h "$SOURCE" ]; do
 done
 BASEDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-PYTHONCMD="python"
+PYTHONCMD="python3"
 NONINTERACTIVE=false
 
 # Setup according to XDG/Freedesktop standards as specified by
@@ -73,8 +73,8 @@ for opt in "$@"; do
     VERSION="$($PYTHONCMD "$BASEDIR/src/version.py")"
     echo "fpp version $VERSION"
     exit 0
-  elif [ "$opt" == "--python3" ]; then
-    PYTHONCMD="python3"
+  elif [ "$opt" == "--python2" ]; then
+    PYTHONCMD="python2"
   elif [ "$opt" == "--help" -o "$opt" == "-h" ]; then
     $PYTHONCMD "$BASEDIR/src/printHelp.py"
     exit 0
