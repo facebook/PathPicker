@@ -102,15 +102,15 @@ want to skip this (perhaps to selected deleted files in `git status`), just run 
 PathPicker is a combination of a bash script and some small Python modules.
 It essentially has three steps:
 
-* First the bash script redirects all standard out in to a python module that
+* Firstly, the bash script redirects all standard out in to a python module that
 parses and extracts out filename candidates. These candidates are extracted with a series of
-regular expressions, since the input to PathPicker can be any stdout from another program. Rather
+regular expressions since the input to PathPicker can be any stdout from another program. Rather
 than make specialized parsers for each program, we treat everything as noisy input and select candidates via
 regexes. To limit the number of calls to the filesystem (to check existence), we are fairly restrictive on the
 candidates we extract.
 
 This has the downside that files that are single words with no extension (like `test`) that are not prepended by
-a directory will fail to match. This is a known limitation to PathPicker, and means that it will sometimes fail to find valid files in the input.
+a directory will fail to match. This is a known limitation to PathPicker and means that it will sometimes fail to find valid files in the input.
 
 * Next, a selector UI built with `curses` is presented to the user. Here you can select a few files to edit or input a command
 to execute.
