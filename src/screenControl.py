@@ -499,7 +499,7 @@ class Controller(object):
         paths = [pathObj.getPath() for pathObj in pathObjs]
         (maxy, maxx) = self.getScreenDimensions()
 
-        # Alright this is a bit tricy -- for tall screens, we try to aim
+        # Alright this is a bit tricky -- for tall screens, we try to aim
         # the command prompt right at the middle of the screen so you dont
         # have to shift your eyes down or up a bunch
         beginHeight = int(round(maxy / 2) - len(paths) / 2.0)
