@@ -332,7 +332,7 @@ def prependDir(file, withFileInspection=False):
         # already absolute, easy
         return '/' + file
 
-    if first in REPOS:
+    if first in REPOS + (os.environ.get('FPP_REPOS') or '').split(','):
         return os.path.expanduser('~/' + file)
 
     if '/' not in file:
