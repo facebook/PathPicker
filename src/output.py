@@ -123,7 +123,8 @@ def joinFilesIntoCommand(filesAndLineNumbers):
             elif editor_without_args in ['subl', 'sublime', 'atom'] and lineNum != 0:
                 cmd += ' \'%s:%d\'' % (filePath, lineNum)
             elif lineNum != 0 and os.environ.get('FPP_LINENUM_SEP'):
-                cmd += " '%s%s%d'" % (filePath, os.environ.get('FPP_LINENUM_SEP'), lineNum)
+                cmd += " '%s%s%d'" % (filePath,
+                                      os.environ.get('FPP_LINENUM_SEP'), lineNum)
             else:
                 cmd += " '%s'" % filePath
     return cmd
