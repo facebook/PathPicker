@@ -30,9 +30,15 @@ a wide variety of input -- try it with all the options below:
 and anything else you can dream up!
 
 ## Requirements
+<<<<<<< HEAD
 
 PathPicker requires Python 3.
 
+=======
+
+PathPicker requires Python >2.6 or >3.0.
+
+>>>>>>> 783b4e6 (Updating copy and grammar for README.md file)
 ### Supported Shells
 
 * Bash is fully supported and works the best.
@@ -50,7 +56,7 @@ Installing PathPicker is easiest with [Homebrew for mac](http://brew.sh/):
 
 ### Linux
 
-On Debian-based systems, run these steps:
+On Debian-based systems, run these steps after installing
 [fakeroot](https://wiki.debian.org/FakeRoot):
 
 ```
@@ -138,3 +144,6 @@ See the [CONTRIBUTING.md](https://github.com/facebook/PathPicker/blob/master/CON
 ## License
 
 PathPicker is MIT licensed.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
