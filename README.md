@@ -51,6 +51,7 @@ Installing PathPicker is easiest with [Homebrew for mac](http://brew.sh/):
 ### Linux
 
 On Debian-based systems, run these steps:
+[fakeroot](https://wiki.debian.org/FakeRoot):
 
 ```
 $ git clone https://github.com/facebook/PathPicker.git
