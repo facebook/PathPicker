@@ -50,4 +50,4 @@ Always try to provide a minimal test case that repros the bug.
 
 ## License
 
-By contributing to Facebook PathPicker, you agree that your contributions will be licensed under its BSD license.
+By contributing to Facebook PathPicker, you agree that your contributions will be licensed under its MIT license.
