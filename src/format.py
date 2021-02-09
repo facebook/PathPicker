@@ -110,14 +110,12 @@ class LineMatch(object):
         return self.path
 
     def getSizeInBytes(self):
-        bashCommand = "ls -lh " + self.path
-        output = subprocess.check_output(bashCommand.split())
+        output = subprocess.check_output(["ls", "-lh", self.path])
         size = output.split()[4].decode('utf-8')
         return 'size: ' + size
 
     def getLengthInLines(self):
-        bashCommand = "wc -l " + self.path
-        output = subprocess.check_output(bashCommand.split())
+        output = subprocess.check_output(["wc", "-l", self.path])
         lines_count = output.strip().split()[0].decode('utf-8')
         return 'length: ' + lines_count + ' lines'
 
@@ -132,15 +130,13 @@ class LineMatch(object):
         return 'last modified: ' + timeModified
 
     def getOwnerUser(self):
-        bashCommand = "ls -ld " + self.path
-        output = subprocess.check_output(bashCommand.split())
+        output = subprocess.check_output(["ls", "-ld", self.path])
         userOwnerName = output.split()[2].decode('utf-8')
         userOwnerId = os.stat(self.path).st_uid
         return 'owned by user: ' + userOwnerName + ', ' + str(userOwnerId)
 
     def getOwnerGroup(self):
-        bashCommand = "ls -ld " + self.path
-        output = subprocess.check_output(bashCommand.split())
+        output = subprocess.check_output(["ls", "-ld", self.path])
         groupOwnerName = output.split()[3].decode('utf-8')
         groupOwnerId = os.stat(self.path).st_gid
         return 'owned by group: ' + groupOwnerName + ', ' + str(groupOwnerId)
