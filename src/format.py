@@ -112,13 +112,14 @@ class LineMatch(object):
     def getSizeInBytes(self):
         bashCommand = "ls -lh " + self.path
         output = subprocess.check_output(bashCommand.split())
-        size = output.split()[4]
-        return 'size: ' + str(size)
+        size = output.split()[4].decode('utf-8')
+        return 'size: ' + size
 
     def getLengthInLines(self):
         bashCommand = "wc -l " + self.path
         output = subprocess.check_output(bashCommand.split())
-        return 'length: ' + str(output.strip().split()[0]) + ' lines'
+        lines_count = output.strip().split()[0].decode('utf-8')
+        return 'length: ' + lines_count + ' lines'
 
     def getTimeLastAccessed(self):
         timeAccessed = time.strftime(
@@ -133,16 +134,16 @@ class LineMatch(object):
     def getOwnerUser(self):
         bashCommand = "ls -ld " + self.path
         output = subprocess.check_output(bashCommand.split())
-        userOwnerName = output.split()[2]
+        userOwnerName = output.split()[2].decode('utf-8')
         userOwnerId = os.stat(self.path).st_uid
-        return 'owned by user: ' + str(userOwnerName) + ', ' + str(userOwnerId)
+        return 'owned by user: ' + userOwnerName + ', ' + str(userOwnerId)
 
     def getOwnerGroup(self):
         bashCommand = "ls -ld " + self.path
         output = subprocess.check_output(bashCommand.split())
-        groupOwnerName = output.split()[3]
+        groupOwnerName = output.split()[3].decode('utf-8')
         groupOwnerId = os.stat(self.path).st_gid
-        return 'owned by group: ' + str(groupOwnerName) + ', ' + str(groupOwnerId)
+        return 'owned by group: ' + groupOwnerName + ', ' + str(groupOwnerId)
 
     def getDir(self):
         # for the cd command and the like. file is a string like
