@@ -27,7 +27,7 @@ Before sending them over, make sure the tests pass with:
 
 #### Test dependencies
 
-* [autopep8](https://github.com/hhatto/autopep8)
+* [black](https://github.com/psf/black)
 
 ### Contributor License Agreement ("CLA")
 
