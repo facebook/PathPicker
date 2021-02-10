@@ -1,0 +1,30 @@
+inputs/annoying-hyphen-dir/Package\ Control.system-bundle|
+inputs/annoying-hyphen-dir/Package Control.system-bundle|    * [f] toggle the selection of a file
+inputs/annoying\ Spaces\ Folder/evilFile\ With\ Space2.txt|    * [F] toggle and move downward by 1
+inputs/annoying Spaces Folder/evilFile With Space2.txt|    * [A] toggle selection of all (unique) files
+|    * [down arrow|j] move downward by 1
+|    * [up arrow|k] move upward by 1
+|    * [<space>] page down
+|    * [b] page up
+|    * [x] quick select mode
+|    * [d] describe file
+|
+|
+|Once you have your files selected, you can
+|either open them in your favorite
+|text editor or execute commands with
+|them via command mode:
+|
+|    * [<Enter>] open all selected files
+|        (or file under cursor if none selected)
+|        in $EDITOR
+|    * [c] enter command mode
+|
+|Description for ./inputs/annoying-hyphen-dir/Pac
+|
+|    * last accessed: */*/* *:*:* (glob)
+|    * last modified: */*/* *:*:* (glob)
+|    * owned by user: *, * (glob)
+|    * owned by group: *, * (glob)
+|    * size: 21* (glob)
+|    * length: 1 lines

@@ -193,6 +193,14 @@ screenTestCases = [{
     'screenConfig': {
         'maxY': 30
     }
+}, {
+    'name': 'fileNameWithSpacesDescription',
+    'input': 'fileNamesWithSpaces.txt',
+    'inputs': ['d'],
+    'validateFileExists': True,
+    'screenConfig': {
+        'maxX': 201,
+    },
 }]
 
 
@@ -293,8 +301,8 @@ class TestScreenLogic(unittest.TestCase):
                 self.assertEqual(expectedLine, actualLine, errorMessage)
 
     def assertEqualWithGlob(self, expectedLine, actualLine, errorMessage):
-        # Escape all regex symbols and replace "*" with ".+"
-        pattern = ".+".join(map(re.escape, expectedLine.split("*")))
+        # Escape all regex symbols and replace "*" with ".*"
+        pattern = ".*".join(map(re.escape, expectedLine.split("*")))
         self.assertTrue(re.match(pattern, actualLine), errorMessage)
 
     @staticmethod
