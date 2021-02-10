@@ -41,7 +41,7 @@ class CursesForTest(object):
         return 256
 
     def exit(self):
-        raise StopIteration('stopping program')
+        raise StopIteration("stopping program")
 
     def allowFileOutput(self):
         # do not output selection pickle

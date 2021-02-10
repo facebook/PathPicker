@@ -10,4 +10,4 @@
 #   www/myFile.py
 # to:
 #   ~/www/myFile.py
-REPOS = ['www', 'configerator', 'fbcode', 'configerator-dsi']
+REPOS = ["www", "configerator", "fbcode", "configerator-dsi"]

@@ -8,7 +8,7 @@ import curses
 import sys
 import os
 
-sys.path.insert(0, '../')
+sys.path.insert(0, "../")
 
 from keyBindingsForTest import KeyBindingsForTest
 from cursesForTest import CursesForTest
@@ -17,37 +17,38 @@ from screenFlags import ScreenFlags
 import processInput
 import choose
 
-INPUT_DIR = './inputs/'
+INPUT_DIR = "./inputs/"
 
 
 def getLineObjsFromFile(inputFile, validateFileExists, allInput):
     inputFile = os.path.join(INPUT_DIR, inputFile)
     file = open(inputFile)
-    lines = file.read().split('\n')
+    lines = file.read().split("\n")
     file.close()
-    return processInput.getLineObjsFromLines(lines,
-                                             validateFileExists=validateFileExists,
-                                             allInput=allInput)
+    return processInput.getLineObjsFromLines(
+        lines, validateFileExists=validateFileExists, allInput=allInput
+    )
 
 
 def getRowsFromScreenRun(
-        inputFile,
-        charInputs,
-        screenConfig={},
-        printScreen=True,
-        pastScreen=None,
-        pastScreens=None,
-        validateFileExists=False,
-        allInput=False,
-        args=[]):
+    inputFile,
+    charInputs,
+    screenConfig={},
+    printScreen=True,
+    pastScreen=None,
+    pastScreens=None,
+    validateFileExists=False,
+    allInput=False,
+    args=[],
+):
 
-    lineObjs = getLineObjsFromFile(inputFile,
-                                   validateFileExists=validateFileExists,
-                                   allInput=allInput)
+    lineObjs = getLineObjsFromFile(
+        inputFile, validateFileExists=validateFileExists, allInput=allInput
+    )
     screen = ScreenForTest(
         charInputs,
-        maxX=screenConfig.get('maxX', 80),
-        maxY=screenConfig.get('maxY', 30),
+        maxX=screenConfig.get("maxX", 80),
+        maxY=screenConfig.get("maxY", 30),
     )
 
     # mock our flags with the passed arg list
@@ -55,8 +56,7 @@ def getRowsFromScreenRun(
     # we run our program and throw a StopIteration exception
     # instead of sys.exit-ing
     try:
-        choose.doProgram(screen, flags, KeyBindingsForTest(),
-                         CursesForTest(), lineObjs)
+        choose.doProgram(screen, flags, KeyBindingsForTest(), CursesForTest(), lineObjs)
     except StopIteration:
         pass
 

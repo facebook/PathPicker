@@ -7,15 +7,17 @@ import sys
 
 if sys.version_info[0] < 3:
     import ConfigParser
+
     parserModule = ConfigParser
 else:
     import configparser
+
     parserModule = configparser
 
 
 from stateFiles import FPP_DIR
 
-KEY_BINDINGS_FILE = os.path.join(FPP_DIR, '.fpp.keys')
+KEY_BINDINGS_FILE = os.path.join(FPP_DIR, ".fpp.keys")
 
 
 class KeyBindings(object):
@@ -36,5 +38,7 @@ class KeyBindings(object):
         # this method anymore, so we convert them to encoded ones first.
         #
         if parser.has_section("bindings"):
-            self.bindings = [(key, command.encode('utf-8'))
-                             for key, command in parser.items("bindings")]
+            self.bindings = [
+                (key, command.encode("utf-8"))
+                for key, command in parser.items("bindings")
+            ]
