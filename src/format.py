@@ -14,7 +14,6 @@ from formattedText import FormattedText
 
 
 class SimpleLine(object):
-
     def __init__(self, formattedLine, index):
         self.formattedLine = formattedLine
         self.index = index
@@ -28,7 +27,7 @@ class SimpleLine(object):
         maxLen = min(maxx - minx, len(str(self)))
         y = miny + self.index + self.controller.getScrollOffset()
 
-        if (y < miny or y >= maxy):
+        if y < miny or y >= maxy:
             # wont be displayed!
             return
 
@@ -43,12 +42,14 @@ class SimpleLine(object):
 
 class LineMatch(object):
 
-    ARROW_DECORATOR = '|===>'
+    ARROW_DECORATOR = "|===>"
     # this is inserted between long files, so it looks like
     # ./src/foo/bar/something|...|baz/foo.py
-    TRUNCATE_DECORATOR = '|...|'
+    TRUNCATE_DECORATOR = "|...|"
 
-    def __init__(self, formattedLine, result, index, validateFileExists=False, allInput=False):
+    def __init__(
+        self, formattedLine, result, index, validateFileExists=False, allInput=False
+    ):
         self.controller = None
 
         self.formattedLine = formattedLine
@@ -58,8 +59,11 @@ class LineMatch(object):
         (path, num, matches) = result
 
         self.originalPath = path
-        self.path = path if allInput else parse.prependDir(path,
-                                                           withFileInspection=validateFileExists)
+        self.path = (
+            path
+            if allInput
+            else parse.prependDir(path, withFileInspection=validateFileExists)
+        )
         self.num = num
 
         line = str(self.formattedLine)
@@ -76,11 +80,11 @@ class LineMatch(object):
         # this will be a no-op, but for lines like
         # "README        " we will reset end to
         # earlier
-        stringSubset = line[self.start:self.end]
+        stringSubset = line[self.start : self.end]
         strippedSubset = stringSubset.strip()
-        trailingWhitespace = (len(stringSubset) - len(strippedSubset))
+        trailingWhitespace = len(stringSubset) - len(strippedSubset)
         self.end -= trailingWhitespace
-        self.group = self.group[0:len(self.group) - trailingWhitespace]
+        self.group = self.group[0 : len(self.group) - trailingWhitespace]
 
         self.selected = False
         self.hovered = False
@@ -111,43 +115,45 @@ class LineMatch(object):
 
     def getSizeInBytes(self):
         output = subprocess.check_output(["ls", "-lh", self.path])
-        size = output.split()[4].decode('utf-8')
-        return 'size: ' + size
+        size = output.split()[4].decode("utf-8")
+        return "size: " + size
 
     def getLengthInLines(self):
         output = subprocess.check_output(["wc", "-l", self.path])
-        lines_count = output.strip().split()[0].decode('utf-8')
-        return 'length: ' + lines_count + ' lines'
+        lines_count = output.strip().split()[0].decode("utf-8")
+        return "length: " + lines_count + " lines"
 
     def getTimeLastAccessed(self):
         timeAccessed = time.strftime(
-            '%m/%d/%Y %H:%M:%S', time.localtime(os.stat(self.path).st_atime))
-        return 'last accessed: ' + timeAccessed
+            "%m/%d/%Y %H:%M:%S", time.localtime(os.stat(self.path).st_atime)
+        )
+        return "last accessed: " + timeAccessed
 
     def getTimeLastModified(self):
         timeModified = time.strftime(
-            '%m/%d/%Y %H:%M:%S', time.localtime(os.stat(self.path).st_mtime))
-        return 'last modified: ' + timeModified
+            "%m/%d/%Y %H:%M:%S", time.localtime(os.stat(self.path).st_mtime)
+        )
+        return "last modified: " + timeModified
 
     def getOwnerUser(self):
         output = subprocess.check_output(["ls", "-ld", self.path])
-        userOwnerName = output.split()[2].decode('utf-8')
+        userOwnerName = output.split()[2].decode("utf-8")
         userOwnerId = os.stat(self.path).st_uid
-        return 'owned by user: ' + userOwnerName + ', ' + str(userOwnerId)
+        return "owned by user: " + userOwnerName + ", " + str(userOwnerId)
 
     def getOwnerGroup(self):
         output = subprocess.check_output(["ls", "-ld", self.path])
-        groupOwnerName = output.split()[3].decode('utf-8')
+        groupOwnerName = output.split()[3].decode("utf-8")
         groupOwnerId = os.stat(self.path).st_gid
-        return 'owned by group: ' + groupOwnerName + ', ' + str(groupOwnerId)
+        return "owned by group: " + groupOwnerName + ", " + str(groupOwnerId)
 
     def getDir(self):
         # for the cd command and the like. file is a string like
         # ./asd.py or ~/www/asdasd/dsada.php, so since it already
         # has the directory appended we can just split on / and drop
         # the last
-        parts = self.path.split('/')[0:-1]
-        return '/'.join(parts)
+        parts = self.path.split("/")[0:-1]
+        return "/".join(parts)
 
     def isResolvable(self):
         return not self.isGitAbbreviatedPath()
@@ -155,8 +161,8 @@ class LineMatch(object):
     def isGitAbbreviatedPath(self):
         # this method mainly serves as a warning for when we get
         # git-abbrievated paths like ".../" that confuse users.
-        parts = self.path.split('/')
-        if len(parts) and parts[0] == '...':
+        parts = self.path.split("/")
+        if len(parts) and parts[0] == "...":
             return True
         return False
 
@@ -179,22 +185,37 @@ class LineMatch(object):
         return self.group
 
     def __str__(self):
-        return (self.getBefore() + '||' + self.getMatch()
-                + '||' + self.getAfter() + '||' +
-                str(self.num))
+        return (
+            self.getBefore()
+            + "||"
+            + self.getMatch()
+            + "||"
+            + self.getAfter()
+            + "||"
+            + str(self.num)
+        )
 
     def updateDecoratedMatch(self, maxLen=None):
-        '''Update the cached decorated match formatted string, and
-        dirty the line, if needed'''
+        """Update the cached decorated match formatted string, and
+        dirty the line, if needed"""
         if self.hovered and self.selected:
-            attributes = (curses.COLOR_WHITE, curses.COLOR_RED,
-                          FormattedText.BOLD_ATTRIBUTE)
+            attributes = (
+                curses.COLOR_WHITE,
+                curses.COLOR_RED,
+                FormattedText.BOLD_ATTRIBUTE,
+            )
         elif self.hovered:
-            attributes = (curses.COLOR_WHITE, curses.COLOR_BLUE,
-                          FormattedText.BOLD_ATTRIBUTE)
+            attributes = (
+                curses.COLOR_WHITE,
+                curses.COLOR_BLUE,
+                FormattedText.BOLD_ATTRIBUTE,
+            )
         elif self.selected:
-            attributes = (curses.COLOR_WHITE, curses.COLOR_GREEN,
-                          FormattedText.BOLD_ATTRIBUTE)
+            attributes = (
+                curses.COLOR_WHITE,
+                curses.COLOR_GREEN,
+                FormattedText.BOLD_ATTRIBUTE,
+            )
         elif not self.allInput:
             attributes = (0, 0, FormattedText.UNDERLINE_ATTRIBUTE)
         else:
@@ -213,27 +234,30 @@ class LineMatch(object):
             # decorated match and glue them together with our
             # truncation decorator. We subtract the length of the
             # before text since we consider that important too.
-            spaceAllowed = maxLen - len(self.TRUNCATE_DECORATOR) \
-                - len(decoratorText) \
+            spaceAllowed = (
+                maxLen
+                - len(self.TRUNCATE_DECORATOR)
+                - len(decoratorText)
                 - len(str(self.beforeText))
+            )
             midPoint = int(spaceAllowed / 2)
             beginMatch = plainText[0:midPoint]
-            endMatch = plainText[-midPoint:len(plainText)]
+            endMatch = plainText[-midPoint : len(plainText)]
             plainText = beginMatch + self.TRUNCATE_DECORATOR + endMatch
 
         self.decoratedMatch = FormattedText(
-            FormattedText.getSequenceForAttributes(*attributes) +
-            plainText)
+            FormattedText.getSequenceForAttributes(*attributes) + plainText
+        )
 
     def getDecorator(self):
         if self.selected:
             return self.ARROW_DECORATOR
-        return ''
+        return ""
 
     def printUpTo(self, text, printer, y, x, maxLen):
-        '''Attempt to print maxLen characters, returning a tuple
+        """Attempt to print maxLen characters, returning a tuple
         (x, maxLen) updated with the actual number of characters
-        printed'''
+        printed"""
         if maxLen <= 0:
             return (x, maxLen)
 
@@ -245,15 +269,14 @@ class LineMatch(object):
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
         y = miny + self.index + self.controller.getScrollOffset()
 
-        if (y < miny or y >= maxy):
+        if y < miny or y >= maxy:
             # wont be displayed!
             return
 
         # we dont care about the after text, but we should be able to see
         # all of the decorated match (which means we need to see up to
         # the end of the decoratedMatch, aka include beforeText)
-        importantTextLength = len(str(self.beforeText)) + \
-            len(str(self.decoratedMatch))
+        importantTextLength = len(str(self.beforeText)) + len(str(self.decoratedMatch))
         spaceForPrinting = maxx - minx
         if importantTextLength > spaceForPrinting:
             # hrm, we need to update our decorated match to show
@@ -264,8 +287,7 @@ class LineMatch(object):
             self.isTruncated = True
         else:
             # first check what our expanded size would be:
-            expandedSize = len(str(self.beforeText)) + \
-                len(self.getMatch())
+            expandedSize = len(str(self.beforeText)) + len(self.getMatch())
             if expandedSize < spaceForPrinting and self.isTruncated:
                 # if the screen gets resized, we might be truncated
                 # from a previous render but **now** we have room.

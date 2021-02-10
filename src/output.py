@@ -10,22 +10,22 @@ from builtins import str
 import logger
 import stateFiles
 
-DEBUG = '~/.fbPager.debug.text'
-RED_COLOR = u'\033[0;31m'
-NO_COLOR = u'\033[0m'
+DEBUG = "~/.fbPager.debug.text"
+RED_COLOR = u"\033[0;31m"
+NO_COLOR = u"\033[0m"
 
-INVALID_FILE_WARNING = '''
+INVALID_FILE_WARNING = """
 Warning! Some invalid or unresolvable files were detected.
-'''
+"""
 
-GIT_ABBREVIATION_WARNING = '''
+GIT_ABBREVIATION_WARNING = """
 It looks like one of these is a git abbreviated file with
 a triple dot path (.../). Try to turn off git's abbreviation
 with --numstat so we get actual paths (not abbreviated
 versions which cannot be resolved.
-'''
+"""
 
-CONTINUE_WARNING = 'Are you sure you want to continue? Ctrl-C to quit'
+CONTINUE_WARNING = "Are you sure you want to continue? Ctrl-C to quit"
 
 
 # The two main entry points into this module:
@@ -40,7 +40,7 @@ def execComposedCommand(command, lineObjs):
     if not isinstance(command, str):
         command = command.decode()
 
-    logger.addEvent('command_on_num_files', len(lineObjs))
+    logger.addEvent("command_on_num_files", len(lineObjs))
     command = composeCommand(command, lineObjs)
     appendAliasExpansion()
     appendIfInvalid(lineObjs)
@@ -49,9 +49,10 @@ def execComposedCommand(command, lineObjs):
 
 
 def editFiles(lineObjs):
-    logger.addEvent('editing_num_files', len(lineObjs))
-    filesAndLineNumbers = [(lineObj.getPath(), lineObj.getLineNum())
-                           for lineObj in lineObjs]
+    logger.addEvent("editing_num_files", len(lineObjs))
+    filesAndLineNumbers = [
+        (lineObj.getPath(), lineObj.getLineNum()) for lineObj in lineObjs
+    ]
     command = joinFilesIntoCommand(filesAndLineNumbers)
     appendIfInvalid(lineObjs)
     appendToFile(command)
@@ -79,19 +80,22 @@ def debug(*args):
 def outputSelection(lineObjs):
     filePath = stateFiles.getSelectionFilePath()
     indices = [l.index for l in lineObjs]
-    file = open(filePath, 'wb')
+    file = open(filePath, "wb")
     pickle.dump(indices, file)
     file.close()
 
 
 def getEditorAndPath():
-    editor_path = os.environ.get('FPP_EDITOR') or os.environ.get('VISUAL') or \
-        os.environ.get('EDITOR')
+    editor_path = (
+        os.environ.get("FPP_EDITOR")
+        or os.environ.get("VISUAL")
+        or os.environ.get("EDITOR")
+    )
     if editor_path:
         editor = os.path.basename(editor_path)
-        logger.addEvent('using_editor_' + editor)
+        logger.addEvent("using_editor_" + editor)
         return editor, editor_path
-    return 'vim', 'vim'
+    return "vim", "vim"
 
 
 def expandPath(filePath):
@@ -103,28 +107,34 @@ def expandPath(filePath):
 
 def joinFilesIntoCommand(filesAndLineNumbers):
     editor, editor_path = getEditorAndPath()
-    cmd = editor_path + ' '
-    if editor == 'vim -p':
+    cmd = editor_path + " "
+    if editor == "vim -p":
         firstFilePath, firstLineNum = filesAndLineNumbers[0]
-        cmd += ' +%d %s' % (firstLineNum, firstFilePath)
+        cmd += " +%d %s" % (firstLineNum, firstFilePath)
         for (filePath, lineNum) in filesAndLineNumbers[1:]:
             cmd += ' +"tabnew +%d %s"' % (lineNum, filePath)
-    elif editor in ['vim', 'mvim', 'nvim'] and not os.environ.get('FPP_DISABLE_SPLIT'):
+    elif editor in ["vim", "mvim", "nvim"] and not os.environ.get("FPP_DISABLE_SPLIT"):
         firstFilePath, firstLineNum = filesAndLineNumbers[0]
-        cmd += ' +%d %s' % (firstLineNum, firstFilePath)
+        cmd += " +%d %s" % (firstLineNum, firstFilePath)
         for (filePath, lineNum) in filesAndLineNumbers[1:]:
             cmd += ' +"vsp +%d %s"' % (lineNum, filePath)
     else:
         for (filePath, lineNum) in filesAndLineNumbers:
             editor_without_args = editor.split()[0]
-            if editor_without_args in ['vi', 'nvim', 'nano', 'joe', 'emacs',
-                                       'emacsclient'] and lineNum != 0:
-                cmd += ' +%d \'%s\'' % (lineNum, filePath)
-            elif editor_without_args in ['subl', 'sublime', 'atom'] and lineNum != 0:
-                cmd += ' \'%s:%d\'' % (filePath, lineNum)
-            elif lineNum != 0 and os.environ.get('FPP_LINENUM_SEP'):
-                cmd += " '%s%s%d'" % (filePath,
-                                      os.environ.get('FPP_LINENUM_SEP'), lineNum)
+            if (
+                editor_without_args
+                in ["vi", "nvim", "nano", "joe", "emacs", "emacsclient"]
+                and lineNum != 0
+            ):
+                cmd += " +%d '%s'" % (lineNum, filePath)
+            elif editor_without_args in ["subl", "sublime", "atom"] and lineNum != 0:
+                cmd += " '%s:%d'" % (filePath, lineNum)
+            elif lineNum != 0 and os.environ.get("FPP_LINENUM_SEP"):
+                cmd += " '%s%s%d'" % (
+                    filePath,
+                    os.environ.get("FPP_LINENUM_SEP"),
+                    lineNum,
+                )
             else:
                 cmd += " '%s'" % filePath
     return cmd
@@ -141,7 +151,7 @@ def composeCdCommand(command, lineObjs):
 
 
 def isCdCommand(command):
-    return command[0:3] in ['cd ', 'cd']
+    return command[0:3] in ["cd ", "cd"]
 
 
 def composeCommand(command, lineObjs):
@@ -152,13 +162,13 @@ def composeCommand(command, lineObjs):
 
 
 def composeFileCommand(command, lineObjs):
-    command = command.encode().decode('utf-8')
+    command = command.encode().decode("utf-8")
     paths = ["'%s'" % lineObj.getPath() for lineObj in lineObjs]
-    path_str = ' '.join(paths)
-    if '$F' in command:
-        command = command.replace('$F', path_str)
+    path_str = " ".join(paths)
+    if "$F" in command:
+        command = command.replace("$F", path_str)
     else:
-        command = command + ' ' + path_str
+        command = command + " " + path_str
     return command
 
 
@@ -167,7 +177,7 @@ def outputNothing():
 
 
 def clearFile():
-    writeToFile('')
+    writeToFile("")
 
 
 def appendAliasExpansion():
@@ -177,18 +187,21 @@ def appendAliasExpansion():
     # despite documentation hinting otherwise.
     #
     # so here we must ask bash to turn on alias expansion.
-    shell = os.environ.get('SHELL')
-    if 'fish' not in shell:
-        appendToFile("""
+    shell = os.environ.get("SHELL")
+    if "fish" not in shell:
+        appendToFile(
+            """
 if type shopt > /dev/null; then
   shopt -s expand_aliases
 fi
-""")
+"""
+        )
 
 
 def appendFriendlyCommand(command):
-    header = 'echo "executing command:"\n' + \
-             'echo "' + command.replace('"', '\\"') + '"'
+    header = (
+        'echo "executing command:"\n' + 'echo "' + command.replace('"', '\\"') + '"'
+    )
     appendToFile(header)
     appendToFile(command)
 
@@ -198,8 +211,8 @@ def appendError(text):
 
 
 def appendToFile(command):
-    file = open(stateFiles.getScriptOutputFilePath(), 'a')
-    file.write(command + '\n')
+    file = open(stateFiles.getScriptOutputFilePath(), "a")
+    file.write(command + "\n")
     file.close()
     logger.output()
 
@@ -208,18 +221,18 @@ def appendExit():
     # The `$SHELL` environment variable points to the default shell,
     # not the current shell. But they are often the same. And there
     # is no other simple and reliable way to detect the current shell.
-    shell = os.environ['SHELL']
+    shell = os.environ["SHELL"]
     # ``csh``, fish`` and, ``rc`` uses ``$status`` instead of ``$?``.
-    if shell.endswith('csh') or shell.endswith('fish') or shell.endswith('rc'):
-        exit_status = '$status'
+    if shell.endswith("csh") or shell.endswith("fish") or shell.endswith("rc"):
+        exit_status = "$status"
     # Otherwise we assume a Bournal-like shell, e.g. bash and zsh.
     else:
-        exit_status = '$?'
-    appendToFile('exit {status};'.format(status=exit_status))
+        exit_status = "$?"
+    appendToFile("exit {status};".format(status=exit_status))
 
 
 def writeToFile(command):
-    file = open(stateFiles.getScriptOutputFilePath(), 'w')
-    file.write(command + '\n')
+    file = open(stateFiles.getScriptOutputFilePath(), "w")
+    file.write(command + "\n")
     file.close()
     logger.output()

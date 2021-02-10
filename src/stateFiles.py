@@ -6,11 +6,11 @@ from __future__ import print_function
 
 import os
 
-FPP_DIR = os.environ.get('FPP_DIR') or '~/.cache/fpp'
-PICKLE_FILE = '.pickle'
-SELECTION_PICKLE = '.selection.pickle'
-OUTPUT_FILE = '.fpp.sh'
-LOGGER_FILE = '.fpp.log'
+FPP_DIR = os.environ.get("FPP_DIR") or "~/.cache/fpp"
+PICKLE_FILE = ".pickle"
+SELECTION_PICKLE = ".selection.pickle"
+OUTPUT_FILE = ".fpp.sh"
+LOGGER_FILE = ".fpp.log"
 
 
 def assertDirCreated():

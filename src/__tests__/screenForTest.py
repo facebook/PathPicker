@@ -5,25 +5,26 @@
 from __future__ import print_function
 
 import sys
-sys.path.insert(0, '../')
+
+sys.path.insert(0, "../")
 from charCodeMapping import CHAR_TO_CODE
 
 ATTRIBUTE_SYMBOL_MAPPING = {
-    0: ' ',
-    1: ' ',
-    2: 'B',
-    2097154: '*',  # bold white
-    131072: '_',
-    3: 'G',
-    4: 'R',
-    5: '?',
-    6: '!',
-    2097153: 'W',
-    2097155: '|',  # bold
-    2097156: '/',  # bold
-    2097158: '~',  # bold
-    2097157: '@',  # bold
-    7: '?',
+    0: " ",
+    1: " ",
+    2: "B",
+    2097154: "*",  # bold white
+    131072: "_",
+    3: "G",
+    4: "R",
+    5: "?",
+    6: "!",
+    2097153: "W",
+    2097155: "|",  # bold
+    2097156: "/",  # bold
+    2097158: "~",  # bold
+    2097157: "@",  # bold
+    7: "?",
 }
 
 
@@ -64,7 +65,7 @@ class ScreenForTest(object):
         for x in range(self.maxX):
             for y in range(self.maxY):
                 coord = (x, y)
-                self.output[coord] = ('', 1)
+                self.output[coord] = ("", 1)
 
     def move(self, y, x):
         self.cursorY = y
@@ -81,16 +82,16 @@ class ScreenForTest(object):
             self.output[coord] = (string[deltaX], self.currentAttribute)
 
     def delch(self, y, x):
-        '''Delete a character. We implement this by removing the output,
-        NOT by printing a space'''
-        self.output[(x, y)] = ('', 1)
+        """Delete a character. We implement this by removing the output,
+        NOT by printing a space"""
+        self.output[(x, y)] = ("", 1)
 
     def getch(self):
         return CHAR_TO_CODE[self.charInputs.pop(0)]
 
     def getstr(self, y, x, maxLen):
         # TODO -- enable editing this
-        return ''
+        return ""
 
     def printScreen(self):
         for index, row in enumerate(self.getRows()):
@@ -111,15 +112,21 @@ class ScreenForTest(object):
         return self.getRowsWithAttributes(screen=self.pastScreens[pastScreen])
 
     def getRowsWithAttributesForPastScreens(self, pastScreens):
-        '''Get the rows & attributes for the array of screens as one stream
-        (there is no extra new line or extra space between pages)'''
-        pages = map(lambda screenIndex: self.getRowsWithAttributes(
-            screen=self.pastScreens[screenIndex]), pastScreens)
+        """Get the rows & attributes for the array of screens as one stream
+        (there is no extra new line or extra space between pages)"""
+        pages = map(
+            lambda screenIndex: self.getRowsWithAttributes(
+                screen=self.pastScreens[screenIndex]
+            ),
+            pastScreens,
+        )
 
         # join the pages together into one stream
         lines, attributes = zip(*pages)
-        return ([line for page in lines for line in page],
-                [line for page in attributes for line in page])
+        return (
+            [line for page in lines for line in page],
+            [line for page in attributes for line in page],
+        )
 
     def getRowsWithAttributes(self, screen=None):
         if not screen:
@@ -128,8 +135,8 @@ class ScreenForTest(object):
         rows = []
         attributeRows = []
         for y in range(self.maxY):
-            row = ''
-            attributeRow = ''
+            row = ""
+            attributeRow = ""
             for x in range(self.maxX):
                 coord = (x, y)
                 (char, attr) = screen[coord]
@@ -146,5 +153,5 @@ class ScreenForTest(object):
     def getAttributeSymbolForCode(self, code):
         symbol = ATTRIBUTE_SYMBOL_MAPPING.get(code, None)
         if symbol is None:
-            raise ValueError('%d not mapped' % code)
+            raise ValueError("%d not mapped" % code)
         return symbol

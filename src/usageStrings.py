@@ -5,25 +5,25 @@
 from __future__ import print_function
 from screenFlags import ScreenFlags
 
-MANPAGE_HEADER = '''= fpp(1)
-'''
+MANPAGE_HEADER = """= fpp(1)
+"""
 
-MANPAGE_NAME_SECTION = '''
+MANPAGE_NAME_SECTION = """
 == NAME
 
 fpp - Facebook PathPicker; a command line tool for selecting files out of bash output
-'''
+"""
 
-USAGE_INTRO_PRE = '''
+USAGE_INTRO_PRE = """
 Welcome to fpp, the Facebook PathPicker! We hope your stay
 with us is enjoyable.
-'''
+"""
 
-MANPAGE_INTRO_PRE = '''
+MANPAGE_INTRO_PRE = """
 == INTRO
-'''
+"""
 
-INTRO = '''
+INTRO = """
 To get started with fpp, pipe some kind of terminal output into the program.
 Examples include:
 
@@ -37,21 +37,21 @@ Examples include:
 Once fpp parses your input (and something that looks like a file matches), it
 will put you inside a pager that will allow you to select files with the
 following commands:
-'''
+"""
 
 USAGE_INTRO = USAGE_INTRO_PRE + INTRO
 
-MANPAGE_SYNOPSIS = '''
+MANPAGE_SYNOPSIS = """
 == SYNOPSIS
 
-'''
+"""
 
-USAGE_PAGE_HEADER = '''
+USAGE_PAGE_HEADER = """
 == Navigation ==
 
-'''
+"""
 
-USAGE_PAGE = '''
+USAGE_PAGE = """
     * [f] toggle the selection of a file
     * [F] toggle and move downward by 1
     * [A] toggle selection of all (unique) files
@@ -72,14 +72,14 @@ them via command mode:
         (or file under cursor if none selected)
         in $EDITOR
     * [c] enter command mode
-'''
+"""
 
-USAGE_COMMAND_HEADER = '''
+USAGE_COMMAND_HEADER = """
 == Command Mode ==
 
-'''
+"""
 
-USAGE_COMMAND = '''
+USAGE_COMMAND = """
 Command mode is helpful when you want to
 execute bash commands with the filenames
 you have selected. By default the filenames
@@ -107,9 +107,9 @@ string. Examples include:
 Which format to:
     * scp file1 file2 dev:~/backup
     * mv file1 file2 ../over/here
-'''
+"""
 
-USAGE_CONFIGURATION = '''
+USAGE_CONFIGURATION = """
 == Configuration ==
 
 
@@ -144,51 +144,55 @@ line option --color.
 For built in commands like `ls`, try `-G` (on Mac, additionally export
 CLICOLOR_FORCE in your environment to anything.)
 
-'''
+"""
 
-USAGE_COMMAND_LINE = '''
+USAGE_COMMAND_LINE = """
 == Command line arguments ==
 
 
 PathPicker supports some command line arguments, as well.
 
-'''
+"""
 
-USAGE_TAIL = '''
+USAGE_TAIL = """
 That's a fairly in-depth overview of Facebook PathPicker.
 We also provide help along the way as you
 use the app, so don't worry and jump on in!
-'''
+"""
 
-USAGE_STR = USAGE_INTRO + \
-    USAGE_PAGE_HEADER + \
-    USAGE_PAGE + \
-    USAGE_COMMAND_HEADER + \
-    USAGE_COMMAND + \
-    USAGE_CONFIGURATION + \
-    USAGE_COMMAND_LINE + \
-    ScreenFlags.getArgParser().format_help() + \
-    USAGE_TAIL
+USAGE_STR = (
+    USAGE_INTRO
+    + USAGE_PAGE_HEADER
+    + USAGE_PAGE
+    + USAGE_COMMAND_HEADER
+    + USAGE_COMMAND
+    + USAGE_CONFIGURATION
+    + USAGE_COMMAND_LINE
+    + ScreenFlags.getArgParser().format_help()
+    + USAGE_TAIL
+)
 
-decorator = '*' * 80
-USAGE_STR = decorator + '\n' + USAGE_STR + '\n' + decorator
+decorator = "*" * 80
+USAGE_STR = decorator + "\n" + USAGE_STR + "\n" + decorator
 
 
-MANPAGE_STR = '\n\n'.join([
-    MANPAGE_HEADER,
-    MANPAGE_NAME_SECTION,
-    MANPAGE_SYNOPSIS,
-    # FIXME: asciidoc example block?
-    # http://www.methods.co.nz/asciidoc/userguide.html#X48
-    ScreenFlags.getArgParser().format_help(),
-    MANPAGE_INTRO_PRE,
-    INTRO,
-    USAGE_PAGE_HEADER,
-    USAGE_PAGE,
-    USAGE_COMMAND_HEADER,
-    USAGE_COMMAND,
-    USAGE_CONFIGURATION,
-])
+MANPAGE_STR = "\n\n".join(
+    [
+        MANPAGE_HEADER,
+        MANPAGE_NAME_SECTION,
+        MANPAGE_SYNOPSIS,
+        # FIXME: asciidoc example block?
+        # http://www.methods.co.nz/asciidoc/userguide.html#X48
+        ScreenFlags.getArgParser().format_help(),
+        MANPAGE_INTRO_PRE,
+        INTRO,
+        USAGE_PAGE_HEADER,
+        USAGE_PAGE,
+        USAGE_COMMAND_HEADER,
+        USAGE_COMMAND,
+        USAGE_CONFIGURATION,
+    ]
+)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(MANPAGE_STR)

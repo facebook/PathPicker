@@ -15,10 +15,10 @@ class FormattedText(object):
     to str() returning the plain text and knows how to print
     itself out using ncurses"""
 
-    ANSI_ESCAPE_FORMATTING = r'\x1b\[([^mK]*)[mK]'
+    ANSI_ESCAPE_FORMATTING = r"\x1b\[([^mK]*)[mK]"
     BOLD_ATTRIBUTE = 1
     UNDERLINE_ATTRIBUTE = 4
-    Range = namedtuple('Range', 'bottom top')
+    Range = namedtuple("Range", "bottom top")
     FOREGROUND_RANGE = Range(30, 39)
     BACKGROUND_RANGE = Range(40, 49)
 
@@ -34,8 +34,8 @@ class FormattedText(object):
             # or it will return [string] if there is no match
             # create the invariant that every segment has a formatting segment, e.g
             # we will always have FORMAT, TEXT, FORMAT, TEXT
-            self.segments.insert(0, '')
-            self.plainText = ''.join(self.segments[1::2])
+            self.segments.insert(0, "")
+            self.plainText = "".join(self.segments[1::2])
 
     def __str__(self):
         return self.plainText
@@ -47,13 +47,13 @@ class FormattedText(object):
         fore = -1  # -1 default means "use default", not "use white/black"
         back = -1
         other = 0
-        intValues = [int(value) for value in formatting.split(';') if value]
+        intValues = [int(value) for value in formatting.split(";") if value]
         for code in intValues:
-            if (code >= cls.FOREGROUND_RANGE.bottom
-                    and code <= cls.FOREGROUND_RANGE.top):
+            if code >= cls.FOREGROUND_RANGE.bottom and code <= cls.FOREGROUND_RANGE.top:
                 fore = code - cls.FOREGROUND_RANGE.bottom
-            elif (code >= cls.BACKGROUND_RANGE.bottom
-                  and code <= cls.BACKGROUND_RANGE.top):
+            elif (
+                code >= cls.BACKGROUND_RANGE.bottom and code <= cls.BACKGROUND_RANGE.top
+            ):
                 back = code - cls.BACKGROUND_RANGE.bottom
             elif code == cls.BOLD_ATTRIBUTE:
                 other = other | curses.A_BOLD
@@ -66,9 +66,15 @@ class FormattedText(object):
     def getSequenceForAttributes(cls, fore, back, attr):
         """Return a fully formed escape sequence for the color pair
         and additional attributes"""
-        return ("\x1b[" + str(cls.FOREGROUND_RANGE.bottom + fore)
-                + ";" + str(cls.BACKGROUND_RANGE.bottom + back) + ";"
-                + str(attr) + "m")
+        return (
+            "\x1b["
+            + str(cls.FOREGROUND_RANGE.bottom + fore)
+            + ";"
+            + str(cls.BACKGROUND_RANGE.bottom + back)
+            + ";"
+            + str(attr)
+            + "m"
+        )
 
     def printText(self, y, x, printer, maxLen):
         """Print out using ncurses. Note that if any formatting changes
@@ -79,9 +85,10 @@ class FormattedText(object):
                 break
             if index % 2 == 1:
                 # text
-                toPrint = val[0:maxLen - printedSoFar]
-                printer.addstr(y, x + printedSoFar, toPrint,
-                               ColorPrinter.CURRENT_COLORS)
+                toPrint = val[0 : maxLen - printedSoFar]
+                printer.addstr(
+                    y, x + printedSoFar, toPrint, ColorPrinter.CURRENT_COLORS
+                )
                 printedSoFar += len(toPrint)
             else:
                 # formatting
@@ -119,15 +126,16 @@ class FormattedText(object):
         beforeText = textSegment[:splitPoint]
         afterText = textSegment[splitPoint:]
         beforeSegments = self.segments[:index]
-        afterSegments = self.segments[index + 1:]
+        afterSegments = self.segments[index + 1 :]
 
         formattingForSegment = self.segments[index - 1]
 
         beforeFormattedText = FormattedText()
         afterFormattedText = FormattedText()
-        beforeFormattedText.segments = (beforeSegments + [beforeText])
-        afterFormattedText.segments = ([formattingForSegment]
-                                       + [afterText] + afterSegments)
+        beforeFormattedText.segments = beforeSegments + [beforeText]
+        afterFormattedText.segments = (
+            [formattingForSegment] + [afterText] + afterSegments
+        )
         beforeFormattedText.plainText = self.plainText[:where]
         afterFormattedText.plainText = self.plainText[where:]
 

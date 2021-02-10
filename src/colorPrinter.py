@@ -26,8 +26,7 @@ class ColorPrinter(object):
         self.currentAttributes = False  # initialized in setAttributes
 
     def setAttributes(self, foreColor, backColor, other):
-        self.currentAttributes = self.getAttributes(foreColor, backColor,
-                                                    other)
+        self.currentAttributes = self.getAttributes(foreColor, backColor, other)
 
     def getAttributes(self, foreColor, backColor, other):
         colorIndex = -1
@@ -62,7 +61,7 @@ class ColorPrinter(object):
 
     # perhaps there's a more elegant way to do this
     def clearSegment(self, y, startX, endX):
-        spaceStr = ' ' * (endX - startX)
+        spaceStr = " " * (endX - startX)
         attr = self.cursesAPI.colorPair(self.DEFAULT_COLOR_INDEX)
 
         self.screen.addstr(y, startX, spaceStr, attr)

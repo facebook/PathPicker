@@ -14,26 +14,28 @@ import stateFiles
 
 
 def writeToFile(content):
-    file = open(stateFiles.getLoggerFilePath(), 'w')
+    file = open(stateFiles.getLoggerFilePath(), "w")
     file.write(content)
     file.close()
 
 
 def clearFile():
-    writeToFile('')
+    writeToFile("")
 
 
 def getUnixName():
-    proc = subprocess.Popen(['whoami'],
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                            shell=True,
-                            universal_newlines=True)
+    proc = subprocess.Popen(
+        ["whoami"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        shell=True,
+        universal_newlines=True,
+    )
 
     (stdout, stderr) = proc.communicate()
     if not stdout:
-        return 'unknown'
-    return stdout.replace('\n', '')
+        return "unknown"
+    return stdout.replace("\n", "")
 
 
 events = []
@@ -47,7 +49,7 @@ def getLoggingDicts():
     unixname = getUnixName()
     dicts = []
     for (event, number) in events:
-        dicts.append({'unixname': unixname, 'num': number, 'eventname': event})
+        dicts.append({"unixname": unixname, "num": number, "eventname": event})
     return dicts
 
 
