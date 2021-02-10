@@ -23,7 +23,7 @@ Send them over! Our bot will ask you to sign the CLA and after that someone
 from the team will start reviewing.
 
 Before sending them over, make sure the tests pass with:
-`./scripts/buildAndTest.sh`
+`./scripts/runTests.sh`
 
 #### Test dependencies
 
