@@ -1,0 +1,4 @@
+inputs/annoying-hyphen-dir/Package\ Control.system-bundle
+inputs/annoying-hyphen-dir/Package Control.system-bundle
+inputs/annoying\ Spaces\ Folder/evilFile\ With\ Space2.txt
+inputs/annoying Spaces Folder/evilFile With Space2.txt
