@@ -8,6 +8,7 @@ import sys
 sys.path.insert(0, '../')
 import screenTestRunner
 import os
+import re
 import unittest
 
 
@@ -280,14 +281,21 @@ class TestScreenLogic(unittest.TestCase):
     def assertEqualLines(self, testName, actualLines, expectedLines):
         self.assertEqualNumLines(testName, actualLines, expectedLines)
         expectedFile = TestScreenLogic.getExpectedFile(testName)
+        globNeedle = " (glob)"
         for index, expectedLine in enumerate(expectedLines):
             actualLine = actualLines[index]
-            self.assertEqual(
-                expectedLine,
-                actualLine,
-                'Line %d did not match for test %s:\n\nExpected:"%s"\nActual  :"%s"' % (
-                    index, expectedFile, expectedLine, actualLine),
-            )
+            errorMessage = 'Line %d did not match for test %s:\n\nExpected:"%s"\nActual  :"%s"' % (
+                index, expectedFile, expectedLine, actualLine)
+            if expectedLine.endswith(globNeedle):
+                self.assertEqualWithGlob(
+                    expectedLine[:-len(globNeedle)], actualLine, errorMessage)
+            else:
+                self.assertEqual(expectedLine, actualLine, errorMessage)
+
+    def assertEqualWithGlob(self, expectedLine, actualLine, errorMessage):
+        # Escape all regex symbols and replace "*" with ".+"
+        pattern = ".+".join(map(re.escape, expectedLine.split("*")))
+        self.assertTrue(re.match(pattern, actualLine), errorMessage)
 
     @staticmethod
     def getExpectedFile(testName):
