@@ -4,7 +4,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 PTH="$(pwd)"
-VERSION="$(python "$PTH/../src/version.py")"
+VERSION="$(python3 "$PTH/../src/version.py")"
 DATETIME=$(date '+%a, %d %b %Y %H:%M:%S %z')
 
 echo "Building fpp version $VERSION at $DATETIME"

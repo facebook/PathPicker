@@ -3,7 +3,7 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-VERSION="$(python ./src/version.py)"
+VERSION="$(python3 ./src/version.py)"
 DEST="./dist/fpp.$VERSION.tar.gz"
 mkdir -p ./dist/
 tar -czf $DEST src/*.py fpp

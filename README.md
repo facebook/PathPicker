@@ -31,7 +31,7 @@ and anything else you can dream up!
 
 ## Requirements
 
-PathPicker requires Python >2.6 or >3.0.
+PathPicker requires Python 3.
 
 ### Supported Shells
 
@@ -56,7 +56,7 @@ On Debian-based systems, run these steps:
 ```
 $ git clone https://github.com/facebook/PathPicker.git
 $ cd PathPicker/debian
-$ ./package.sh 
+$ ./package.sh
 $ ls ../fpp_0.7.2_noarch.deb
 ```
 

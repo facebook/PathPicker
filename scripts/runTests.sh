@@ -19,7 +19,7 @@ fi
 cd ./src/__tests__/
 for testname in test*.py; do
     echo "Running: $testname"
-    if ! python "$testname"; then
+    if ! python3 "$testname"; then
         echo "Tests failed :("
         exit 1
     fi
