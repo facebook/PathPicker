@@ -74,7 +74,8 @@ for opt in "$@"; do
     echo "fpp version $VERSION"
     exit 0
   elif [ "$opt" == "--python2" ]; then
-    PYTHONCMD="python2"
+    echo "Python 2 is no longer supported. Please use Python 3."
+    exit 1
   elif [ "$opt" == "--help" -o "$opt" == "-h" ]; then
     $PYTHONCMD "$BASEDIR/src/printHelp.py"
     exit 0
