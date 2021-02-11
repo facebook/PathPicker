@@ -1,6 +1,6 @@
 # PathPicker
 
-[![tests](https://github.com/facebook/PathPicker/workflows/tests/badge.svg)](https://github.com/facebook/PathPicker/actions)
+[![tests](https://github.com/facebook/PathPicker/workflows/tests/badge.svg)](https://github.com/facebook/PathPicker/actions) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Facebook PathPicker is a simple command line tool that solves the perpetual
 problem of selecting files out of bash output. PathPicker will:
@@ -138,6 +138,3 @@ See the [CONTRIBUTING.md](https://github.com/facebook/PathPicker/blob/master/CON
 ## License
 
 PathPicker is MIT licensed.
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
