@@ -1,5 +1,0 @@
-language: python
-python:
-  - "3.7"
-install: "pip3 install black"
-script: "./scripts/runTests.sh"
