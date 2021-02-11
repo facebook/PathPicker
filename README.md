@@ -1,6 +1,6 @@
 # PathPicker
 
-![tests](https://github.com/facebook/PathPicker/workflows/tests/badge.svg)
+[![tests](https://github.com/facebook/PathPicker/workflows/tests/badge.svg)](https://github.com/facebook/PathPicker/actions)
 
 Facebook PathPicker is a simple command line tool that solves the perpetual
 problem of selecting files out of bash output. PathPicker will:
