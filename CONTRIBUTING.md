@@ -27,7 +27,8 @@ Before sending them over, make sure the tests pass with:
 
 #### Test dependencies
 
-* [black](https://github.com/psf/black)
+* Install [black](https://github.com/psf/black)
+  * `pip3 install black`
 
 ### Contributor License Agreement ("CLA")
 
