@@ -8,6 +8,8 @@ import subprocess
 
 import curses
 import parse
+
+from pathlib import Path
 from formattedText import FormattedText
 
 
@@ -111,47 +113,43 @@ class LineMatch(object):
     def getPath(self):
         return self.path
 
-    def getSizeInBytes(self):
-        output = subprocess.check_output(["ls", "-lh", self.path])
-        size = output.split()[4].decode("utf-8")
-        return "size: " + size
+    def getFileSize(self):
+        size = os.path.getsize(self.path)
+        for unit in ["B", "K", "M", "G", "T", "P", "E", "Z"]:
+            if size < 1024:
+                return f"size: {size}{unit}"
+            size //= 1024
 
     def getLengthInLines(self):
         output = subprocess.check_output(["wc", "-l", self.path])
         lines_count = output.strip().split()[0].decode("utf-8")
-        return "length: " + lines_count + " lines"
+        lines_caption = "lines" if int(lines_count) > 1 else "line"
+        return f"length: {lines_count} {lines_caption}"
 
     def getTimeLastAccessed(self):
         timeAccessed = time.strftime(
             "%m/%d/%Y %H:%M:%S", time.localtime(os.stat(self.path).st_atime)
         )
-        return "last accessed: " + timeAccessed
+        return f"last accessed: {timeAccessed}"
 
     def getTimeLastModified(self):
         timeModified = time.strftime(
             "%m/%d/%Y %H:%M:%S", time.localtime(os.stat(self.path).st_mtime)
         )
-        return "last modified: " + timeModified
+        return f"last modified: {timeModified}"
 
     def getOwnerUser(self):
-        output = subprocess.check_output(["ls", "-ld", self.path])
-        userOwnerName = output.split()[2].decode("utf-8")
+        userOwnerName = Path(self.path).owner()
         userOwnerId = os.stat(self.path).st_uid
-        return "owned by user: " + userOwnerName + ", " + str(userOwnerId)
+        return f"owned by user: {userOwnerName}, {userOwnerId}"
 
     def getOwnerGroup(self):
-        output = subprocess.check_output(["ls", "-ld", self.path])
-        groupOwnerName = output.split()[3].decode("utf-8")
+        groupOwnerName = Path(self.path).group()
         groupOwnerId = os.stat(self.path).st_gid
-        return "owned by group: " + groupOwnerName + ", " + str(groupOwnerId)
+        return f"owned by group: {groupOwnerName}, {groupOwnerId}"
 
     def getDir(self):
-        # for the cd command and the like. file is a string like
-        # ./asd.py or ~/www/asdasd/dsada.php, so since it already
-        # has the directory appended we can just split on / and drop
-        # the last
-        parts = self.path.split("/")[0:-1]
-        return "/".join(parts)
+        return os.path.dirname(self.path)
 
     def isResolvable(self):
         return not self.isGitAbbreviatedPath()
@@ -159,10 +157,8 @@ class LineMatch(object):
     def isGitAbbreviatedPath(self):
         # this method mainly serves as a warning for when we get
         # git-abbrievated paths like ".../" that confuse users.
-        parts = self.path.split("/")
-        if len(parts) and parts[0] == "...":
-            return True
-        return False
+        parts = self.path.split(os.path.sep)
+        return len(parts) and parts[0] == "..."
 
     def getLineNum(self):
         return self.num
