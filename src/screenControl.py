@@ -121,7 +121,7 @@ class HelperChrome(object):
             lineObj.getTimeLastModified(),
             lineObj.getOwnerUser(),
             lineObj.getOwnerGroup(),
-            lineObj.getSizeInBytes(),
+            lineObj.getFileSize(),
             lineObj.getLengthInLines(),
         ]
         self.printer.addstr(startY, startX, headerLine)

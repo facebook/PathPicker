@@ -26,5 +26,5 @@ inputs/annoying Spaces Folder/evilFile With Space2.txt|    * [A] toggle selectio
 |    * last modified: */*/* *:*:* (glob)
 |    * owned by user: *, * (glob)
 |    * owned by group: *, * (glob)
-|    * size: 21* (glob)
-|    * length: 1 lines
+|    * size: 21B
+|    * length: 1 line
