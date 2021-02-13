@@ -25,7 +25,7 @@ this error will go away)
 """
 
 
-def doProgram(stdscr, flags, keyBindings=None, cursesAPI=None, lineObjs=None):
+def doProgram(stdscr, flags, keyBindings=None, cursesAPI=None, lineObjs=None) -> None:
     # curses and lineObjs get dependency injected for
     # our tests, so init these if they are not provided
     if not keyBindings:
