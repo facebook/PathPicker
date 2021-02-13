@@ -4,8 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 import sys
 
-sys.path.insert(0, "../")
-import screenTestRunner
+from tests import screenTestRunner
 import os
 import re
 import unittest
@@ -312,7 +311,7 @@ class TestScreenLogic(unittest.TestCase):
             actualLine = actualLines[index]
             errorMessage = (
                 'Line %d did not match for test %s:\n\nExpected:"%s"\nActual  :"%s"'
-                % (index, expectedFile, expectedLine, actualLine)
+                % (index + 1, expectedFile, expectedLine, actualLine)
             )
             if expectedLine.endswith(globNeedle):
                 self.assertEqualWithGlob(

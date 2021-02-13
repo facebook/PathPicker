@@ -7,10 +7,10 @@ import time
 import subprocess
 
 import curses
-import parse
+from pathpicker import parse
 
 from pathlib import Path
-from formattedText import FormattedText
+from pathpicker.formattedText import FormattedText
 
 
 class SimpleLine(object):

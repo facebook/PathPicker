@@ -6,12 +6,10 @@ import sys
 import unittest
 import os
 
-sys.path.insert(0, "../")
-
-import parse
-from localTestCases import LOCAL_TEST_CASES
-from formattedText import FormattedText
-import format
+from pathpicker import parse
+from tests.localTestCases import LOCAL_TEST_CASES
+from pathpicker.formattedText import FormattedText
+from pathpicker import format
 
 fileTestCases = [
     {"input": "html/js/hotness.js", "match": True, "file": "html/js/hotness.js"},

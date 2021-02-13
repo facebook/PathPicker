@@ -6,12 +6,12 @@ import sys
 import os
 import pickle
 
-import parse
-import format
-import stateFiles
-from formattedText import FormattedText
-from usageStrings import USAGE_STR
-from screenFlags import ScreenFlags
+from pathpicker import parse
+from pathpicker import format
+from pathpicker import stateFiles
+from pathpicker.formattedText import FormattedText
+from pathpicker.usageStrings import USAGE_STR
+from pathpicker.screenFlags import ScreenFlags
 
 
 def getLineObjs(flags):

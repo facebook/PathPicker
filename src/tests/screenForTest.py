@@ -4,8 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 import sys
 
-sys.path.insert(0, "../")
-from charCodeMapping import CHAR_TO_CODE
+from pathpicker.charCodeMapping import CHAR_TO_CODE
 
 ATTRIBUTE_SYMBOL_MAPPING = {
     0: " ",

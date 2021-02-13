@@ -4,13 +4,11 @@
 # LICENSE file in the root directory of this source tree.
 import sys
 
-sys.path.insert(0, "../")
-
-from keyBindingsForTest import KEY_BINDINGS_FOR_TEST_CONFIG_CONTENT
-from keyBindingsForTest import KeyBindingsForTest
-from keyBindings import KeyBindings
+from tests.keyBindingsForTest import KEY_BINDINGS_FOR_TEST_CONFIG_CONTENT
+from tests.keyBindingsForTest import KeyBindingsForTest
+from pathpicker.keyBindings import KeyBindings
 import tempfile
-import keyBindings
+from pathpicker import keyBindings
 import unittest
 
 

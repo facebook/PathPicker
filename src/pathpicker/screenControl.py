@@ -7,12 +7,12 @@ import sys
 import signal
 
 import processInput
-import usageStrings
-import output
-import logger
-import format
-from charCodeMapping import CODE_TO_CHAR
-from colorPrinter import ColorPrinter
+from pathpicker import usageStrings
+from pathpicker import output
+from pathpicker import logger
+from pathpicker import format
+from pathpicker.charCodeMapping import CODE_TO_CHAR
+from pathpicker.colorPrinter import ColorPrinter
 
 
 def signal_handler(signal, frame):
