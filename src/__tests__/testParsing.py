@@ -379,7 +379,7 @@ class TestParseFunction(unittest.TestCase):
         for testCase in prependDirTestCases:
             inFile = testCase["in"]
 
-            result = parse.prependDir(inFile)
+            result = parse.prepend_dir(inFile)
             expected = testCase["out"]
             if inFile[0:2] == "~/":
                 expected = os.path.expanduser(expected)

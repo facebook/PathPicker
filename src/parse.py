@@ -7,6 +7,7 @@ import os
 import subprocess
 
 import logger
+from typing import Optional, Pattern, List, Dict
 from repos import REPOS
 
 MASTER_REGEX = re.compile(
@@ -132,101 +133,115 @@ MASTER_REGEX_WITH_SPACES = re.compile(
 )
 
 
-REGEX_WATERFALL = [
-    {
-        # Homedirs need a separate regex.
-        "regex": HOMEDIR_REGEX,
-        "name": "HOMEDIR_REGEX",
-    },
-    {
-        # the master regex matches tbgs results with
-        # line numbers, so we prefer that and test it first
-        "regex": MASTER_REGEX,
-        "name": "MASTER_REGEX",
+class RegexConfig:
+    def __init__(
+        self,
+        name: str,
+        regex: Pattern,
+        preferred_regex: Optional[Pattern] = None,
+        num_index: int = 2,
+        no_num: bool = False,
+        only_with_file_inspection: bool = False,
+        with_all_lines_matched: bool = False,
+    ):
+        self.name = name
+        self.regex = regex
+        self.preferred_regex = preferred_regex
+        self.num_index = num_index
+        self.no_num = no_num
+        self.only_with_file_inspection = only_with_file_inspection
+        self.with_all_lines_matched = with_all_lines_matched
+
+
+REGEX_WATERFALL: List[RegexConfig] = [
+    # Homedirs need a separate regex.
+    RegexConfig("HOMEDIR_REGEX", HOMEDIR_REGEX),
+    # The master regex matches tbgs results with
+    # line numbers, so we prefer that and test it first.
+    RegexConfig(
+        "MASTER_REGEX",
+        MASTER_REGEX,
         # one real quick check -- did we find a better match
         # earlier in the regex?
-        "preferred_regex": OTHER_BGS_RESULT_REGEX,
-    },
-    {
-        # if something clearly looks like an *bgs result but
-        # just has a weird filename (like all caps with no extension)
-        # then we can match that as well. Note that we require
-        # the line number match since otherwise this would be too lax
-        # of a regex.
-        "regex": OTHER_BGS_RESULT_REGEX,
-        "name": "OTHER_BGS_RESULT_REGEX",
-    },
-    {
-        "regex": MASTER_REGEX_MORE_EXTENSIONS,
-        "name": "MASTER_REGEX_MORE_EXTENSIONS",
-        "onlyWithFileInspection": True,
-    },
-    {
-        # We would overmatch on wayyyyy too many things if we
-        # allowed spaces everywhere, but with filesystem validation
-        # and the final fallback we can include them.
-        "regex": MASTER_REGEX_WITH_SPACES,
-        "name": "MASTER_REGEX_WITH_SPACES",
-        "numIndex": 4,
-        "onlyWithFileInspection": True,
-    },
-    {
-        "regex": MASTER_REGEX_WITH_SPACES_AND_WEIRD_FILES,
-        "name": "MASTER_REGEX_WITH_SPACES_AND_WEIRD_FILES",
-        "numIndex": 4,
-        "onlyWithFileInspection": True,
-    },
-    {
-        # An Emacs and Vim backup/temporary/save file of the form: #example.txt#
-        "regex": JUST_VIM_TEMP_FILE,
-        "name": "JUST_VIM_TEMP_FILE",
-        "noNum": True,
-    },
-    {
-        # An Emacs backup/temporary/save file with a tilde at the end: example.txt~
-        "regex": JUST_EMACS_TEMP_FILE,
-        "name": "JUST_EMACS_TEMP_FILE",
-        "noNum": True,
-    },
-    {
-        # File (without directory) and a number. Ex:
-        # $ grep -n my_pattern A.txt B.txt
-        # A.txt:100 my_pattern
-        "regex": JUST_FILE_WITH_NUMBER,
-        "name": "JUST_FILE_WITH_NUMBER",
-        "numIndex": 1,
-    },
-    {
-        # ok maybe its just a normal file (with a dot)
-        # so lets test for that if the above fails
-        "regex": JUST_FILE,
-        "name": "JUST_FILE",
-        "noNum": True,
-    },
-    {
-        # ok if thats not there, try do to filesystem validation
-        # for just files with spaces
-        "regex": JUST_FILE_WITH_SPACES,
-        "name": "JUST_FILE_WITH_SPACES",
-        "noNum": True,
-        "onlyWithFileInspection": True,
-    },
-    {
-        # ok finally it might be a file with no periods. we test
-        # this last since its more restrictive, because we dont
-        # want to match things like cx('foo/root'). hence
-        # we require some minimum number of slashes and minimum
-        # file name length
-        "regex": FILE_NO_PERIODS,
-        "name": "FILE_NO_PERIODS",
-        "noNum": True,
-    },
-    {
-        "regex": ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE,
-        "name": "ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE",
-        "noNum": True,
-        "withAllLinesMatched": True,
-    },
+        preferred_regex=OTHER_BGS_RESULT_REGEX,
+    ),
+    # If something clearly looks like an *bgs result but
+    # just has a weird filename (like all caps with no extension)
+    # then we can match that as well. Note that we require
+    # the line number match since otherwise this would be too lax
+    # of a regex.
+    RegexConfig("OTHER_BGS_RESULT_REGEX", OTHER_BGS_RESULT_REGEX),
+    RegexConfig(
+        "MASTER_REGEX_MORE_EXTENSIONS",
+        MASTER_REGEX_MORE_EXTENSIONS,
+        only_with_file_inspection=True,
+    ),
+    # We would overmatch on wayyyyy too many things if we
+    # allowed spaces everywhere, but with filesystem validation
+    # and the final fallback we can include them.
+    RegexConfig(
+        "MASTER_REGEX_WITH_SPACES",
+        MASTER_REGEX_WITH_SPACES,
+        num_index=4,
+        only_with_file_inspection=True,
+    ),
+    RegexConfig(
+        "MASTER_REGEX_WITH_SPACES_AND_WEIRD_FILES",
+        MASTER_REGEX_WITH_SPACES_AND_WEIRD_FILES,
+        num_index=4,
+        only_with_file_inspection=True,
+    ),
+    # An Emacs and Vim backup/temporary/save file of the form: #example.txt#
+    RegexConfig(
+        "JUST_VIM_TEMP_FILE",
+        JUST_VIM_TEMP_FILE,
+        no_num=True,
+    ),
+    # An Emacs backup/temporary/save file with a tilde at the end: example.txt~
+    RegexConfig(
+        "JUST_EMACS_TEMP_FILE",
+        JUST_EMACS_TEMP_FILE,
+        no_num=True,
+    ),
+    # File (without directory) and a number. Ex:
+    # $ grep -n my_pattern A.txt B.txt
+    # A.txt:100 my_pattern
+    RegexConfig(
+        "JUST_FILE_WITH_NUMBER",
+        JUST_FILE_WITH_NUMBER,
+        num_index=1,
+    ),
+    # Ok maybe its just a normal file (with a dot)
+    # so lets test for that if the above fails
+    RegexConfig(
+        "JUST_FILE",
+        JUST_FILE,
+        no_num=True,
+    ),
+    # Ok if thats not there, try do to filesystem validation
+    # for just files with spaces
+    RegexConfig(
+        "JUST_FILE_WITH_SPACES",
+        JUST_FILE_WITH_SPACES,
+        no_num=True,
+        only_with_file_inspection=True,
+    ),
+    # Ok finally it might be a file with no periods. we test
+    # this last since its more restrictive, because we dont
+    # want to match things like cx('foo/root'). hence
+    # we require some minimum number of slashes and minimum
+    # file name length
+    RegexConfig(
+        "FILE_NO_PERIODS",
+        FILE_NO_PERIODS,
+        no_num=True,
+    ),
+    RegexConfig(
+        "ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE",
+        ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE,
+        no_num=True,
+        with_all_lines_matched=True,
+    ),
 ]
 
 
@@ -250,7 +265,11 @@ def getRepoPath():
         return stdout
 
     proc = subprocess.Popen(
-        ["hg root"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True
+        ["hg root"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        shell=True,
+        universal_newlines=True,
     )
 
     (stdout, stderr) = proc.communicate()
@@ -272,9 +291,11 @@ PREPEND_PATH = str(getRepoPath().strip()) + "/"
 # if it matches
 def matchLine(line, validateFileExists=False, allInput=False):
     if not validateFileExists:
-        results = matchLineImpl(line, withAllLinesMatched=allInput)
+        results = match_line_impl(line, with_all_lines_matched=allInput)
         return results[0] if results else None
-    results = matchLineImpl(line, withFileInspection=True, withAllLinesMatched=allInput)
+    results = match_line_impl(
+        line, with_file_inspection=True, with_all_lines_matched=allInput
+    )
     if not results:
         return None
     # ok now we are going to check if this result is an actual
@@ -282,57 +303,55 @@ def matchLine(line, validateFileExists=False, allInput=False):
     for result in results:
         (filePath, _, _) = result
         if (
-            os.path.isfile(prependDir(filePath, withFileInspection=True))
+            os.path.isfile(prepend_dir(filePath, with_file_inspection=True))
             or filePath[0:4] == ".../"
         ):
             return result
     return None
 
 
-def matchLineImpl(line, withFileInspection=False, withAllLinesMatched=False):
+def match_line_impl(line, with_file_inspection=False, with_all_lines_matched=False):
     # ok new behavior -- we will actually collect **ALL** results
     # of the regexes since filesystem validation might filter some
     # of the earlier ones out (particulary those with hyphens)
     results = []
-    for regexConfig in REGEX_WATERFALL:
-        regex = regexConfig["regex"]
-        if regexConfig.get("withAllLinesMatched") and not withAllLinesMatched:
+    for regex_config in REGEX_WATERFALL:
+        regex = regex_config.regex
+        if regex_config.with_all_lines_matched != with_all_lines_matched:
             continue
-        if withAllLinesMatched and not regexConfig.get("withAllLinesMatched"):
-            continue
-        if regexConfig.get("onlyWithFileInspection") and not withFileInspection:
+        if regex_config.only_with_file_inspection and not with_file_inspection:
             continue
 
         matches = regex.search(line)
         if not matches:
             continue
 
-        unpackFunc = (
-            unpackMatchesNoNum
-            if regexConfig.get("noNum")
-            else lambda x: unpackMatches(x, numIndex=regexConfig.get("numIndex", 2))
+        unpack_func = (
+            unpack_matches_no_num
+            if regex_config.no_num
+            else lambda x: unpack_matches(x, num_index=regex_config.num_index)
         )
 
-        if not regexConfig.get("preferred_regex"):
-            results.append(unpackFunc(matches))
+        if not regex_config.preferred_regex:
+            results.append(unpack_func(matches))
             continue
 
         # check the preferred_regex
-        preferred_regex = regexConfig.get("preferred_regex")
+        preferred_regex = regex_config.preferred_regex
         other_matches = preferred_regex.search(line)
         if not other_matches:
-            results.append(unpackFunc(matches))
+            results.append(unpack_func(matches))
             continue
         if other_matches.start() < matches.start():
             # we found a better result earlier, so return that
-            results.append(unpackFunc(other_matches))
+            results.append(unpack_func(other_matches))
             continue
-        results.append(unpackFunc(matches))
+        results.append(unpack_func(matches))
     # nothing matched at all
     return results
 
 
-def prependDir(file, withFileInspection=False):
+def prepend_dir(file, with_file_inspection=False):
     if not file or len(file) < 2:
         return file
 
@@ -372,30 +391,30 @@ def prependDir(file, withFileInspection=False):
     if file[0:2] == "a/" or file[0:2] == "b/":
         return PREPEND_PATH + file[2:]
 
-    splitUp = file.split("/")
-    if splitUp[0] == "www":
-        return PREPEND_PATH + "/".join(splitUp[1:])
+    split_up = file.split("/")
+    if split_up[0] == "www":
+        return PREPEND_PATH + "/".join(split_up[1:])
 
-    if not withFileInspection:
+    if not with_file_inspection:
         # hope
-        return PREPEND_PATH + "/".join(splitUp)
+        return PREPEND_PATH + "/".join(split_up)
     # Alright we need to handle the case where git status returns
     # relative paths where every other git command returns paths relative
     # to the top-level dir. so lets see if PREPEND_PATH is not a file whereas
     # relative is...
-    topLevelPath = PREPEND_PATH + "/".join(splitUp)
-    relativePath = "./" + "/".join(splitUp)
-    if not os.path.isfile(topLevelPath) and os.path.isfile(relativePath):
-        return relativePath
-    return topLevelPath
+    top_level_path = PREPEND_PATH + "/".join(split_up)
+    relative_path = "./" + "/".join(split_up)
+    if not os.path.isfile(top_level_path) and os.path.isfile(relative_path):
+        return relative_path
+    return top_level_path
 
 
-def unpackMatchesNoNum(matches):
+def unpack_matches_no_num(matches):
     return (matches.groups()[0], 0, matches)
 
 
-def unpackMatches(matches, numIndex):
+def unpack_matches(matches, num_index):
     groups = matches.groups()
     file = groups[0]
-    num = 0 if groups[numIndex] is None else int(groups[numIndex])
+    num = 0 if groups[num_index] is None else int(groups[num_index])
     return (file, num, matches)
