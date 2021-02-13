@@ -188,7 +188,7 @@ def appendAliasExpansion():
     #
     # so here we must ask bash to turn on alias expansion.
     shell = os.environ.get("SHELL")
-    if "fish" not in shell:
+    if shell is None or "fish" not in shell:
         appendToFile(
             """
 if type shopt > /dev/null; then

@@ -23,6 +23,7 @@ class SimpleLine(object):
         print(str(self))
 
     def output(self, printer):
+        assert self.controller is not None
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
         maxLen = min(maxx - minx, len(str(self)))
         y = miny + self.index + self.controller.getScrollOffset()
@@ -260,6 +261,7 @@ class LineMatch(object):
         return (x + maxPrintable, maxLen - maxPrintable)
 
     def output(self, printer):
+        assert self.controller is not None
         (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
         y = miny + self.index + self.controller.getScrollOffset()
 
