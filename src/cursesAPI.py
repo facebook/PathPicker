@@ -30,6 +30,7 @@ class CursesAPI(object):
         return curses.color_pair(colorNumber)
 
     def getColorPairs(self):
+        assert hasattr(curses, "COLOR_PAIRS"), "curses is not initialized!"
         return curses.COLOR_PAIRS
 
     def exit(self):
