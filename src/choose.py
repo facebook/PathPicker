@@ -7,14 +7,14 @@ import pickle
 import sys
 import os
 
-import output
-import screenControl
-import logger
-import format
-import stateFiles
-from keyBindings import KeyBindings
-from cursesAPI import CursesAPI
-from screenFlags import ScreenFlags
+from pathpicker import output
+from pathpicker import screenControl
+from pathpicker import logger
+from pathpicker import format
+from pathpicker import stateFiles
+from pathpicker.keyBindings import KeyBindings
+from pathpicker.cursesAPI import CursesAPI
+from pathpicker.screenFlags import ScreenFlags
 
 LOAD_SELECTION_WARNING = """
 WARNING! Loading the standard input and previous selection

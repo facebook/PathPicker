@@ -6,12 +6,10 @@ import curses
 import sys
 import os
 
-sys.path.insert(0, "../")
-
-from keyBindingsForTest import KeyBindingsForTest
-from cursesForTest import CursesForTest
-from screenForTest import ScreenForTest
-from screenFlags import ScreenFlags
+from tests.keyBindingsForTest import KeyBindingsForTest
+from tests.cursesForTest import CursesForTest
+from tests.screenForTest import ScreenForTest
+from pathpicker.screenFlags import ScreenFlags
 import processInput
 import choose
 

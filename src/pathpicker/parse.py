@@ -6,9 +6,9 @@ import re
 import os
 import subprocess
 
-import logger
 from typing import Optional, Pattern, List, Dict
-from repos import REPOS
+from pathpicker import logger
+from pathpicker.repos import REPOS
 
 MASTER_REGEX = re.compile(
     "(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?"
