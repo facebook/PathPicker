@@ -62,7 +62,7 @@ class LineMatch(object):
         self.path = (
             path
             if allInput
-            else parse.prependDir(path, withFileInspection=validateFileExists)
+            else parse.prepend_dir(path, with_file_inspection=validateFileExists)
         )
         self.num = num
 
