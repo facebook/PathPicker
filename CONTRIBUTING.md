@@ -27,8 +27,8 @@ Before sending them over, make sure the tests pass with:
 
 #### Test dependencies
 
-* Install [black](https://github.com/psf/black)
-  * `pip3 install black`
+* Install [black](https://github.com/psf/black) and [isort](https://github.com/pycqa/isort)
+  * `pip3 install black isort`
 
 ### Contributor License Agreement ("CLA")
 
