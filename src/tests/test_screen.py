@@ -2,13 +2,12 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-import sys
-
-from tests.lib import screen_test_runner
 import os
 import re
+import sys
 import unittest
 
+from tests.lib import screen_test_runner
 
 EXPECTED_DIR = "./expected/"
 screenTestCases = [

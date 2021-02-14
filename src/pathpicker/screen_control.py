@@ -3,13 +3,10 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 import curses
-import sys
 import signal
+import sys
 
-from pathpicker import usage_strings
-from pathpicker import output
-from pathpicker import logger
-from pathpicker import format
+from pathpicker import format, logger, output, usage_strings
 from pathpicker.char_code_mapping import CODE_TO_CHAR
 from pathpicker.color_printer import ColorPrinter
 

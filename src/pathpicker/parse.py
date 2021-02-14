@@ -2,11 +2,11 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-import re
 import os
+import re
 import subprocess
+from typing import Dict, List, Optional, Pattern
 
-from typing import Optional, Pattern, List, Dict
 from pathpicker import logger
 from pathpicker.repos import REPOS
 

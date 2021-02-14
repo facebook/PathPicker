@@ -3,12 +3,14 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 import sys
-
-from tests.lib.key_bindings import KEY_BINDINGS_FOR_TEST_CONFIG_CONTENT
-from tests.lib.key_bindings import KeyBindingsForTest
-from pathpicker.key_bindings import KeyBindings
 import tempfile
 import unittest
+
+from pathpicker.key_bindings import KeyBindings
+from tests.lib.key_bindings import (
+    KEY_BINDINGS_FOR_TEST_CONFIG_CONTENT,
+    KeyBindingsForTest,
+)
 
 
 class TestKeyBindingsParser(unittest.TestCase):
