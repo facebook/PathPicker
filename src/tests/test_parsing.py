@@ -297,24 +297,28 @@ fileTestCases = [
         "validateFileExists": True,
         "match": True,
         "disableFuzzTest": True,
+        "working_dir": "inputs",
         "file": "evilFile No Prepend.txt",
     },
     {
         "input": "file-from-yocto_%.bbappend",
         "validateFileExists": True,
         "match": True,
+        "working_dir": "inputs",
         "file": "file-from-yocto_%.bbappend",
     },
     {
         "input": "otehr thing ./foo/file-from-yocto_3.1%.bbappend",
         "validateFileExists": True,
         "match": True,
+        "working_dir": "inputs",
         "file": "file-from-yocto_3.1%.bbappend",
     },
     {
         "input": "./file-from-yocto_3.1%.bbappend",
         "validateFileExists": True,
         "match": True,
+        "working_dir": "inputs",
         "file": "./file-from-yocto_3.1%.bbappend",
     },
     {
@@ -370,6 +374,9 @@ allInputTestCases = [
         "match": 'no changes added to commit (use "git add" and/or "git commit -a")',
     },
 ]
+
+# Current directory
+TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class TestParseFunction(unittest.TestCase):
@@ -449,6 +456,10 @@ class TestParseFunction(unittest.TestCase):
         print("Tested %d cases for all-input matching." % len(allInputTestCases))
 
     def checkFileResult(self, testCase):
+        working_dir = TESTS_DIR
+        if testCase.get("working_dir"):
+            working_dir = os.path.join(working_dir, testCase["working_dir"])
+        os.chdir(working_dir)
         result = parse.matchLine(
             testCase["input"],
             validateFileExists=testCase.get("validateFileExists", False),
