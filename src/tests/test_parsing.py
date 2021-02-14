@@ -6,7 +6,7 @@ import copy
 import os
 import sys
 import unittest
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from pathpicker import format, parse
 from pathpicker.formatted_text import FormattedText
@@ -16,7 +16,7 @@ from tests.lib.local_test_cases import LOCAL_TEST_CASES
 class ParsingTestCase:
     def __init__(
         self,
-        input: str,
+        test_input: str,
         match: bool,
         file: Optional[str] = None,
         num: int = 0,
@@ -24,7 +24,7 @@ class ParsingTestCase:
         disable_fuzz_test=False,
         working_dir: Optional[str] = None,
     ):
-        self.input = input
+        self.input = test_input
         self.match = match
         assert not match or file is not None, "file must be set for match"
         self.file = file
@@ -303,7 +303,7 @@ FILE_TEST_CASES: List[ParsingTestCase] = [
 # local test cases get added as well
 FILE_TEST_CASES += LOCAL_TEST_CASES
 
-prependDirTestCases = [
+PREPEND_DIR_TEST_CASES: List[Dict[str, str]] = [
     {"in": "home/absolute/path.py", "out": "/home/absolute/path.py"},
     {
         "in": "~/www/asd.py",
@@ -319,24 +319,31 @@ prependDirTestCases = [
     {"in": "", "out": ""},
 ]
 
-allInputTestCases = [
-    {"input": "    ", "match": None},
-    {"input": " ", "match": None},
-    {"input": "a", "match": "a"},
-    {"input": "   a", "match": "a"},
-    {"input": "a    ", "match": "a"},
-    {"input": "    foo bar", "match": "foo bar"},
-    {"input": "foo bar    ", "match": "foo bar"},
-    {"input": "    foo bar    ", "match": "foo bar"},
-    {"input": "foo bar baz", "match": "foo bar baz"},
-    {
-        "input": "	modified:   Classes/Media/YPMediaLibraryViewController.m",
-        "match": "modified:   Classes/Media/YPMediaLibraryViewController.m",
-    },
-    {
-        "input": 'no changes added to commit (use "git add" and/or "git commit -a")',
-        "match": 'no changes added to commit (use "git add" and/or "git commit -a")',
-    },
+
+class AllInputTestCase:
+    def __init__(self, test_input: str, match: Optional[str]):
+        self.input = test_input
+        self.match = match
+
+
+ALL_INPUT_TEST_CASES: List[AllInputTestCase] = [
+    AllInputTestCase("    ", None),
+    AllInputTestCase(" ", None),
+    AllInputTestCase("a", "a"),
+    AllInputTestCase("   a", "a"),
+    AllInputTestCase("a    ", "a"),
+    AllInputTestCase("    foo bar", "foo bar"),
+    AllInputTestCase("foo bar    ", "foo bar"),
+    AllInputTestCase("    foo bar    ", "foo bar"),
+    AllInputTestCase("foo bar baz", "foo bar baz"),
+    AllInputTestCase(
+        "	modified:   Classes/Media/YPMediaLibraryViewController.m",
+        "modified:   Classes/Media/YPMediaLibraryViewController.m",
+    ),
+    AllInputTestCase(
+        'no changes added to commit (use "git add" and/or "git commit -a")',
+        'no changes added to commit (use "git add" and/or "git commit -a")',
+    ),
 ]
 
 # Current directory
@@ -345,7 +352,7 @@ TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class TestParseFunction(unittest.TestCase):
     def testPrependDir(self):
-        for testCase in prependDirTestCases:
+        for testCase in PREPEND_DIR_TEST_CASES:
             inFile = testCase["in"]
 
             result = parse.prepend_dir(inFile)
@@ -354,7 +361,7 @@ class TestParseFunction(unittest.TestCase):
                 expected = os.path.expanduser(expected)
 
             self.assertEqual(expected, result)
-        print("Tested %d dir cases." % len(prependDirTestCases))
+        print("Tested %d dir cases." % len(PREPEND_DIR_TEST_CASES))
 
     def testFileFuzz(self):
         befores = ["M ", "Modified: ", "Changed: ", "+++ ", "Banana asdasdoj pjo "]
@@ -401,25 +408,24 @@ class TestParseFunction(unittest.TestCase):
         print("Tested %d cases." % len(FILE_TEST_CASES))
 
     def testAllInputMatches(self):
-        for test_case in allInputTestCases:
-            result = parse.matchLine(test_case["input"], False, True)
+        for test_case in ALL_INPUT_TEST_CASES:
+            result = parse.matchLine(test_case.input, False, True)
 
             if not result:
                 self.assertTrue(
-                    test_case["match"] is None,
-                    'Expected a match "%s" where one did not occur.'
-                    % test_case["match"],
+                    test_case.match is None,
+                    'Expected a match "%s" where one did not occur.' % test_case.match,
                 )
                 continue
 
             (match, _, _) = result
             self.assertEqual(
                 match,
-                test_case["match"],
-                'Line "%s" did not match.' % test_case["input"],
+                test_case.match,
+                'Line "%s" did not match.' % test_case.input,
             )
 
-        print("Tested %d cases for all-input matching." % len(allInputTestCases))
+        print("Tested %d cases for all-input matching." % len(ALL_INPUT_TEST_CASES))
 
     def checkFileResult(self, test_case):
         working_dir = TESTS_DIR
