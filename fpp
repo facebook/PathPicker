@@ -32,7 +32,7 @@ fi
 
 function doProgram {
   # process input from pipe and store as pickled file
-  $PYTHONCMD "$BASEDIR/src/processInput.py" "$@"
+  $PYTHONCMD "$BASEDIR/src/process_input.py" "$@"
   # if it failed, just fail now and exit the script
   # this works for the looping -ko case as well
   if [[ $? != 0 ]]; then exit $?; fi
@@ -77,7 +77,7 @@ for opt in "$@"; do
     echo "Python 2 is no longer supported. Please use Python 3."
     exit 1
   elif [ "$opt" == "--help" -o "$opt" == "-h" ]; then
-    $PYTHONCMD "$BASEDIR/src/printHelp.py"
+    $PYTHONCMD "$BASEDIR/src/print_help.py"
     exit 0
   elif [ "$opt" == "--record" -o "$opt" == "-r" ]; then
     echo "Recording input and output..."

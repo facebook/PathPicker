@@ -1,30 +1,30 @@
-src/pathpicker/charCodeMapping.py         | 20 +++++++++++++
-*********************************                                               
+src/pathpicker/char_code_mapping.py         | 20 +++++++++++++
+***********************************                                             
 src/choose.py                  | 15 ++++++++--
 _____________                                                                   
-src/pathpicker/colorPrinter.py            | 21 ++++++++-----
-______________________________                                                  
-src/pathpicker/cursesAPI.py               | 40 +++++++++++++++++++++++++
-___________________________                                                     
+src/pathpicker/color_printer.py            | 21 ++++++++-----
+_______________________________                                                 
+src/pathpicker/curses_api.py               | 40 +++++++++++++++++++++++++
+____________________________                                                    
 src/pathpicker/format.py                  |  4 +--
 ________________________                                                        
-src/processInput.py            |  7 +++++
-___________________                                                             
-/foo/bar/src/charCodeMapping.py         | 20 +++++++++++++
+src/process_input.py            |  7 +++++
+____________________                                                            
+/foo/bar/src/pathpicker/char_code_mapping.py         | 20 +++++++++++++
                                                                                 
 /foo/bar/src/choose.py                  | 15 ++++++++--
                                                                                 
-/foo/bar/src/colorPrinter.py            | 21 ++++++++-----
+/foo/bar/src/pathpicker/color_printer.py            | 21 ++++++++-----
                                                                                 
-/foo/bar/src/cursesAPI.py               | 40 +++++++++++++++++++++++++
+/foo/bar/src/pathpicker/curses_api.py               | 40 +++++++++++++++++++++++
                                                                                 
-/foo/bar/src/format.py                  |  4 +--
+/foo/bar/src/pathpicker/format.py                  |  4 +--
                                                                                 
-/foo/bar/src/processInput.py            |  7 +++++
+/foo/bar/src/process_input.py            |  7 +++++
                                                                                 
-/foo/bar/src/screenControl.py           | 28 +++++++-----------
+/foo/bar/src/pathpicker/screen_control.py           | 28 +++++++-----------
                                                                                 
-/foo/bar/src/screenFlags.py             | 34 +++++++++++++++++++++
+/foo/bar/src/pathpicker/screen_flags.py             | 34 +++++++++++++++++++++
                                                                                 
 14 files changed, 290 insertions(+), 33 deletions(-)
                                                                                 

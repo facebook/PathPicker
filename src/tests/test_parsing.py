@@ -7,8 +7,8 @@ import unittest
 import os
 
 from pathpicker import parse
-from tests.localTestCases import LOCAL_TEST_CASES
-from pathpicker.formattedText import FormattedText
+from tests.local_test_cases import LOCAL_TEST_CASES
+from pathpicker.formatted_text import FormattedText
 from pathpicker import format
 
 fileTestCases = [

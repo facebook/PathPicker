@@ -6,13 +6,12 @@ import curses
 import sys
 import signal
 
-import processInput
-from pathpicker import usageStrings
+from pathpicker import usage_strings
 from pathpicker import output
 from pathpicker import logger
 from pathpicker import format
-from pathpicker.charCodeMapping import CODE_TO_CHAR
-from pathpicker.colorPrinter import ColorPrinter
+from pathpicker.char_code_mapping import CODE_TO_CHAR
+from pathpicker.color_printer import ColorPrinter
 
 
 def signal_handler(signal, frame):
@@ -149,9 +148,9 @@ class HelperChrome(object):
         borderX = maxx - self.WIDTH
         if self.mode == COMMAND_MODE:
             borderX = len(SHORT_COMMAND_PROMPT) + 20
-        usageLines = usageStrings.USAGE_PAGE.split("\n")
+        usageLines = usage_strings.USAGE_PAGE.split("\n")
         if self.mode == COMMAND_MODE:
-            usageLines = usageStrings.USAGE_COMMAND.split("\n")
+            usageLines = usage_strings.USAGE_COMMAND.split("\n")
         for index, usageLine in enumerate(usageLines):
             self.printer.addstr(self.getMinY() + index, borderX + 2, usageLine)
             self.SIDEBAR_Y = self.getMinY() + index

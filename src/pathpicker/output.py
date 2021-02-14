@@ -7,7 +7,7 @@ import pickle
 import re
 
 from pathpicker import logger
-from pathpicker import stateFiles
+from pathpicker import state_files
 
 DEBUG = "~/.fbPager.debug.text"
 RED_COLOR = u"\033[0;31m"
@@ -77,7 +77,7 @@ def debug(*args):
 
 
 def outputSelection(lineObjs):
-    filePath = stateFiles.getSelectionFilePath()
+    filePath = state_files.getSelectionFilePath()
     indices = [l.index for l in lineObjs]
     file = open(filePath, "wb")
     pickle.dump(indices, file)
@@ -210,7 +210,7 @@ def appendError(text):
 
 
 def appendToFile(command):
-    file = open(stateFiles.getScriptOutputFilePath(), "a")
+    file = open(state_files.getScriptOutputFilePath(), "a")
     file.write(command + "\n")
     file.close()
     logger.output()
@@ -231,7 +231,7 @@ def appendExit():
 
 
 def writeToFile(command):
-    file = open(stateFiles.getScriptOutputFilePath(), "w")
+    file = open(state_files.getScriptOutputFilePath(), "w")
     file.write(command + "\n")
     file.close()
     logger.output()

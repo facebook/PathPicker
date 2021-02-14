@@ -10,7 +10,7 @@ import curses
 from pathpicker import parse
 
 from pathlib import Path
-from pathpicker.formattedText import FormattedText
+from pathpicker.formatted_text import FormattedText
 
 
 class SimpleLine(object):

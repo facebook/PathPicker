@@ -8,10 +8,10 @@ import pickle
 
 from pathpicker import parse
 from pathpicker import format
-from pathpicker import stateFiles
-from pathpicker.formattedText import FormattedText
-from pathpicker.usageStrings import USAGE_STR
-from pathpicker.screenFlags import ScreenFlags
+from pathpicker import state_files
+from pathpicker.formatted_text import FormattedText
+from pathpicker.usage_strings import USAGE_STR
+from pathpicker.screen_flags import ScreenFlags
 
 
 def getLineObjs(flags):
@@ -53,7 +53,7 @@ def getLineObjsFromLines(inputLines, validateFileExists=True, allInput=False):
 
 
 def doProgram(flags):
-    filePath = stateFiles.getPickleFilePath()
+    filePath = state_files.getPickleFilePath()
     lineObjs = getLineObjs(flags)
     # pickle it so the next program can parse it
     pickle.dump(lineObjs, open(filePath, "wb"))
@@ -67,21 +67,21 @@ if __name__ == "__main__":
     flags = ScreenFlags.initFromArgs(sys.argv[1:])
     if flags.getIsCleanMode():
         print("Cleaning out state files...")
-        for filePath in stateFiles.getAllStateFiles():
+        for filePath in state_files.getAllStateFiles():
             if os.path.isfile(filePath):
                 os.remove(filePath)
-        print("Done! Removed %d files " % len(stateFiles.getAllStateFiles()))
+        print("Done! Removed %d files " % len(state_files.getAllStateFiles()))
         sys.exit(0)
 
     if sys.stdin.isatty():
-        if os.path.isfile(stateFiles.getPickleFilePath()):
+        if os.path.isfile(state_files.getPickleFilePath()):
             print("Using previous input piped to fpp...")
         else:
             usage()
         # let the next stage parse the old version
     else:
         # delete the old selection
-        selectionPath = stateFiles.getSelectionFilePath()
+        selectionPath = state_files.getSelectionFilePath()
         if os.path.isfile(selectionPath):
             os.remove(selectionPath)
 
