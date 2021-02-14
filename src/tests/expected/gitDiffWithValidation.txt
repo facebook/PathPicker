@@ -8,8 +8,8 @@ src/pathpicker/cursesAPI.py               | 40 +++++++++++++++++++++++++
 ___________________________                                                     
 src/pathpicker/format.py                  |  4 +--
 ________________________                                                        
-src/processInput.py            |  7 +++++
-___________________                                                             
+src/process_input.py            |  7 +++++
+____________________                                                            
 /foo/bar/src/charCodeMapping.py         | 20 +++++++++++++
                                                                                 
 /foo/bar/src/choose.py                  | 15 ++++++++--

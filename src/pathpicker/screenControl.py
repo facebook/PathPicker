@@ -6,7 +6,6 @@ import curses
 import sys
 import signal
 
-import processInput
 from pathpicker import usageStrings
 from pathpicker import output
 from pathpicker import logger

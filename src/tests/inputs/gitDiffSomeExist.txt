@@ -3,7 +3,7 @@ src/choose.py                  | 15 ++++++++--
 src/pathpicker/colorPrinter.py            | 21 ++++++++-----
 src/pathpicker/cursesAPI.py               | 40 +++++++++++++++++++++++++
 src/pathpicker/format.py                  |  4 +--
-src/processInput.py            |  7 +++++
+src/process_input.py            |  7 +++++
 /foo/bar/src/charCodeMapping.py         | 20 +++++++++++++
 /foo/bar/src/choose.py                  | 15 ++++++++--
 /foo/bar/src/colorPrinter.py            | 21 ++++++++-----

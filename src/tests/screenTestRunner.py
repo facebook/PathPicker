@@ -10,7 +10,7 @@ from tests.keyBindingsForTest import KeyBindingsForTest
 from tests.cursesForTest import CursesForTest
 from tests.screenForTest import ScreenForTest
 from pathpicker.screenFlags import ScreenFlags
-import processInput
+import process_input
 import choose
 
 INPUT_DIR = "./inputs/"
@@ -21,7 +21,7 @@ def getLineObjsFromFile(inputFile, validateFileExists, allInput):
     file = open(inputFile)
     lines = file.read().split("\n")
     file.close()
-    return processInput.getLineObjsFromLines(
+    return process_input.getLineObjsFromLines(
         lines, validateFileExists=validateFileExists, allInput=allInput
     )
 
