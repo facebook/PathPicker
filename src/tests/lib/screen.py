@@ -3,6 +3,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 import sys
+from typing import Tuple
 
 from pathpicker.char_code_mapping import CHAR_TO_CODE
 
@@ -125,7 +126,7 @@ class ScreenForTest(object):
             [line for page in attributes for line in page],
         )
 
-    def getRowsWithAttributes(self, screen=None):
+    def getRowsWithAttributes(self, screen=None) -> Tuple:
         if not screen:
             screen = self.output
 
