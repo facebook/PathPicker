@@ -2,16 +2,14 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-import sys
 import os
 import pickle
+import sys
 
-from pathpicker import parse
-from pathpicker import format
-from pathpicker import state_files
+from pathpicker import format, parse, state_files
 from pathpicker.formatted_text import FormattedText
-from pathpicker.usage_strings import USAGE_STR
 from pathpicker.screen_flags import ScreenFlags
+from pathpicker.usage_strings import USAGE_STR
 
 
 def getLineObjs(flags):

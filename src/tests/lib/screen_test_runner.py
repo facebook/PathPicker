@@ -3,15 +3,15 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 import curses
-import sys
 import os
+import sys
 
-from tests.lib.key_bindings import KeyBindingsForTest
-from tests.lib.curses import CursesForTest
-from tests.lib.screen import ScreenForTest
-from pathpicker.screen_flags import ScreenFlags
-import process_input
 import choose
+import process_input
+from pathpicker.screen_flags import ScreenFlags
+from tests.lib.curses import CursesForTest
+from tests.lib.key_bindings import KeyBindingsForTest
+from tests.lib.screen import ScreenForTest
 
 INPUT_DIR = "./inputs/"
 

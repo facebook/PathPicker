@@ -2,14 +2,13 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
+import os
 import sys
 import unittest
-import os
 
-from pathpicker import parse
-from tests.lib.local_test_cases import LOCAL_TEST_CASES
+from pathpicker import format, parse
 from pathpicker.formatted_text import FormattedText
-from pathpicker import format
+from tests.lib.local_test_cases import LOCAL_TEST_CASES
 
 fileTestCases = [
     {"input": "html/js/hotness.js", "match": True, "file": "html/js/hotness.js"},

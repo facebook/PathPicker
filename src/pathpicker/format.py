@@ -2,14 +2,13 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-import os
-import time
-import subprocess
-
 import curses
-from pathpicker import parse
-
+import os
+import subprocess
+import time
 from pathlib import Path
+
+from pathpicker import parse
 from pathpicker.formatted_text import FormattedText
 
 

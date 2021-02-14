@@ -5,6 +5,6 @@
 #
 # If you have specific test cases local to your dev environment,
 # add them here
-from typing import List, Any
+from typing import Any, List
 
 LOCAL_TEST_CASES: List[Any] = []

@@ -3,17 +3,13 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 import curses
+import os
 import pickle
 import sys
-import os
 
-from pathpicker import output
-from pathpicker import screen_control
-from pathpicker import logger
-from pathpicker import format
-from pathpicker import state_files
-from pathpicker.key_bindings import KeyBindings
+from pathpicker import format, logger, output, screen_control, state_files
 from pathpicker.curses_api import CursesAPI
+from pathpicker.key_bindings import KeyBindings
 from pathpicker.screen_flags import ScreenFlags
 
 LOAD_SELECTION_WARNING = """
