@@ -4,8 +4,8 @@
 # LICENSE file in the root directory of this source tree.
 import sys
 
-from tests.keyBindingsForTest import KEY_BINDINGS_FOR_TEST_CONFIG_CONTENT
-from tests.keyBindingsForTest import KeyBindingsForTest
+from tests.key_bindings_for_test import KEY_BINDINGS_FOR_TEST_CONFIG_CONTENT
+from tests.key_bindings_for_test import KeyBindingsForTest
 from pathpicker.keyBindings import KeyBindings
 import tempfile
 from pathpicker import keyBindings

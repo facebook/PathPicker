@@ -4,7 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 import sys
 
-from tests import screenTestRunner
+from tests import screen_test_runner
 import os
 import re
 import unittest
@@ -237,7 +237,7 @@ class TestScreenLogic(unittest.TestCase):
             charInputs = testCase.get("inputs", []) + charInputs
 
             args = testCase.get("args", [])
-            screenData = screenTestRunner.getRowsFromScreenRun(
+            screenData = screen_test_runner.getRowsFromScreenRun(
                 inputFile=testCase.get("input", "gitDiff.txt"),
                 charInputs=charInputs,
                 screenConfig=testCase.get("screenConfig", {}),

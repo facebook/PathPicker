@@ -6,9 +6,9 @@ import curses
 import sys
 import os
 
-from tests.keyBindingsForTest import KeyBindingsForTest
-from tests.cursesForTest import CursesForTest
-from tests.screenForTest import ScreenForTest
+from tests.key_bindings_for_test import KeyBindingsForTest
+from tests.curses_for_test import CursesForTest
+from tests.screen_for_test import ScreenForTest
 from pathpicker.screenFlags import ScreenFlags
 import process_input
 import choose
