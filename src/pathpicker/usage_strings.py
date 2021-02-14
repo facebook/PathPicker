@@ -2,7 +2,7 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-from pathpicker.screenFlags import ScreenFlags
+from pathpicker.screen_flags import ScreenFlags
 
 MANPAGE_HEADER = """= fpp(1)
 """

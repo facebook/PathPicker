@@ -5,7 +5,7 @@
 import re
 import curses
 from collections import namedtuple
-from pathpicker.colorPrinter import ColorPrinter
+from pathpicker.color_printer import ColorPrinter
 
 
 class FormattedText(object):

@@ -8,13 +8,13 @@ import sys
 import os
 
 from pathpicker import output
-from pathpicker import screenControl
+from pathpicker import screen_control
 from pathpicker import logger
 from pathpicker import format
-from pathpicker import stateFiles
-from pathpicker.keyBindings import KeyBindings
-from pathpicker.cursesAPI import CursesAPI
-from pathpicker.screenFlags import ScreenFlags
+from pathpicker import state_files
+from pathpicker.key_bindings import KeyBindings
+from pathpicker.curses_api import CursesAPI
+from pathpicker.screen_flags import ScreenFlags
 
 LOAD_SELECTION_WARNING = """
 WARNING! Loading the standard input and previous selection
@@ -36,12 +36,12 @@ def doProgram(stdscr, flags, keyBindings=None, cursesAPI=None, lineObjs=None) ->
         lineObjs = getLineObjs()
     output.clearFile()
     logger.clearFile()
-    screen = screenControl.Controller(flags, keyBindings, stdscr, lineObjs, cursesAPI)
+    screen = screen_control.Controller(flags, keyBindings, stdscr, lineObjs, cursesAPI)
     screen.control()
 
 
 def getLineObjs():
-    filePath = stateFiles.getPickleFilePath()
+    filePath = state_files.getPickleFilePath()
     try:
         lineObjs = pickle.load(open(filePath, "rb"))
     except:
@@ -50,7 +50,7 @@ def getLineObjs():
         sys.exit(1)
     logger.addEvent("total_num_files", len(lineObjs))
 
-    selectionPath = stateFiles.getSelectionFilePath()
+    selectionPath = state_files.getSelectionFilePath()
     if os.path.isfile(selectionPath):
         setSelectionsFromPickle(selectionPath, lineObjs)
 
@@ -83,7 +83,7 @@ def setSelectionsFromPickle(selectionPath, lineObjs):
 
 
 if __name__ == "__main__":
-    filePath = stateFiles.getPickleFilePath()
+    filePath = state_files.getPickleFilePath()
     if not os.path.exists(filePath):
         print("Nothing to do!")
         output.writeToFile('echo ":D";')

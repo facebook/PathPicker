@@ -7,7 +7,7 @@ import os
 import sys
 from typing import List, Tuple
 
-from pathpicker.stateFiles import FPP_DIR
+from pathpicker.state_files import FPP_DIR
 
 KEY_BINDINGS_FILE = os.path.join(FPP_DIR, ".fpp.keys")
 

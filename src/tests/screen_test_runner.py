@@ -9,7 +9,7 @@ import os
 from tests.key_bindings_for_test import KeyBindingsForTest
 from tests.curses_for_test import CursesForTest
 from tests.screen_for_test import ScreenForTest
-from pathpicker.screenFlags import ScreenFlags
+from pathpicker.screen_flags import ScreenFlags
 import process_input
 import choose
 

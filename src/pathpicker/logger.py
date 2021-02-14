@@ -6,7 +6,7 @@ import json
 import subprocess
 import os
 
-from pathpicker import stateFiles
+from pathpicker import state_files
 
 # This file just outputs some simple log events that are consumed by
 # another service for internal logging at Facebook. Use it if you want
@@ -14,7 +14,7 @@ from pathpicker import stateFiles
 
 
 def writeToFile(content):
-    file = open(stateFiles.getLoggerFilePath(), "w")
+    file = open(state_files.getLoggerFilePath(), "w")
     file.write(content)
     file.close()
 
