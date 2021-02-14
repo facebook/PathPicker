@@ -20,14 +20,19 @@ REPO_ROOT="$BASEDIR/.."
 
 if ! command -v black &> /dev/null; then
   echo "'black' is required for build."
-  exit 1;
+  exit 1
 fi
 
-if ! black --check "$REPO_ROOT/src/"; then
+if ! isort --check-only --verbose "$REPO_ROOT/src/"; then
+  echo "Imports are not sorted properly!"
+  exit 1
+fi
+
+if ! black --check --verbose "$REPO_ROOT/src/"; then
   echo "Not properly formatted!";
-  exit 1;
+  exit 1
 else
-  echo "Formatting is good!"
+  echo "Formatting looks good!"
 fi
 
 export PYTHONPATH="$REPO_ROOT/src"
