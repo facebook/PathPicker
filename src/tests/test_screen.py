@@ -4,7 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 import sys
 
-from tests import screen_test_runner
+from tests.lib import screen_test_runner
 import os
 import re
 import unittest
