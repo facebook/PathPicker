@@ -19,6 +19,6 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install black isort
+          pip install black isort mypy
       - name: Run tests
         run: bash ./scripts/runTests.sh

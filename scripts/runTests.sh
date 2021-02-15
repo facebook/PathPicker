@@ -29,10 +29,15 @@ if ! isort --check-only --verbose "$REPO_ROOT/src/"; then
 fi
 
 if ! black --check --verbose "$REPO_ROOT/src/"; then
-  echo "Not properly formatted!";
+  echo "Not properly formatted!"
   exit 1
 else
   echo "Formatting looks good!"
+fi
+
+if ! mypy --config "$REPO_ROOT/pyproject.toml" "$REPO_ROOT/src/"; then
+  echo "Typing errors!"
+  exit 1
 fi
 
 export PYTHONPATH="$REPO_ROOT/src"
