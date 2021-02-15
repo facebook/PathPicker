@@ -10,7 +10,6 @@ from typing import Dict, List, Optional
 
 from pathpicker import format, parse
 from pathpicker.formatted_text import FormattedText
-from tests.lib.local_test_cases import LOCAL_TEST_CASES
 
 
 class ParsingTestCase:
@@ -299,9 +298,6 @@ FILE_TEST_CASES: List[ParsingTestCase] = [
         "Gemfilenope", False, validate_file_exists=False, disable_fuzz_test=True
     ),
 ]
-
-# local test cases get added as well
-FILE_TEST_CASES += LOCAL_TEST_CASES
 
 PREPEND_DIR_TEST_CASES: List[Dict[str, str]] = [
     {"in": "home/absolute/path.py", "out": "/home/absolute/path.py"},
