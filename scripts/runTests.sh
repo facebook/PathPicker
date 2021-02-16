@@ -35,7 +35,7 @@ else
   echo "Formatting looks good!"
 fi
 
-if ! mypy --config "$REPO_ROOT/pyproject.toml" "$REPO_ROOT/src/"; then
+if ! mypy "$REPO_ROOT/src/"; then
   echo "Typing errors!"
   exit 1
 fi
