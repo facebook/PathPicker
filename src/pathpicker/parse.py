@@ -5,7 +5,7 @@
 import os
 import re
 import subprocess
-from typing import Dict, List, Optional, Pattern
+from typing import List, Optional, Pattern
 
 from pathpicker import logger
 from pathpicker.repos import REPOS
