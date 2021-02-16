@@ -4,7 +4,6 @@
 # LICENSE file in the root directory of this source tree.
 import configparser
 import os
-import sys
 from typing import List, Tuple
 
 from pathpicker.state_files import FPP_DIR

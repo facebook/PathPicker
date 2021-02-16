@@ -4,8 +4,6 @@
 # LICENSE file in the root directory of this source tree.
 import argparse
 
-from pathpicker import logger
-
 
 class ScreenFlags(object):
 

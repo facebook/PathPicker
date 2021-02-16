@@ -4,7 +4,6 @@
 # LICENSE file in the root directory of this source tree.
 import os
 import re
-import sys
 import unittest
 from typing import Dict, List, Optional
 
