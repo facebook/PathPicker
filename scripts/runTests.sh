@@ -20,8 +20,10 @@ done
 BASEDIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 REPO_ROOT="$BASEDIR/.."
 
+cd "$REPO_ROOT"
+
 poetry install
-poetry run isort "$REPO_ROOT/src" --check-only
-poetry run black "$REPO_ROOT/src" --check
-poetry run flake8 "$REPO_ROOT/src"
-poetry run pytest "$REPO_ROOT/src/tests"
+poetry run isort src --check-only
+poetry run black src --check
+poetry run flake8 src
+poetry run pytest src/tests
