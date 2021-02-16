@@ -27,8 +27,7 @@ Before sending them over, make sure the tests pass with:
 
 #### Test dependencies
 
-* Install [black](https://github.com/psf/black), [isort](https://github.com/pycqa/isort) and [mypy](https://github.com/python/mypy).
-  * `pip3 install black isort mypy`
+* Install [poetry](https://github.com/python-poetry/poetry).
 
 ### Contributor License Agreement ("CLA")
 

@@ -1,3 +1,23 @@
 [tool.isort]
 profile = "black"
 multi_line_output = 3
+
+[tool.poetry]
+name = "pathpicker"
+version = "0.9.2"
+description = "PathPicker accepts a wide range of input -- output from git commands, grep results, searches -- pretty much anything. After parsing the input, PathPicker presents you with a nice UI to select which files you're interested in. After that you can open them in your favorite editor or execute arbitrary commands."
+authors = ["Peter Cottle <pcottle@fb.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+
+[tool.poetry.dev-dependencies]
+black = "^20.8b1"
+isort = "^5.7.0"
+mypy = "^0.800"
+pytest = "^6.2.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
