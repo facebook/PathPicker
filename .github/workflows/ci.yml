@@ -28,5 +28,7 @@ jobs:
         run: poetry run isort src --check-only
       - name: Run black
         run: poetry run black src --check
+      - name: Run flake8
+        run: poetry run flake8 src
       - name: Run tests
         run: poetry run pytest src/tests

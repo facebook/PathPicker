@@ -23,4 +23,5 @@ REPO_ROOT="$BASEDIR/.."
 poetry install
 poetry run isort "$REPO_ROOT/src" --check-only
 poetry run black "$REPO_ROOT/src" --check
+poetry run flake8 "$REPO_ROOT/src"
 poetry run pytest "$REPO_ROOT/src/tests"
