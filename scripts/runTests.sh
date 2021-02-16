@@ -4,6 +4,8 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
+set -e
+
 # get the directory of this script so we can execute the related python
 # http://stackoverflow.com/a/246128/212110
 SOURCE=$0
@@ -18,35 +20,7 @@ done
 BASEDIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 REPO_ROOT="$BASEDIR/.."
 
-if ! command -v black &> /dev/null; then
-  echo "'black' is required for build."
-  exit 1
-fi
-
-if ! isort --check-only --verbose "$REPO_ROOT/src/"; then
-  echo "Imports are not sorted properly!"
-  exit 1
-fi
-
-if ! black --check --verbose "$REPO_ROOT/src/"; then
-  echo "Not properly formatted!"
-  exit 1
-else
-  echo "Formatting looks good!"
-fi
-
-if ! mypy "$REPO_ROOT/src/"; then
-  echo "Typing errors!"
-  exit 1
-fi
-
-export PYTHONPATH="$REPO_ROOT/src"
-
-cd "$REPO_ROOT/src/tests/"
-for testname in test*.py; do
-    echo "Running: $testname"
-    if ! python3 "$testname"; then
-        echo "Tests failed :("
-        exit 1
-    fi
-done
+poetry install
+poetry run isort "$REPO_ROOT/src" --check-only
+poetry run black "$REPO_ROOT/src" --check
+poetry run pytest "$REPO_ROOT/src/tests"
