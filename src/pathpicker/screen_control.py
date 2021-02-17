@@ -6,9 +6,10 @@ import curses
 import signal
 import sys
 
-from pathpicker import format, logger, output, usage_strings
+from pathpicker import logger, output, usage_strings
 from pathpicker.char_code_mapping import CODE_TO_CHAR
 from pathpicker.color_printer import ColorPrinter
+from pathpicker.line_format import LineMatch
 
 
 def signal_handler(signal, frame):
@@ -101,8 +102,8 @@ class HelperChrome:
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         return maxx > 200
 
-    def trimLine(self, str, width):
-        return str[:width]
+    def trimLine(self, line, width):
+        return line[:width]
 
     def outputDescriptionPane(self, lineObj):
         if not self.getIsSidebarMode():
@@ -726,7 +727,7 @@ class Controller:
         if lbls.index(key) >= len(self.lineObjs):
             return
         lineObj = self.lineObjs[lbls.index(key) - self.scrollOffset]
-        if isinstance(lineObj, format.LineMatch):
+        if isinstance(lineObj, LineMatch):
             lineMatchIndex = self.lineMatches.index(lineObj)
             self.hoverIndex = lineMatchIndex
             self.toggleSelect()

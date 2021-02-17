@@ -7,8 +7,9 @@ import os
 import unittest
 from typing import Dict, List, Optional
 
-from pathpicker import format, parse
+from pathpicker import parse
 from pathpicker.formatted_text import FormattedText
+from pathpicker.line_format import LineMatch
 
 
 class ParsingTestCase:
@@ -392,7 +393,7 @@ class TestParseFunction(unittest.TestCase):
     def testUnresolvable(self):
         file_line = ".../something/foo.py"
         result = parse.matchLine(file_line)
-        line_obj = format.LineMatch(FormattedText(file_line), result, 0)
+        line_obj = LineMatch(FormattedText(file_line), result, 0)
         self.assertTrue(
             not line_obj.isResolvable(), '"%s" should not be resolvable' % file_line
         )
@@ -402,7 +403,7 @@ class TestParseFunction(unittest.TestCase):
         to_check = [case for case in FILE_TEST_CASES if case.match]
         for test_case in to_check:
             result = parse.matchLine(test_case.input)
-            line_obj = format.LineMatch(FormattedText(test_case.input), result, 0)
+            line_obj = LineMatch(FormattedText(test_case.input), result, 0)
             self.assertTrue(
                 line_obj.isResolvable(),
                 'Line "%s" was not resolvable' % test_case.input,

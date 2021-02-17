@@ -6,8 +6,9 @@ import os
 import pickle
 import sys
 
-from pathpicker import format, parse, state_files
+from pathpicker import parse, state_files
 from pathpicker.formatted_text import FormattedText
+from pathpicker.line_format import LineMatch, SimpleLine
 from pathpicker.screen_flags import ScreenFlags
 from pathpicker.usage_strings import USAGE_STR
 
@@ -35,9 +36,9 @@ def getLineObjsFromLines(inputLines, validateFileExists=True, allInput=False):
         )
 
         if not result:
-            line = format.SimpleLine(formattedLine, index)
+            line = SimpleLine(formattedLine, index)
         else:
-            line = format.LineMatch(
+            line = LineMatch(
                 formattedLine,
                 result,
                 index,

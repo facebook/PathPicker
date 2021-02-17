@@ -6,7 +6,7 @@ import os
 import pickle
 
 from pathpicker import logger, state_files
-from pathpicker.format import LineMatch
+from pathpicker.line_format import LineMatch
 
 DEBUG = "~/.fbPager.debug.text"
 RED_COLOR = u"\033[0;31m"

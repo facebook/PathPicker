@@ -7,9 +7,10 @@ import os
 import pickle
 import sys
 
-from pathpicker import format, logger, output, screen_control, state_files
+from pathpicker import logger, output, screen_control, state_files
 from pathpicker.curses_api import CursesAPI
 from pathpicker.key_bindings import KeyBindings
+from pathpicker.line_format import LineMatch
 from pathpicker.screen_flags import ScreenFlags
 
 LOAD_SELECTION_WARNING = """
@@ -71,7 +72,7 @@ def setSelectionsFromPickle(selectionPath, lineObjs):
             output.appendError(error)
             continue
         toSelect = lineObjs[index]
-        if isinstance(toSelect, format.LineMatch):
+        if isinstance(toSelect, LineMatch):
             lineObjs[index].setSelect(True)
         else:
             error = "Line %d was selected but is not LineMatch" % index
