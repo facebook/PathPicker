@@ -6,5 +6,3 @@ per-file-ignores =
     src/pathpicker/color_printer.py:E713
     src/pathpicker/formatted_text.py:E714
     src/pathpicker/output.py:E741
-    src/pathpicker/parse.py:W605
-    src/pathpicker/screen_control.py:W605
