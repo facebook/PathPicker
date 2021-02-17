@@ -91,8 +91,8 @@ class LineMatch:
         self.isTruncated = False
 
         # precalculate the pre, post, and match strings
-        (self.beforeText, unused) = self.formattedLine.breakat(self.start)
-        (unused, self.afterText) = self.formattedLine.breakat(self.end)
+        (self.beforeText, _) = self.formattedLine.breakat(self.start)
+        (_, self.afterText) = self.formattedLine.breakat(self.end)
 
         self.updateDecoratedMatch()
 

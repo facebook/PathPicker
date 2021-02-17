@@ -99,7 +99,7 @@ class HelperChrome:
         return self.screenControl.getChromeBoundaries()[1]
 
     def getIsSidebarMode(self):
-        (maxy, maxx) = self.screenControl.getScreenDimensions()
+        (_maxy, maxx) = self.screenControl.getScreenDimensions()
         return maxx > 200
 
     def trimLine(self, line, width):
@@ -108,7 +108,7 @@ class HelperChrome:
     def outputDescriptionPane(self, lineObj):
         if not self.getIsSidebarMode():
             return
-        (maxy, maxx) = self.screenControl.getScreenDimensions()
+        (_maxy, maxx) = self.screenControl.getScreenDimensions()
         borderX = maxx - self.WIDTH
         startY = self.SIDEBAR_Y + 1
         startX = borderX + 2
@@ -199,7 +199,7 @@ class ScrollBar:
 
         # see if we are activated
         self.activated = True
-        (maxy, maxx) = self.screenControl.getScreenDimensions()
+        (maxy, _maxx) = self.screenControl.getScreenDimensions()
         if self.numLines < maxy:
             self.activated = False
             logger.addEvent("no_scrollbar")
@@ -212,7 +212,7 @@ class ScrollBar:
     def calcBoxFractions(self):
         # what we can see is basically the fraction of our screen over
         # total num lines
-        (maxy, maxx) = self.screenControl.getScreenDimensions()
+        (maxy, _maxx) = self.screenControl.getScreenDimensions()
         fracDisplayed = min(1.0, (maxy / float(self.numLines)))
         self.boxStartFraction = -self.screenControl.getScrollOffset() / float(
             self.numLines
@@ -241,12 +241,12 @@ class ScrollBar:
 
     def outputBorder(self):
         x = self.getX() + 4
-        (maxy, maxx) = self.screenControl.getScreenDimensions()
+        (maxy, _maxx) = self.screenControl.getScreenDimensions()
         for y in range(0, maxy):
             self.printer.addstr(y, x, " ")
 
     def outputBox(self):
-        (maxy, maxx) = self.screenControl.getScreenDimensions()
+        (maxy, _maxx) = self.screenControl.getScreenDimensions()
         topY = maxy - 2
         minY = self.getMinY()
         diff = topY - minY
@@ -262,13 +262,13 @@ class ScrollBar:
 
     def outputCaps(self):
         x = self.getX()
-        (maxy, maxx) = self.screenControl.getScreenDimensions()
+        (maxy, _maxx) = self.screenControl.getScreenDimensions()
         for y in [self.getMinY() - 1, maxy - 1]:
             self.printer.addstr(y, x, "===")
 
     def outputBase(self):
         x = self.getX()
-        (maxy, maxx) = self.screenControl.getScreenDimensions()
+        (maxy, _maxx) = self.screenControl.getScreenDimensions()
         for y in range(self.getMinY(), maxy - 1):
             self.printer.addstr(y, x, " . ")
 
@@ -337,7 +337,7 @@ class Controller:
         return (minx, CHROME_MIN_Y, maxx, maxy)
 
     def getViewportHeight(self):
-        (minx, miny, maxx, maxy) = self.getChromeBoundaries()
+        (_minx, miny, _maxx, maxy) = self.getChromeBoundaries()
         return maxy - miny
 
     def setHover(self, index, val):
@@ -640,7 +640,7 @@ class Controller:
         if self.dirty:
             self.printAll()
             return
-        (minx, miny, maxx, maxy) = self.getChromeBoundaries()
+        (_minx, miny, _maxx, maxy) = self.getChromeBoundaries()
         didClearLine = False
         for index in self.dirtyIndexes:
             y = miny + index + self.getScrollOffset()

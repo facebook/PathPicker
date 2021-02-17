@@ -20,7 +20,6 @@ disable = [
     # to be fixed in the new release
     "unsubscriptable-object",
     "unused-argument",
-    "unused-variable",
 ]
 
 [tool.pylint.format]
