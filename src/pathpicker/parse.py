@@ -11,124 +11,120 @@ from pathpicker import logger
 from pathpicker.repos import REPOS
 
 MASTER_REGEX = re.compile(
-    "(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?"
+    r"(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?"
 )
 MASTER_REGEX_MORE_EXTENSIONS = re.compile(
-    "(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9-~]{1,30})[:-]{0,1}(\d+)?"
+    r"(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9-~]{1,30})[:-]{0,1}(\d+)?"
 )
 HOMEDIR_REGEX = re.compile(
-    "(~\/([a-z.A-Z0-9\-_]+\/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?"
+    r"(~\/([a-z.A-Z0-9\-_]+\/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?"
 )
 OTHER_BGS_RESULT_REGEX = re.compile(
-    "(\/?([a-z.A-Z0-9\-_]+\/)+[a-zA-Z0-9_.]{3,})[:-]{0,1}(\d+)"
+    r"(\/?([a-z.A-Z0-9\-_]+\/)+[a-zA-Z0-9_.]{3,})[:-]{0,1}(\d+)"
 )
-ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE = re.compile("(\S.*\S|\S)")
+ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE = re.compile(r"(\S.*\S|\S)")
 JUST_FILE_WITH_NUMBER = re.compile(
-    "([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})[:-](\d+)(\s|$|:)+"
+    r"([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})[:-](\d+)(\s|$|:)+"
 )
-JUST_FILE = re.compile("([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+")
-JUST_EMACS_TEMP_FILE = re.compile("([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10}~)(\s|$|:)+")
-JUST_VIM_TEMP_FILE = re.compile("(#[@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10}#)(\s|$|:)+")
+JUST_FILE = re.compile(r"([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+")
+JUST_EMACS_TEMP_FILE = re.compile(r"([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10}~)(\s|$|:)+")
+JUST_VIM_TEMP_FILE = re.compile(r"(#[@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10}#)(\s|$|:)+")
 # start with a normal char for ls -l
 JUST_FILE_WITH_SPACES = re.compile(
-    "([a-zA-Z][@+a-z. A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+"
+    r"([a-zA-Z][@+a-z. A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+"
 )
 FILE_NO_PERIODS = re.compile(
-    "".join(
-        (
-            "(",
-            # Recognized files starting with a dot followed by at least 3 characters
-            "((\/?([a-z.A-Z0-9\-_]+\/))?\.[a-zA-Z0-9\-_]{3,}[a-zA-Z0-9\-_\/]*)",
-            # or
-            "|",
-            # Recognize files containing at least one slash
-            "([a-z.A-Z0-9\-_\/]{1,}\/[a-zA-Z0-9\-_]{1,})",
-            # or
-            "|",
-            # Recognize files starting with capital letter and ending in "file".
-            # eg. Makefile
-            "([A-Z][a-zA-Z]{2,}file)",
-            # end trying to capture
-            ")",
-            # Regardless of the above case, here's how the file name should terminate
-            "(\s|$|:)+",
-        )
+    (
+        "("
+        # Recognized files starting with a dot followed by at least 3 characters
+        r"((\/?([a-z.A-Z0-9\-_]+\/))?\.[a-zA-Z0-9\-_]{3,}[a-zA-Z0-9\-_\/]*)"
+        # or
+        "|"
+        # Recognize files containing at least one slash
+        r"([a-z.A-Z0-9\-_\/]{1,}\/[a-zA-Z0-9\-_]{1,})"
+        # or
+        "|"
+        # Recognize files starting with capital letter and ending in "file".
+        # eg. Makefile
+        r"([A-Z][a-zA-Z]{2,}file)"
+        # end trying to capture
+        ")"
+        # Regardless of the above case, here's how the file name should terminate
+        r"(\s|$|:)+"
     )
 )
 
 MASTER_REGEX_WITH_SPACES_AND_WEIRD_FILES = re.compile(
-    "".join(
-        (
-            # begin the capture
-            "(",
-            # capture some pre-dir stuff like / and ./
-            "(?:",
-            "\.?\/" ")?",  # thats optional
-            # now we look at directories. The 'character class ' allowed before the '/'
-            # is either a real character or a character and a space. This allows
-            # multiple spaces in a directory as long as each space is followed by
-            # a normal character, but it does not allow multiple continguous spaces
-            # which would otherwise gobble up too much whitespace.
-            #
-            # Thus, these directories will match:
-            #   /something foo/
-            #   / a b c d e/
-            #   /normal/
-            #
-            # but these will not:
-            #   /two  spaces  here/
-            #   /ending in a space /
-            "(([a-z.A-Z0-9\-_]|\s[a-zA-Z0-9\-_])+\/)+",
-            # Recognized files starting with a dot followed by at least 3 characters
-            "((\/?([a-z.A-Z0-9\-_]+\/))?\.[a-zA-Z0-9\-_]{3,}[a-zA-Z0-9\-_\/]*)",
-            # or
-            "|",
-            # Recognize files containing at least one slash
-            "([a-z.A-Z0-9\-_\/]{1,}\/[a-zA-Z0-9\-_]{1,})",
-            # or
-            "|",
-            # Recognize files starting with capital letter and ending in "file".
-            # eg. Makefile
-            "([A-Z][a-zA-Z]{2,}file)",
-            ")",
-        )
+    (
+        # begin the capture
+        "("
+        # capture some pre-dir stuff like / and ./
+        r"(?:"
+        r"\.?\/"
+        ")?"  # thats optional
+        # now we look at directories. The 'character class ' allowed before the '/'
+        # is either a real character or a character and a space. This allows
+        # multiple spaces in a directory as long as each space is followed by
+        # a normal character, but it does not allow multiple continguous spaces
+        # which would otherwise gobble up too much whitespace.
+        #
+        # Thus, these directories will match:
+        #   /something foo/
+        #   / a b c d e/
+        #   /normal/
+        #
+        # but these will not:
+        #   /two  spaces  here/
+        #   /ending in a space /
+        r"(([a-z.A-Z0-9\-_]|\s[a-zA-Z0-9\-_])+\/)+"
+        # Recognized files starting with a dot followed by at least 3 characters
+        r"((\/?([a-z.A-Z0-9\-_]+\/))?\.[a-zA-Z0-9\-_]{3,}[a-zA-Z0-9\-_\/]*)"
+        # or
+        "|"
+        # Recognize files containing at least one slash
+        r"([a-z.A-Z0-9\-_\/]{1,}\/[a-zA-Z0-9\-_]{1,})"
+        # or
+        "|"
+        # Recognize files starting with capital letter and ending in "file".
+        # eg. Makefile
+        r"([A-Z][a-zA-Z]{2,}file)"
+        ")"
     )
 )
 
 MASTER_REGEX_WITH_SPACES = re.compile(
-    "".join(
-        (
-            # begin the capture
-            "(",
-            # capture some pre-dir stuff like / and ./
-            "(?:",
-            "\.?\/" ")?",  # thats optional
-            # now we look at directories. The 'character class ' allowed before the '/'
-            # is either a real character or a character and a space. This allows
-            # multiple spaces in a directory as long as each space is followed by
-            # a normal character, but it does not allow multiple continguous spaces
-            # which would otherwise gobble up too much whitespace.
-            #
-            # Thus, these directories will match:
-            #   /something foo/
-            #   / a b c d e/
-            #   /normal/
-            #
-            # but these will not:
-            #   /two  spaces  here/
-            #   /ending in a space /
-            "(([a-z.A-Z0-9\-_]|\s[a-zA-Z0-9\-_])+\/)+",
-            # we do similar for the filename part. the 'character class' is
-            # char or char with space following, with some added tokens like @
-            # for retina files.
-            "([\(\),%@a-zA-Z0-9\-_+.]|\s[,\(\)@%a-zA-Z0-9\-_+.])+",
-            # extensions dont allow spaces
-            "\.[a-zA-Z0-9-]{1,30}",
-            # end capture
-            ")",
-            # optionally capture the line number
-            "[:-]{0,1}(\d+)?",
-        )
+    (
+        # begin the capture
+        "("
+        # capture some pre-dir stuff like / and ./
+        r"(?:"
+        r"\.?\/"
+        ")?"  # thats optional
+        # now we look at directories. The 'character class ' allowed before the '/'
+        # is either a real character or a character and a space. This allows
+        # multiple spaces in a directory as long as each space is followed by
+        # a normal character, but it does not allow multiple continguous spaces
+        # which would otherwise gobble up too much whitespace.
+        #
+        # Thus, these directories will match:
+        #   /something foo/
+        #   / a b c d e/
+        #   /normal/
+        #
+        # but these will not:
+        #   /two  spaces  here/
+        #   /ending in a space /
+        r"(([a-z.A-Z0-9\-_]|\s[a-zA-Z0-9\-_])+\/)+"
+        # we do similar for the filename part. the 'character class' is
+        # char or char with space following, with some added tokens like @
+        # for retina files.
+        r"([\(\),%@a-zA-Z0-9\-_+.]|\s[,\(\)@%a-zA-Z0-9\-_+.])+"
+        # extensions dont allow spaces
+        r"\.[a-zA-Z0-9-]{1,30}"
+        # end capture
+        ")"
+        # optionally capture the line number
+        r"[:-]{0,1}(\d+)?"
     )
 )
 

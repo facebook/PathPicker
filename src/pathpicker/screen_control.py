@@ -256,7 +256,7 @@ class ScrollBar(object):
         self.printer.addstr(boxStartY, x, "/-\\")
         for y in range(boxStartY + 1, boxStopY):
             self.printer.addstr(y, x, "|-|")
-        self.printer.addstr(boxStopY, x, "\-/")
+        self.printer.addstr(boxStopY, x, "\\-/")
 
     def outputCaps(self):
         x = self.getX()
