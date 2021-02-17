@@ -4,7 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 
 
-class ColorPrinter(object):
+class ColorPrinter:
 
     """A thin wrapper over screens in ncurses that caches colors and
     attribute state"""

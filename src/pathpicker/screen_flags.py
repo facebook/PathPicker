@@ -5,7 +5,7 @@
 import argparse
 
 
-class ScreenFlags(object):
+class ScreenFlags:
 
     """A class that just represents the total set of flags
     available to FPP. Note that some of these are actually

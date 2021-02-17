@@ -9,7 +9,7 @@ from collections import namedtuple
 from pathpicker.color_printer import ColorPrinter
 
 
-class FormattedText(object):
+class FormattedText:
 
     """A piece of ANSI escape formatted text which responds
     to str() returning the plain text and knows how to print

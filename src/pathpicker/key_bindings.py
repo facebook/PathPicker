@@ -11,7 +11,7 @@ from pathpicker.state_files import FPP_DIR
 KEY_BINDINGS_FILE = os.path.join(FPP_DIR, ".fpp.keys")
 
 
-class KeyBindings(object):
+class KeyBindings:
 
     bindings: List[Tuple[str, bytes]] = []
 
