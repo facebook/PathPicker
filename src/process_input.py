@@ -62,7 +62,7 @@ def usage():
     print(USAGE_STR)
 
 
-if __name__ == "__main__":
+def main(argv) -> int:
     flags = ScreenFlags.initFromArgs(sys.argv[1:])
     if flags.getIsCleanMode():
         print("Cleaning out state files...")
@@ -70,8 +70,7 @@ if __name__ == "__main__":
             if os.path.isfile(filePath):
                 os.remove(filePath)
         print("Done! Removed %d files " % len(state_files.getAllStateFiles()))
-        sys.exit(0)
-
+        return 0
     if sys.stdin.isatty():
         if os.path.isfile(state_files.getPickleFilePath()):
             print("Using previous input piped to fpp...")
@@ -80,10 +79,12 @@ if __name__ == "__main__":
         # let the next stage parse the old version
     else:
         # delete the old selection
-        selectionPath = state_files.getSelectionFilePath()
-        if os.path.isfile(selectionPath):
-            os.remove(selectionPath)
-
+        selection_path = state_files.getSelectionFilePath()
+        if os.path.isfile(selection_path):
+            os.remove(selection_path)
         doProgram(flags)
+    return 0
 
-    sys.exit(0)
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

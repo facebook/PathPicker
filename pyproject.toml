@@ -10,7 +10,6 @@ disable = [
     "missing-function-docstring",
     "missing-module-docstring",
     "no-self-use",
-    "redefined-outer-name",
     "too-few-public-methods",
     "too-many-arguments",
     "too-many-branches",

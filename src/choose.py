@@ -79,16 +79,21 @@ def setSelectionsFromPickle(selectionPath, lineObjs):
             output.appendError(error)
 
 
-if __name__ == "__main__":
-    filePath = state_files.getPickleFilePath()
-    if not os.path.exists(filePath):
+def main(argv) -> int:
+    file_path = state_files.getPickleFilePath()
+    if not os.path.exists(file_path):
         print("Nothing to do!")
         output.writeToFile('echo ":D";')
         output.appendExit()
-        sys.exit(0)
+        return 0
     output.clearFile()
     # we initialize our args *before* we move into curses
     # so we can benefit from the default argparse
     # behavior:
-    flags = ScreenFlags.initFromArgs(sys.argv[1:])
+    flags = ScreenFlags.initFromArgs(argv[1:])
     curses.wrapper(lambda x: doProgram(x, flags))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

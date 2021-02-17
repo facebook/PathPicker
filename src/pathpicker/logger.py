@@ -39,5 +39,5 @@ def getLoggingDicts():
 
 def output():
     dicts = getLoggingDicts()
-    output = json.dumps(dicts)
-    writeToFile(output)
+    json_output = json.dumps(dicts)
+    writeToFile(json_output)
