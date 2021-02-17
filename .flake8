@@ -5,10 +5,6 @@ per-file-ignores =
     src/choose.py:E722
     src/pathpicker/color_printer.py:E713
     src/pathpicker/formatted_text.py:E714
-    src/pathpicker/key_bindings.py:E501
     src/pathpicker/output.py:E741
     src/pathpicker/parse.py:W605
-    src/pathpicker/screen_control.py:W605,E501
-    src/pathpicker/screen_flags.py:E501
-    src/tests/test_key_bindings_parsing.py:E501
-    src/tests/test_parsing.py:E501
+    src/pathpicker/screen_control.py:W605

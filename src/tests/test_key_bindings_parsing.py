@@ -22,8 +22,10 @@ class TestKeyBindingsParser(unittest.TestCase):
         self.assertEqual(
             parser.bindings,
             [],
-            "The parser did not return an empty list, when initialized with a non-existent file: %s"
-            % (parser.bindings),
+            (
+                "The parser did not return an empty list, "
+                f"when initialized with a non-existent file: {parser.bindings}"
+            ),
         )
 
     def testStandardParsing(self):
@@ -39,8 +41,10 @@ class TestKeyBindingsParser(unittest.TestCase):
         self.assertEqual(
             actualResult,
             expectedResult,
-            'The parser did not properly parse the test file\n\nExpected:"%s"\nActual  :"%s"'
-            % (expectedResult, actualResult),
+            (
+                "The parser did not properly parse the test file\n\n"
+                f'Expected:"{expectedResult}"\nActual  :"{actualResult}"'
+            ),
         )
 
 

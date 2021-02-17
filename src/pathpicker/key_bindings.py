@@ -17,17 +17,18 @@ class KeyBindings(object):
 
     def __init__(self, keyBindingsFile=KEY_BINDINGS_FILE):
         """Returns configured key bindings, in the format [(key, command), ...].
-        The ordering of the entries is not guaranteed, although it's irrelevant to the purpose.
+        The ordering of the entries is not guaranteed, although it's irrelevant
+        to the purpose.
         """
         configFilePath = os.path.expanduser(keyBindingsFile)
         parser = configparser.ConfigParser()
         parser.read(configFilePath)
 
-        # The `executePreconfiguredCommand` underlying APIs use `curses.getstr()`, which returns an
-        # encoded string, and invoke `decode()` on it.
-        # In Python 3/configparser, the parsed strings are already decoded, therefore don't support
-        # this method anymore, so we convert them to encoded ones first.
-        #
+        # The `executePreconfiguredCommand` underlying APIs use `curses.getstr()`,
+        # which returns an encoded string, and invoke `decode()` on it.
+        # In Python 3/configparser, the parsed strings are already decoded,
+        # therefore don't support this method anymore, so we convert them
+        # to encoded ones first.
         if parser.has_section("bindings"):
             self.bindings = [
                 (key, command.encode("utf-8"))

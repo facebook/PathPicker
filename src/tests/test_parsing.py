@@ -66,26 +66,38 @@ FILE_TEST_CASES: List[ParsingTestCase] = [
     ParsingTestCase("foo/bar/TARGETS:23", True, "foo/bar/TARGETS", num=23),
     ParsingTestCase("foo/bar/TARGETS-24", True, "foo/bar/TARGETS", num=24),
     ParsingTestCase(
-        'fbcode/search/places/scorer/PageScorer.cpp:27:46:#include "search/places/scorer/linear_scores/MinutiaeVerbScorer.h',
+        (
+            "fbcode/search/places/scorer/PageScorer.cpp:27:46:"
+            '#include "search/places/scorer/linear_scores/MinutiaeVerbScorer.h'
+        ),
         True,
         "fbcode/search/places/scorer/PageScorer.cpp",
         num=27,
     ),
     ParsingTestCase(
-        '(fbcode/search/places/scorer/PageScorer.cpp:27:46):#include "search/places/scorer/linear_scores/MinutiaeVerbScorer.h',
+        (
+            "(fbcode/search/places/scorer/PageScorer.cpp:27:46):"
+            '#include "search/places/scorer/linear_scores/MinutiaeVerbScorer.h'
+        ),
         True,
         "fbcode/search/places/scorer/PageScorer.cpp",
         num=27,
     ),
     # Pretty intense case
     ParsingTestCase(
-        'fbcode/search/places/scorer/TARGETS:590:28:    srcs = ["linear_scores/MinutiaeVerbScorer.cpp"]',
+        (
+            "fbcode/search/places/scorer/TARGETS:590:28:"
+            '    srcs = ["linear_scores/MinutiaeVerbScorer.cpp"]'
+        ),
         True,
         "fbcode/search/places/scorer/TARGETS",
         num=590,
     ),
     ParsingTestCase(
-        'fbcode/search/places/scorer/TARGETS:1083:27:      "linear_scores/test/MinutiaeVerbScorerTest.cpp"',
+        (
+            "fbcode/search/places/scorer/TARGETS:1083:27:"
+            '      "linear_scores/test/MinutiaeVerbScorerTest.cpp"'
+        ),
         True,
         "fbcode/search/places/scorer/TARGETS",
         num=1083,

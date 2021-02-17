@@ -126,7 +126,10 @@ do not exist on the system anymore.""",
             action="store_true",
             help="""You may force PathPicker to recognize all
 lines as acceptable input. Typically, PathPicker will scan the input for references
-to file paths. Passing this option will disable those scans and the program will assume that every input line is a match. In practice, this option allows for input selection for a variety of sources that would otherwise be unsupported -- git branches, mercurial bookmarks, etc.""",
+to file paths. Passing this option will disable those scans and the program will
+assume that every input line is a match. In practice, this option allows for input
+selection for a variety of sources that would otherwise be unsupported -- git branches,
+mercurial bookmarks, etc.""",
         )
         parser.add_argument(
             "-ni",
@@ -137,8 +140,8 @@ to file paths. Passing this option will disable those scans and the program will
 chosen files to operate on is spawned in an interactive subshell.  This allows you
 to use aliases and have access to environment variables defined in your startup
 files, but can have strange side-effects when starting and stopping jobs
-and redirecting inputs.  Using this flag runs your commands in a non-interactive subshell,
-like a normal shell script.""",
+and redirecting inputs.  Using this flag runs your commands in a non-interactive
+subshell, like a normal shell script.""",
         )
         parser.add_argument(
             "-a",
