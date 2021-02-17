@@ -53,7 +53,7 @@ class HelperChrome:
         self.printer = printer
         self.screenControl = screenControl
         self.flags = flags
-        self.mode = None
+        self.mode = SELECT_MODE
         self.WIDTH = 50
         self.SIDEBAR_Y = 0
         self.DESCRIPTION_CLEAR = True

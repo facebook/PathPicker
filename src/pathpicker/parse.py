@@ -6,7 +6,7 @@ import os
 import re
 import subprocess
 from functools import partial
-from typing import List, Optional, Pattern
+from typing import Callable, List, Optional, Pattern
 
 from pathpicker import logger
 from pathpicker.repos import REPOS
@@ -323,10 +323,15 @@ def match_line_impl(line, with_file_inspection=False, with_all_lines_matched=Fal
         if not matches:
             continue
 
-        unpack_func = (
-            unpack_matches_no_num
+        # mypy needs some help here to resolve types correctly
+        unpack_matches_num_index_var: Callable = partial(
+            unpack_matches, num_index=regex_config.num_index
+        )
+        unpack_matches_no_num_var: Callable = unpack_matches_no_num
+        unpack_func: Callable = (
+            unpack_matches_no_num_var
             if regex_config.no_num
-            else partial(unpack_matches, num_index=regex_config.num_index)
+            else unpack_matches_num_index_var
         )
 
         if not regex_config.preferred_regex:

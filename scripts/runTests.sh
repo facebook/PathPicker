@@ -25,6 +25,7 @@ cd "$REPO_ROOT"
 poetry install
 poetry run isort src --check-only
 poetry run black src --check
+poetry run mypy src
 poetry run flake8 src
 poetry run pylint src
 poetry run pytest src/tests
