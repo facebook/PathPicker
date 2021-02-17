@@ -465,7 +465,7 @@ class Controller:
         elif key == "A" and not self.mode == X_MODE:
             self.toggleSelectAll()
         elif key == "ENTER" and (
-            not self.flags.getAllInput() or len(self.flags.getPresetCommand())
+            not self.flags.getAllInput() or self.flags.getPresetCommand()
         ):
             # it does not make sense to process an 'ENTER' keypress if we're in
             # the allInput mode and there is not a preset command.
@@ -574,7 +574,7 @@ class Controller:
         self.stdscr.erase()
         # first check if they are trying to enter command mode
         # but already have a command...
-        if len(self.flags.getPresetCommand()):
+        if self.flags.getPresetCommand():
             self.helperChrome.output(self.mode)
             (minX, minY, _, maxY) = self.getChromeBoundaries()
             yStart = (maxY + minY) / 2 - 3
