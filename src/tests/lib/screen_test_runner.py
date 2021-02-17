@@ -27,15 +27,18 @@ def getLineObjsFromFile(inputFile, validateFileExists, allInput):
 def getRowsFromScreenRun(
     inputFile,
     charInputs,
-    screenConfig={},
+    screenConfig=None,
     printScreen=True,
     pastScreen=None,
     pastScreens=None,
     validateFileExists=False,
     allInput=False,
-    args=[],
+    args=None,
 ):
-
+    if screenConfig is None:
+        screenConfig = {}
+    if args is None:
+        args = []
     lineObjs = getLineObjsFromFile(
         inputFile, validateFileExists=validateFileExists, allInput=allInput
     )

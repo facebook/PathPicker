@@ -10,7 +10,6 @@ disable = [
     "chained-comparison",
     "consider-using-enumerate",
     "consider-using-in",
-    "dangerous-default-value",
     "duplicate-code",
     "fixme",
     "inconsistent-return-statements",
