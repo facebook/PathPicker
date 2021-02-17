@@ -74,9 +74,9 @@ class ScreenForTest:
     def addstr(self, y, x, string, attr=None):
         if attr:
             self.attrset(attr)
-        for deltaX in range(len(string)):
+        for deltaX, value in enumerate(string):
             coord = (x + deltaX, y)
-            self.output[coord] = (string[deltaX], self.currentAttribute)
+            self.output[coord] = (value, self.currentAttribute)
 
     def delch(self, y, x):
         """Delete a character. We implement this by removing the output,

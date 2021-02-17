@@ -5,6 +5,7 @@
 import os
 import re
 import subprocess
+from functools import partial
 from typing import List, Optional, Pattern
 
 from pathpicker import logger
@@ -325,7 +326,7 @@ def match_line_impl(line, with_file_inspection=False, with_all_lines_matched=Fal
         unpack_func = (
             unpack_matches_no_num
             if regex_config.no_num
-            else lambda x: unpack_matches(x, num_index=regex_config.num_index)
+            else partial(unpack_matches, num_index=regex_config.num_index)
         )
 
         if not regex_config.preferred_regex:

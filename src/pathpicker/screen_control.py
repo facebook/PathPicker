@@ -52,6 +52,7 @@ class HelperChrome:
         self.printer = printer
         self.screenControl = screenControl
         self.flags = flags
+        self.mode = None
         self.WIDTH = 50
         self.SIDEBAR_Y = 0
         self.DESCRIPTION_CLEAR = True
@@ -297,7 +298,8 @@ class Controller:
                 self.lineMatches.append(lineObj)
 
         # begin tracking dirty state
-        self.resetDirty()
+        self.dirty = False
+        self.dirtyIndexes = []
 
         if self.flags.args.all:
             self.toggleSelectAll()
@@ -439,19 +441,19 @@ class Controller:
         self.updateScrollOffset()
 
     def processInput(self, key):
-        if key == "UP" or key == "k":
+        if key in ["k", "UP"]:
             self.moveIndex(-1)
-        elif key == "DOWN" or key == "j":
+        elif key in ["j", "DOWN"]:
             self.moveIndex(1)
         elif key == "x":
             self.toggleXMode()
         elif key == "c":
             self.beginEnterCommand()
-        elif key == " " or key == "NPAGE":
+        elif key in [" ", "NPAGE"]:
             self.pageDown()
-        elif key == "b" or key == "PPAGE":
+        elif key in ["b", "PPAGE"]:
             self.pageUp()
-        elif key == "g" or key == "HOME":
+        elif key in ["g", "HOME"]:
             self.jumpToIndex(0)
         elif (key == "G" and not self.mode == X_MODE) or key == "END":
             self.jumpToIndex(self.numMatches - 1)
@@ -641,7 +643,7 @@ class Controller:
         didClearLine = False
         for index in self.dirtyIndexes:
             y = miny + index + self.getScrollOffset()
-            if y >= miny and y < maxy:
+            if miny <= y < maxy:
                 didClearLine = True
                 self.clearLine(y)
                 self.lineObjs[index].output(self.colorPrinter)
@@ -724,7 +726,7 @@ class Controller:
         if lbls.index(key) >= len(self.lineObjs):
             return
         lineObj = self.lineObjs[lbls.index(key) - self.scrollOffset]
-        if type(lineObj) == format.LineMatch:
+        if isinstance(lineObj, format.LineMatch):
             lineMatchIndex = self.lineMatches.index(lineObj)
             self.hoverIndex = lineMatchIndex
             self.toggleSelect()

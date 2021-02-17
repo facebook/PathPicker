@@ -4,15 +4,7 @@ multi_line_output = 3
 
 [tool.pylint.messages_control]
 disable = [
-    "attribute-defined-outside-init",
-    "broad-except",
-    "cell-var-from-loop",
-    "chained-comparison",
-    "consider-using-enumerate",
-    "consider-using-in",
-    "duplicate-code",
     "fixme",
-    "inconsistent-return-statements",
     "invalid-name",
     "missing-class-docstring",
     "missing-function-docstring",
@@ -26,7 +18,8 @@ disable = [
     "too-many-instance-attributes",
     "too-many-public-methods",
     "too-many-return-statements",
-    "unidiomatic-typecheck",
+    # needs https://github.com/PyCQA/pylint/issues/3882
+    # to be fixed in the new release
     "unsubscriptable-object",
     "unused-argument",
     "unused-variable",
