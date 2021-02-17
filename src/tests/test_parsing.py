@@ -451,7 +451,7 @@ class TestParseFunction(unittest.TestCase):
             )
             return
 
-        file, num, match = result
+        file, num, _match = result
         self.assertTrue(test_case.match, 'Line "%s" did match' % test_case.input)
 
         self.assertEqual(

@@ -155,5 +155,5 @@ once the interactive editor has been entered.""",
 
     @staticmethod
     def initFromArgs(argv):
-        (args, chars) = ScreenFlags.getArgParser().parse_known_args(argv)
+        (args, _chars) = ScreenFlags.getArgParser().parse_known_args(argv)
         return ScreenFlags(args)

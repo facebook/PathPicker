@@ -51,8 +51,8 @@ class ScreenForTest:
             self.pastScreens.append(dict(self.output))
 
     def containsContent(self, screen):
-        for coord, pair in screen.items():
-            (char, attr) = pair
+        for _coord, pair in screen.items():
+            (char, _attr) = pair
             if char:
                 return True
         return False

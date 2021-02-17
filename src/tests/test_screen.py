@@ -237,7 +237,7 @@ class TestScreenLogic(unittest.TestCase):
 
     def compareToExpected(self, test_case, test_name, screen_data):
         TestScreenLogic.maybeMakeExpectedDir()
-        (actual_lines, actual_attributes) = screen_data
+        (actual_lines, _actual_attributes) = screen_data
 
         if test_case.with_attributes:
             self.compareLinesAndAttributesToExpected(test_name, screen_data)
