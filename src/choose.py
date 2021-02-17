@@ -52,8 +52,8 @@ def getLineObjs():
         setSelectionsFromPickle(selectionPath, lineObjs)
 
     matches = [lineObj for lineObj in lineObjs.values() if not lineObj.isSimple()]
-    if matches:
-        output.writeToFile('echo "No lines matched!!";')
+    if not matches:
+        output.writeToFile('echo "No lines matched!";')
         output.appendExit()
         sys.exit(0)
     return lineObjs
