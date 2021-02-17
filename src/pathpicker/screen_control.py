@@ -47,7 +47,7 @@ INVISIBLE_CURSOR = 0
 BLOCK_CURSOR = 2
 
 
-class HelperChrome(object):
+class HelperChrome:
     def __init__(self, printer, screenControl, flags):
         self.printer = printer
         self.screenControl = screenControl
@@ -186,7 +186,7 @@ class HelperChrome(object):
         return ", ".join(navOptions)
 
 
-class ScrollBar(object):
+class ScrollBar:
     def __init__(self, printer, lines, screenControl):
         self.printer = printer
         self.screenControl = screenControl
@@ -271,7 +271,7 @@ class ScrollBar(object):
             self.printer.addstr(y, x, " . ")
 
 
-class Controller(object):
+class Controller:
     def __init__(self, flags, keyBindings, stdscr, lineObjs, cursesAPI):
         self.stdscr = stdscr
         self.cursesAPI = cursesAPI

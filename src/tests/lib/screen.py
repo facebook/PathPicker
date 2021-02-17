@@ -25,7 +25,7 @@ ATTRIBUTE_SYMBOL_MAPPING = {
 }
 
 
-class ScreenForTest(object):
+class ScreenForTest:
 
     """A dummy object that is dependency-injected in place
     of curses standard screen. Allows us to unit-test parts

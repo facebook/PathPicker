@@ -6,7 +6,7 @@ import curses
 import sys
 
 
-class CursesAPI(object):
+class CursesAPI:
 
     """A dummy curses wrapper that allows us to intercept these
     calls when in a test environment"""

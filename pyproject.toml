@@ -33,7 +33,6 @@ disable = [
     "unsubscriptable-object",
     "unused-argument",
     "unused-variable",
-    "useless-object-inheritance",
 ]
 
 [tool.pylint.format]

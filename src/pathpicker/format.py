@@ -12,7 +12,7 @@ from pathpicker import parse
 from pathpicker.formatted_text import FormattedText
 
 
-class SimpleLine(object):
+class SimpleLine:
     def __init__(self, formattedLine, index):
         self.formattedLine = formattedLine
         self.index = index
@@ -40,7 +40,7 @@ class SimpleLine(object):
         return True
 
 
-class LineMatch(object):
+class LineMatch:
 
     ARROW_DECORATOR = "|===>"
     # this is inserted between long files, so it looks like

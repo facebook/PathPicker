@@ -4,7 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 
 
-class CursesForTest(object):
+class CursesForTest:
 
     """The dependency-injected curses wrapper which simply
     stores some state in test runs of the UI"""
