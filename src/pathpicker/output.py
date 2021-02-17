@@ -6,6 +6,7 @@ import os
 import pickle
 
 from pathpicker import logger, state_files
+from pathpicker.format import LineMatch
 
 DEBUG = "~/.fbPager.debug.text"
 RED_COLOR = u"\033[0;31m"
@@ -30,7 +31,7 @@ CONTINUE_WARNING = "Are you sure you want to continue? Ctrl-C to quit"
 
 
 def execComposedCommand(command, lineObjs):
-    if not len(command):
+    if not command:
         editFiles(lineObjs)
         return
 
@@ -64,7 +65,7 @@ def appendIfInvalid(lineObjs):
     if not invalidLines:
         return
     appendError(INVALID_FILE_WARNING)
-    if len([line for line in invalidLines if line.isGitAbbreviatedPath()]):
+    if any(map(LineMatch.isGitAbbreviatedPath, invalidLines)):
         appendError(GIT_ABBREVIATION_WARNING)
     appendToFile('read -p "%s" -r' % CONTINUE_WARNING)
 
@@ -154,8 +155,7 @@ def isCdCommand(command):
 def composeCommand(command, lineObjs):
     if isCdCommand(command):
         return composeCdCommand(command, lineObjs)
-    else:
-        return composeFileCommand(command, lineObjs)
+    return composeFileCommand(command, lineObjs)
 
 
 def composeFileCommand(command, lineObjs):

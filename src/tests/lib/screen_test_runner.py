@@ -62,7 +62,6 @@ def getRowsFromScreenRun(
 
     if pastScreen:
         return screen.getRowsWithAttributesForPastScreen(pastScreen)
-    elif pastScreens:
+    if pastScreens:
         return screen.getRowsWithAttributesForPastScreens(pastScreens)
-
     return screen.getRowsWithAttributes()
