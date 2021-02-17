@@ -49,11 +49,9 @@ class FormattedText:
         other = 0
         intValues = [int(value) for value in formatting.split(";") if value]
         for code in intValues:
-            if code >= cls.FOREGROUND_RANGE.bottom and code <= cls.FOREGROUND_RANGE.top:
+            if cls.FOREGROUND_RANGE.bottom <= code <= cls.FOREGROUND_RANGE.top:
                 fore = code - cls.FOREGROUND_RANGE.bottom
-            elif (
-                code >= cls.BACKGROUND_RANGE.bottom and code <= cls.BACKGROUND_RANGE.top
-            ):
+            elif cls.BACKGROUND_RANGE.bottom <= code <= cls.BACKGROUND_RANGE.top:
                 back = code - cls.BACKGROUND_RANGE.bottom
             elif code == cls.BOLD_ATTRIBUTE:
                 other = other | curses.A_BOLD

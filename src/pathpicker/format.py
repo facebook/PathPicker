@@ -119,6 +119,7 @@ class LineMatch:
             if size < 1024:
                 return f"size: {size}{unit}"
             size //= 1024
+        raise Exception("Unreachable")
 
     def getLengthInLines(self):
         output = subprocess.check_output(["wc", "-l", self.path])
