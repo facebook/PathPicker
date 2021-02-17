@@ -63,7 +63,7 @@ def usage():
 
 
 def main(argv) -> int:
-    flags = ScreenFlags.initFromArgs(sys.argv[1:])
+    flags = ScreenFlags.initFromArgs(argv[1:])
     if flags.getIsCleanMode():
         print("Cleaning out state files...")
         for filePath in state_files.getAllStateFiles():

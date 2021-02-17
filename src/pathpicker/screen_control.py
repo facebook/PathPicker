@@ -12,7 +12,7 @@ from pathpicker.color_printer import ColorPrinter
 from pathpicker.line_format import LineMatch
 
 
-def signal_handler(sig, frame):
+def signal_handler(_sig, _frame) -> None:
     # from http://stackoverflow.com/a/1112350/948126
     # Lets just quit rather than signal.SIGINT printing the stack
     sys.exit(0)

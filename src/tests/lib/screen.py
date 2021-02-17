@@ -86,7 +86,7 @@ class ScreenForTest:
     def getch(self):
         return CHAR_TO_CODE[self.charInputs.pop(0)]
 
-    def getstr(self, y, x, maxLen):
+    def getstr(self, _y, _x, _max_len) -> str:
         # TODO -- enable editing this
         return ""
 

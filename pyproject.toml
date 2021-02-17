@@ -19,7 +19,6 @@ disable = [
     # needs https://github.com/PyCQA/pylint/issues/3882
     # to be fixed in the new release
     "unsubscriptable-object",
-    "unused-argument",
 ]
 
 [tool.pylint.format]
