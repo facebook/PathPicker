@@ -2,7 +2,7 @@ src/pathpicker/char_code_mapping.py         | 20 +++++++++++++
 src/choose.py                  | 15 ++++++++--
 src/pathpicker/color_printer.py            | 21 ++++++++-----
 src/pathpicker/curses_api.py               | 40 +++++++++++++++++++++++++
-src/pathpicker/format.py                  |  4 +--
+src/pathpicker/line_format.py                  |  4 +--
 src/process_input.py            |  7 +++++
 /foo/bar/src/pathpicker/char_code_mapping.py         | 20 +++++++++++++
 /foo/bar/src/choose.py                  | 15 ++++++++--
