@@ -76,7 +76,7 @@ def debug(*args):
 
 def outputSelection(lineObjs):
     filePath = state_files.getSelectionFilePath()
-    indices = [l.index for l in lineObjs]
+    indices = [line.index for line in lineObjs]
     file = open(filePath, "wb")
     pickle.dump(indices, file)
     file.close()

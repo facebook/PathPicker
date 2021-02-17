@@ -28,7 +28,7 @@ class FormattedText(object):
     def __init__(self, text=None):
         self.text = text
 
-        if not self.text is None:
+        if self.text is not None:
             self.segments = re.split(self.ANSI_ESCAPE_FORMATTING, self.text)
             # re.split will insert a empty string if there is a match at the beginning
             # or it will return [string] if there is no match

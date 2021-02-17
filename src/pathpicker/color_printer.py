@@ -28,7 +28,7 @@ class ColorPrinter(object):
     def getAttributes(self, foreColor, backColor, other):
         colorIndex = -1
         colorPair = (foreColor, backColor)
-        if not colorPair in self.colors:
+        if colorPair not in self.colors:
             newIndex = len(self.colors)
             if newIndex < self.cursesAPI.getColorPairs():
                 self.cursesAPI.initPair(newIndex, foreColor, backColor)

@@ -40,7 +40,7 @@ def getLineObjs():
     filePath = state_files.getPickleFilePath()
     try:
         lineObjs = pickle.load(open(filePath, "rb"))
-    except:
+    except Exception:
         output.appendError(LOAD_SELECTION_WARNING)
         output.appendExit()
         sys.exit(1)
@@ -61,7 +61,7 @@ def getLineObjs():
 def setSelectionsFromPickle(selectionPath, lineObjs):
     try:
         selectedIndices = pickle.load(open(selectionPath, "rb"))
-    except:
+    except Exception:
         output.appendError(LOAD_SELECTION_WARNING)
         output.appendExit()
         sys.exit(1)
