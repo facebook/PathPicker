@@ -467,13 +467,13 @@ class Controller(object):
         elif key == "ENTER" and (
             not self.flags.getAllInput() or len(self.flags.getPresetCommand())
         ):
-            # it does not make sense to process an 'ENTER' keypress if we're in the allInput
-            # mode and there is not a preset command.
+            # it does not make sense to process an 'ENTER' keypress if we're in
+            # the allInput mode and there is not a preset command.
             self.onEnter()
         elif key == "q":
             output.outputNothing()
-            # this will get the appropriate selection and save it to a file for reuse
-            # before exiting the program
+            # this will get the appropriate selection and save it to a file for
+            # reuse before exiting the program
             self.getPathsToUse()
             self.cursesAPI.exit()
         elif self.mode == X_MODE and key in lbls:
