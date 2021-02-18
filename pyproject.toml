@@ -15,9 +15,6 @@ disable = [
     "too-many-instance-attributes",
     "too-many-public-methods",
     "too-many-return-statements",
-    # needs https://github.com/PyCQA/pylint/issues/3882
-    # to be fixed in the new release
-    "unsubscriptable-object",
 ]
 
 [tool.pylint.format]
