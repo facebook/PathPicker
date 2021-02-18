@@ -6,10 +6,11 @@ import curses
 import os
 import pickle
 import sys
+from typing import Optional
 
 from pathpicker import logger, output, screen_control, state_files
 from pathpicker.curses_api import CursesAPI
-from pathpicker.key_bindings import KeyBindings
+from pathpicker.key_bindings import KeyBindings, read_key_bindings
 from pathpicker.line_format import LineMatch
 from pathpicker.screen_flags import ScreenFlags
 
@@ -22,11 +23,17 @@ this error will go away)
 """
 
 
-def doProgram(stdscr, flags, keyBindings=None, cursesAPI=None, lineObjs=None) -> None:
+def doProgram(
+    stdscr,
+    flags,
+    keyBindings: Optional[KeyBindings] = None,
+    cursesAPI=None,
+    lineObjs=None,
+) -> None:
     # curses and lineObjs get dependency injected for
     # our tests, so init these if they are not provided
     if not keyBindings:
-        keyBindings = KeyBindings()
+        keyBindings = read_key_bindings()
     if not cursesAPI:
         cursesAPI = CursesAPI()
     if not lineObjs:

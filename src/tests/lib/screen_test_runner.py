@@ -8,7 +8,7 @@ import choose
 import process_input
 from pathpicker.screen_flags import ScreenFlags
 from tests.lib.curses import CursesForTest
-from tests.lib.key_bindings import KeyBindingsForTest
+from tests.lib.key_bindings import KEY_BINDINGS_FOR_TEST
 from tests.lib.screen import ScreenForTest
 
 INPUT_DIR = "./inputs/"
@@ -53,7 +53,9 @@ def getRowsFromScreenRun(
     # we run our program and throw a StopIteration exception
     # instead of sys.exit-ing
     try:
-        choose.doProgram(screen, flags, KeyBindingsForTest(), CursesForTest(), lineObjs)
+        choose.doProgram(
+            screen, flags, KEY_BINDINGS_FOR_TEST, CursesForTest(), lineObjs
+        )
     except StopIteration:
         pass
 

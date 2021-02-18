@@ -482,7 +482,7 @@ class Controller:
         elif self.mode == X_MODE and key in lbls:
             self.selectXMode(key)
 
-        for boundKey, command in self.keyBindings.bindings:
+        for boundKey, command in self.keyBindings:
             if key == boundKey:
                 self.executePreconfiguredCommand(command)
 

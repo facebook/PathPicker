@@ -12,7 +12,9 @@ from tests.lib import screen_test_runner
 EXPECTED_DIR = "./expected/"
 
 
-class ScreenTestCase:
+# Using NamedTuple here will require some ugly hacks to properly support
+# empty list and empty dict as default values.
+class ScreenTestCase:  # pylint: disable=too-few-public-methods
     def __init__(
         self,
         name: str,
