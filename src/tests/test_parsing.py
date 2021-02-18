@@ -2,35 +2,23 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-import copy
 import os
 import unittest
-from typing import Dict, List, Optional
+from typing import Dict, List, NamedTuple, Optional
 
 from pathpicker import parse
 from pathpicker.formatted_text import FormattedText
 from pathpicker.line_format import LineMatch
 
 
-class ParsingTestCase:
-    def __init__(
-        self,
-        test_input: str,
-        match: bool,
-        file: Optional[str] = None,
-        num: int = 0,
-        validate_file_exists=False,
-        disable_fuzz_test=False,
-        working_dir: Optional[str] = None,
-    ):
-        self.input = test_input
-        self.match = match
-        assert not match or file is not None, "file must be set for match"
-        self.file = file
-        self.num = num
-        self.validate_file_exists = validate_file_exists
-        self.disable_fuzz_test = disable_fuzz_test
-        self.working_dir = working_dir
+class ParsingTestCase(NamedTuple):
+    test_input: str
+    match: bool
+    file: Optional[str] = None
+    num: int = 0
+    validate_file_exists: bool = False
+    disable_fuzz_test: bool = False
+    working_dir: Optional[str] = None
 
 
 FILE_TEST_CASES: List[ParsingTestCase] = [
@@ -328,10 +316,9 @@ PREPEND_DIR_TEST_CASES: List[Dict[str, str]] = [
 ]
 
 
-class AllInputTestCase:
-    def __init__(self, test_input: str, match: Optional[str]):
-        self.input = test_input
-        self.match = match
+class AllInputTestCase(NamedTuple):
+    test_input: str
+    match: Optional[str]
 
 
 ALL_INPUT_TEST_CASES: List[AllInputTestCase] = [
@@ -384,9 +371,8 @@ class TestParseFunction(unittest.TestCase):
                 continue
             for before in befores:
                 for after in afters:
-                    test_input = "%s%s%s" % (before, test_case.input, after)
-                    this_case = copy.copy(test_case)
-                    this_case.input = test_input
+                    test_input = "%s%s%s" % (before, test_case.test_input, after)
+                    this_case = test_case._replace(test_input=test_input)
                     self.checkFileResult(this_case)
         print("Tested %d cases for file fuzz." % len(FILE_TEST_CASES))
 
@@ -402,11 +388,11 @@ class TestParseFunction(unittest.TestCase):
     def testResolvable(self):
         to_check = [case for case in FILE_TEST_CASES if case.match]
         for test_case in to_check:
-            result = parse.matchLine(test_case.input)
-            line_obj = LineMatch(FormattedText(test_case.input), result, 0)
+            result = parse.matchLine(test_case.test_input)
+            line_obj = LineMatch(FormattedText(test_case.test_input), result, 0)
             self.assertTrue(
                 line_obj.isResolvable(),
-                'Line "%s" was not resolvable' % test_case.input,
+                'Line "%s" was not resolvable' % test_case.test_input,
             )
         print("Tested %d resolvable cases." % len(to_check))
 
@@ -417,7 +403,7 @@ class TestParseFunction(unittest.TestCase):
 
     def testAllInputMatches(self):
         for test_case in ALL_INPUT_TEST_CASES:
-            result = parse.matchLine(test_case.input, False, True)
+            result = parse.matchLine(test_case.test_input, False, True)
 
             if not result:
                 self.assertTrue(
@@ -430,7 +416,7 @@ class TestParseFunction(unittest.TestCase):
             self.assertEqual(
                 match,
                 test_case.match,
-                'Line "%s" did not match.' % test_case.input,
+                'Line "%s" did not match.' % test_case.test_input,
             )
 
         print("Tested %d cases for all-input matching." % len(ALL_INPUT_TEST_CASES))
@@ -441,18 +427,18 @@ class TestParseFunction(unittest.TestCase):
             working_dir = os.path.join(working_dir, test_case.working_dir)
         os.chdir(working_dir)
         result = parse.matchLine(
-            test_case.input,
+            test_case.test_input,
             validateFileExists=test_case.validate_file_exists,
         )
         if not result:
             self.assertFalse(
                 test_case.match,
-                'Line "%s" did not match any regex' % test_case.input,
+                'Line "%s" did not match any regex' % test_case.test_input,
             )
             return
 
         file, num, _match = result
-        self.assertTrue(test_case.match, 'Line "%s" did match' % test_case.input)
+        self.assertTrue(test_case.match, 'Line "%s" did match' % test_case.test_input)
 
         self.assertEqual(
             test_case.file,
@@ -464,7 +450,7 @@ class TestParseFunction(unittest.TestCase):
             test_case.num,
             num,
             "num matches not equal %d %d for %s"
-            % (test_case.num, num, test_case.input),
+            % (test_case.num, num, test_case.test_input),
         )
 
 

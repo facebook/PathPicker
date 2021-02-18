@@ -5,10 +5,10 @@
 import tempfile
 import unittest
 
-from pathpicker.key_bindings import KeyBindings
+from pathpicker.key_bindings import read_key_bindings
 from tests.lib.key_bindings import (
+    KEY_BINDINGS_FOR_TEST,
     KEY_BINDINGS_FOR_TEST_CONFIG_CONTENT,
-    KeyBindingsForTest,
 )
 
 
@@ -17,14 +17,14 @@ class TestKeyBindingsParser(unittest.TestCase):
         file = tempfile.NamedTemporaryFile(delete=True)
         file.close()
 
-        parser = KeyBindings(file.name)
+        bindings = read_key_bindings(file.name)
 
         self.assertEqual(
-            parser.bindings,
+            bindings,
             [],
             (
                 "The parser did not return an empty list, "
-                f"when initialized with a non-existent file: {parser.bindings}"
+                f"when initialized with a non-existent file: {bindings}"
             ),
         )
 
@@ -33,10 +33,10 @@ class TestKeyBindingsParser(unittest.TestCase):
         file.write(KEY_BINDINGS_FOR_TEST_CONFIG_CONTENT)
         file.close()
 
-        parser = KeyBindings(file.name)
+        bindings = read_key_bindings(file.name)
 
-        actualResult = sorted(parser.bindings)
-        expectedResult = KeyBindingsForTest().bindings
+        actualResult = sorted(bindings)
+        expectedResult = KEY_BINDINGS_FOR_TEST
 
         self.assertEqual(
             actualResult,

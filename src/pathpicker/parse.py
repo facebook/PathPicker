@@ -6,7 +6,7 @@ import os
 import re
 import subprocess
 from functools import partial
-from typing import Callable, List, Optional, Pattern
+from typing import Callable, List, NamedTuple, Optional, Pattern
 
 from pathpicker import logger
 from pathpicker.repos import REPOS
@@ -130,24 +130,14 @@ MASTER_REGEX_WITH_SPACES = re.compile(
 )
 
 
-class RegexConfig:
-    def __init__(
-        self,
-        name: str,
-        regex: Pattern,
-        preferred_regex: Optional[Pattern] = None,
-        num_index: int = 2,
-        no_num: bool = False,
-        only_with_file_inspection: bool = False,
-        with_all_lines_matched: bool = False,
-    ):
-        self.name = name
-        self.regex = regex
-        self.preferred_regex = preferred_regex
-        self.num_index = num_index
-        self.no_num = no_num
-        self.only_with_file_inspection = only_with_file_inspection
-        self.with_all_lines_matched = with_all_lines_matched
+class RegexConfig(NamedTuple):
+    name: str
+    regex: Pattern
+    preferred_regex: Optional[Pattern] = None
+    num_index: int = 2
+    no_num: bool = False
+    only_with_file_inspection: bool = False
+    with_all_lines_matched: bool = False
 
 
 REGEX_WATERFALL: List[RegexConfig] = [
