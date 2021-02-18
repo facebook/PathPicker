@@ -28,6 +28,7 @@ Before sending them over, make sure the tests pass with:
 #### Test dependencies
 
 * Install [poetry](https://github.com/python-poetry/poetry).
+* Select poetry environment with `poetry env use 3.6`. Some linters depend on Python version and it's better to check on the same version as we use in CI.
 
 ### Contributor License Agreement ("CLA")
 
