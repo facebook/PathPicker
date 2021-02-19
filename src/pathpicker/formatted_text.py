@@ -90,7 +90,7 @@ class FormattedText:
                 printedSoFar += len(toPrint)
             else:
                 # formatting
-                printer.setAttributes(*self.parseFormatting(val))
+                printer.set_attributes(*self.parseFormatting(val))
 
     def findSegmentPlace(self, toGo):
         index = 1

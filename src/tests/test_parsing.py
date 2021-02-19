@@ -378,7 +378,7 @@ class TestParseFunction(unittest.TestCase):
 
     def testUnresolvable(self):
         file_line = ".../something/foo.py"
-        result = parse.matchLine(file_line)
+        result = parse.match_line(file_line)
         line_obj = LineMatch(FormattedText(file_line), result, 0)
         self.assertTrue(
             not line_obj.isResolvable(), '"%s" should not be resolvable' % file_line
@@ -388,7 +388,7 @@ class TestParseFunction(unittest.TestCase):
     def testResolvable(self):
         to_check = [case for case in FILE_TEST_CASES if case.match]
         for test_case in to_check:
-            result = parse.matchLine(test_case.test_input)
+            result = parse.match_line(test_case.test_input)
             line_obj = LineMatch(FormattedText(test_case.test_input), result, 0)
             self.assertTrue(
                 line_obj.isResolvable(),
@@ -403,7 +403,7 @@ class TestParseFunction(unittest.TestCase):
 
     def testAllInputMatches(self):
         for test_case in ALL_INPUT_TEST_CASES:
-            result = parse.matchLine(test_case.test_input, False, True)
+            result = parse.match_line(test_case.test_input, False, True)
 
             if not result:
                 self.assertTrue(
@@ -426,9 +426,9 @@ class TestParseFunction(unittest.TestCase):
         if test_case.working_dir is not None:
             working_dir = os.path.join(working_dir, test_case.working_dir)
         os.chdir(working_dir)
-        result = parse.matchLine(
+        result = parse.match_line(
             test_case.test_input,
-            validateFileExists=test_case.validate_file_exists,
+            validate_file_exists=test_case.validate_file_exists,
         )
         if not result:
             self.assertFalse(

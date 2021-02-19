@@ -137,7 +137,7 @@ class HelperChrome:
         (maxy, maxx) = self.screenControl.getScreenDimensions()
         borderX = maxx - self.WIDTH
         startY = self.SIDEBAR_Y + 1
-        self.printer.clearSquare(startY, maxy - 1, borderX + 2, maxx)
+        self.printer.clear_square(startY, maxy - 1, borderX + 2, maxx)
         self.DESCRIPTION_CLEAR = True
 
     def outputSide(self):
@@ -685,7 +685,7 @@ class Controller:
             xStart,
             "Oh no! You already provided a command so "
             + "you cannot enter command mode.",
-            self.colorPrinter.getAttributes(curses.COLOR_WHITE, curses.COLOR_RED, 0),
+            self.colorPrinter.get_attributes(curses.COLOR_WHITE, curses.COLOR_RED, 0),
         )
 
         self.colorPrinter.addstr(

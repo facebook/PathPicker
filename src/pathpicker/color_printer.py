@@ -12,53 +12,53 @@ class ColorPrinter:
     DEFAULT_COLOR_INDEX = 1
     CURRENT_COLORS = -1
 
-    def __init__(self, screen, cursesAPI):
+    def __init__(self, screen, curses_api):
         self.colors = {}
         self.colors[(0, 0)] = 0  # 0,0 = white on black is hardcoded
         # in general, we want to use -1,-1 for most "normal" text printing
         self.colors[(-1, -1)] = self.DEFAULT_COLOR_INDEX
-        self.cursesAPI = cursesAPI
-        self.cursesAPI.initPair(self.DEFAULT_COLOR_INDEX, -1, -1)
+        self.curses_api = curses_api
+        self.curses_api.initPair(self.DEFAULT_COLOR_INDEX, -1, -1)
         self.screen = screen
-        self.currentAttributes = False  # initialized in setAttributes
+        self.current_attributes = False  # initialized in set_attributes
 
-    def setAttributes(self, foreColor, backColor, other):
-        self.currentAttributes = self.getAttributes(foreColor, backColor, other)
+    def set_attributes(self, fg_color, bg_color, other):
+        self.current_attributes = self.get_attributes(fg_color, bg_color, other)
 
-    def getAttributes(self, foreColor, backColor, other):
-        colorIndex = -1
-        colorPair = (foreColor, backColor)
-        if colorPair not in self.colors:
-            newIndex = len(self.colors)
-            if newIndex < self.cursesAPI.getColorPairs():
-                self.cursesAPI.initPair(newIndex, foreColor, backColor)
-                self.colors[colorPair] = newIndex
-                colorIndex = newIndex
+    def get_attributes(self, fg_color, bg_color, other):
+        color_index = -1
+        color_pair = (fg_color, bg_color)
+        if color_pair not in self.colors:
+            new_index = len(self.colors)
+            if new_index < self.curses_api.getColorPairs():
+                self.curses_api.initPair(new_index, fg_color, bg_color)
+                self.colors[color_pair] = new_index
+                color_index = new_index
         else:
-            colorIndex = self.colors[colorPair]
+            color_index = self.colors[color_pair]
 
-        attr = self.cursesAPI.colorPair(colorIndex)
+        attr = self.curses_api.colorPair(color_index)
 
         attr = attr | other
 
         return attr
 
-    def addstr(self, y, x, text, attr=None):
+    def addstr(self, y_pos, x_pos, text, attr=None):
         if attr is None:
-            attr = self.cursesAPI.colorPair(self.DEFAULT_COLOR_INDEX)
+            attr = self.curses_api.colorPair(self.DEFAULT_COLOR_INDEX)
         elif attr == self.CURRENT_COLORS:
-            attr = self.currentAttributes
+            attr = self.current_attributes
 
-        self.screen.addstr(y, x, text, attr)
+        self.screen.addstr(y_pos, x_pos, text, attr)
 
-    def clearSquare(self, topY, bottomY, leftX, rightX):
+    def clear_square(self, top_y, bottom_y, left_x, right_x):
         # clear out square from top to bottom
-        for i in range(topY, bottomY):
-            self.clearSegment(i, leftX, rightX)
+        for i in range(top_y, bottom_y):
+            self.clear_segment(i, left_x, right_x)
 
     # perhaps there's a more elegant way to do this
-    def clearSegment(self, y, startX, endX):
-        spaceStr = " " * (endX - startX)
-        attr = self.cursesAPI.colorPair(self.DEFAULT_COLOR_INDEX)
+    def clear_segment(self, y_pos, start_x, end_x):
+        space_str = " " * (end_x - start_x)
+        attr = self.curses_api.colorPair(self.DEFAULT_COLOR_INDEX)
 
-        self.screen.addstr(y, startX, spaceStr, attr)
+        self.screen.addstr(y_pos, start_x, space_str, attr)
