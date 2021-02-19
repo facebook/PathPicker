@@ -30,60 +30,60 @@ CONTINUE_WARNING = "Are you sure you want to continue? Ctrl-C to quit"
 #
 
 
-def execComposedCommand(command, lineObjs):
+def exec_composed_command(command, line_objs):
     if not command:
-        editFiles(lineObjs)
+        edit_files(line_objs)
         return
 
     if not isinstance(command, str):
         command = command.decode()
 
-    logger.addEvent("command_on_num_files", len(lineObjs))
-    command = composeCommand(command, lineObjs)
-    appendAliasExpansion()
-    appendIfInvalid(lineObjs)
-    appendFriendlyCommand(command)
-    appendExit()
+    logger.addEvent("command_on_num_files", len(line_objs))
+    command = compose_command(command, line_objs)
+    append_alias_expansion()
+    append_if_invalid(line_objs)
+    append_friendly_command(command)
+    append_exit()
 
 
-def editFiles(lineObjs):
-    logger.addEvent("editing_num_files", len(lineObjs))
-    filesAndLineNumbers = [
-        (lineObj.getPath(), lineObj.getLineNum()) for lineObj in lineObjs
+def edit_files(line_objs):
+    logger.addEvent("editing_num_files", len(line_objs))
+    files_and_line_numbers = [
+        (lineObj.getPath(), lineObj.getLineNum()) for lineObj in line_objs
     ]
-    command = joinFilesIntoCommand(filesAndLineNumbers)
-    appendIfInvalid(lineObjs)
-    appendToFile(command)
-    appendExit()
+    command = join_files_into_command(files_and_line_numbers)
+    append_if_invalid(line_objs)
+    append_to_file(command)
+    append_exit()
 
 
 # Private helpers
-def appendIfInvalid(lineObjs):
+def append_if_invalid(line_objs):
     # lastly lets check validity and actually output an
     # error if any files are invalid
-    invalidLines = [line for line in lineObjs if not line.isResolvable()]
-    if not invalidLines:
+    invalid_lines = [line for line in line_objs if not line.isResolvable()]
+    if not invalid_lines:
         return
-    appendError(INVALID_FILE_WARNING)
-    if any(map(LineMatch.isGitAbbreviatedPath, invalidLines)):
-        appendError(GIT_ABBREVIATION_WARNING)
-    appendToFile('read -p "%s" -r' % CONTINUE_WARNING)
+    append_error(INVALID_FILE_WARNING)
+    if any(map(LineMatch.isGitAbbreviatedPath, invalid_lines)):
+        append_error(GIT_ABBREVIATION_WARNING)
+    append_to_file('read -p "%s" -r' % CONTINUE_WARNING)
 
 
 def debug(*args):
     for arg in args:
-        appendToFile('echo "DEBUG: ' + str(arg) + '"')
+        append_to_file('echo "DEBUG: ' + str(arg) + '"')
 
 
-def outputSelection(lineObjs):
-    filePath = state_files.getSelectionFilePath()
-    indices = [line.index for line in lineObjs]
-    file = open(filePath, "wb")
+def output_selection(line_objs):
+    file_path = state_files.getSelectionFilePath()
+    indices = [line.index for line in line_objs]
+    file = open(file_path, "wb")
     pickle.dump(indices, file)
     file.close()
 
 
-def getEditorAndPath():
+def get_editor_and_path():
     editor_path = (
         os.environ.get("FPP_EDITOR")
         or os.environ.get("VISUAL")
@@ -96,71 +96,71 @@ def getEditorAndPath():
     return "vim", "vim"
 
 
-def expandPath(filePath):
+def expand_path(file_path):
     # expand ~/ paths
-    filePath = os.path.expanduser(filePath)
+    file_path = os.path.expanduser(file_path)
     # and in case of grep, expand ./ as well
-    return os.path.abspath(filePath)
+    return os.path.abspath(file_path)
 
 
-def joinFilesIntoCommand(filesAndLineNumbers):
-    editor, editor_path = getEditorAndPath()
+def join_files_into_command(files_and_line_numbers):
+    editor, editor_path = get_editor_and_path()
     cmd = editor_path + " "
     if editor == "vim -p":
-        firstFilePath, firstLineNum = filesAndLineNumbers[0]
-        cmd += " +%d %s" % (firstLineNum, firstFilePath)
-        for (filePath, lineNum) in filesAndLineNumbers[1:]:
-            cmd += ' +"tabnew +%d %s"' % (lineNum, filePath)
+        first_file_path, first_line_num = files_and_line_numbers[0]
+        cmd += " +%d %s" % (first_line_num, first_file_path)
+        for (file_path, line_num) in files_and_line_numbers[1:]:
+            cmd += ' +"tabnew +%d %s"' % (line_num, file_path)
     elif editor in ["vim", "mvim", "nvim"] and not os.environ.get("FPP_DISABLE_SPLIT"):
-        firstFilePath, firstLineNum = filesAndLineNumbers[0]
-        cmd += " +%d %s" % (firstLineNum, firstFilePath)
-        for (filePath, lineNum) in filesAndLineNumbers[1:]:
-            cmd += ' +"vsp +%d %s"' % (lineNum, filePath)
+        first_file_path, first_line_num = files_and_line_numbers[0]
+        cmd += " +%d %s" % (first_line_num, first_file_path)
+        for (file_path, line_num) in files_and_line_numbers[1:]:
+            cmd += ' +"vsp +%d %s"' % (line_num, file_path)
     else:
-        for (filePath, lineNum) in filesAndLineNumbers:
+        for (file_path, line_num) in files_and_line_numbers:
             editor_without_args = editor.split()[0]
             if (
                 editor_without_args
                 in ["vi", "nvim", "nano", "joe", "emacs", "emacsclient"]
-                and lineNum != 0
+                and line_num != 0
             ):
-                cmd += " +%d '%s'" % (lineNum, filePath)
-            elif editor_without_args in ["subl", "sublime", "atom"] and lineNum != 0:
-                cmd += " '%s:%d'" % (filePath, lineNum)
-            elif lineNum != 0 and os.environ.get("FPP_LINENUM_SEP"):
+                cmd += " +%d '%s'" % (line_num, file_path)
+            elif editor_without_args in ["subl", "sublime", "atom"] and line_num != 0:
+                cmd += " '%s:%d'" % (file_path, line_num)
+            elif line_num != 0 and os.environ.get("FPP_LINENUM_SEP"):
                 cmd += " '%s%s%d'" % (
-                    filePath,
+                    file_path,
                     os.environ.get("FPP_LINENUM_SEP"),
-                    lineNum,
+                    line_num,
                 )
             else:
-                cmd += " '%s'" % filePath
+                cmd += " '%s'" % file_path
     return cmd
 
 
-def composeCdCommand(command, lineObjs):
-    filePath = os.path.expanduser(lineObjs[0].getDir())
-    filePath = os.path.abspath(filePath)
+def compose_cd_command(command, line_objs):
+    file_path = os.path.expanduser(line_objs[0].getDir())
+    file_path = os.path.abspath(file_path)
     # now copy it into clipboard for cdp-ing
     # TODO -- this is pretty specific to
     # pcottles workflow
-    command = 'echo "' + filePath + '" > ~/.dircopy'
+    command = 'echo "' + file_path + '" > ~/.dircopy'
     return command
 
 
-def isCdCommand(command):
+def is_cd_command(command):
     return command[0:3] in ["cd ", "cd"]
 
 
-def composeCommand(command, lineObjs):
-    if isCdCommand(command):
-        return composeCdCommand(command, lineObjs)
-    return composeFileCommand(command, lineObjs)
+def compose_command(command, line_objs):
+    if is_cd_command(command):
+        return compose_cd_command(command, line_objs)
+    return compose_file_command(command, line_objs)
 
 
-def composeFileCommand(command, lineObjs):
+def compose_file_command(command, line_objs):
     command = command.encode().decode("utf-8")
-    paths = ["'%s'" % lineObj.getPath() for lineObj in lineObjs]
+    paths = ["'%s'" % lineObj.getPath() for lineObj in line_objs]
     path_str = " ".join(paths)
     if "$F" in command:
         command = command.replace("$F", path_str)
@@ -169,15 +169,15 @@ def composeFileCommand(command, lineObjs):
     return command
 
 
-def outputNothing():
-    appendToFile('echo "nothing to do!"; exit 1')
+def output_nothing():
+    append_to_file('echo "nothing to do!"; exit 1')
 
 
-def clearFile():
-    writeToFile("")
+def clear_file():
+    write_to_file("")
 
 
-def appendAliasExpansion():
+def append_alias_expansion():
     # zsh by default expands aliases when running in interactive mode
     # (see ../fpp). bash (on this author's Yosemite box) seems to have
     # alias expansion off when run with -i present and -c absent,
@@ -186,7 +186,7 @@ def appendAliasExpansion():
     # so here we must ask bash to turn on alias expansion.
     shell = os.environ.get("SHELL")
     if shell is None or "fish" not in shell:
-        appendToFile(
+        append_to_file(
             """
 if type shopt > /dev/null; then
   shopt -s expand_aliases
@@ -195,26 +195,26 @@ fi
         )
 
 
-def appendFriendlyCommand(command):
+def append_friendly_command(command):
     header = (
         'echo "executing command:"\n' + 'echo "' + command.replace('"', '\\"') + '"'
     )
-    appendToFile(header)
-    appendToFile(command)
+    append_to_file(header)
+    append_to_file(command)
 
 
-def appendError(text):
-    appendToFile('printf "%s%s%s\n"' % (RED_COLOR, text, NO_COLOR))
+def append_error(text):
+    append_to_file('printf "%s%s%s\n"' % (RED_COLOR, text, NO_COLOR))
 
 
-def appendToFile(command):
+def append_to_file(command):
     file = open(state_files.getScriptOutputFilePath(), "a")
     file.write(command + "\n")
     file.close()
     logger.output()
 
 
-def appendExit():
+def append_exit():
     # The `$SHELL` environment variable points to the default shell,
     # not the current shell. But they are often the same. And there
     # is no other simple and reliable way to detect the current shell.
@@ -225,10 +225,10 @@ def appendExit():
     # Otherwise we assume a Bournal-like shell, e.g. bash and zsh.
     else:
         exit_status = "$?"
-    appendToFile("exit {status};".format(status=exit_status))
+    append_to_file("exit {status};".format(status=exit_status))
 
 
-def writeToFile(command):
+def write_to_file(command):
     file = open(state_files.getScriptOutputFilePath(), "w")
     file.write(command + "\n")
     file.close()

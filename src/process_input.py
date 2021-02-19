@@ -17,8 +17,8 @@ def getLineObjs(flags):
     inputLines = sys.stdin.readlines()
     return getLineObjsFromLines(
         inputLines,
-        validateFileExists=not flags.getDisableFileChecks(),
-        allInput=flags.getAllInput(),
+        validateFileExists=not flags.get_disable_file_checks(),
+        allInput=flags.get_all_input(),
     )
 
 
@@ -63,8 +63,8 @@ def usage():
 
 
 def main(argv) -> int:
-    flags = ScreenFlags.initFromArgs(argv[1:])
-    if flags.getIsCleanMode():
+    flags = ScreenFlags.init_from_args(argv[1:])
+    if flags.get_is_clean_mode():
         print("Cleaning out state files...")
         for filePath in state_files.getAllStateFiles():
             if os.path.isfile(filePath):

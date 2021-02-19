@@ -167,7 +167,7 @@ USAGE_STR = (
     + USAGE_COMMAND
     + USAGE_CONFIGURATION
     + USAGE_COMMAND_LINE
-    + ScreenFlags.getArgParser().format_help()
+    + ScreenFlags.get_arg_parser().format_help()
     + USAGE_TAIL
 )
 
@@ -182,7 +182,7 @@ MANPAGE_STR = "\n\n".join(
         MANPAGE_SYNOPSIS,
         # FIXME: asciidoc example block?
         # http://www.methods.co.nz/asciidoc/userguide.html#X48
-        ScreenFlags.getArgParser().format_help(),
+        ScreenFlags.get_arg_parser().format_help(),
         MANPAGE_INTRO_PRE,
         INTRO,
         USAGE_PAGE_HEADER,
