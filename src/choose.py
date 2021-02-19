@@ -38,7 +38,7 @@ def doProgram(
         cursesAPI = CursesAPI()
     if not lineObjs:
         lineObjs = getLineObjs()
-    output.clearFile()
+    output.clear_file()
     logger.clearFile()
     screen = screen_control.Controller(flags, keyBindings, stdscr, lineObjs, cursesAPI)
     screen.control()
@@ -49,8 +49,8 @@ def getLineObjs():
     try:
         lineObjs = pickle.load(open(filePath, "rb"))
     except (OSError, KeyError, pickle.PickleError):
-        output.appendError(LOAD_SELECTION_WARNING)
-        output.appendExit()
+        output.append_error(LOAD_SELECTION_WARNING)
+        output.append_exit()
         sys.exit(1)
     logger.addEvent("total_num_files", len(lineObjs))
 
@@ -60,8 +60,8 @@ def getLineObjs():
 
     matches = [lineObj for lineObj in lineObjs.values() if not lineObj.isSimple()]
     if not matches:
-        output.writeToFile('echo "No lines matched!";')
-        output.appendExit()
+        output.write_to_file('echo "No lines matched!";')
+        output.append_exit()
         sys.exit(0)
     return lineObjs
 
@@ -70,34 +70,34 @@ def setSelectionsFromPickle(selectionPath, lineObjs):
     try:
         selectedIndices = pickle.load(open(selectionPath, "rb"))
     except (OSError, KeyError, pickle.PickleError):
-        output.appendError(LOAD_SELECTION_WARNING)
-        output.appendExit()
+        output.append_error(LOAD_SELECTION_WARNING)
+        output.append_exit()
         sys.exit(1)
     for index in selectedIndices:
         if index >= len(lineObjs.items()):
             error = "Found index %d more than total matches" % index
-            output.appendError(error)
+            output.append_error(error)
             continue
         toSelect = lineObjs[index]
         if isinstance(toSelect, LineMatch):
             lineObjs[index].setSelect(True)
         else:
             error = "Line %d was selected but is not LineMatch" % index
-            output.appendError(error)
+            output.append_error(error)
 
 
 def main(argv) -> int:
     file_path = state_files.getPickleFilePath()
     if not os.path.exists(file_path):
         print("Nothing to do!")
-        output.writeToFile('echo ":D";')
-        output.appendExit()
+        output.write_to_file('echo ":D";')
+        output.append_exit()
         return 0
-    output.clearFile()
+    output.clear_file()
     # we initialize our args *before* we move into curses
     # so we can benefit from the default argparse
     # behavior:
-    flags = ScreenFlags.initFromArgs(argv[1:])
+    flags = ScreenFlags.init_from_args(argv[1:])
     curses.wrapper(lambda x: doProgram(x, flags))
     return 0
 

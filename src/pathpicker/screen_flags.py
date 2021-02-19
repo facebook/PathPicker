@@ -24,29 +24,29 @@ class ScreenFlags:
     def __init__(self, args):
         self.args = args
 
-    def getIsRecordMode(self):
+    def get_is_record_mode(self):
         return self.args.record
 
-    def getPresetCommand(self):
+    def get_preset_command(self):
         return " ".join(self.args.command)
 
-    def getExecuteKeys(self):
+    def get_execute_keys(self):
         return self.args.execute_keys
 
-    def getIsCleanMode(self):
+    def get_is_clean_mode(self):
         return self.args.clean
 
-    def getDisableFileChecks(self):
+    def get_disable_file_checks(self):
         return self.args.no_file_checks or self.args.all_input
 
-    def getAllInput(self):
+    def get_all_input(self):
         return self.args.all_input
 
-    def getIsNonInteractive(self):
+    def get_is_non_interactive(self):
         return self.args.non_interactive
 
     @staticmethod
-    def getArgParser():
+    def get_arg_parser():
         parser = argparse.ArgumentParser(prog="fpp")
         parser.add_argument(
             "-r",
@@ -154,6 +154,6 @@ once the interactive editor has been entered.""",
         return parser
 
     @staticmethod
-    def initFromArgs(argv):
-        (args, _chars) = ScreenFlags.getArgParser().parse_known_args(argv)
+    def init_from_args(argv):
+        (args, _chars) = ScreenFlags.get_arg_parser().parse_known_args(argv)
         return ScreenFlags(args)

@@ -49,7 +49,7 @@ def getRowsFromScreenRun(
     )
 
     # mock our flags with the passed arg list
-    flags = ScreenFlags.initFromArgs(args)
+    flags = ScreenFlags.init_from_args(args)
     # we run our program and throw a StopIteration exception
     # instead of sys.exit-ing
     try:

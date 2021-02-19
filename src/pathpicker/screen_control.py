@@ -182,7 +182,7 @@ class HelperChrome:
 
         # it does not make sense to give the user the option to "open" the selection
         # in all-input mode
-        if self.flags.getAllInput():
+        if self.flags.get_all_input():
             navOptions.remove(SHORT_NAV_OPTION_OPEN_STR)
 
         return ", ".join(navOptions)
@@ -360,7 +360,7 @@ class Controller:
         self.helperChrome.outputDescription(self.lineMatches[self.hoverIndex])
 
     def control(self):
-        executeKeys = self.flags.getExecuteKeys()
+        executeKeys = self.flags.get_execute_keys()
 
         # we start out by printing everything we need to
         self.printAll()
@@ -468,13 +468,13 @@ class Controller:
         elif key == "A" and not self.mode == X_MODE:
             self.toggleSelectAll()
         elif key == "ENTER" and (
-            not self.flags.getAllInput() or self.flags.getPresetCommand()
+            not self.flags.get_all_input() or self.flags.get_preset_command()
         ):
             # it does not make sense to process an 'ENTER' keypress if we're in
             # the allInput mode and there is not a preset command.
             self.onEnter()
         elif key == "q":
-            output.outputNothing()
+            output.output_nothing()
             # this will get the appropriate selection and save it to a file for
             # reuse before exiting the program
             self.getPathsToUse()
@@ -494,7 +494,7 @@ class Controller:
 
         # save the selection we are using
         if self.cursesAPI.allowFileOutput():
-            output.outputSelection(toUse)
+            output.output_selection(toUse)
         return toUse
 
     def getSelectedPaths(self):
@@ -577,7 +577,7 @@ class Controller:
         self.stdscr.erase()
         # first check if they are trying to enter command mode
         # but already have a command...
-        if self.flags.getPresetCommand():
+        if self.flags.get_preset_command():
             self.helperChrome.output(self.mode)
             (minX, minY, _, maxY) = self.getChromeBoundaries()
             yStart = (maxY + minY) / 2 - 3
@@ -601,12 +601,12 @@ class Controller:
             logger.addEvent("exit_command_mode")
             return
         lineObjs = self.getPathsToUse()
-        output.execComposedCommand(command, lineObjs)
+        output.exec_composed_command(command, lineObjs)
         sys.exit(0)
 
     def executePreconfiguredCommand(self, command):
         lineObjs = self.getPathsToUse()
-        output.execComposedCommand(command, lineObjs)
+        output.exec_composed_command(command, lineObjs)
         sys.exit(0)
 
     def onEnter(self):
@@ -617,11 +617,11 @@ class Controller:
         logger.addEvent("selected_num_files", len(lineObjs))
 
         # commands passed from the command line get used immediately
-        presetCommand = self.flags.getPresetCommand()
+        presetCommand = self.flags.get_preset_command()
         if len(presetCommand) > 0:
-            output.execComposedCommand(presetCommand, lineObjs)
+            output.exec_composed_command(presetCommand, lineObjs)
         else:
-            output.editFiles(lineObjs)
+            output.edit_files(lineObjs)
 
         sys.exit(0)
 
@@ -691,7 +691,7 @@ class Controller:
         self.colorPrinter.addstr(
             yStart + 1,
             xStart,
-            'The command you provided was "%s" ' % self.flags.getPresetCommand(),
+            'The command you provided was "%s" ' % self.flags.get_preset_command(),
         )
         self.colorPrinter.addstr(
             yStart + 2, xStart, "Press any key to go back to selecting paths."
