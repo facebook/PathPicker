@@ -44,8 +44,8 @@ def getLineObjsFromLines(inputLines, validateFileExists=True, allInput=False):
                 formattedLine,
                 result,
                 index,
-                validateFileExists=validateFileExists,
-                allInput=allInput,
+                validate_file_exists=validateFileExists,
+                all_input=allInput,
             )
 
         lineObjs[index] = line

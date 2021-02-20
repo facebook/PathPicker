@@ -38,7 +38,7 @@ def exec_composed_command(command, line_objs):
     if not isinstance(command, str):
         command = command.decode()
 
-    logger.addEvent("command_on_num_files", len(line_objs))
+    logger.add_event("command_on_num_files", len(line_objs))
     command = compose_command(command, line_objs)
     append_alias_expansion()
     append_if_invalid(line_objs)
@@ -47,9 +47,9 @@ def exec_composed_command(command, line_objs):
 
 
 def edit_files(line_objs):
-    logger.addEvent("editing_num_files", len(line_objs))
+    logger.add_event("editing_num_files", len(line_objs))
     files_and_line_numbers = [
-        (lineObj.getPath(), lineObj.getLineNum()) for lineObj in line_objs
+        (lineObj.get_path(), lineObj.get_line_num()) for lineObj in line_objs
     ]
     command = join_files_into_command(files_and_line_numbers)
     append_if_invalid(line_objs)
@@ -61,11 +61,11 @@ def edit_files(line_objs):
 def append_if_invalid(line_objs):
     # lastly lets check validity and actually output an
     # error if any files are invalid
-    invalid_lines = [line for line in line_objs if not line.isResolvable()]
+    invalid_lines = [line for line in line_objs if not line.is_resolvable()]
     if not invalid_lines:
         return
     append_error(INVALID_FILE_WARNING)
-    if any(map(LineMatch.isGitAbbreviatedPath, invalid_lines)):
+    if any(map(LineMatch.is_git_abbreviated_path, invalid_lines)):
         append_error(GIT_ABBREVIATION_WARNING)
     append_to_file('read -p "%s" -r' % CONTINUE_WARNING)
 
@@ -91,7 +91,7 @@ def get_editor_and_path():
     )
     if editor_path:
         editor = os.path.basename(editor_path)
-        logger.addEvent("using_editor_" + editor)
+        logger.add_event("using_editor_" + editor)
         return editor, editor_path
     return "vim", "vim"
 
@@ -139,7 +139,7 @@ def join_files_into_command(files_and_line_numbers):
 
 
 def compose_cd_command(command, line_objs):
-    file_path = os.path.expanduser(line_objs[0].getDir())
+    file_path = os.path.expanduser(line_objs[0].get_dir())
     file_path = os.path.abspath(file_path)
     # now copy it into clipboard for cdp-ing
     # TODO -- this is pretty specific to
@@ -160,7 +160,7 @@ def compose_command(command, line_objs):
 
 def compose_file_command(command, line_objs):
     command = command.encode().decode("utf-8")
-    paths = ["'%s'" % lineObj.getPath() for lineObj in line_objs]
+    paths = ["'%s'" % lineObj.get_path() for lineObj in line_objs]
     path_str = " ".join(paths)
     if "$F" in command:
         command = command.replace("$F", path_str)

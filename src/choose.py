@@ -39,7 +39,7 @@ def doProgram(
     if not lineObjs:
         lineObjs = getLineObjs()
     output.clear_file()
-    logger.clearFile()
+    logger.clear_file()
     screen = screen_control.Controller(flags, keyBindings, stdscr, lineObjs, cursesAPI)
     screen.control()
 
@@ -52,13 +52,13 @@ def getLineObjs():
         output.append_error(LOAD_SELECTION_WARNING)
         output.append_exit()
         sys.exit(1)
-    logger.addEvent("total_num_files", len(lineObjs))
+    logger.add_event("total_num_files", len(lineObjs))
 
     selectionPath = state_files.getSelectionFilePath()
     if os.path.isfile(selectionPath):
         setSelectionsFromPickle(selectionPath, lineObjs)
 
-    matches = [lineObj for lineObj in lineObjs.values() if not lineObj.isSimple()]
+    matches = [lineObj for lineObj in lineObjs.values() if not lineObj.is_simple()]
     if not matches:
         output.write_to_file('echo "No lines matched!";')
         output.append_exit()
@@ -80,7 +80,7 @@ def setSelectionsFromPickle(selectionPath, lineObjs):
             continue
         toSelect = lineObjs[index]
         if isinstance(toSelect, LineMatch):
-            lineObjs[index].setSelect(True)
+            lineObjs[index].set_select(True)
         else:
             error = "Line %d was selected but is not LineMatch" % index
             output.append_error(error)

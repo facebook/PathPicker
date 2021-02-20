@@ -12,24 +12,24 @@ from pathpicker import state_files
 # to, or disable it if you want.
 
 
-def writeToFile(content):
+def write_to_file(content):
     file = open(state_files.getLoggerFilePath(), "w")
     file.write(content)
     file.close()
 
 
-def clearFile():
-    writeToFile("")
+def clear_file():
+    write_to_file("")
 
 
 events = []
 
 
-def addEvent(event, number=None):
+def add_event(event, number=None):
     events.append((event, number))
 
 
-def getLoggingDicts():
+def get_logging_dicts():
     unixname = getpass.getuser()
     dicts = []
     for (event, number) in events:
@@ -38,6 +38,6 @@ def getLoggingDicts():
 
 
 def output():
-    dicts = getLoggingDicts()
+    dicts = get_logging_dicts()
     json_output = json.dumps(dicts)
-    writeToFile(json_output)
+    write_to_file(json_output)

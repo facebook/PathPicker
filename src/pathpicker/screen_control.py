@@ -58,9 +58,9 @@ class HelperChrome:
         self.SIDEBAR_Y = 0
         self.DESCRIPTION_CLEAR = True
         if self.getIsSidebarMode():
-            logger.addEvent("init_wide_mode")
+            logger.add_event("init_wide_mode")
         else:
-            logger.addEvent("init_narrow_mode")
+            logger.add_event("init_narrow_mode")
 
     def output(self, mode):
         self.mode = mode
@@ -115,12 +115,12 @@ class HelperChrome:
         headerLine = "Description for " + lineObj.path + " :"
         linePrefix = "    * "
         descLines = [
-            lineObj.getTimeLastAccessed(),
-            lineObj.getTimeLastModified(),
-            lineObj.getOwnerUser(),
-            lineObj.getOwnerGroup(),
-            lineObj.getFileSize(),
-            lineObj.getLengthInLines(),
+            lineObj.get_time_last_accessed(),
+            lineObj.get_time_last_modified(),
+            lineObj.get_owner_user(),
+            lineObj.get_owner_group(),
+            lineObj.get_file_size(),
+            lineObj.get_length_in_lines(),
         ]
         self.printer.addstr(startY, startX, headerLine)
         y = startY + 2
@@ -202,9 +202,9 @@ class ScrollBar:
         (maxy, _maxx) = self.screenControl.getScreenDimensions()
         if self.numLines < maxy:
             self.activated = False
-            logger.addEvent("no_scrollbar")
+            logger.add_event("no_scrollbar")
         else:
-            logger.addEvent("needed_scrollbar")
+            logger.add_event("needed_scrollbar")
 
     def getIsActivated(self):
         return self.activated
@@ -295,7 +295,7 @@ class Controller:
 
         for lineObj in self.lineObjs.values():
             lineObj.controller = self
-            if not lineObj.isSimple():
+            if not lineObj.is_simple():
                 self.lineMatches.append(lineObj)
 
         # begin tracking dirty state
@@ -316,7 +316,7 @@ class Controller:
         # a valid value after we have all our line objects
         self.updateScrollOffset()
 
-        logger.addEvent("init")
+        logger.add_event("init")
 
     def getScrollOffset(self):
         return self.scrollOffset
@@ -341,20 +341,20 @@ class Controller:
         return maxy - miny
 
     def setHover(self, index, val):
-        self.lineMatches[index].setHover(val)
+        self.lineMatches[index].set_hover(val)
 
     def toggleSelect(self):
-        self.lineMatches[self.hoverIndex].toggleSelect()
+        self.lineMatches[self.hoverIndex].toggle_select()
 
     def toggleSelectAll(self):
         paths = set()
         for line in self.lineMatches:
-            if line.getPath() not in paths:
-                paths.add(line.getPath())
-                line.toggleSelect()
+            if line.get_path() not in paths:
+                paths.add(line.get_path())
+                line.toggle_select()
 
     def setSelect(self, val):
-        self.lineMatches[self.hoverIndex].setSelect(val)
+        self.lineMatches[self.hoverIndex].set_select(val)
 
     def describeFile(self):
         self.helperChrome.outputDescription(self.lineMatches[self.hoverIndex])
@@ -386,7 +386,7 @@ class Controller:
             self.resetDirty()
             self.updateScrollOffset()
             self.stdscr.refresh()
-            logger.addEvent("resize")
+            logger.add_event("resize")
         (self.oldmaxy, self.oldmaxx) = self.getScreenDimensions()
 
     def updateScrollOffset(self):
@@ -401,7 +401,7 @@ class Controller:
         # important, we need to get the real SCREEN position
         # of the hover index, not its index within our matches
         hovered = self.lineMatches[self.hoverIndex]
-        desiredTopRow = hovered.getScreenIndex() - halfHeight
+        desiredTopRow = hovered.get_screen_index() - halfHeight
 
         oldOffset = self.scrollOffset
         desiredTopRow = max(desiredTopRow, 0)
@@ -501,7 +501,7 @@ class Controller:
         return [
             lineObj
             for (index, lineObj) in enumerate(self.lineMatches)
-            if lineObj.getSelected()
+            if lineObj.get_selected()
         ]
 
     def getHoveredPaths(self):
@@ -513,7 +513,7 @@ class Controller:
 
     def showAndGetCommand(self):
         pathObjs = self.getPathsToUse()
-        paths = [pathObj.getPath() for pathObj in pathObjs]
+        paths = [pathObj.get_path() for pathObj in pathObjs]
         (maxy, maxx) = self.getScreenDimensions()
 
         # Alright this is a bit tricky -- for tall screens, we try to aim
@@ -590,7 +590,7 @@ class Controller:
 
         self.mode = COMMAND_MODE
         self.helperChrome.output(self.mode)
-        logger.addEvent("enter_command_mode")
+        logger.add_event("enter_command_mode")
 
         command = self.showAndGetCommand()
         if len(command) == 0:
@@ -598,7 +598,7 @@ class Controller:
             self.mode = SELECT_MODE
             self.cursesAPI.noecho()
             self.dirtyAll()
-            logger.addEvent("exit_command_mode")
+            logger.add_event("exit_command_mode")
             return
         lineObjs = self.getPathsToUse()
         output.exec_composed_command(command, lineObjs)
@@ -614,7 +614,7 @@ class Controller:
         if not lineObjs:
             # nothing selected, assume we want hovered
             lineObjs = self.getHoveredPaths()
-        logger.addEvent("selected_num_files", len(lineObjs))
+        logger.add_event("selected_num_files", len(lineObjs))
 
         # commands passed from the command line get used immediately
         presetCommand = self.flags.get_preset_command()
@@ -702,7 +702,7 @@ class Controller:
 
     def moveCursor(self):
         x = CHROME_MIN_X if self.scrollBar.getIsActivated() else 0
-        y = self.lineMatches[self.hoverIndex].getScreenIndex() + self.scrollOffset
+        y = self.lineMatches[self.hoverIndex].get_screen_index() + self.scrollOffset
         self.stdscr.move(y, x)
 
     def getKey(self):
