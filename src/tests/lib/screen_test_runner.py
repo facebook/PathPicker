@@ -44,8 +44,8 @@ def getRowsFromScreenRun(
     )
     screen = ScreenForTest(
         charInputs,
-        maxX=screenConfig.get("maxX", 80),
-        maxY=screenConfig.get("maxY", 30),
+        max_x=screenConfig.get("maxX", 80),
+        max_y=screenConfig.get("maxY", 30),
     )
 
     # mock our flags with the passed arg list
@@ -60,10 +60,10 @@ def getRowsFromScreenRun(
         pass
 
     if printScreen:
-        screen.printOldScreens()
+        screen.print_old_screens()
 
     if pastScreen:
-        return screen.getRowsWithAttributesForPastScreen(pastScreen)
+        return screen.get_rows_with_attributes_for_past_screen(pastScreen)
     if pastScreens:
-        return screen.getRowsWithAttributesForPastScreens(pastScreens)
-    return screen.getRowsWithAttributes()
+        return screen.get_rows_with_attributes_for_past_screens(pastScreens)
+    return screen.get_rows_with_attributes()

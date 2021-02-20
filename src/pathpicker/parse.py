@@ -235,7 +235,7 @@ REGEX_WATERFALL: List[RegexConfig] = [
 # Attempts to resolve the root directory of the
 # repository in which path resides (i.e. the current directory).
 # both git and hg have commands for this, so let's just use those.
-def getRepoPath():
+def get_repo_path():
     proc = subprocess.Popen(
         ["git rev-parse --show-toplevel"],
         stdout=subprocess.PIPE,
@@ -271,27 +271,27 @@ def getRepoPath():
     return "./"
 
 
-PREPEND_PATH = str(getRepoPath().strip()) + "/"
+PREPEND_PATH = str(get_repo_path().strip()) + "/"
 
 
 # returns a filename and (optional) line number
 # if it matches
-def matchLine(line, validateFileExists=False, allInput=False):
-    if not validateFileExists:
-        results = match_line_impl(line, with_all_lines_matched=allInput)
+def match_line(line, validate_file_exists=False, all_input=False):
+    if not validate_file_exists:
+        results = match_line_impl(line, with_all_lines_matched=all_input)
         return results[0] if results else None
     results = match_line_impl(
-        line, with_file_inspection=True, with_all_lines_matched=allInput
+        line, with_file_inspection=True, with_all_lines_matched=all_input
     )
     if not results:
         return None
     # ok now we are going to check if this result is an actual
     # file...
     for result in results:
-        (filePath, _, _) = result
+        (file_path, _, _) = result
         if (
-            os.path.isfile(prepend_dir(filePath, with_file_inspection=True))
-            or filePath[0:4] == ".../"
+            os.path.isfile(prepend_dir(file_path, with_file_inspection=True))
+            or file_path[0:4] == ".../"
         ):
             return result
     return None
@@ -402,11 +402,11 @@ def prepend_dir(file, with_file_inspection=False):
 
 
 def unpack_matches_no_num(matches):
-    return (matches.groups()[0], 0, matches)
+    return matches.groups()[0], 0, matches
 
 
 def unpack_matches(matches, num_index):
     groups = matches.groups()
     file = groups[0]
     num = 0 if groups[num_index] is None else int(groups[num_index])
-    return (file, num, matches)
+    return file, num, matches
