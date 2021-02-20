@@ -28,7 +28,7 @@ SELECT_MODE = "SELECT"
 COMMAND_MODE = "COMMAND_MODE"
 X_MODE = "X_MODE"
 
-lbls = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'"
+LABELS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'"
 
 # options for displayed to the user at the bottom of the screen
 SHORT_NAV_OPTION_SELECTION_STR = "[f|A] selection"
@@ -54,9 +54,9 @@ class HelperChrome:
         self.screen_control = screen_control
         self.flags = flags
         self.mode = SELECT_MODE
-        self.WIDTH = 50
-        self.SIDEBAR_Y = 0
-        self.DESCRIPTION_CLEAR = True
+        self.width = 50
+        self.sidebar_y = 0
+        self.description_clear = True
         if self.get_is_sidebar_mode():
             logger.add_event("init_wide_mode")
         else:
@@ -88,7 +88,7 @@ class HelperChrome:
     def reduce_max_x(self, max_x):
         if not self.get_is_sidebar_mode():
             return max_x
-        return max_x - self.WIDTH
+        return max_x - self.width
 
     def get_min_x(self):
         if self.mode == COMMAND_MODE:
@@ -109,8 +109,8 @@ class HelperChrome:
         if not self.get_is_sidebar_mode():
             return
         (_max_y, max_x) = self.screen_control.get_screen_dimensions()
-        border_x = max_x - self.WIDTH
-        start_y = self.SIDEBAR_Y + 1
+        border_x = max_x - self.width
+        start_y = self.sidebar_y + 1
         start_x = border_x + 2
         header_line = "Description for " + line_obj.path + " :"
         line_prefix = "    * "
@@ -123,28 +123,28 @@ class HelperChrome:
             line_obj.get_length_in_lines(),
         ]
         self.printer.addstr(start_y, start_x, header_line)
-        y = start_y + 2
+        y_pos = start_y + 2
         for desc_line in desc_lines:
             desc_line = self.trim_line(desc_line, max_x - start_x - len(line_prefix))
-            self.printer.addstr(y, start_x, line_prefix + desc_line)
-            y = y + 1
-        self.DESCRIPTION_CLEAR = False
+            self.printer.addstr(y_pos, start_x, line_prefix + desc_line)
+            y_pos = y_pos + 1
+        self.description_clear = False
 
     # to fix bug where description pane may not clear on scroll
     def clear_description_pane(self):
-        if self.DESCRIPTION_CLEAR:
+        if self.description_clear:
             return
         (max_y, max_x) = self.screen_control.get_screen_dimensions()
-        border_x = max_x - self.WIDTH
-        start_y = self.SIDEBAR_Y + 1
+        border_x = max_x - self.width
+        start_y = self.sidebar_y + 1
         self.printer.clear_square(start_y, max_y - 1, border_x + 2, max_x)
-        self.DESCRIPTION_CLEAR = True
+        self.description_clear = True
 
     def output_side(self):
         if not self.get_is_sidebar_mode():
             return
         (max_y, max_x) = self.screen_control.get_screen_dimensions()
-        border_x = max_x - self.WIDTH
+        border_x = max_x - self.width
         if self.mode == COMMAND_MODE:
             border_x = len(SHORT_COMMAND_PROMPT) + 20
         usage_lines = usage_strings.USAGE_PAGE.split("\n")
@@ -152,9 +152,9 @@ class HelperChrome:
             usage_lines = usage_strings.USAGE_COMMAND.split("\n")
         for index, usage_line in enumerate(usage_lines):
             self.printer.addstr(self.get_min_y() + index, border_x + 2, usage_line)
-            self.SIDEBAR_Y = self.get_min_y() + index
-        for y in range(self.get_min_y(), max_y):
-            self.printer.addstr(y, border_x, "|")
+            self.sidebar_y = self.get_min_y() + index
+        for y_pos in range(self.get_min_y(), max_y):
+            self.printer.addstr(y_pos, border_x, "|")
 
     def output_bottom(self):
         if self.get_is_sidebar_mode():
@@ -250,15 +250,15 @@ class ScrollBar:
         top_y = max_y - 2
         min_y = self.get_min_y()
         diff = top_y - min_y
-        x = self.get_x()
+        x_pos = self.get_x()
 
         box_start_y = int(diff * self.box_start_fraction) + min_y
         box_stop_y = int(diff * self.box_stop_fraction) + min_y
 
-        self.printer.addstr(box_start_y, x, "/-\\")
+        self.printer.addstr(box_start_y, x_pos, "/-\\")
         for y_pos in range(box_start_y + 1, box_stop_y):
-            self.printer.addstr(y_pos, x, "|-|")
-        self.printer.addstr(box_stop_y, x, "\\-/")
+            self.printer.addstr(y_pos, x_pos, "|-|")
+        self.printer.addstr(box_stop_y, x_pos, "\\-/")
 
     def output_caps(self):
         x_pos = self.get_x()
@@ -267,10 +267,10 @@ class ScrollBar:
             self.printer.addstr(y_pos, x_pos, "===")
 
     def output_base(self):
-        x = self.get_x()
+        x_pos = self.get_x()
         (max_y, _max_x) = self.screen_control.get_screen_dimensions()
         for y_pos in range(self.get_min_y(), max_y - 1):
-            self.printer.addstr(y_pos, x, " . ")
+            self.printer.addstr(y_pos, x_pos, " . ")
 
 
 class Controller:
@@ -314,7 +314,7 @@ class Controller:
         # at 0 if our first real match is WAY
         # down the screen -- so lets init it to
         # a valid value after we have all our line objects
-        self.updateScrollOffset()
+        self.update_scroll_offset()
 
         logger.add_event("init")
 
@@ -363,108 +363,108 @@ class Controller:
         execute_keys = self.flags.get_execute_keys()
 
         # we start out by printing everything we need to
-        self.printAll()
-        self.resetDirty()
-        self.moveCursor()
+        self.print_all()
+        self.reset_dirty()
+        self.move_cursor()
         while True:
             if len(execute_keys) > 0:
-                inKey = execute_keys.pop(0)
+                in_key = execute_keys.pop(0)
             else:
-                inKey = self.getKey()
-            self.checkResize()
-            self.processInput(inKey)
-            self.processDirty()
-            self.resetDirty()
-            self.moveCursor()
+                in_key = self.get_key()
+            self.check_resize()
+            self.process_input(in_key)
+            self.process_dirty()
+            self.reset_dirty()
+            self.move_cursor()
             self.stdscr.refresh()
 
-    def checkResize(self):
-        (maxy, maxx) = self.get_screen_dimensions()
-        if maxy is not self.old_max_y or maxx is not self.old_max_x:
+    def check_resize(self):
+        (max_y, max_x) = self.get_screen_dimensions()
+        if max_y is not self.old_max_y or max_x is not self.old_max_x:
             # we resized so print all!
-            self.printAll()
-            self.resetDirty()
-            self.updateScrollOffset()
+            self.print_all()
+            self.reset_dirty()
+            self.update_scroll_offset()
             self.stdscr.refresh()
             logger.add_event("resize")
         (self.old_max_y, self.old_max_x) = self.get_screen_dimensions()
 
-    def updateScrollOffset(self):
+    def update_scroll_offset(self):
         """
         yay scrolling logic! we will start simple here
         and basically just center the viewport to current
         matched line
         """
-        windowHeight = self.get_viewport_height()
-        halfHeight = int(round(windowHeight / 2.0))
+        window_height = self.get_viewport_height()
+        half_height = int(round(window_height / 2.0))
 
         # important, we need to get the real SCREEN position
         # of the hover index, not its index within our matches
         hovered = self.line_matches[self.hover_index]
-        desiredTopRow = hovered.get_screen_index() - halfHeight
+        desired_top_row = hovered.get_screen_index() - half_height
 
-        oldOffset = self.scroll_offset
-        desiredTopRow = max(desiredTopRow, 0)
-        newOffset = -desiredTopRow
+        old_offset = self.scroll_offset
+        desired_top_row = max(desired_top_row, 0)
+        new_offset = -desired_top_row
         # lets add in some leeway -- dont bother repositioning
         # if the old offset is within 1/2 of the window height
         # of our desired (unless we absolutely have to)
         if (
-            abs(newOffset - oldOffset) > halfHeight / 2
-            or self.hover_index + oldOffset < 0
+            abs(new_offset - old_offset) > half_height / 2
+            or self.hover_index + old_offset < 0
         ):
             # need to reassign now we have gone too far
-            self.scroll_offset = newOffset
-        if oldOffset is not self.scroll_offset:
-            self.dirtyAll()
+            self.scroll_offset = new_offset
+        if old_offset is not self.scroll_offset:
+            self.dirty_all()
 
         # also update our scroll bar
         self.scroll_bar.calc_box_fractions()
 
-    def pageDown(self):
-        pageHeight = (int)(self.get_viewport_height() * 0.5)
-        self.moveIndex(pageHeight)
+    def page_down(self):
+        page_height = int(self.get_viewport_height() * 0.5)
+        self.move_index(page_height)
 
-    def pageUp(self):
-        pageHeight = (int)(self.get_viewport_height() * 0.5)
-        self.moveIndex(-pageHeight)
+    def page_up(self):
+        page_height = int(self.get_viewport_height() * 0.5)
+        self.move_index(-page_height)
 
-    def moveIndex(self, delta):
-        newIndex = (self.hover_index + delta) % self.num_matches
-        self.jumpToIndex(newIndex)
+    def move_index(self, delta):
+        new_index = (self.hover_index + delta) % self.num_matches
+        self.jump_to_index(new_index)
         # also clear the description pane if necessary
         self.helper_chrome.clear_description_pane()
 
-    def jumpToIndex(self, newIndex):
+    def jump_to_index(self, new_index):
         self.set_hover(self.hover_index, False)
-        self.hover_index = newIndex
+        self.hover_index = new_index
         self.set_hover(self.hover_index, True)
-        self.updateScrollOffset()
+        self.update_scroll_offset()
 
-    def processInput(self, key):
+    def process_input(self, key):
         if key in ["k", "UP"]:
-            self.moveIndex(-1)
+            self.move_index(-1)
         elif key in ["j", "DOWN"]:
-            self.moveIndex(1)
+            self.move_index(1)
         elif key == "x":
-            self.toggleXMode()
+            self.toggle_x_mode()
         elif key == "c":
-            self.beginEnterCommand()
+            self.begin_enter_command()
         elif key in [" ", "NPAGE"]:
-            self.pageDown()
+            self.page_down()
         elif key in ["b", "PPAGE"]:
-            self.pageUp()
+            self.page_up()
         elif key in ["g", "HOME"]:
-            self.jumpToIndex(0)
+            self.jump_to_index(0)
         elif (key == "G" and not self.mode == X_MODE) or key == "END":
-            self.jumpToIndex(self.num_matches - 1)
+            self.jump_to_index(self.num_matches - 1)
         elif key == "d":
             self.describe_file()
         elif key == "f":
             self.toggle_select()
         elif key == "F":
             self.toggle_select()
-            self.moveIndex(1)
+            self.move_index(1)
         elif key == "A" and not self.mode == X_MODE:
             self.toggle_select_all()
         elif key == "ENTER" and (
@@ -472,262 +472,266 @@ class Controller:
         ):
             # it does not make sense to process an 'ENTER' keypress if we're in
             # the allInput mode and there is not a preset command.
-            self.onEnter()
+            self.on_enter()
         elif key == "q":
             output.output_nothing()
             # this will get the appropriate selection and save it to a file for
             # reuse before exiting the program
-            self.getPathsToUse()
+            self.get_paths_to_use()
             self.curses_api.exit()
-        elif self.mode == X_MODE and key in lbls:
-            self.selectXMode(key)
+        elif self.mode == X_MODE and key in LABELS:
+            self.select_x_mode(key)
 
-        for boundKey, command in self.key_bindings:
-            if key == boundKey:
-                self.executePreconfiguredCommand(command)
+        for bound_key, command in self.key_bindings:
+            if key == bound_key:
+                self.execute_preconfigured_command(command)
 
-    def getPathsToUse(self):
+    def get_paths_to_use(self):
         # if we have selected paths, those, otherwise hovered
-        toUse = self.getSelectedPaths()
-        if not toUse:
-            toUse = self.getHoveredPaths()
+        to_use = self.get_selected_paths()
+        if not to_use:
+            to_use = self.get_hovered_paths()
 
         # save the selection we are using
         if self.curses_api.allow_file_output():
-            output.output_selection(toUse)
-        return toUse
+            output.output_selection(to_use)
+        return to_use
 
-    def getSelectedPaths(self):
+    def get_selected_paths(self):
         return [
-            lineObj
-            for (index, lineObj) in enumerate(self.line_matches)
-            if lineObj.get_selected()
+            line_obj
+            for (index, line_obj) in enumerate(self.line_matches)
+            if line_obj.get_selected()
         ]
 
-    def getHoveredPaths(self):
+    def get_hovered_paths(self):
         return [
-            lineObj
-            for (index, lineObj) in enumerate(self.line_matches)
+            line_obj
+            for (index, line_obj) in enumerate(self.line_matches)
             if index == self.hover_index
         ]
 
-    def showAndGetCommand(self):
-        pathObjs = self.getPathsToUse()
-        paths = [pathObj.get_path() for pathObj in pathObjs]
-        (maxy, maxx) = self.get_screen_dimensions()
+    def show_and_get_command(self):
+        path_objs = self.get_paths_to_use()
+        paths = [pathObj.get_path() for pathObj in path_objs]
+        (max_y, max_x) = self.get_screen_dimensions()
 
         # Alright this is a bit tricky -- for tall screens, we try to aim
         # the command prompt right at the middle of the screen so you dont
         # have to shift your eyes down or up a bunch
-        beginHeight = int(round(maxy / 2) - len(paths) / 2.0)
+        begin_height = int(round(max_y / 2) - len(paths) / 2.0)
         # but if you have a TON of paths, we are going to start printing
         # way off screen. in this case lets just slap the prompt
         # at the bottom so we can fit as much as possible.
         #
         # There could better option here to slowly increase the prompt
         # height to the bottom, but this is good enough for now...
-        if beginHeight <= 1:
-            beginHeight = maxy - 6
+        if begin_height <= 1:
+            begin_height = max_y - 6
 
-        borderLine = "=" * len(SHORT_COMMAND_PROMPT)
-        promptLine = "." * len(SHORT_COMMAND_PROMPT)
+        border_line = "=" * len(SHORT_COMMAND_PROMPT)
+        prompt_line = "." * len(SHORT_COMMAND_PROMPT)
         # from helper chrome code
-        maxPathLength = maxx - 5
+        max_path_length = max_x - 5
         if self.helper_chrome.get_is_sidebar_mode():
             # need to be shorter to not go into side bar
-            maxPathLength = len(SHORT_COMMAND_PROMPT) + 18
+            max_path_length = len(SHORT_COMMAND_PROMPT) + 18
 
         # first lets print all the paths
-        startHeight = beginHeight - 1 - len(paths)
+        start_height = begin_height - 1 - len(paths)
         try:
-            self.color_printer.addstr(startHeight - 3, 0, borderLine)
-            self.color_printer.addstr(startHeight - 2, 0, SHORT_PATHS_HEADER)
-            self.color_printer.addstr(startHeight - 1, 0, borderLine)
+            self.color_printer.addstr(start_height - 3, 0, border_line)
+            self.color_printer.addstr(start_height - 2, 0, SHORT_PATHS_HEADER)
+            self.color_printer.addstr(start_height - 1, 0, border_line)
         except curses.error:
             pass
 
         for index, path in enumerate(paths):
             try:
-                self.color_printer.addstr(startHeight + index, 0, path[0:maxPathLength])
+                self.color_printer.addstr(
+                    start_height + index, 0, path[0:max_path_length]
+                )
             except curses.error:
                 pass
 
         # first print prompt
         try:
-            self.color_printer.addstr(beginHeight, 0, SHORT_COMMAND_PROMPT)
-            self.color_printer.addstr(beginHeight + 1, 0, SHORT_COMMAND_PROMPT2)
+            self.color_printer.addstr(begin_height, 0, SHORT_COMMAND_PROMPT)
+            self.color_printer.addstr(begin_height + 1, 0, SHORT_COMMAND_PROMPT2)
         except curses.error:
             pass
         # then line to distinguish and prompt line
         try:
-            self.color_printer.addstr(beginHeight - 1, 0, borderLine)
-            self.color_printer.addstr(beginHeight + 2, 0, borderLine)
-            self.color_printer.addstr(beginHeight + 3, 0, promptLine)
+            self.color_printer.addstr(begin_height - 1, 0, border_line)
+            self.color_printer.addstr(begin_height + 2, 0, border_line)
+            self.color_printer.addstr(begin_height + 3, 0, prompt_line)
         except curses.error:
             pass
 
         self.stdscr.refresh()
         self.curses_api.echo()
-        maxX = int(round(maxx - 1))
+        max_x = int(round(max_x - 1))
 
-        command = self.stdscr.getstr(beginHeight + 3, 0, maxX)
+        command = self.stdscr.getstr(begin_height + 3, 0, max_x)
         return command
 
-    def beginEnterCommand(self):
+    def begin_enter_command(self):
         self.stdscr.erase()
         # first check if they are trying to enter command mode
         # but already have a command...
         if self.flags.get_preset_command():
             self.helper_chrome.output(self.mode)
-            (minX, minY, _, maxY) = self.get_chrome_boundaries()
-            yStart = (maxY + minY) / 2 - 3
-            self.printProvidedCommandWarning(yStart, minX)
+            (min_x, min_y, _, max_y) = self.get_chrome_boundaries()
+            y_start = (max_y + min_y) / 2 - 3
+            self.print_provided_command_warning(y_start, min_x)
             self.stdscr.refresh()
-            self.getKey()
+            self.get_key()
             self.mode = SELECT_MODE
-            self.dirtyAll()
+            self.dirty_all()
             return
 
         self.mode = COMMAND_MODE
         self.helper_chrome.output(self.mode)
         logger.add_event("enter_command_mode")
 
-        command = self.showAndGetCommand()
+        command = self.show_and_get_command()
         if len(command) == 0:
             # go back to selection mode and repaint
             self.mode = SELECT_MODE
             self.curses_api.noecho()
-            self.dirtyAll()
+            self.dirty_all()
             logger.add_event("exit_command_mode")
             return
-        lineObjs = self.getPathsToUse()
-        output.exec_composed_command(command, lineObjs)
+        line_objs = self.get_paths_to_use()
+        output.exec_composed_command(command, line_objs)
         sys.exit(0)
 
-    def executePreconfiguredCommand(self, command):
-        lineObjs = self.getPathsToUse()
-        output.exec_composed_command(command, lineObjs)
+    def execute_preconfigured_command(self, command):
+        line_objs = self.get_paths_to_use()
+        output.exec_composed_command(command, line_objs)
         sys.exit(0)
 
-    def onEnter(self):
-        lineObjs = self.getPathsToUse()
-        if not lineObjs:
+    def on_enter(self):
+        line_objs = self.get_paths_to_use()
+        if not line_objs:
             # nothing selected, assume we want hovered
-            lineObjs = self.getHoveredPaths()
-        logger.add_event("selected_num_files", len(lineObjs))
+            line_objs = self.get_hovered_paths()
+        logger.add_event("selected_num_files", len(line_objs))
 
         # commands passed from the command line get used immediately
-        presetCommand = self.flags.get_preset_command()
-        if len(presetCommand) > 0:
-            output.exec_composed_command(presetCommand, lineObjs)
+        preset_command = self.flags.get_preset_command()
+        if len(preset_command) > 0:
+            output.exec_composed_command(preset_command, line_objs)
         else:
-            output.edit_files(lineObjs)
+            output.edit_files(line_objs)
 
         sys.exit(0)
 
-    def resetDirty(self):
+    def reset_dirty(self):
         # reset all dirty state for our components
         self.dirty = False
         self.dirty_indexes = []
 
-    def dirtyLine(self, index):
+    def dirty_line(self, index):
         self.dirty_indexes.append(index)
 
-    def dirtyAll(self):
+    def dirty_all(self):
         self.dirty = True
 
-    def processDirty(self):
+    def process_dirty(self):
         if self.dirty:
-            self.printAll()
+            self.print_all()
             return
-        (_minx, miny, _maxx, maxy) = self.get_chrome_boundaries()
-        didClearLine = False
+        (_min_x, min_y, _max_x, max_y) = self.get_chrome_boundaries()
+        did_clear_line = False
         for index in self.dirty_indexes:
-            y = miny + index + self.get_scroll_offset()
-            if miny <= y < maxy:
-                didClearLine = True
-                self.clearLine(y)
+            y_pos = min_y + index + self.get_scroll_offset()
+            if min_y <= y_pos < max_y:
+                did_clear_line = True
+                self.clear_line(y_pos)
                 self.line_objs[index].output(self.color_printer)
-        if didClearLine and self.helper_chrome.get_is_sidebar_mode():
+        if did_clear_line and self.helper_chrome.get_is_sidebar_mode():
             # now we need to output the chrome again since on wide
             # monitors we will have cleared out a line of the chrome
             self.helper_chrome.output(self.mode)
 
-    def clearLine(self, y):
+    def clear_line(self, y_pos):
         """Clear a line of content, excluding the chrome"""
-        (minx, _, _, _) = self.get_chrome_boundaries()
-        (_, maxx) = self.stdscr.getmaxyx()
-        charsToDelete = range(minx, maxx)
+        (min_x, _, _, _) = self.get_chrome_boundaries()
+        (_, max_x) = self.stdscr.getmaxyx()
+        chars_to_delete = range(min_x, max_x)
         # we go in the **reverse** order since the original documentation
         # of delchar (http://dell9.ma.utexas.edu/cgi-bin/man-cgi?delch+3)
         # mentions that delchar actually moves all the characters to the right
         # of the cursor
-        for x in reversed(charsToDelete):
-            self.stdscr.delch(y, x)
+        for x_pos in reversed(chars_to_delete):
+            self.stdscr.delch(y_pos, x_pos)
 
-    def printAll(self):
+    def print_all(self):
         self.stdscr.erase()
-        self.printLines()
-        self.printScroll()
-        self.printXMode()
-        self.printChrome()
+        self.print_lines()
+        self.print_scroll()
+        self.print_x_mode()
+        self.print_chrome()
 
-    def printLines(self):
-        for lineObj in self.line_objs.values():
-            lineObj.output(self.color_printer)
+    def print_lines(self):
+        for line_obj in self.line_objs.values():
+            line_obj.output(self.color_printer)
 
-    def printScroll(self):
+    def print_scroll(self):
         self.scroll_bar.output()
 
-    def printProvidedCommandWarning(self, yStart, xStart):
+    def print_provided_command_warning(self, y_start, x_start):
         self.color_printer.addstr(
-            yStart,
-            xStart,
+            y_start,
+            x_start,
             "Oh no! You already provided a command so "
             + "you cannot enter command mode.",
             self.color_printer.get_attributes(curses.COLOR_WHITE, curses.COLOR_RED, 0),
         )
 
         self.color_printer.addstr(
-            yStart + 1,
-            xStart,
+            y_start + 1,
+            x_start,
             'The command you provided was "%s" ' % self.flags.get_preset_command(),
         )
         self.color_printer.addstr(
-            yStart + 2, xStart, "Press any key to go back to selecting paths."
+            y_start + 2, x_start, "Press any key to go back to selecting paths."
         )
 
-    def printChrome(self):
+    def print_chrome(self):
         self.helper_chrome.output(self.mode)
 
-    def moveCursor(self):
-        x = CHROME_MIN_X if self.scroll_bar.get_is_activated() else 0
-        y = self.line_matches[self.hover_index].get_screen_index() + self.scroll_offset
-        self.stdscr.move(y, x)
+    def move_cursor(self):
+        x_pos = CHROME_MIN_X if self.scroll_bar.get_is_activated() else 0
+        y_pos = (
+            self.line_matches[self.hover_index].get_screen_index() + self.scroll_offset
+        )
+        self.stdscr.move(y_pos, x_pos)
 
-    def getKey(self):
-        charCode = self.stdscr.getch()
-        return CODE_TO_CHAR.get(charCode, "")
+    def get_key(self):
+        char_code = self.stdscr.getch()
+        return CODE_TO_CHAR.get(char_code, "")
 
-    def toggleXMode(self):
+    def toggle_x_mode(self):
         self.mode = X_MODE if self.mode != X_MODE else SELECT_MODE
-        self.printAll()
+        self.print_all()
 
-    def printXMode(self):
+    def print_x_mode(self):
         if self.mode == X_MODE:
-            (maxy, _) = self.scroll_bar.screen_control.get_screen_dimensions()
-            topY = maxy - 2
-            minY = self.scroll_bar.get_min_y() - 1
-            for i in range(minY, topY + 1):
-                idx = i - minY
-                if idx < len(lbls):
-                    self.color_printer.addstr(i, 1, lbls[idx])
+            (max_y, _) = self.scroll_bar.screen_control.get_screen_dimensions()
+            top_y = max_y - 2
+            min_y = self.scroll_bar.get_min_y() - 1
+            for i in range(min_y, top_y + 1):
+                idx = i - min_y
+                if idx < len(LABELS):
+                    self.color_printer.addstr(i, 1, LABELS[idx])
 
-    def selectXMode(self, key):
-        if lbls.index(key) >= len(self.line_objs):
+    def select_x_mode(self, key):
+        if LABELS.index(key) >= len(self.line_objs):
             return
-        lineObj = self.line_objs[lbls.index(key) - self.scroll_offset]
-        if isinstance(lineObj, LineMatch):
-            lineMatchIndex = self.line_matches.index(lineObj)
-            self.hover_index = lineMatchIndex
+        line_obj = self.line_objs[LABELS.index(key) - self.scroll_offset]
+        if isinstance(line_obj, LineMatch):
+            line_match_index = self.line_matches.index(line_obj)
+            self.hover_index = line_match_index
             self.toggle_select()

@@ -23,7 +23,7 @@ def read_key_bindings(key_bindings_file=KEY_BINDINGS_FILE) -> KeyBindings:
     parser = configparser.ConfigParser()
     parser.read(config_file_path)
 
-    # The `executePreconfiguredCommand` underlying APIs use `curses.getstr()`,
+    # The `execute_preconfigured_command` underlying APIs use `curses.getstr()`,
     # which returns an encoded string, and invoke `decode()` on it.
     # In Python 3/configparser, the parsed strings are already decoded,
     # therefore don't support this method anymore, so we convert them

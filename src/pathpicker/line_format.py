@@ -219,10 +219,10 @@ class LineMatch:
 
         decorator_text = self.get_decorator()
 
-        # we may not be connected to a controller (during processInput,
+        # we may not be connected to a controller (during process_input,
         # for example)
         if self.controller:
-            self.controller.dirtyLine(self.index)
+            self.controller.dirty_line(self.index)
 
         plain_text = decorator_text + self.get_match()
         if max_len and len(plain_text + str(self.before_text)) > max_len:
