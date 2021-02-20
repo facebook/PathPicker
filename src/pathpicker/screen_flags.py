@@ -9,7 +9,7 @@ class ScreenFlags:
 
     """A class that just represents the total set of flags
     available to FPP. Note that some of these are actually
-    processsed by the fpp batch file, and not by python.
+    processed by the fpp batch file, and not by python.
     However, they are documented here because argsparse is
     clean and easy to use for that purpose.
 

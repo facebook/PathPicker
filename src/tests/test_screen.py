@@ -150,7 +150,7 @@ SCREEN_TEST_CASES: List[ScreenTestCase] = [
         inputs=["x", "E", "H"],
     ),
     ScreenTestCase(
-        "gitAbbreivatedFiles",
+        "gitAbbreviatedFiles",
         input_file="gitAbbreviatedFiles.txt",
         with_attributes=True,
         inputs=["f", "j"],

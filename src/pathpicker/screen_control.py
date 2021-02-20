@@ -334,7 +334,7 @@ class Controller:
         max_y = self.helper_chrome.reduce_max_y(max_y)
         max_x = self.helper_chrome.reduce_max_x(max_x)
         # format of (MINX, MINY, MAXX, MAXY)
-        return (min_x, CHROME_MIN_Y, max_x, max_y)
+        return min_x, CHROME_MIN_Y, max_x, max_y
 
     def get_viewport_height(self):
         (_min_x, min_y, _max_x, max_y) = self.get_chrome_boundaries()
@@ -406,7 +406,7 @@ class Controller:
         old_offset = self.scroll_offset
         desired_top_row = max(desired_top_row, 0)
         new_offset = -desired_top_row
-        # lets add in some leeway -- dont bother repositioning
+        # lets add in some leeway -- don't bother repositioning
         # if the old offset is within 1/2 of the window height
         # of our desired (unless we absolutely have to)
         if (
@@ -517,7 +517,7 @@ class Controller:
         (max_y, max_x) = self.get_screen_dimensions()
 
         # Alright this is a bit tricky -- for tall screens, we try to aim
-        # the command prompt right at the middle of the screen so you dont
+        # the command prompt right at the middle of the screen so you don't
         # have to shift your eyes down or up a bunch
         begin_height = int(round(max_y / 2) - len(paths) / 2.0)
         # but if you have a TON of paths, we are going to start printing
