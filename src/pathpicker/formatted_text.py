@@ -5,6 +5,7 @@
 import curses
 import re
 from collections import namedtuple
+from typing import Optional
 
 from pathpicker.color_printer import ColorPrinter
 
@@ -25,7 +26,7 @@ class FormattedText:
     DEFAULT_COLOR_FOREGROUND = -1
     DEFAULT_COLOR_BACKGROUND = -1
 
-    def __init__(self, text=None):
+    def __init__(self, text: Optional[str] = None):
         self.text = text
 
         if self.text is not None:

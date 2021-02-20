@@ -6,10 +6,12 @@ import os
 import re
 import subprocess
 from functools import partial
-from typing import Callable, List, NamedTuple, Optional, Pattern
+from typing import Callable, List, Match, NamedTuple, NewType, Optional, Pattern, Tuple
 
 from pathpicker import logger
 from pathpicker.repos import REPOS
+
+MatchResult = NewType("MatchResult", Tuple[str, int, Match])
 
 MASTER_REGEX = re.compile(
     r"(/?([a-z.A-Z0-9\-_]+/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]?(\d+)?"
@@ -276,7 +278,9 @@ PREPEND_PATH = str(get_repo_path().strip()) + "/"
 
 # returns a filename and (optional) line number
 # if it matches
-def match_line(line, validate_file_exists=False, all_input=False):
+def match_line(
+    line: str, validate_file_exists: bool = False, all_input: bool = False
+) -> Optional[MatchResult]:
     if not validate_file_exists:
         results = match_line_impl(line, with_all_lines_matched=all_input)
         return results[0] if results else None
@@ -297,7 +301,9 @@ def match_line(line, validate_file_exists=False, all_input=False):
     return None
 
 
-def match_line_impl(line, with_file_inspection=False, with_all_lines_matched=False):
+def match_line_impl(
+    line: str, with_file_inspection: bool = False, with_all_lines_matched: bool = False
+) -> List[MatchResult]:
     # ok new behavior -- we will actually collect **ALL** results
     # of the regexes since filesystem validation might filter some
     # of the earlier ones out (particularly those with hyphens)
@@ -401,12 +407,12 @@ def prepend_dir(file, with_file_inspection=False):
     return top_level_path
 
 
-def unpack_matches_no_num(matches):
-    return matches.groups()[0], 0, matches
+def unpack_matches_no_num(matches: Match) -> MatchResult:
+    return MatchResult((matches.groups()[0], 0, matches))
 
 
-def unpack_matches(matches, num_index):
+def unpack_matches(matches: Match, num_index: int) -> MatchResult:
     groups = matches.groups()
     file = groups[0]
     num = 0 if groups[num_index] is None else int(groups[num_index])
-    return file, num, matches
+    return MatchResult((file, num, matches))

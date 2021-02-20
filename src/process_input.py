@@ -5,15 +5,16 @@
 import os
 import pickle
 import sys
+from typing import Dict, List
 
 from pathpicker import parse, state_files
 from pathpicker.formatted_text import FormattedText
-from pathpicker.line_format import LineMatch, SimpleLine
+from pathpicker.line_format import LineBase, LineMatch, SimpleLine
 from pathpicker.screen_flags import ScreenFlags
 from pathpicker.usage_strings import USAGE_STR
 
 
-def get_line_objs(flags):
+def get_line_objs(flags: ScreenFlags) -> Dict[int, LineBase]:
     input_lines = sys.stdin.readlines()
     return get_line_objs_from_lines(
         input_lines,
@@ -22,10 +23,12 @@ def get_line_objs(flags):
     )
 
 
-def get_line_objs_from_lines(input_lines, validate_file_exists=True, all_input=False):
-    line_objs = {}
+def get_line_objs_from_lines(
+    input_lines: List[str], validate_file_exists: bool = True, all_input: bool = False
+) -> Dict[int, LineBase]:
+    line_objs: Dict[int, LineBase] = {}
     for index, line in enumerate(input_lines):
-        line = line.replace("\t", "    ")
+        line = line.replace("\t", " " * 4)
         # remove the new line as we place the cursor ourselves for each
         # line. this avoids curses errors when we newline past the end of the
         # screen
@@ -38,9 +41,9 @@ def get_line_objs_from_lines(input_lines, validate_file_exists=True, all_input=F
         )
 
         if not result:
-            line = SimpleLine(formatted_line, index)
+            line_obj: LineBase = SimpleLine(formatted_line, index)
         else:
-            line = LineMatch(
+            line_obj = LineMatch(
                 formatted_line,
                 result,
                 index,
@@ -48,12 +51,12 @@ def get_line_objs_from_lines(input_lines, validate_file_exists=True, all_input=F
                 all_input=all_input,
             )
 
-        line_objs[index] = line
+        line_objs[index] = line_obj
 
     return line_objs
 
 
-def do_program(flags):
+def do_program(flags: ScreenFlags) -> None:
     file_path = state_files.get_pickle_file_path()
     line_objs = get_line_objs(flags)
     # pickle it so the next program can parse it
@@ -64,7 +67,7 @@ def usage() -> None:
     print(USAGE_STR)
 
 
-def main(argv) -> int:
+def main(argv: List[str]) -> int:
     flags = ScreenFlags.init_from_args(argv[1:])
     if flags.get_is_clean_mode():
         print("Cleaning out state files...")
