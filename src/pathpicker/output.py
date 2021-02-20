@@ -76,7 +76,7 @@ def debug(*args):
 
 
 def output_selection(line_objs):
-    file_path = state_files.getSelectionFilePath()
+    file_path = state_files.get_selection_file_path()
     indices = [line.index for line in line_objs]
     file = open(file_path, "wb")
     pickle.dump(indices, file)
@@ -208,7 +208,7 @@ def append_error(text):
 
 
 def append_to_file(command):
-    file = open(state_files.getScriptOutputFilePath(), "a")
+    file = open(state_files.get_script_output_file_path(), "a")
     file.write(command + "\n")
     file.close()
     logger.output()
@@ -229,7 +229,7 @@ def append_exit():
 
 
 def write_to_file(command):
-    file = open(state_files.getScriptOutputFilePath(), "w")
+    file = open(state_files.get_script_output_file_path(), "w")
     file.write(command + "\n")
     file.close()
     logger.output()

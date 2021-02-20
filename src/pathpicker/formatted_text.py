@@ -35,77 +35,77 @@ class FormattedText:
             # create the invariant that every segment has a formatting segment, e.g
             # we will always have FORMAT, TEXT, FORMAT, TEXT
             self.segments.insert(0, "")
-            self.plainText = "".join(self.segments[1::2])
+            self.plain_text = "".join(self.segments[1::2])
 
     def __str__(self):
-        return self.plainText
+        return self.plain_text
 
     @classmethod
-    def parseFormatting(cls, formatting):
+    def parse_formatting(cls, formatting):
         """Parse ANSI formatting; the formatting passed in should be
         stripped of the control characters and ending character"""
-        fore = -1  # -1 default means "use default", not "use white/black"
-        back = -1
+        fg_color = -1  # -1 default means "use default", not "use white/black"
+        bg_color = -1
         other = 0
-        intValues = [int(value) for value in formatting.split(";") if value]
-        for code in intValues:
+        int_values = [int(value) for value in formatting.split(";") if value]
+        for code in int_values:
             if cls.FOREGROUND_RANGE.bottom <= code <= cls.FOREGROUND_RANGE.top:
-                fore = code - cls.FOREGROUND_RANGE.bottom
+                fg_color = code - cls.FOREGROUND_RANGE.bottom
             elif cls.BACKGROUND_RANGE.bottom <= code <= cls.BACKGROUND_RANGE.top:
-                back = code - cls.BACKGROUND_RANGE.bottom
+                bg_color = code - cls.BACKGROUND_RANGE.bottom
             elif code == cls.BOLD_ATTRIBUTE:
                 other = other | curses.A_BOLD
             elif code == cls.UNDERLINE_ATTRIBUTE:
                 other = other | curses.A_UNDERLINE
 
-        return (fore, back, other)
+        return fg_color, bg_color, other
 
     @classmethod
-    def getSequenceForAttributes(cls, fore, back, attr):
+    def get_sequence_for_attributes(cls, fg_color, bg_color, attr):
         """Return a fully formed escape sequence for the color pair
         and additional attributes"""
         return (
             "\x1b["
-            + str(cls.FOREGROUND_RANGE.bottom + fore)
+            + str(cls.FOREGROUND_RANGE.bottom + fg_color)
             + ";"
-            + str(cls.BACKGROUND_RANGE.bottom + back)
+            + str(cls.BACKGROUND_RANGE.bottom + bg_color)
             + ";"
             + str(attr)
             + "m"
         )
 
-    def printText(self, y, x, printer, maxLen):
+    def print_text(self, y_pos, x_pos, printer, max_len):
         """Print out using ncurses. Note that if any formatting changes
         occur, the attribute set is changed and not restored"""
-        printedSoFar = 0
+        printed_so_far = 0
         for index, val in enumerate(self.segments):
-            if printedSoFar >= maxLen:
+            if printed_so_far >= max_len:
                 break
             if index % 2 == 1:
                 # text
-                toPrint = val[0 : maxLen - printedSoFar]
+                to_print = val[0 : max_len - printed_so_far]
                 printer.addstr(
-                    y, x + printedSoFar, toPrint, ColorPrinter.CURRENT_COLORS
+                    y_pos, x_pos + printed_so_far, to_print, ColorPrinter.CURRENT_COLORS
                 )
-                printedSoFar += len(toPrint)
+                printed_so_far += len(to_print)
             else:
                 # formatting
-                printer.set_attributes(*self.parseFormatting(val))
+                printer.set_attributes(*self.parse_formatting(val))
 
-    def findSegmentPlace(self, toGo):
+    def find_segment_place(self, to_go):
         index = 1
 
         while index < len(self.segments):
-            toGo -= len(self.segments[index])
-            if toGo < 0:
-                return (index, toGo)
+            to_go -= len(self.segments[index])
+            if to_go < 0:
+                return index, to_go
 
             index += 2
 
-        if toGo == 0:
+        if to_go == 0:
             # we could reach here if the requested place is equal
             # to the very end of the string (as we do a <0 above).
-            return (index - 2, len(self.segments[index - 2]))
+            return index - 2, len(self.segments[index - 2])
 
     def breakat(self, where):
         """Break the formatted text at the point given and return
@@ -119,22 +119,22 @@ class FormattedText:
         # FORMAT, TEXT, FORMAT, TEXTBEFORE, FORMAT, TEXTAFTER, FORMAT, TEXT
         # --before----, segF,   [before],   segF,   [after],   -----after--
         # ----index---------------/
-        (index, splitPoint) = self.findSegmentPlace(where)
-        textSegment = self.segments[index]
-        beforeText = textSegment[:splitPoint]
-        afterText = textSegment[splitPoint:]
-        beforeSegments = self.segments[:index]
-        afterSegments = self.segments[index + 1 :]
+        (index, split_point) = self.find_segment_place(where)
+        text_segment = self.segments[index]
+        before_text = text_segment[:split_point]
+        after_text = text_segment[split_point:]
+        before_segments = self.segments[:index]
+        after_segments = self.segments[index + 1 :]
 
-        formattingForSegment = self.segments[index - 1]
+        formatting_for_segment = self.segments[index - 1]
 
-        beforeFormattedText = FormattedText()
-        afterFormattedText = FormattedText()
-        beforeFormattedText.segments = beforeSegments + [beforeText]
-        afterFormattedText.segments = (
-            [formattingForSegment] + [afterText] + afterSegments
+        before_formatted_text = FormattedText()
+        after_formatted_text = FormattedText()
+        before_formatted_text.segments = before_segments + [before_text]
+        after_formatted_text.segments = (
+            [formatting_for_segment] + [after_text] + after_segments
         )
-        beforeFormattedText.plainText = self.plainText[:where]
-        afterFormattedText.plainText = self.plainText[where:]
+        before_formatted_text.plain_text = self.plain_text[:where]
+        after_formatted_text.plain_text = self.plain_text[where:]
 
-        return (beforeFormattedText, afterFormattedText)
+        return before_formatted_text, after_formatted_text

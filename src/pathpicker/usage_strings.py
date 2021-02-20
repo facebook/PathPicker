@@ -171,8 +171,8 @@ USAGE_STR = (
     + USAGE_TAIL
 )
 
-decorator = "*" * 80
-USAGE_STR = decorator + "\n" + USAGE_STR + "\n" + decorator
+DECORATOR = "*" * 80
+USAGE_STR = DECORATOR + "\n" + USAGE_STR + "\n" + DECORATOR
 
 
 MANPAGE_STR = "\n\n".join(

@@ -277,7 +277,7 @@ class Controller:
     def __init__(self, flags, keyBindings, stdscr, lineObjs, cursesAPI):
         self.stdscr = stdscr
         self.cursesAPI = cursesAPI
-        self.cursesAPI.useDefaultColors()
+        self.cursesAPI.use_default_colors()
         self.colorPrinter = ColorPrinter(self.stdscr, cursesAPI)
         self.flags = flags
         self.keyBindings = keyBindings
@@ -493,7 +493,7 @@ class Controller:
             toUse = self.getHoveredPaths()
 
         # save the selection we are using
-        if self.cursesAPI.allowFileOutput():
+        if self.cursesAPI.allow_file_output():
             output.output_selection(toUse)
         return toUse
 

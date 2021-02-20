@@ -45,7 +45,7 @@ def doProgram(
 
 
 def getLineObjs():
-    filePath = state_files.getPickleFilePath()
+    filePath = state_files.get_pickle_file_path()
     try:
         lineObjs = pickle.load(open(filePath, "rb"))
     except (OSError, KeyError, pickle.PickleError):
@@ -54,7 +54,7 @@ def getLineObjs():
         sys.exit(1)
     logger.add_event("total_num_files", len(lineObjs))
 
-    selectionPath = state_files.getSelectionFilePath()
+    selectionPath = state_files.get_selection_file_path()
     if os.path.isfile(selectionPath):
         setSelectionsFromPickle(selectionPath, lineObjs)
 
@@ -87,7 +87,7 @@ def setSelectionsFromPickle(selectionPath, lineObjs):
 
 
 def main(argv) -> int:
-    file_path = state_files.getPickleFilePath()
+    file_path = state_files.get_pickle_file_path()
     if not os.path.exists(file_path):
         print("Nothing to do!")
         output.write_to_file('echo ":D";')

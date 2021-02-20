@@ -18,7 +18,7 @@ class ColorPrinter:
         # in general, we want to use -1,-1 for most "normal" text printing
         self.colors[(-1, -1)] = self.DEFAULT_COLOR_INDEX
         self.curses_api = curses_api
-        self.curses_api.initPair(self.DEFAULT_COLOR_INDEX, -1, -1)
+        self.curses_api.init_pair(self.DEFAULT_COLOR_INDEX, -1, -1)
         self.screen = screen
         self.current_attributes = False  # initialized in set_attributes
 
@@ -30,14 +30,14 @@ class ColorPrinter:
         color_pair = (fg_color, bg_color)
         if color_pair not in self.colors:
             new_index = len(self.colors)
-            if new_index < self.curses_api.getColorPairs():
-                self.curses_api.initPair(new_index, fg_color, bg_color)
+            if new_index < self.curses_api.get_color_pairs():
+                self.curses_api.init_pair(new_index, fg_color, bg_color)
                 self.colors[color_pair] = new_index
                 color_index = new_index
         else:
             color_index = self.colors[color_pair]
 
-        attr = self.curses_api.colorPair(color_index)
+        attr = self.curses_api.color_pair(color_index)
 
         attr = attr | other
 
@@ -45,7 +45,7 @@ class ColorPrinter:
 
     def addstr(self, y_pos, x_pos, text, attr=None):
         if attr is None:
-            attr = self.curses_api.colorPair(self.DEFAULT_COLOR_INDEX)
+            attr = self.curses_api.color_pair(self.DEFAULT_COLOR_INDEX)
         elif attr == self.CURRENT_COLORS:
             attr = self.current_attributes
 
@@ -59,6 +59,6 @@ class ColorPrinter:
     # perhaps there's a more elegant way to do this
     def clear_segment(self, y_pos, start_x, end_x):
         space_str = " " * (end_x - start_x)
-        attr = self.curses_api.colorPair(self.DEFAULT_COLOR_INDEX)
+        attr = self.curses_api.color_pair(self.DEFAULT_COLOR_INDEX)
 
         self.screen.addstr(y_pos, start_x, space_str, attr)

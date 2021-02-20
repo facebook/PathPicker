@@ -10,37 +10,37 @@ class CursesForTest:
     stores some state in test runs of the UI"""
 
     def __init__(self):
-        self.isEcho = False
-        self.isDefaultColors = False
-        self.colorPairs = {}
-        self.currentColor = (0, 0)
+        self.is_echo = False
+        self.is_default_colors = False
+        self.color_pairs = {}
+        self.current_color = (0, 0)
         # the (0, 0) is hardcoded
-        self.colorPairs[0] = self.currentColor
+        self.color_pairs[0] = self.current_color
 
-    def useDefaultColors(self):
-        self.isDefaultColors = True
+    def use_default_colors(self):
+        self.is_default_colors = True
 
     def echo(self):
-        self.isEcho = True
+        self.is_echo = True
 
     def noecho(self):
-        self.isEcho = False
+        self.is_echo = False
 
-    def initPair(self, pairNumber, fg, bg):
-        self.colorPairs[pairNumber] = (fg, bg)
+    def init_pair(self, pair_number, fg, bg):
+        self.color_pairs[pair_number] = (fg, bg)
 
-    def colorPair(self, colorNumber):
-        self.currentColor = self.colorPairs[colorNumber]
+    def color_pair(self, color_number):
+        self.current_color = self.color_pairs[color_number]
         # TOOD -- find a better return than this?
-        return colorNumber
+        return color_number
 
-    def getColorPairs(self):
+    def get_color_pairs(self):
         # pretend we are on 256 color
         return 256
 
     def exit(self):
         raise StopIteration("stopping program")
 
-    def allowFileOutput(self):
+    def allow_file_output(self):
         # do not output selection pickle
         return False

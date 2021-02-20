@@ -14,7 +14,7 @@ class CursesAPI:
     def __init__(self):
         pass
 
-    def useDefaultColors(self):
+    def use_default_colors(self):
         curses.use_default_colors()
 
     def echo(self):
@@ -23,18 +23,18 @@ class CursesAPI:
     def noecho(self):
         curses.noecho()
 
-    def initPair(self, pairNumber, fg, bg):
-        return curses.init_pair(pairNumber, fg, bg)
+    def init_pair(self, pair_number, fg_color, bg_color):
+        return curses.init_pair(pair_number, fg_color, bg_color)
 
-    def colorPair(self, colorNumber):
-        return curses.color_pair(colorNumber)
+    def color_pair(self, color_number):
+        return curses.color_pair(color_number)
 
-    def getColorPairs(self):
+    def get_color_pairs(self):
         assert hasattr(curses, "COLOR_PAIRS"), "curses is not initialized!"
         return curses.COLOR_PAIRS
 
     def exit(self):
         sys.exit(0)
 
-    def allowFileOutput(self):
+    def allow_file_output(self):
         return True

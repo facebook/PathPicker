@@ -11,7 +11,7 @@ OUTPUT_FILE = ".fpp.sh"
 LOGGER_FILE = ".fpp.log"
 
 
-def assertDirCreated():
+def assert_dir_created():
     path = os.path.expanduser(FPP_DIR)
     if os.path.isdir(path):
         return
@@ -22,32 +22,32 @@ def assertDirCreated():
             raise
 
 
-def getPickleFilePath():
-    assertDirCreated()
+def get_pickle_file_path():
+    assert_dir_created()
     return os.path.expanduser(os.path.join(FPP_DIR, PICKLE_FILE))
 
 
-def getSelectionFilePath():
-    assertDirCreated()
+def get_selection_file_path():
+    assert_dir_created()
     return os.path.expanduser(os.path.join(FPP_DIR, SELECTION_PICKLE))
 
 
-def getScriptOutputFilePath():
-    assertDirCreated()
+def get_script_output_file_path():
+    assert_dir_created()
     return os.path.expanduser(os.path.join(FPP_DIR, OUTPUT_FILE))
 
 
-def getLoggerFilePath():
-    assertDirCreated()
+def get_logger_file_path():
+    assert_dir_created()
     return os.path.expanduser(os.path.join(FPP_DIR, LOGGER_FILE))
 
 
-def getAllStateFiles():
+def get_all_state_files():
     # keep this update to date! We do not include
     # the script output path since that gets cleaned automatically
     return [
-        getPickleFilePath(),
-        getSelectionFilePath(),
-        getLoggerFilePath(),
-        getScriptOutputFilePath(),
+        get_pickle_file_path(),
+        get_selection_file_path(),
+        get_logger_file_path(),
+        get_script_output_file_path(),
     ]
