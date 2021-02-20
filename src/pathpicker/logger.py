@@ -13,7 +13,7 @@ from pathpicker import state_files
 
 
 def write_to_file(content):
-    file = open(state_files.getLoggerFilePath(), "w")
+    file = open(state_files.get_logger_file_path(), "w")
     file.write(content)
     file.close()
 

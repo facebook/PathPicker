@@ -54,7 +54,7 @@ def getLineObjsFromLines(inputLines, validateFileExists=True, allInput=False):
 
 
 def doProgram(flags):
-    filePath = state_files.getPickleFilePath()
+    filePath = state_files.get_pickle_file_path()
     lineObjs = getLineObjs(flags)
     # pickle it so the next program can parse it
     pickle.dump(lineObjs, open(filePath, "wb"))
@@ -68,20 +68,20 @@ def main(argv) -> int:
     flags = ScreenFlags.init_from_args(argv[1:])
     if flags.get_is_clean_mode():
         print("Cleaning out state files...")
-        for filePath in state_files.getAllStateFiles():
+        for filePath in state_files.get_all_state_files():
             if os.path.isfile(filePath):
                 os.remove(filePath)
-        print("Done! Removed %d files " % len(state_files.getAllStateFiles()))
+        print("Done! Removed %d files " % len(state_files.get_all_state_files()))
         return 0
     if sys.stdin.isatty():
-        if os.path.isfile(state_files.getPickleFilePath()):
+        if os.path.isfile(state_files.get_pickle_file_path()):
             print("Using previous input piped to fpp...")
         else:
             usage()
         # let the next stage parse the old version
     else:
         # delete the old selection
-        selection_path = state_files.getSelectionFilePath()
+        selection_path = state_files.get_selection_file_path()
         if os.path.isfile(selection_path):
             os.remove(selection_path)
         doProgram(flags)

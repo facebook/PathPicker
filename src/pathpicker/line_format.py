@@ -31,7 +31,7 @@ class SimpleLine:
             # wont be displayed!
             return
 
-        self.formatted_line.printText(y_pos, min_x, printer, max_len)
+        self.formatted_line.print_text(y_pos, min_x, printer, max_len)
 
     def __str__(self):
         return str(self.formatted_line)
@@ -242,7 +242,7 @@ class LineMatch:
             plain_text = begin_match + self.TRUNCATE_DECORATOR + end_match
 
         self.decorated_match = FormattedText(
-            FormattedText.getSequenceForAttributes(*attributes) + plain_text
+            FormattedText.get_sequence_for_attributes(*attributes) + plain_text
         )
 
     def get_decorator(self):
@@ -258,7 +258,7 @@ class LineMatch:
             return x_pos, max_len
 
         max_printable = min(len(str(text)), max_len)
-        text.printText(y_pos, x_pos, printer, max_printable)
+        text.print_text(y_pos, x_pos, printer, max_printable)
         return x_pos + max_printable, max_len - max_printable
 
     def output(self, printer):
