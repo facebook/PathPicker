@@ -294,7 +294,7 @@ class Controller:
         self.line_matches = []
 
         for line_obj in self.line_objs.values():
-            line_obj.controller = self
+            line_obj.set_controller(self)
             if not line_obj.is_simple():
                 self.line_matches.append(line_obj)
 

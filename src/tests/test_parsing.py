@@ -379,6 +379,8 @@ class TestParseFunction(unittest.TestCase):
     def test_unresolvable(self):
         file_line = ".../something/foo.py"
         result = parse.match_line(file_line)
+        if not result:
+            raise AssertionError(f'"{file_line}": no result')
         line_obj = LineMatch(FormattedText(file_line), result, 0)
         self.assertTrue(
             not line_obj.is_resolvable(), '"%s" should not be resolvable' % file_line
@@ -389,6 +391,8 @@ class TestParseFunction(unittest.TestCase):
         to_check = [case for case in FILE_TEST_CASES if case.match]
         for test_case in to_check:
             result = parse.match_line(test_case.test_input)
+            if not result:
+                raise AssertionError(f'"{test_case.test_input}": no result')
             line_obj = LineMatch(FormattedText(test_case.test_input), result, 0)
             self.assertTrue(
                 line_obj.is_resolvable(),

@@ -6,17 +6,35 @@ import curses
 import os
 import subprocess
 import time
+from abc import ABC, abstractmethod
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from pathpicker import parse
 from pathpicker.formatted_text import FormattedText
+from pathpicker.parse import MatchResult
+
+if TYPE_CHECKING:
+    from pathpicker.screen_control import Controller
 
 
-class SimpleLine:
-    def __init__(self, formatted_line, index):
+class LineBase(ABC):
+    def __init__(self):
+        self.controller = None
+
+    def set_controller(self, controller: "Controller") -> None:
+        self.controller = controller
+
+    @abstractmethod
+    def is_simple(self) -> bool:
+        pass
+
+
+class SimpleLine(LineBase):
+    def __init__(self, formatted_line: FormattedText, index: int):
+        super().__init__()
         self.formatted_line = formatted_line
         self.index = index
-        self.controller = None
 
     def print_out(self):
         print(str(self))
@@ -40,16 +58,21 @@ class SimpleLine:
         return True
 
 
-class LineMatch:
+class LineMatch(LineBase):
     ARROW_DECORATOR = "|===>"
     # this is inserted between long files, so it looks like
     # ./src/foo/bar/something|...|baz/foo.py
     TRUNCATE_DECORATOR = "|...|"
 
     def __init__(
-        self, formatted_line, result, index, validate_file_exists=False, all_input=False
+        self,
+        formatted_line: FormattedText,
+        result: MatchResult,
+        index: int,
+        validate_file_exists: bool = False,
+        all_input: bool = False,
     ):
-        self.controller = None
+        super().__init__()
 
         self.formatted_line = formatted_line
         self.index = index
