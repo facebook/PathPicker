@@ -13,7 +13,7 @@ from tests.lib.key_bindings import (
 
 
 class TestKeyBindingsParser(unittest.TestCase):
-    def testIgnoreNonExistingConfigurationFile(self):
+    def test_ignore_non_existing_configuration_file(self):
         file = tempfile.NamedTemporaryFile(delete=True)
         file.close()
 
@@ -28,22 +28,22 @@ class TestKeyBindingsParser(unittest.TestCase):
             ),
         )
 
-    def testStandardParsing(self):
+    def test_standard_parsing(self):
         file = tempfile.NamedTemporaryFile(mode="wt", delete=False)
         file.write(KEY_BINDINGS_FOR_TEST_CONFIG_CONTENT)
         file.close()
 
         bindings = read_key_bindings(file.name)
 
-        actualResult = sorted(bindings)
-        expectedResult = KEY_BINDINGS_FOR_TEST
+        actual_result = sorted(bindings)
+        expected_result = KEY_BINDINGS_FOR_TEST
 
         self.assertEqual(
-            actualResult,
-            expectedResult,
+            actual_result,
+            expected_result,
             (
                 "The parser did not properly parse the test file\n\n"
-                f'Expected:"{expectedResult}"\nActual  :"{actualResult}"'
+                f'Expected:"{expected_result}"\nActual  :"{actual_result}"'
             ),
         )
 

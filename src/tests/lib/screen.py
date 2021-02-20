@@ -59,9 +59,9 @@ class ScreenForTest:
 
     def erase(self):
         self.output = {}
-        for x in range(self.max_x):
-            for y in range(self.max_y):
-                coord = (x, y)
+        for x_pos in range(self.max_x):
+            for y_pos in range(self.max_y):
+                coord = (x_pos, y_pos)
                 self.output[coord] = ("", 1)
 
     def move(self, y_pos, x_pos):
@@ -74,8 +74,8 @@ class ScreenForTest:
     def addstr(self, y_pos, x_pos, string, attr=None):
         if attr:
             self.attrset(attr)
-        for deltaX, value in enumerate(string):
-            coord = (x_pos + deltaX, y_pos)
+        for delta_x, value in enumerate(string):
+            coord = (x_pos + delta_x, y_pos)
             self.output[coord] = (value, self.current_attribute)
 
     def delch(self, y_pos, x_pos):
@@ -95,9 +95,9 @@ class ScreenForTest:
             print("Row %02d:%s" % (index, row))
 
     def print_old_screens(self):
-        for oldScreen in range(self.get_num_past_screens()):
-            for index, row in enumerate(self.get_rows_for_past_screen(oldScreen)):
-                print("Screen %02d Row %02d:%s" % (oldScreen, index, row))
+        for old_screen in range(self.get_num_past_screens()):
+            for index, row in enumerate(self.get_rows_for_past_screen(old_screen)):
+                print("Screen %02d Row %02d:%s" % (old_screen, index, row))
 
     def get_num_past_screens(self):
         return len(self.past_screens)
@@ -131,11 +131,11 @@ class ScreenForTest:
 
         rows = []
         attribute_rows = []
-        for y in range(self.max_y):
+        for y_pos in range(self.max_y):
             row = ""
             attribute_row = ""
-            for x in range(self.max_x):
-                coord = (x, y)
+            for x_pos in range(self.max_x):
+                coord = (x_pos, y_pos)
                 (char, attr) = screen[coord]
                 row += char
                 attribute_row += self.get_attribute_symbol_for_code(attr)

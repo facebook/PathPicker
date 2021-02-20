@@ -26,8 +26,8 @@ class CursesForTest:
     def noecho(self):
         self.is_echo = False
 
-    def init_pair(self, pair_number, fg, bg):
-        self.color_pairs[pair_number] = (fg, bg)
+    def init_pair(self, pair_number, fg_color, bg_color):
+        self.color_pairs[pair_number] = (fg_color, bg_color)
 
     def color_pair(self, color_number):
         self.current_color = self.color_pairs[color_number]

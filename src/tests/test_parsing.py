@@ -346,19 +346,19 @@ TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class TestParseFunction(unittest.TestCase):
-    def testPrependDir(self):
-        for testCase in PREPEND_DIR_TEST_CASES:
-            inFile = testCase["in"]
+    def test_prepend_dir(self):
+        for test_case in PREPEND_DIR_TEST_CASES:
+            in_file = test_case["in"]
 
-            result = parse.prepend_dir(inFile)
-            expected = testCase["out"]
-            if inFile[0:2] == "~/":
+            result = parse.prepend_dir(in_file)
+            expected = test_case["out"]
+            if in_file[0:2] == "~/":
                 expected = os.path.expanduser(expected)
 
             self.assertEqual(expected, result)
         print("Tested %d dir cases." % len(PREPEND_DIR_TEST_CASES))
 
-    def testFileFuzz(self):
+    def test_file_fuzz(self):
         befores = ["M ", "Modified: ", "Changed: ", "+++ ", "Banana asdasdoj pjo "]
         afters = [
             " * Adapts AdsErrorCodestore to something",
@@ -373,10 +373,10 @@ class TestParseFunction(unittest.TestCase):
                 for after in afters:
                     test_input = "%s%s%s" % (before, test_case.test_input, after)
                     this_case = test_case._replace(test_input=test_input)
-                    self.checkFileResult(this_case)
+                    self.check_file_result(this_case)
         print("Tested %d cases for file fuzz." % len(FILE_TEST_CASES))
 
-    def testUnresolvable(self):
+    def test_unresolvable(self):
         file_line = ".../something/foo.py"
         result = parse.match_line(file_line)
         line_obj = LineMatch(FormattedText(file_line), result, 0)
@@ -385,7 +385,7 @@ class TestParseFunction(unittest.TestCase):
         )
         print("Tested unresolvable case.")
 
-    def testResolvable(self):
+    def test_resolvable(self):
         to_check = [case for case in FILE_TEST_CASES if case.match]
         for test_case in to_check:
             result = parse.match_line(test_case.test_input)
@@ -396,12 +396,12 @@ class TestParseFunction(unittest.TestCase):
             )
         print("Tested %d resolvable cases." % len(to_check))
 
-    def testFileMatch(self):
+    def test_file_match(self):
         for test_case in FILE_TEST_CASES:
-            self.checkFileResult(test_case)
+            self.check_file_result(test_case)
         print("Tested %d cases." % len(FILE_TEST_CASES))
 
-    def testAllInputMatches(self):
+    def test_all_input_matches(self):
         for test_case in ALL_INPUT_TEST_CASES:
             result = parse.match_line(test_case.test_input, False, True)
 
@@ -421,7 +421,7 @@ class TestParseFunction(unittest.TestCase):
 
         print("Tested %d cases for all-input matching." % len(ALL_INPUT_TEST_CASES))
 
-    def checkFileResult(self, test_case):
+    def check_file_result(self, test_case):
         working_dir = TESTS_DIR
         if test_case.working_dir is not None:
             working_dir = os.path.join(working_dir, test_case.working_dir)
