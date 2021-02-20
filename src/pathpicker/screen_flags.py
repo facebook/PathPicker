@@ -3,6 +3,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 import argparse
+from typing import List
 
 
 class ScreenFlags:
@@ -21,32 +22,32 @@ class ScreenFlags:
 
     """
 
-    def __init__(self, args):
+    def __init__(self, args: argparse.Namespace):
         self.args = args
 
-    def get_is_record_mode(self):
-        return self.args.record
+    def get_is_record_mode(self) -> bool:
+        return bool(self.args.record)
 
-    def get_preset_command(self):
+    def get_preset_command(self) -> str:
         return " ".join(self.args.command)
 
-    def get_execute_keys(self):
-        return self.args.execute_keys
+    def get_execute_keys(self) -> List[str]:
+        return list(self.args.execute_keys)
 
-    def get_is_clean_mode(self):
-        return self.args.clean
+    def get_is_clean_mode(self) -> bool:
+        return bool(self.args.clean)
 
-    def get_disable_file_checks(self):
-        return self.args.no_file_checks or self.args.all_input
+    def get_disable_file_checks(self) -> bool:
+        return bool(self.args.no_file_checks) or bool(self.args.all_input)
 
-    def get_all_input(self):
-        return self.args.all_input
+    def get_all_input(self) -> bool:
+        return bool(self.args.all_input)
 
-    def get_is_non_interactive(self):
-        return self.args.non_interactive
+    def get_is_non_interactive(self) -> bool:
+        return bool(self.args.non_interactive)
 
     @staticmethod
-    def get_arg_parser():
+    def get_arg_parser() -> argparse.ArgumentParser:
         parser = argparse.ArgumentParser(prog="fpp")
         parser.add_argument(
             "-r",
@@ -154,6 +155,6 @@ once the interactive editor has been entered.""",
         return parser
 
     @staticmethod
-    def init_from_args(argv):
+    def init_from_args(argv: List[str]) -> "ScreenFlags":
         (args, _chars) = ScreenFlags.get_arg_parser().parse_known_args(argv)
         return ScreenFlags(args)

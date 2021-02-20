@@ -41,7 +41,6 @@ class SimpleLine:
 
 
 class LineMatch:
-
     ARROW_DECORATOR = "|===>"
     # this is inserted between long files, so it looks like
     # ./src/foo/bar/something|...|baz/foo.py
