@@ -23,64 +23,66 @@ this error will go away)
 """
 
 
-def doProgram(
+def do_program(
     stdscr,
     flags,
-    keyBindings: Optional[KeyBindings] = None,
-    cursesAPI=None,
-    lineObjs=None,
+    key_bindings: Optional[KeyBindings] = None,
+    curses_api=None,
+    line_objs=None,
 ) -> None:
     # curses and lineObjs get dependency injected for
     # our tests, so init these if they are not provided
-    if not keyBindings:
-        keyBindings = read_key_bindings()
-    if not cursesAPI:
-        cursesAPI = CursesAPI()
-    if not lineObjs:
-        lineObjs = getLineObjs()
+    if not key_bindings:
+        key_bindings = read_key_bindings()
+    if not curses_api:
+        curses_api = CursesAPI()
+    if not line_objs:
+        line_objs = get_line_objs()
     output.clear_file()
     logger.clear_file()
-    screen = screen_control.Controller(flags, keyBindings, stdscr, lineObjs, cursesAPI)
+    screen = screen_control.Controller(
+        flags, key_bindings, stdscr, line_objs, curses_api
+    )
     screen.control()
 
 
-def getLineObjs():
-    filePath = state_files.get_pickle_file_path()
+def get_line_objs():
+    file_path = state_files.get_pickle_file_path()
     try:
-        lineObjs = pickle.load(open(filePath, "rb"))
+        line_objs = pickle.load(open(file_path, "rb"))
     except (OSError, KeyError, pickle.PickleError):
         output.append_error(LOAD_SELECTION_WARNING)
         output.append_exit()
         sys.exit(1)
-    logger.add_event("total_num_files", len(lineObjs))
+    logger.add_event("total_num_files", len(line_objs))
 
-    selectionPath = state_files.get_selection_file_path()
-    if os.path.isfile(selectionPath):
-        setSelectionsFromPickle(selectionPath, lineObjs)
+    selection_path = state_files.get_selection_file_path()
+    if os.path.isfile(selection_path):
+        set_selections_from_pickle(selection_path, line_objs)
 
-    matches = [lineObj for lineObj in lineObjs.values() if not lineObj.is_simple()]
+    matches = [lineObj for lineObj in line_objs.values() if not lineObj.is_simple()]
     if not matches:
         output.write_to_file('echo "No lines matched!";')
         output.append_exit()
         sys.exit(0)
-    return lineObjs
+    return line_objs
 
 
-def setSelectionsFromPickle(selectionPath, lineObjs):
+def set_selections_from_pickle(selection_path, line_objs):
     try:
-        selectedIndices = pickle.load(open(selectionPath, "rb"))
+        selected_indices = pickle.load(open(selection_path, "rb"))
     except (OSError, KeyError, pickle.PickleError):
         output.append_error(LOAD_SELECTION_WARNING)
         output.append_exit()
         sys.exit(1)
-    for index in selectedIndices:
-        if index >= len(lineObjs.items()):
+    for index in selected_indices:
+        if index >= len(line_objs.items()):
             error = "Found index %d more than total matches" % index
             output.append_error(error)
             continue
-        toSelect = lineObjs[index]
-        if isinstance(toSelect, LineMatch):
-            lineObjs[index].set_select(True)
+        to_select = line_objs[index]
+        if isinstance(to_select, LineMatch):
+            line_objs[index].set_select(True)
         else:
             error = "Line %d was selected but is not LineMatch" % index
             output.append_error(error)
@@ -98,7 +100,7 @@ def main(argv) -> int:
     # so we can benefit from the default argparse
     # behavior:
     flags = ScreenFlags.init_from_args(argv[1:])
-    curses.wrapper(lambda x: doProgram(x, flags))
+    curses.wrapper(lambda x: do_program(x, flags))
     return 0
 
 

@@ -13,51 +13,51 @@ from pathpicker.screen_flags import ScreenFlags
 from pathpicker.usage_strings import USAGE_STR
 
 
-def getLineObjs(flags):
-    inputLines = sys.stdin.readlines()
-    return getLineObjsFromLines(
-        inputLines,
-        validateFileExists=not flags.get_disable_file_checks(),
-        allInput=flags.get_all_input(),
+def get_line_objs(flags):
+    input_lines = sys.stdin.readlines()
+    return get_line_objs_from_lines(
+        input_lines,
+        validate_file_exists=not flags.get_disable_file_checks(),
+        all_input=flags.get_all_input(),
     )
 
 
-def getLineObjsFromLines(inputLines, validateFileExists=True, allInput=False):
-    lineObjs = {}
-    for index, line in enumerate(inputLines):
+def get_line_objs_from_lines(input_lines, validate_file_exists=True, all_input=False):
+    line_objs = {}
+    for index, line in enumerate(input_lines):
         line = line.replace("\t", "    ")
         # remove the new line as we place the cursor ourselves for each
         # line. this avoids curses errors when we newline past the end of the
         # screen
         line = line.replace("\n", "")
-        formattedLine = FormattedText(line)
+        formatted_line = FormattedText(line)
         result = parse.match_line(
-            str(formattedLine),
-            validate_file_exists=validateFileExists,
-            all_input=allInput,
+            str(formatted_line),
+            validate_file_exists=validate_file_exists,
+            all_input=all_input,
         )
 
         if not result:
-            line = SimpleLine(formattedLine, index)
+            line = SimpleLine(formatted_line, index)
         else:
             line = LineMatch(
-                formattedLine,
+                formatted_line,
                 result,
                 index,
-                validate_file_exists=validateFileExists,
-                all_input=allInput,
+                validate_file_exists=validate_file_exists,
+                all_input=all_input,
             )
 
-        lineObjs[index] = line
+        line_objs[index] = line
 
-    return lineObjs
+    return line_objs
 
 
-def doProgram(flags):
-    filePath = state_files.get_pickle_file_path()
-    lineObjs = getLineObjs(flags)
+def do_program(flags):
+    file_path = state_files.get_pickle_file_path()
+    line_objs = get_line_objs(flags)
     # pickle it so the next program can parse it
-    pickle.dump(lineObjs, open(filePath, "wb"))
+    pickle.dump(line_objs, open(file_path, "wb"))
 
 
 def usage():
@@ -68,9 +68,9 @@ def main(argv) -> int:
     flags = ScreenFlags.init_from_args(argv[1:])
     if flags.get_is_clean_mode():
         print("Cleaning out state files...")
-        for filePath in state_files.get_all_state_files():
-            if os.path.isfile(filePath):
-                os.remove(filePath)
+        for file_path in state_files.get_all_state_files():
+            if os.path.isfile(file_path):
+                os.remove(file_path)
         print("Done! Removed %d files " % len(state_files.get_all_state_files()))
         return 0
     if sys.stdin.isatty():
@@ -84,7 +84,7 @@ def main(argv) -> int:
         selection_path = state_files.get_selection_file_path()
         if os.path.isfile(selection_path):
             os.remove(selection_path)
-        doProgram(flags)
+        do_program(flags)
     return 0
 
 

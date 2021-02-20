@@ -19,8 +19,8 @@ def getLineObjsFromFile(inputFile, validateFileExists, allInput):
     file = open(inputFile)
     lines = file.read().split("\n")
     file.close()
-    return process_input.getLineObjsFromLines(
-        lines, validateFileExists=validateFileExists, allInput=allInput
+    return process_input.get_line_objs_from_lines(
+        lines, validate_file_exists=validateFileExists, all_input=allInput
     )
 
 
@@ -53,7 +53,7 @@ def getRowsFromScreenRun(
     # we run our program and throw a StopIteration exception
     # instead of sys.exit-ing
     try:
-        choose.doProgram(
+        choose.do_program(
             screen, flags, KEY_BINDINGS_FOR_TEST, CursesForTest(), lineObjs
         )
     except StopIteration:
