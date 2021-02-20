@@ -31,7 +31,7 @@ class CursesForTest:
 
     def color_pair(self, color_number):
         self.current_color = self.color_pairs[color_number]
-        # TOOD -- find a better return than this?
+        # TODO -- find a better return than this?
         return color_number
 
     def get_color_pairs(self):

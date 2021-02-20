@@ -12,16 +12,16 @@ from pathpicker import logger
 from pathpicker.repos import REPOS
 
 MASTER_REGEX = re.compile(
-    r"(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?"
+    r"(/?([a-z.A-Z0-9\-_]+/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]?(\d+)?"
 )
 MASTER_REGEX_MORE_EXTENSIONS = re.compile(
-    r"(\/?([a-z.A-Z0-9\-_]+\/)+[+@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9-~]{1,30})[:-]{0,1}(\d+)?"
+    r"(/?([a-z.A-Z0-9\-_]+/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9-~]{1,30})[:-]?(\d+)?"
 )
 HOMEDIR_REGEX = re.compile(
-    r"(~\/([a-z.A-Z0-9\-_]+\/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]{0,1}(\d+)?"
+    r"(~/([a-z.A-Z0-9\-_]+/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]?(\d+)?"
 )
 OTHER_BGS_RESULT_REGEX = re.compile(
-    r"(\/?([a-z.A-Z0-9\-_]+\/)+[a-zA-Z0-9_.]{3,})[:-]{0,1}(\d+)"
+    r"(/?([a-z.A-Z0-9\-_]+/)+[a-zA-Z0-9_.]{3,})[:-]?(\d+)"
 )
 ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE = re.compile(r"(\S.*\S|\S)")
 JUST_FILE_WITH_NUMBER = re.compile(
@@ -36,20 +36,20 @@ JUST_FILE_WITH_SPACES = re.compile(
 )
 FILE_NO_PERIODS = re.compile(
     (
-        "("
+        r"("
         # Recognized files starting with a dot followed by at least 3 characters
-        r"((\/?([a-z.A-Z0-9\-_]+\/))?\.[a-zA-Z0-9\-_]{3,}[a-zA-Z0-9\-_\/]*)"
+        r"((/?([a-z.A-Z0-9\-_]+/))?\.[a-zA-Z0-9\-_]{3,}[a-zA-Z0-9\-_/]*)"
         # or
-        "|"
+        r"|"
         # Recognize files containing at least one slash
-        r"([a-z.A-Z0-9\-_\/]{1,}\/[a-zA-Z0-9\-_]{1,})"
+        r"([a-z.A-Z0-9\-_/]+/[a-zA-Z0-9\-_]+)"
         # or
-        "|"
+        r"|"
         # Recognize files starting with capital letter and ending in "file".
         # eg. Makefile
         r"([A-Z][a-zA-Z]{2,}file)"
         # end trying to capture
-        ")"
+        r")"
         # Regardless of the above case, here's how the file name should terminate
         r"(\s|$|:)+"
     )
@@ -58,11 +58,11 @@ FILE_NO_PERIODS = re.compile(
 MASTER_REGEX_WITH_SPACES_AND_WEIRD_FILES = re.compile(
     (
         # begin the capture
-        "("
+        r"("
         # capture some pre-dir stuff like / and ./
         r"(?:"
-        r"\.?\/"
-        ")?"  # thats optional
+        r"\.?/"
+        r")?"  # thats optional
         # now we look at directories. The 'character class ' allowed before the '/'
         # is either a real character or a character and a space. This allows
         # multiple spaces in a directory as long as each space is followed by
@@ -77,30 +77,30 @@ MASTER_REGEX_WITH_SPACES_AND_WEIRD_FILES = re.compile(
         # but these will not:
         #   /two  spaces  here/
         #   /ending in a space /
-        r"(([a-z.A-Z0-9\-_]|\s[a-zA-Z0-9\-_])+\/)+"
+        r"(([a-z.A-Z0-9\-_]|\s[a-zA-Z0-9\-_])+/)+"
         # Recognized files starting with a dot followed by at least 3 characters
-        r"((\/?([a-z.A-Z0-9\-_]+\/))?\.[a-zA-Z0-9\-_]{3,}[a-zA-Z0-9\-_\/]*)"
+        r"((/?([a-z.A-Z0-9\-_]+/))?\.[a-zA-Z0-9\-_]{3,}[a-zA-Z0-9\-_/]*)"
         # or
-        "|"
+        r"|"
         # Recognize files containing at least one slash
-        r"([a-z.A-Z0-9\-_\/]{1,}\/[a-zA-Z0-9\-_]{1,})"
+        r"([a-z.A-Z0-9\-_/]+/[a-zA-Z0-9\-_]+)"
         # or
-        "|"
+        r"|"
         # Recognize files starting with capital letter and ending in "file".
         # eg. Makefile
         r"([A-Z][a-zA-Z]{2,}file)"
-        ")"
+        r")"
     )
 )
 
 MASTER_REGEX_WITH_SPACES = re.compile(
     (
         # begin the capture
-        "("
+        r"("
         # capture some pre-dir stuff like / and ./
         r"(?:"
-        r"\.?\/"
-        ")?"  # thats optional
+        r"\.?/"
+        r")?"  # thats optional
         # now we look at directories. The 'character class ' allowed before the '/'
         # is either a real character or a character and a space. This allows
         # multiple spaces in a directory as long as each space is followed by
@@ -115,17 +115,17 @@ MASTER_REGEX_WITH_SPACES = re.compile(
         # but these will not:
         #   /two  spaces  here/
         #   /ending in a space /
-        r"(([a-z.A-Z0-9\-_]|\s[a-zA-Z0-9\-_])+\/)+"
+        r"(([a-z.A-Z0-9\-_]|\s[a-zA-Z0-9\-_])+/)+"
         # we do similar for the filename part. the 'character class' is
         # char or char with space following, with some added tokens like @
         # for retina files.
-        r"([\(\),%@a-zA-Z0-9\-_+.]|\s[,\(\)@%a-zA-Z0-9\-_+.])+"
+        r"([(),%@a-zA-Z0-9\-_+.]|\s[,()@%a-zA-Z0-9\-_+.])+"
         # extensions dont allow spaces
         r"\.[a-zA-Z0-9-]{1,30}"
         # end capture
         ")"
         # optionally capture the line number
-        r"[:-]{0,1}(\d+)?"
+        r"[:-]?(\d+)?"
     )
 )
 
@@ -205,7 +205,7 @@ REGEX_WATERFALL: List[RegexConfig] = [
         JUST_FILE,
         no_num=True,
     ),
-    # Ok if thats not there, try do to filesystem validation
+    # Ok if that's not there, try do to filesystem validation
     # for just files with spaces
     RegexConfig(
         "JUST_FILE_WITH_SPACES",
@@ -214,7 +214,7 @@ REGEX_WATERFALL: List[RegexConfig] = [
         only_with_file_inspection=True,
     ),
     # Ok finally it might be a file with no periods. we test
-    # this last since its more restrictive, because we dont
+    # this last since its more restrictive, because we don't
     # want to match things like cx('foo/root'). hence
     # we require some minimum number of slashes and minimum
     # file name length
@@ -300,7 +300,7 @@ def match_line(line, validate_file_exists=False, all_input=False):
 def match_line_impl(line, with_file_inspection=False, with_all_lines_matched=False):
     # ok new behavior -- we will actually collect **ALL** results
     # of the regexes since filesystem validation might filter some
-    # of the earlier ones out (particulary those with hyphens)
+    # of the earlier ones out (particularly those with hyphens)
     results = []
     for regex_config in REGEX_WATERFALL:
         regex = regex_config.regex
@@ -379,7 +379,7 @@ def prepend_dir(file, with_file_inspection=False):
         return "./" + file
 
     # git show and diff has a/stuff and b/stuff, so handle that. git
-    # status never does this so we dont need to worry about relative dirs
+    # status never does this so we don't need to worry about relative dirs
     if file[0:2] == "a/" or file[0:2] == "b/":
         return PREPEND_PATH + file[2:]
 
