@@ -23,9 +23,9 @@ class SimpleLine:
 
     def output(self, printer):
         assert self.controller is not None
-        (min_x, min_y, max_x, max_y) = self.controller.getChromeBoundaries()
+        (min_x, min_y, max_x, max_y) = self.controller.get_chrome_boundaries()
         max_len = min(max_x - min_x, len(str(self)))
-        y_pos = min_y + self.index + self.controller.getScrollOffset()
+        y_pos = min_y + self.index + self.controller.get_scroll_offset()
 
         if y_pos < min_y or y_pos >= max_y:
             # wont be displayed!
@@ -263,8 +263,8 @@ class LineMatch:
 
     def output(self, printer):
         assert self.controller is not None
-        (min_x, min_y, max_x, max_y) = self.controller.getChromeBoundaries()
-        y_pos = min_y + self.index + self.controller.getScrollOffset()
+        (min_x, min_y, max_x, max_y) = self.controller.get_chrome_boundaries()
+        y_pos = min_y + self.index + self.controller.get_scroll_offset()
 
         if y_pos < min_y or y_pos >= max_y:
             # wont be displayed!
