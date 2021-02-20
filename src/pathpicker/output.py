@@ -9,8 +9,8 @@ from pathpicker import logger, state_files
 from pathpicker.line_format import LineMatch
 
 DEBUG = "~/.fbPager.debug.text"
-RED_COLOR = u"\033[0;31m"
-NO_COLOR = u"\033[0m"
+RED_COLOR = "\033[0;31m"
+NO_COLOR = "\033[0m"
 
 INVALID_FILE_WARNING = """
 Warning! Some invalid or unresolvable files were detected.
@@ -67,12 +67,12 @@ def append_if_invalid(line_objs):
     append_error(INVALID_FILE_WARNING)
     if any(map(LineMatch.is_git_abbreviated_path, invalid_lines)):
         append_error(GIT_ABBREVIATION_WARNING)
-    append_to_file('read -p "%s" -r' % CONTINUE_WARNING)
+    append_to_file(f'read -p "{CONTINUE_WARNING}" -r')
 
 
 def debug(*args):
     for arg in args:
-        append_to_file('echo "DEBUG: ' + str(arg) + '"')
+        append_to_file(f'echo "DEBUG: {str(arg)}"')
 
 
 def output_selection(line_objs):
@@ -91,7 +91,7 @@ def get_editor_and_path():
     )
     if editor_path:
         editor = os.path.basename(editor_path)
-        logger.add_event("using_editor_" + editor)
+        logger.add_event(f"using_editor_{editor}")
         return editor, editor_path
     return "vim", "vim"
 
@@ -108,14 +108,14 @@ def join_files_into_command(files_and_line_numbers):
     cmd = editor_path + " "
     if editor == "vim -p":
         first_file_path, first_line_num = files_and_line_numbers[0]
-        cmd += " +%d %s" % (first_line_num, first_file_path)
+        cmd += f" +{first_line_num} {first_file_path}"
         for (file_path, line_num) in files_and_line_numbers[1:]:
-            cmd += ' +"tabnew +%d %s"' % (line_num, file_path)
+            cmd += f' +"tabnew +{line_num} {file_path}"'
     elif editor in ["vim", "mvim", "nvim"] and not os.environ.get("FPP_DISABLE_SPLIT"):
         first_file_path, first_line_num = files_and_line_numbers[0]
-        cmd += " +%d %s" % (first_line_num, first_file_path)
+        cmd += f" +{first_line_num} {first_file_path}"
         for (file_path, line_num) in files_and_line_numbers[1:]:
-            cmd += ' +"vsp +%d %s"' % (line_num, file_path)
+            cmd += f' +"vsp +{line_num} {file_path}"'
     else:
         for (file_path, line_num) in files_and_line_numbers:
             editor_without_args = editor.split()[0]
@@ -124,17 +124,13 @@ def join_files_into_command(files_and_line_numbers):
                 in ["vi", "nvim", "nano", "joe", "emacs", "emacsclient"]
                 and line_num != 0
             ):
-                cmd += " +%d '%s'" % (line_num, file_path)
+                cmd += f" +{line_num} '{file_path}'"
             elif editor_without_args in ["subl", "sublime", "atom"] and line_num != 0:
-                cmd += " '%s:%d'" % (file_path, line_num)
+                cmd += f" '{file_path}:{line_num}'"
             elif line_num != 0 and os.environ.get("FPP_LINENUM_SEP"):
-                cmd += " '%s%s%d'" % (
-                    file_path,
-                    os.environ.get("FPP_LINENUM_SEP"),
-                    line_num,
-                )
+                cmd += f" '{file_path}{os.environ.get('FPP_LINENUM_SEP')}{line_num}'"
             else:
-                cmd += " '%s'" % file_path
+                cmd += f" '{file_path}'"
     return cmd
 
 
@@ -160,7 +156,7 @@ def compose_command(command, line_objs):
 
 def compose_file_command(command, line_objs):
     command = command.encode().decode("utf-8")
-    paths = ["'%s'" % lineObj.get_path() for lineObj in line_objs]
+    paths = [f"'{line_obj.get_path()}'" for line_obj in line_objs]
     path_str = " ".join(paths)
     if "$F" in command:
         command = command.replace("$F", path_str)
@@ -196,15 +192,13 @@ fi
 
 
 def append_friendly_command(command):
-    header = (
-        'echo "executing command:"\n' + 'echo "' + command.replace('"', '\\"') + '"'
-    )
+    header = 'echo "executing command:"\necho "' + command.replace('"', '\\"') + '"'
     append_to_file(header)
     append_to_file(command)
 
 
 def append_error(text):
-    append_to_file('printf "%s%s%s\n"' % (RED_COLOR, text, NO_COLOR))
+    append_to_file(f'printf "{RED_COLOR}{text}{NO_COLOR}\n"')
 
 
 def append_to_file(command):
@@ -225,7 +219,7 @@ def append_exit():
     # Otherwise we assume a Bournal-like shell, e.g. bash and zsh.
     else:
         exit_status = "$?"
-    append_to_file("exit {status};".format(status=exit_status))
+    append_to_file(f"exit {exit_status};")
 
 
 def write_to_file(command):

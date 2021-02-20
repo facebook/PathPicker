@@ -92,12 +92,12 @@ class ScreenForTest:
 
     def print_screen(self):
         for index, row in enumerate(self.get_rows()):
-            print("Row %02d:%s" % (index, row))
+            print(f"Row {index:02}:{row}")
 
     def print_old_screens(self):
         for old_screen in range(self.get_num_past_screens()):
             for index, row in enumerate(self.get_rows_for_past_screen(old_screen)):
-                print("Screen %02d Row %02d:%s" % (old_screen, index, row))
+                print(f"Screen {old_screen:02} Row {index:02}:{row}")
 
     def get_num_past_screens(self):
         return len(self.past_screens)
@@ -150,5 +150,5 @@ class ScreenForTest:
     def get_attribute_symbol_for_code(self, code):
         symbol = ATTRIBUTE_SYMBOL_MAPPING.get(code, None)
         if symbol is None:
-            raise ValueError("%d not mapped" % code)
+            raise ValueError(f"{code} not mapped")
         return symbol

@@ -356,7 +356,7 @@ class TestParseFunction(unittest.TestCase):
                 expected = os.path.expanduser(expected)
 
             self.assertEqual(expected, result)
-        print("Tested %d dir cases." % len(PREPEND_DIR_TEST_CASES))
+        print(f"Tested {len(PREPEND_DIR_TEST_CASES)} dir cases.")
 
     def test_file_fuzz(self):
         befores = ["M ", "Modified: ", "Changed: ", "+++ ", "Banana asdasdoj pjo "]
@@ -371,10 +371,10 @@ class TestParseFunction(unittest.TestCase):
                 continue
             for before in befores:
                 for after in afters:
-                    test_input = "%s%s%s" % (before, test_case.test_input, after)
+                    test_input = f"{before}{test_case.test_input}{after}"
                     this_case = test_case._replace(test_input=test_input)
                     self.check_file_result(this_case)
-        print("Tested %d cases for file fuzz." % len(FILE_TEST_CASES))
+        print(f"Tested {len(FILE_TEST_CASES)} cases for file fuzz.")
 
     def test_unresolvable(self):
         file_line = ".../something/foo.py"
@@ -383,7 +383,7 @@ class TestParseFunction(unittest.TestCase):
             raise AssertionError(f'"{file_line}": no result')
         line_obj = LineMatch(FormattedText(file_line), result, 0)
         self.assertTrue(
-            not line_obj.is_resolvable(), '"%s" should not be resolvable' % file_line
+            not line_obj.is_resolvable(), f'"{file_line}" should not be resolvable'
         )
         print("Tested unresolvable case.")
 
@@ -396,14 +396,14 @@ class TestParseFunction(unittest.TestCase):
             line_obj = LineMatch(FormattedText(test_case.test_input), result, 0)
             self.assertTrue(
                 line_obj.is_resolvable(),
-                'Line "%s" was not resolvable' % test_case.test_input,
+                f'Line "{test_case.test_input}" was not resolvable',
             )
-        print("Tested %d resolvable cases." % len(to_check))
+        print(f"Tested {len(to_check)} resolvable cases.")
 
     def test_file_match(self):
         for test_case in FILE_TEST_CASES:
             self.check_file_result(test_case)
-        print("Tested %d cases." % len(FILE_TEST_CASES))
+        print(f"Tested {len(FILE_TEST_CASES)} cases.")
 
     def test_all_input_matches(self):
         for test_case in ALL_INPUT_TEST_CASES:
@@ -412,7 +412,7 @@ class TestParseFunction(unittest.TestCase):
             if not result:
                 self.assertTrue(
                     test_case.match is None,
-                    'Expected a match "%s" where one did not occur.' % test_case.match,
+                    f'Expected a match "{test_case.match}" where one did not occur.',
                 )
                 continue
 
@@ -420,10 +420,10 @@ class TestParseFunction(unittest.TestCase):
             self.assertEqual(
                 match,
                 test_case.match,
-                'Line "%s" did not match.' % test_case.test_input,
+                f'Line "{test_case.test_input}" did not match.',
             )
 
-        print("Tested %d cases for all-input matching." % len(ALL_INPUT_TEST_CASES))
+        print(f"Tested {len(ALL_INPUT_TEST_CASES)} cases for all-input matching.")
 
     def check_file_result(self, test_case):
         working_dir = TESTS_DIR
@@ -437,24 +437,23 @@ class TestParseFunction(unittest.TestCase):
         if not result:
             self.assertFalse(
                 test_case.match,
-                'Line "%s" did not match any regex' % test_case.test_input,
+                f'Line "{test_case.test_input}" did not match any regex',
             )
             return
 
         file, num, _match = result
-        self.assertTrue(test_case.match, 'Line "%s" did match' % test_case.test_input)
+        self.assertTrue(test_case.match, f'Line "{test_case.test_input}" did match')
 
         self.assertEqual(
             test_case.file,
             file,
-            "files not equal |%s| |%s|" % (test_case.file, file),
+            f"files not equal |{test_case.file}| |{file}|",
         )
 
         self.assertEqual(
             test_case.num,
             num,
-            "num matches not equal %d %d for %s"
-            % (test_case.num, num, test_case.test_input),
+            f"num matches not equal {test_case.num} {num} for {test_case.test_input}",
         )
 
 
