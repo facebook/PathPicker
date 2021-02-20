@@ -77,14 +77,14 @@ def set_selections_from_pickle(selection_path, line_objs) -> None:
         sys.exit(1)
     for index in selected_indices:
         if index >= len(line_objs.items()):
-            error = "Found index %d more than total matches" % index
+            error = f"Found index {index} more than total matches"
             output.append_error(error)
             continue
         to_select = line_objs[index]
         if isinstance(to_select, LineMatch):
             line_objs[index].set_select(True)
         else:
-            error = "Line %d was selected but is not LineMatch" % index
+            error = f"Line {index} was selected but is not LineMatch"
             output.append_error(error)
 
 

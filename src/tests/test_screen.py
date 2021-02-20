@@ -214,7 +214,7 @@ class TestScreenLogic(unittest.TestCase):
             # make sure its not copy pasta-ed
             test_name = test_case.name
             self.assertFalse(
-                seen_cases.get(test_name, False), "Already seen %s " % test_name
+                seen_cases.get(test_name, False), f"Already seen {test_name}"
             )
             seen_cases[test_name] = True
 
@@ -235,7 +235,7 @@ class TestScreenLogic(unittest.TestCase):
             )
 
             self.compare_to_expected(test_case, test_name, screen_data)
-            print("Tested %s " % test_name)
+            print(f"Tested {test_name}")
 
     def compare_to_expected(self, test_case, test_name, screen_data):
         TestScreenLogic.maybe_make_expected_dir()
@@ -274,18 +274,20 @@ class TestScreenLogic(unittest.TestCase):
         if os.path.isfile(expected_file):
             return
 
-        print("Could not find file %s so outputting..." % expected_file)
+        print(f"Could not find file {expected_file} so outputting...")
         file = open(expected_file, "w")
         file.write(output)
         file.close()
-        self.fail("File outputted, please inspect %s for correctness" % expected_file)
+        self.fail(f"File outputted, please inspect {expected_file} for correctness")
 
     def assert_equal_num_lines(self, test_name, actual_lines, expected_lines):
         self.assertEqual(
             len(actual_lines),
             len(expected_lines),
-            "%s test: Actual lines was %d but expected lines was %d"
-            % (test_name, len(actual_lines), len(expected_lines)),
+            (
+                f"{test_name} test: Actual lines was {len(actual_lines)} "
+                f"but expected lines was {len(expected_lines)}"
+            ),
         )
 
     def assert_equal_lines(self, test_name, actual_lines, expected_lines):
@@ -295,8 +297,8 @@ class TestScreenLogic(unittest.TestCase):
         for index, expected_line in enumerate(expected_lines):
             actual_line = actual_lines[index]
             error_message = (
-                'Line %d did not match for test %s:\n\nExpected:"%s"\nActual  :"%s"'
-                % (index + 1, expected_file, expected_line, actual_line)
+                f"Line {index + 1} did not match for test {expected_file}:\n\n"
+                f'Expected:"{expected_line}"\nActual  :"{actual_line}"'
             )
             if expected_line.endswith(glob_needle):
                 self.assert_equal_with_glob(

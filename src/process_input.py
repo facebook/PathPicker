@@ -74,7 +74,7 @@ def main(argv: List[str]) -> int:
         for file_path in state_files.get_all_state_files():
             if os.path.isfile(file_path):
                 os.remove(file_path)
-        print("Done! Removed %d files " % len(state_files.get_all_state_files()))
+        print(f"Done! Removed {len(state_files.get_all_state_files())} files ")
         return 0
     if sys.stdin.isatty():
         if os.path.isfile(state_files.get_pickle_file_path()):

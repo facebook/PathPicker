@@ -159,6 +159,22 @@ testfixtures = ">=6.8.0,<7"
 test = ["pytest (>=4.0.2,<6)", "toml"]
 
 [[package]]
+name = "flake8-use-fstring"
+version = "1.1"
+description = "Flake8 plugin for string formatting style."
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+flake8 = ">=3.0.0,<4.0.0"
+
+[package.extras]
+ci = ["coverage (>=4.0.0,<5.0.0)", "pytest (>=4)", "pytest-cov (>=2)", "flake8-builtins", "flake8-commas", "flake8-fixme", "flake8-print", "flake8-quotes", "flake8-todo", "python-coveralls"]
+dev = ["coverage (>=4.0.0,<5.0.0)", "pytest (>=4)", "pytest-cov (>=2)", "flake8-builtins", "flake8-commas", "flake8-fixme", "flake8-print", "flake8-quotes", "flake8-todo"]
+test = ["coverage (>=4.0.0,<5.0.0)", "pytest (>=4)", "pytest-cov (>=2)", "flake8-builtins", "flake8-commas", "flake8-fixme", "flake8-print", "flake8-quotes", "flake8-todo"]
+
+[[package]]
 name = "importlib-metadata"
 version = "3.4.0"
 description = "Read metadata from Python packages"
@@ -413,7 +429,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "12933c0bedbe12ddc1a0f73862863d76151172217f99400bd6e89ddbe50ab233"
+content-hash = "3cde88fc2b6aeaa6dc965478ba25bd16519777a57062c86b9580a0ee61f3b445"
 
 [metadata.files]
 appdirs = [
@@ -465,6 +481,9 @@ flake8-comprehensions = [
 flake8-isort = [
     {file = "flake8-isort-4.0.0.tar.gz", hash = "sha256:2b91300f4f1926b396c2c90185844eb1a3d5ec39ea6138832d119da0a208f4d9"},
     {file = "flake8_isort-4.0.0-py2.py3-none-any.whl", hash = "sha256:729cd6ef9ba3659512dee337687c05d79c78e1215fdf921ed67e5fe46cce2f3c"},
+]
+flake8-use-fstring = [
+    {file = "flake8-use-fstring-1.1.tar.gz", hash = "sha256:a0eea849ffe33fb6903c210c243c0f418da86a530e46cb13e64f1bdb045f22dc"},
 ]
 importlib-metadata = [
     {file = "importlib_metadata-3.4.0-py3-none-any.whl", hash = "sha256:ace61d5fc652dc280e7b6b4ff732a9c2d40db2c0f92bc6cb74e07b73d53a1771"},

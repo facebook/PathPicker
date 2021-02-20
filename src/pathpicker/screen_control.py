@@ -685,15 +685,14 @@ class Controller:
         self.color_printer.addstr(
             y_start,
             x_start,
-            "Oh no! You already provided a command so "
-            + "you cannot enter command mode.",
+            "Oh no! You already provided a command so you cannot enter command mode.",
             self.color_printer.get_attributes(curses.COLOR_WHITE, curses.COLOR_RED, 0),
         )
 
         self.color_printer.addstr(
             y_start + 1,
             x_start,
-            'The command you provided was "%s" ' % self.flags.get_preset_command(),
+            f'The command you provided was "{self.flags.get_preset_command()}" ',
         )
         self.color_printer.addstr(
             y_start + 2, x_start, "Press any key to go back to selecting paths."
