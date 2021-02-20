@@ -25,10 +25,13 @@ from the team will start reviewing.
 Before sending them over, make sure the tests pass with:
 `./scripts/runTests.sh`
 
-#### Test dependencies
+### Test dependencies
 
 * Install [poetry](https://github.com/python-poetry/poetry).
 * Select poetry environment with `poetry env use 3.6`. Some linters depend on Python version and it's better to check on the same version as we use in CI.
+
+### PyCharm project
+You can open PathPicker in PyCharm. You will also need to install [poetry plugin](https://plugins.jetbrains.com/plugin/14307-poetry) for using poetry environment.
 
 ### Contributor License Agreement ("CLA")
 
