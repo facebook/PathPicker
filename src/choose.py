@@ -6,7 +6,7 @@ import curses
 import os
 import pickle
 import sys
-from typing import Optional
+from typing import List, Optional
 
 from pathpicker import logger, output, screen_control, state_files
 from pathpicker.curses_api import CursesAPI
@@ -25,7 +25,7 @@ this error will go away)
 
 def do_program(
     stdscr,
-    flags,
+    flags: ScreenFlags,
     key_bindings: Optional[KeyBindings] = None,
     curses_api=None,
     line_objs=None,
@@ -60,7 +60,7 @@ def get_line_objs():
     if os.path.isfile(selection_path):
         set_selections_from_pickle(selection_path, line_objs)
 
-    matches = [lineObj for lineObj in line_objs.values() if not lineObj.is_simple()]
+    matches = [line_obj for line_obj in line_objs.values() if not line_obj.is_simple()]
     if not matches:
         output.write_to_file('echo "No lines matched!";')
         output.append_exit()
@@ -68,7 +68,7 @@ def get_line_objs():
     return line_objs
 
 
-def set_selections_from_pickle(selection_path, line_objs):
+def set_selections_from_pickle(selection_path, line_objs) -> None:
     try:
         selected_indices = pickle.load(open(selection_path, "rb"))
     except (OSError, KeyError, pickle.PickleError):
@@ -88,7 +88,7 @@ def set_selections_from_pickle(selection_path, line_objs):
             output.append_error(error)
 
 
-def main(argv) -> int:
+def main(argv: List[str]) -> int:
     file_path = state_files.get_pickle_file_path()
     if not os.path.exists(file_path):
         print("Nothing to do!")

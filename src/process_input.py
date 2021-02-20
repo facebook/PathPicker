@@ -60,7 +60,7 @@ def do_program(flags):
     pickle.dump(line_objs, open(file_path, "wb"))
 
 
-def usage():
+def usage() -> None:
     print(USAGE_STR)
 
 
