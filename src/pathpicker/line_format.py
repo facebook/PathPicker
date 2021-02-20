@@ -13,30 +13,30 @@ from pathpicker.formatted_text import FormattedText
 
 
 class SimpleLine:
-    def __init__(self, formattedLine, index):
-        self.formattedLine = formattedLine
+    def __init__(self, formatted_line, index):
+        self.formatted_line = formatted_line
         self.index = index
         self.controller = None
 
-    def printOut(self):
+    def print_out(self):
         print(str(self))
 
     def output(self, printer):
         assert self.controller is not None
-        (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
-        maxLen = min(maxx - minx, len(str(self)))
-        y = miny + self.index + self.controller.getScrollOffset()
+        (min_x, min_y, max_x, max_y) = self.controller.getChromeBoundaries()
+        max_len = min(max_x - min_x, len(str(self)))
+        y_pos = min_y + self.index + self.controller.getScrollOffset()
 
-        if y < miny or y >= maxy:
+        if y_pos < min_y or y_pos >= max_y:
             # wont be displayed!
             return
 
-        self.formattedLine.printText(y, minx, printer, maxLen)
+        self.formatted_line.printText(y_pos, min_x, printer, max_len)
 
     def __str__(self):
-        return str(self.formattedLine)
+        return str(self.formatted_line)
 
-    def isSimple(self):
+    def is_simple(self):
         return True
 
 
@@ -48,25 +48,25 @@ class LineMatch:
     TRUNCATE_DECORATOR = "|...|"
 
     def __init__(
-        self, formattedLine, result, index, validateFileExists=False, allInput=False
+        self, formatted_line, result, index, validate_file_exists=False, all_input=False
     ):
         self.controller = None
 
-        self.formattedLine = formattedLine
+        self.formatted_line = formatted_line
         self.index = index
-        self.allInput = allInput
+        self.all_input = all_input
 
         (path, num, matches) = result
 
-        self.originalPath = path
+        self.original_path = path
         self.path = (
             path
-            if allInput
-            else parse.prepend_dir(path, with_file_inspection=validateFileExists)
+            if all_input
+            else parse.prepend_dir(path, with_file_inspection=validate_file_exists)
         )
         self.num = num
 
-        line = str(self.formattedLine)
+        line = str(self.formatted_line)
         # save a bunch of stuff so we can
         # pickle
         self.start = matches.start()
@@ -80,40 +80,41 @@ class LineMatch:
         # this will be a no-op, but for lines like
         # "README        " we will reset end to
         # earlier
-        stringSubset = line[self.start : self.end]
-        strippedSubset = stringSubset.strip()
-        trailingWhitespace = len(stringSubset) - len(strippedSubset)
-        self.end -= trailingWhitespace
-        self.group = self.group[0 : len(self.group) - trailingWhitespace]
+        string_subset = line[self.start : self.end]
+        stripped_subset = string_subset.strip()
+        trailing_whitespace = len(string_subset) - len(stripped_subset)
+        self.end -= trailing_whitespace
+        self.group = self.group[0 : len(self.group) - trailing_whitespace]
 
         self.selected = False
         self.hovered = False
-        self.isTruncated = False
+        self.is_truncated = False
 
         # precalculate the pre, post, and match strings
-        (self.beforeText, _) = self.formattedLine.breakat(self.start)
-        (_, self.afterText) = self.formattedLine.breakat(self.end)
+        (self.before_text, _) = self.formatted_line.breakat(self.start)
+        (_, self.after_text) = self.formatted_line.breakat(self.end)
 
-        self.updateDecoratedMatch()
+        self.decorated_match = FormattedText()
+        self.update_decorated_match()
 
-    def toggleSelect(self):
-        self.setSelect(not self.selected)
+    def toggle_select(self):
+        self.set_select(not self.selected)
 
-    def setSelect(self, val):
+    def set_select(self, val):
         self.selected = val
-        self.updateDecoratedMatch()
+        self.update_decorated_match()
 
-    def setHover(self, val):
+    def set_hover(self, val):
         self.hovered = val
-        self.updateDecoratedMatch()
+        self.update_decorated_match()
 
-    def getScreenIndex(self):
+    def get_screen_index(self):
         return self.index
 
-    def getPath(self):
+    def get_path(self):
         return self.path
 
-    def getFileSize(self):
+    def get_file_size(self):
         size = os.path.getsize(self.path)
         for unit in ["B", "K", "M", "G", "T", "P", "E", "Z"]:
             if size < 1024:
@@ -121,76 +122,76 @@ class LineMatch:
             size //= 1024
         raise AssertionError("Unreachable")
 
-    def getLengthInLines(self):
+    def get_length_in_lines(self):
         output = subprocess.check_output(["wc", "-l", self.path])
         lines_count = output.strip().split()[0].decode("utf-8")
         lines_caption = "lines" if int(lines_count) > 1 else "line"
         return f"length: {lines_count} {lines_caption}"
 
-    def getTimeLastAccessed(self):
-        timeAccessed = time.strftime(
+    def get_time_last_accessed(self):
+        time_accessed = time.strftime(
             "%m/%d/%Y %H:%M:%S", time.localtime(os.stat(self.path).st_atime)
         )
-        return f"last accessed: {timeAccessed}"
+        return f"last accessed: {time_accessed}"
 
-    def getTimeLastModified(self):
-        timeModified = time.strftime(
+    def get_time_last_modified(self):
+        time_modified = time.strftime(
             "%m/%d/%Y %H:%M:%S", time.localtime(os.stat(self.path).st_mtime)
         )
-        return f"last modified: {timeModified}"
+        return f"last modified: {time_modified}"
 
-    def getOwnerUser(self):
-        userOwnerName = Path(self.path).owner()
-        userOwnerId = os.stat(self.path).st_uid
-        return f"owned by user: {userOwnerName}, {userOwnerId}"
+    def get_owner_user(self):
+        user_owner_name = Path(self.path).owner()
+        user_owner_id = os.stat(self.path).st_uid
+        return f"owned by user: {user_owner_name}, {user_owner_id}"
 
-    def getOwnerGroup(self):
-        groupOwnerName = Path(self.path).group()
-        groupOwnerId = os.stat(self.path).st_gid
-        return f"owned by group: {groupOwnerName}, {groupOwnerId}"
+    def get_owner_group(self):
+        group_owner_name = Path(self.path).group()
+        group_owner_id = os.stat(self.path).st_gid
+        return f"owned by group: {group_owner_name}, {group_owner_id}"
 
-    def getDir(self):
+    def get_dir(self):
         return os.path.dirname(self.path)
 
-    def isResolvable(self):
-        return not self.isGitAbbreviatedPath()
+    def is_resolvable(self):
+        return not self.is_git_abbreviated_path()
 
-    def isGitAbbreviatedPath(self):
+    def is_git_abbreviated_path(self):
         # this method mainly serves as a warning for when we get
         # git-abbrievated paths like ".../" that confuse users.
         parts = self.path.split(os.path.sep)
         return len(parts) and parts[0] == "..."
 
-    def getLineNum(self):
+    def get_line_num(self):
         return self.num
 
-    def isSimple(self):
+    def is_simple(self):
         return False
 
-    def getSelected(self):
+    def get_selected(self):
         return self.selected
 
-    def getBefore(self):
-        return str(self.beforeText)
+    def get_before(self):
+        return str(self.before_text)
 
-    def getAfter(self):
-        return str(self.afterText)
+    def get_after(self):
+        return str(self.after_text)
 
-    def getMatch(self):
+    def get_match(self):
         return self.group
 
     def __str__(self):
         return (
-            self.getBefore()
+            self.get_before()
             + "||"
-            + self.getMatch()
+            + self.get_match()
             + "||"
-            + self.getAfter()
+            + self.get_after()
             + "||"
             + str(self.num)
         )
 
-    def updateDecoratedMatch(self, maxLen=None):
+    def update_decorated_match(self, max_len=None):
         """Update the cached decorated match formatted string, and
         dirty the line, if needed"""
         if self.hovered and self.selected:
@@ -211,89 +212,91 @@ class LineMatch:
                 curses.COLOR_GREEN,
                 FormattedText.BOLD_ATTRIBUTE,
             )
-        elif not self.allInput:
+        elif not self.all_input:
             attributes = (0, 0, FormattedText.UNDERLINE_ATTRIBUTE)
         else:
             attributes = (0, 0, 0)
 
-        decoratorText = self.getDecorator()
+        decorator_text = self.get_decorator()
 
         # we may not be connected to a controller (during processInput,
         # for example)
         if self.controller:
             self.controller.dirtyLine(self.index)
 
-        plainText = decoratorText + self.getMatch()
-        if maxLen and len(plainText + str(self.beforeText)) > maxLen:
+        plain_text = decorator_text + self.get_match()
+        if max_len and len(plain_text + str(self.before_text)) > max_len:
             # alright, we need to chop the ends off of our
             # decorated match and glue them together with our
             # truncation decorator. We subtract the length of the
             # before text since we consider that important too.
-            spaceAllowed = (
-                maxLen
+            space_allowed = (
+                max_len
                 - len(self.TRUNCATE_DECORATOR)
-                - len(decoratorText)
-                - len(str(self.beforeText))
+                - len(decorator_text)
+                - len(str(self.before_text))
             )
-            midPoint = int(spaceAllowed / 2)
-            beginMatch = plainText[0:midPoint]
-            endMatch = plainText[-midPoint : len(plainText)]
-            plainText = beginMatch + self.TRUNCATE_DECORATOR + endMatch
+            mid_point = int(space_allowed / 2)
+            begin_match = plain_text[0:mid_point]
+            end_match = plain_text[-mid_point : len(plain_text)]
+            plain_text = begin_match + self.TRUNCATE_DECORATOR + end_match
 
-        self.decoratedMatch = FormattedText(
-            FormattedText.getSequenceForAttributes(*attributes) + plainText
+        self.decorated_match = FormattedText(
+            FormattedText.getSequenceForAttributes(*attributes) + plain_text
         )
 
-    def getDecorator(self):
+    def get_decorator(self):
         if self.selected:
             return self.ARROW_DECORATOR
         return ""
 
-    def printUpTo(self, text, printer, y, x, maxLen):
+    def print_up_to(self, text, printer, y_pos, x_pos, max_len):
         """Attempt to print maxLen characters, returning a tuple
         (x, maxLen) updated with the actual number of characters
         printed"""
-        if maxLen <= 0:
-            return (x, maxLen)
+        if max_len <= 0:
+            return x_pos, max_len
 
-        maxPrintable = min(len(str(text)), maxLen)
-        text.printText(y, x, printer, maxPrintable)
-        return (x + maxPrintable, maxLen - maxPrintable)
+        max_printable = min(len(str(text)), max_len)
+        text.printText(y_pos, x_pos, printer, max_printable)
+        return x_pos + max_printable, max_len - max_printable
 
     def output(self, printer):
         assert self.controller is not None
-        (minx, miny, maxx, maxy) = self.controller.getChromeBoundaries()
-        y = miny + self.index + self.controller.getScrollOffset()
+        (min_x, min_y, max_x, max_y) = self.controller.getChromeBoundaries()
+        y_pos = min_y + self.index + self.controller.getScrollOffset()
 
-        if y < miny or y >= maxy:
+        if y_pos < min_y or y_pos >= max_y:
             # wont be displayed!
             return
 
         # we dont care about the after text, but we should be able to see
         # all of the decorated match (which means we need to see up to
         # the end of the decoratedMatch, aka include beforeText)
-        importantTextLength = len(str(self.beforeText)) + len(str(self.decoratedMatch))
-        spaceForPrinting = maxx - minx
-        if importantTextLength > spaceForPrinting:
+        important_text_length = len(str(self.before_text)) + len(
+            str(self.decorated_match)
+        )
+        space_for_printing = max_x - min_x
+        if important_text_length > space_for_printing:
             # hrm, we need to update our decorated match to show
             # a truncated version since right now we will print off
             # the screen. lets also dump the beforeText for more
             # space
-            self.updateDecoratedMatch(maxLen=spaceForPrinting)
-            self.isTruncated = True
+            self.update_decorated_match(max_len=space_for_printing)
+            self.is_truncated = True
         else:
             # first check what our expanded size would be:
-            expandedSize = len(str(self.beforeText)) + len(self.getMatch())
-            if expandedSize < spaceForPrinting and self.isTruncated:
+            expanded_size = len(str(self.before_text)) + len(self.get_match())
+            if expanded_size < space_for_printing and self.is_truncated:
                 # if the screen gets resized, we might be truncated
                 # from a previous render but **now** we have room.
                 # in that case lets expand back out
-                self.updateDecoratedMatch()
-                self.isTruncated = False
+                self.update_decorated_match()
+                self.is_truncated = False
 
-        maxLen = maxx - minx
-        soFar = (minx, maxLen)
+        max_len = max_x - min_x
+        so_far = (min_x, max_len)
 
-        soFar = self.printUpTo(self.beforeText, printer, y, *soFar)
-        soFar = self.printUpTo(self.decoratedMatch, printer, y, *soFar)
-        soFar = self.printUpTo(self.afterText, printer, y, *soFar)
+        so_far = self.print_up_to(self.before_text, printer, y_pos, *so_far)
+        so_far = self.print_up_to(self.decorated_match, printer, y_pos, *so_far)
+        so_far = self.print_up_to(self.after_text, printer, y_pos, *so_far)

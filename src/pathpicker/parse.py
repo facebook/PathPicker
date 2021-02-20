@@ -248,7 +248,7 @@ def get_repo_path():
 
     # If there was no error return the output
     if not stderr:
-        logger.addEvent("using_git")
+        logger.add_event("using_git")
         return stdout
 
     proc = subprocess.Popen(
@@ -263,11 +263,11 @@ def get_repo_path():
 
     # If there was no error return the output
     if not stderr:
-        logger.addEvent("using_hg")
+        logger.add_event("using_hg")
         return stdout
 
     # Not a git or hg repo, go with current dir as a default
-    logger.addEvent("used_outside_repo")
+    logger.add_event("used_outside_repo")
     return "./"
 
 
