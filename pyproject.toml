@@ -5,7 +5,6 @@ multi_line_output = 3
 [tool.pylint.messages_control]
 disable = [
     "fixme",
-    "invalid-name",
     "missing-class-docstring",
     "missing-function-docstring",
     "missing-module-docstring",
