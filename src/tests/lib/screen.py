@@ -38,8 +38,6 @@ class ScreenForTest(ScreenBase):
     def __init__(self, char_inputs: List[str], max_x: int, max_y: int):
         self.max_x = max_x
         self.max_y = max_y
-        self.cursor_x = 0
-        self.cursor_y = 0
         self.output = ScreenType({})
         self.past_screens: List[ScreenType] = []
         self.char_inputs = char_inputs
@@ -68,9 +66,8 @@ class ScreenForTest(ScreenBase):
                 coord = (x_pos, y_pos)
                 self.output[coord] = ("", 1)
 
-    def move(self, y_pos: int, x_pos: int) -> None:
-        self.cursor_y = y_pos
-        self.cursor_x = x_pos
+    def move(self, _y_pos: int, _x_pos: int) -> None:
+        pass
 
     def attrset(self, attr: int) -> None:
         self.current_attribute = attr

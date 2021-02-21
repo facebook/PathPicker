@@ -32,3 +32,5 @@ jobs:
         run: poetry run pylint src
       - name: Run tests
         run: poetry run pytest src/tests
+      - name: Run vulture
+        run: poetry run vulture src

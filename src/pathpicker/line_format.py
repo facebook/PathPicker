@@ -37,9 +37,6 @@ class SimpleLine(LineBase):
         self.formatted_line = formatted_line
         self.index = index
 
-    def print_out(self) -> None:
-        print(str(self))
-
     def output(self, printer: ColorPrinter) -> None:
         assert self.controller is not None
         (min_x, min_y, max_x, max_y) = self.controller.get_chrome_boundaries()
@@ -78,7 +75,6 @@ class LineMatch(LineBase):
 
         path, num, matches = result
 
-        self.original_path = path
         self.path = (
             path
             if all_input
