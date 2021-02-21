@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from pathpicker import parse
+from pathpicker.color_printer import ColorPrinter
 from pathpicker.formatted_text import FormattedText
 from pathpicker.parse import MatchResult
 
@@ -24,6 +25,10 @@ class LineBase(ABC):
 
     def set_controller(self, controller: "Controller") -> None:
         self.controller = controller
+
+    @abstractmethod
+    def output(self, printer: ColorPrinter):
+        pass
 
     @abstractmethod
     def is_simple(self) -> bool:
