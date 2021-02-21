@@ -8,7 +8,7 @@ import subprocess
 import time
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional, Tuple
 
 from pathpicker import parse
 from pathpicker.color_printer import ColorPrinter
@@ -20,14 +20,14 @@ if TYPE_CHECKING:
 
 
 class LineBase(ABC):
-    def __init__(self):
-        self.controller = None
+    def __init__(self) -> None:
+        self.controller: Optional["Controller"] = None
 
     def set_controller(self, controller: "Controller") -> None:
         self.controller = controller
 
     @abstractmethod
-    def output(self, printer: ColorPrinter):
+    def output(self, printer: ColorPrinter) -> None:
         pass
 
     @abstractmethod
@@ -41,10 +41,10 @@ class SimpleLine(LineBase):
         self.formatted_line = formatted_line
         self.index = index
 
-    def print_out(self):
+    def print_out(self) -> None:
         print(str(self))
 
-    def output(self, printer):
+    def output(self, printer: ColorPrinter) -> None:
         assert self.controller is not None
         (min_x, min_y, max_x, max_y) = self.controller.get_chrome_boundaries()
         max_len = min(max_x - min_x, len(str(self)))
@@ -56,10 +56,10 @@ class SimpleLine(LineBase):
 
         self.formatted_line.print_text(y_pos, min_x, printer, max_len)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.formatted_line)
 
-    def is_simple(self):
+    def is_simple(self) -> bool:
         return True
 
 
@@ -83,7 +83,7 @@ class LineMatch(LineBase):
         self.index = index
         self.all_input = all_input
 
-        (path, num, matches) = result
+        path, num, matches = result
 
         self.original_path = path
         self.path = (
@@ -98,7 +98,7 @@ class LineMatch(LineBase):
         # pickle
         self.start = matches.start()
         self.end = min(matches.end(), len(line))
-        self.group = matches.group()
+        self.group: str = matches.group()
 
         # this is a bit weird but we need to strip
         # off the whitespace for the matches we got,
@@ -124,24 +124,24 @@ class LineMatch(LineBase):
         self.decorated_match = FormattedText()
         self.update_decorated_match()
 
-    def toggle_select(self):
+    def toggle_select(self) -> None:
         self.set_select(not self.selected)
 
-    def set_select(self, val):
+    def set_select(self, val: bool) -> None:
         self.selected = val
         self.update_decorated_match()
 
-    def set_hover(self, val):
+    def set_hover(self, val: bool) -> None:
         self.hovered = val
         self.update_decorated_match()
 
-    def get_screen_index(self):
+    def get_screen_index(self) -> int:
         return self.index
 
-    def get_path(self):
+    def get_path(self) -> str:
         return self.path
 
-    def get_file_size(self):
+    def get_file_size(self) -> str:
         size = os.path.getsize(self.path)
         for unit in ["B", "K", "M", "G", "T", "P", "E", "Z"]:
             if size < 1024:
@@ -149,65 +149,65 @@ class LineMatch(LineBase):
             size //= 1024
         raise AssertionError("Unreachable")
 
-    def get_length_in_lines(self):
+    def get_length_in_lines(self) -> str:
         output = subprocess.check_output(["wc", "-l", self.path])
         lines_count = output.strip().split()[0].decode("utf-8")
         lines_caption = "lines" if int(lines_count) > 1 else "line"
         return f"length: {lines_count} {lines_caption}"
 
-    def get_time_last_accessed(self):
+    def get_time_last_accessed(self) -> str:
         time_accessed = time.strftime(
             "%m/%d/%Y %H:%M:%S", time.localtime(os.stat(self.path).st_atime)
         )
         return f"last accessed: {time_accessed}"
 
-    def get_time_last_modified(self):
+    def get_time_last_modified(self) -> str:
         time_modified = time.strftime(
             "%m/%d/%Y %H:%M:%S", time.localtime(os.stat(self.path).st_mtime)
         )
         return f"last modified: {time_modified}"
 
-    def get_owner_user(self):
+    def get_owner_user(self) -> str:
         user_owner_name = Path(self.path).owner()
         user_owner_id = os.stat(self.path).st_uid
         return f"owned by user: {user_owner_name}, {user_owner_id}"
 
-    def get_owner_group(self):
+    def get_owner_group(self) -> str:
         group_owner_name = Path(self.path).group()
         group_owner_id = os.stat(self.path).st_gid
         return f"owned by group: {group_owner_name}, {group_owner_id}"
 
-    def get_dir(self):
+    def get_dir(self) -> str:
         return os.path.dirname(self.path)
 
-    def is_resolvable(self):
+    def is_resolvable(self) -> bool:
         return not self.is_git_abbreviated_path()
 
-    def is_git_abbreviated_path(self):
+    def is_git_abbreviated_path(self) -> bool:
         # this method mainly serves as a warning for when we get
         # git-abbrievated paths like ".../" that confuse users.
         parts = self.path.split(os.path.sep)
-        return len(parts) and parts[0] == "..."
+        return len(parts) > 0 and parts[0] == "..."
 
-    def get_line_num(self):
+    def get_line_num(self) -> int:
         return self.num
 
-    def is_simple(self):
+    def is_simple(self) -> bool:
         return False
 
-    def get_selected(self):
+    def get_selected(self) -> bool:
         return self.selected
 
-    def get_before(self):
+    def get_before(self) -> str:
         return str(self.before_text)
 
-    def get_after(self):
+    def get_after(self) -> str:
         return str(self.after_text)
 
-    def get_match(self):
+    def get_match(self) -> str:
         return self.group
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             self.get_before()
             + "||"
@@ -218,7 +218,7 @@ class LineMatch(LineBase):
             + str(self.num)
         )
 
-    def update_decorated_match(self, max_len=None):
+    def update_decorated_match(self, max_len: Optional[int] = None) -> None:
         """Update the cached decorated match formatted string, and
         dirty the line, if needed"""
         if self.hovered and self.selected:
@@ -272,12 +272,19 @@ class LineMatch(LineBase):
             FormattedText.get_sequence_for_attributes(*attributes) + plain_text
         )
 
-    def get_decorator(self):
+    def get_decorator(self) -> str:
         if self.selected:
             return self.ARROW_DECORATOR
         return ""
 
-    def print_up_to(self, text, printer, y_pos, x_pos, max_len):
+    def print_up_to(
+        self,
+        text: FormattedText,
+        printer: ColorPrinter,
+        y_pos: int,
+        x_pos: int,
+        max_len: int,
+    ) -> Tuple[int, int]:
         """Attempt to print maxLen characters, returning a tuple
         (x, maxLen) updated with the actual number of characters
         printed"""
@@ -288,7 +295,7 @@ class LineMatch(LineBase):
         text.print_text(y_pos, x_pos, printer, max_printable)
         return x_pos + max_printable, max_len - max_printable
 
-    def output(self, printer):
+    def output(self, printer: ColorPrinter) -> None:
         assert self.controller is not None
         (min_x, min_y, max_x, max_y) = self.controller.get_chrome_boundaries()
         y_pos = min_y + self.index + self.controller.get_scroll_offset()
