@@ -71,7 +71,9 @@ def get_line_objs() -> Dict[int, LineBase]:
     return line_objs
 
 
-def set_selections_from_pickle(selection_path, line_objs) -> None:
+def set_selections_from_pickle(
+    selection_path: str, line_objs: Dict[int, LineBase]
+) -> None:
     try:
         selected_indices = pickle.load(open(selection_path, "rb"))
     except (OSError, KeyError, pickle.PickleError):
@@ -85,7 +87,7 @@ def set_selections_from_pickle(selection_path, line_objs) -> None:
             continue
         to_select = line_objs[index]
         if isinstance(to_select, LineMatch):
-            line_objs[index].set_select(True)
+            to_select.set_select(True)
         else:
             error = f"Line {index} was selected but is not LineMatch"
             output.append_error(error)
