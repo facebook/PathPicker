@@ -143,6 +143,14 @@ flake8 = ">=3.0,<3.2.0 || >3.2.0,<4"
 importlib-metadata = {version = "*", markers = "python_version < \"3.8\""}
 
 [[package]]
+name = "flake8-copyright"
+version = "0.2.2"
+description = "Adds copyright checks to flake8"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "flake8-isort"
 version = "4.0.0"
 description = "flake8 plugin that integrates isort ."
@@ -429,7 +437,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "3cde88fc2b6aeaa6dc965478ba25bd16519777a57062c86b9580a0ee61f3b445"
+content-hash = "fb1a5fbe94bc8443271944ac3667d71ab94e5d2d80e7f731a98a1ef26ff43cae"
 
 [metadata.files]
 appdirs = [
@@ -477,6 +485,11 @@ flake8-bugbear = [
 flake8-comprehensions = [
     {file = "flake8-comprehensions-3.3.1.tar.gz", hash = "sha256:e734bf03806bb562886d9bf635d23a65a1a995c251b67d7e007a7b608af9bd22"},
     {file = "flake8_comprehensions-3.3.1-py3-none-any.whl", hash = "sha256:6d80dfafda0d85633f88ea5bc7de949485f71f1e28db7af7719563fe5f62dcb1"},
+]
+flake8-copyright = [
+    {file = "flake8-copyright-0.2.2.tar.gz", hash = "sha256:5c3632dd8c586547b25fff4272282005fdbcba56eeb77b7487564aa636b6e533"},
+    {file = "flake8_copyright-0.2.2-py2.py3-none-any.whl", hash = "sha256:616a960c9602ad2d0136bf3f12564e253caffe82f151d2982f78a12a42e1faa0"},
+    {file = "flake8_copyright-0.2.2-py3-none-any.whl", hash = "sha256:dbad92ee5f51398722cd571b6e36cc3651914bf1b286b0e638bba1f4af0b6f5b"},
 ]
 flake8-isort = [
     {file = "flake8-isort-4.0.0.tar.gz", hash = "sha256:2b91300f4f1926b396c2c90185844eb1a3d5ec39ea6138832d119da0a208f4d9"},

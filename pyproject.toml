@@ -41,6 +41,7 @@ flake8-isort = "^4.0.0"
 flake8-comprehensions = "^3.3.1"
 flake8-bugbear = "^20.11.1"
 flake8-use-fstring = "^1.1"
+flake8-copyright = "^0.2.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
