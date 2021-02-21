@@ -349,7 +349,7 @@ def match_line_impl(
     return results
 
 
-def prepend_dir(file, with_file_inspection=False):
+def prepend_dir(file: str, with_file_inspection: bool = False) -> str:
     if not file or len(file) < 2:
         return file
 
