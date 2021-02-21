@@ -2,9 +2,11 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-from typing import Dict, List, NewType, Optional, Tuple
+from copy import copy
+from typing import Dict, List, NewType, Optional, Tuple, Union
 
 from pathpicker.char_code_mapping import CHAR_TO_CODE
+from pathpicker.screen import ScreenBase
 
 ATTRIBUTE_SYMBOL_MAPPING: Dict[int, str] = {
     0: " ",
@@ -28,7 +30,7 @@ ATTRIBUTE_SYMBOL_MAPPING: Dict[int, str] = {
 ScreenType = NewType("ScreenType", Dict[Tuple[int, int], Tuple[str, int]])
 
 
-class ScreenForTest:
+class ScreenForTest(ScreenBase):
     """A dummy object that is dependency-injected in place
     of curses standard screen. Allows us to unit-test parts
     of the UI code"""
@@ -50,7 +52,7 @@ class ScreenForTest:
     def refresh(self) -> None:
         if self.contains_content(self.output):
             # we have an old screen, so add it
-            self.past_screens.append(ScreenType(self.output.copy()))
+            self.past_screens.append(copy(self.output))
 
     def contains_content(self, screen: ScreenType) -> bool:
         for _coord, pair in screen.items():
@@ -90,7 +92,7 @@ class ScreenForTest:
     def getch(self) -> int:
         return CHAR_TO_CODE[self.char_inputs.pop(0)]
 
-    def getstr(self, _y: int, _x: int, _max_len: int) -> str:
+    def getstr(self, _y: int, _x: int, _max_len: int) -> Union[str, bytes, int]:
         # TODO -- enable editing this
         return ""
 
@@ -116,7 +118,7 @@ class ScreenForTest:
 
     def get_rows_with_attributes_for_past_screens(
         self, past_screens: List[int]
-    ) -> Tuple[List[str], List[int]]:
+    ) -> Tuple[List[str], List[str]]:
         """Get the rows & attributes for the array of screens as one stream
         (there is no extra new line or extra space between pages)"""
         pages = map(

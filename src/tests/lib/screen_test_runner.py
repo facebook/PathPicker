@@ -3,18 +3,22 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 import os
+from typing import Dict, List, Optional, Tuple
 
 import choose
 import process_input
+from pathpicker.line_format import LineBase
 from pathpicker.screen_flags import ScreenFlags
-from tests.lib.curses import CursesForTest
+from tests.lib.curses_api import CursesForTest
 from tests.lib.key_bindings import KEY_BINDINGS_FOR_TEST
 from tests.lib.screen import ScreenForTest
 
 INPUT_DIR = "./inputs/"
 
 
-def get_line_objs_from_file(input_file, validate_file_exists, all_input):
+def get_line_objs_from_file(
+    input_file: str, validate_file_exists: bool, all_input: bool
+) -> Dict[int, LineBase]:
     input_file = os.path.join(INPUT_DIR, input_file)
     file = open(input_file)
     lines = file.read().split("\n")
@@ -25,20 +29,16 @@ def get_line_objs_from_file(input_file, validate_file_exists, all_input):
 
 
 def get_rows_from_screen_run(
-    input_file,
-    char_inputs,
-    screen_config=None,
-    print_screen=True,
-    past_screen=None,
-    past_screens=None,
-    validate_file_exists=False,
-    all_input=False,
-    args=None,
-):
-    if screen_config is None:
-        screen_config = {}
-    if args is None:
-        args = []
+    input_file: str,
+    char_inputs: List[str],
+    screen_config: Dict[str, int],
+    print_screen: bool,
+    past_screen: Optional[int],
+    past_screens: Optional[List[int]],
+    args: List[str],
+    validate_file_exists: bool,
+    all_input: bool,
+) -> Tuple[List[str], List[str]]:
     line_objs = get_line_objs_from_file(
         input_file, validate_file_exists=validate_file_exists, all_input=all_input
     )

@@ -30,10 +30,6 @@ class LineBase(ABC):
     def output(self, printer: ColorPrinter) -> None:
         pass
 
-    @abstractmethod
-    def is_simple(self) -> bool:
-        pass
-
 
 class SimpleLine(LineBase):
     def __init__(self, formatted_line: FormattedText, index: int):
@@ -58,9 +54,6 @@ class SimpleLine(LineBase):
 
     def __str__(self) -> str:
         return str(self.formatted_line)
-
-    def is_simple(self) -> bool:
-        return True
 
 
 class LineMatch(LineBase):
@@ -191,9 +184,6 @@ class LineMatch(LineBase):
 
     def get_line_num(self) -> int:
         return self.num
-
-    def is_simple(self) -> bool:
-        return False
 
     def get_selected(self) -> bool:
         return self.selected

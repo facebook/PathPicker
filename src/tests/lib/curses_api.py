@@ -2,9 +2,10 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
+from pathpicker.curses_api import CursesApiBase
 
 
-class CursesForTest:
+class CursesForTest(CursesApiBase):
 
     """The dependency-injected curses wrapper which simply
     stores some state in test runs of the UI"""
