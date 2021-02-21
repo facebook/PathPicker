@@ -5,7 +5,7 @@
 import curses
 import re
 from collections import namedtuple
-from typing import Optional
+from typing import Optional, Tuple
 
 from pathpicker.color_printer import ColorPrinter
 
@@ -38,11 +38,11 @@ class FormattedText:
             self.segments.insert(0, "")
             self.plain_text = "".join(self.segments[1::2])
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.plain_text
 
     @classmethod
-    def parse_formatting(cls, formatting):
+    def parse_formatting(cls, formatting: str) -> Tuple[int, int, int]:
         """Parse ANSI formatting; the formatting passed in should be
         stripped of the control characters and ending character"""
         fg_color = -1  # -1 default means "use default", not "use white/black"
@@ -62,7 +62,9 @@ class FormattedText:
         return fg_color, bg_color, other
 
     @classmethod
-    def get_sequence_for_attributes(cls, fg_color, bg_color, attr):
+    def get_sequence_for_attributes(
+        cls, fg_color: int, bg_color: int, attr: int
+    ) -> str:
         """Return a fully formed escape sequence for the color pair
         and additional attributes"""
         return (
@@ -75,7 +77,9 @@ class FormattedText:
             + "m"
         )
 
-    def print_text(self, y_pos, x_pos, printer, max_len):
+    def print_text(
+        self, y_pos: int, x_pos: int, printer: ColorPrinter, max_len: int
+    ) -> None:
         """Print out using ncurses. Note that if any formatting changes
         occur, the attribute set is changed and not restored"""
         printed_so_far = 0
@@ -93,7 +97,7 @@ class FormattedText:
                 # formatting
                 printer.set_attributes(*self.parse_formatting(val))
 
-    def find_segment_place(self, to_go):
+    def find_segment_place(self, to_go: int) -> Tuple[int, int]:
         index = 1
 
         while index < len(self.segments):
@@ -107,8 +111,9 @@ class FormattedText:
             # we could reach here if the requested place is equal
             # to the very end of the string (as we do a <0 above).
             return index - 2, len(self.segments[index - 2])
+        raise AssertionError("Unreachable")
 
-    def breakat(self, where):
+    def breakat(self, where: int) -> Tuple["FormattedText", "FormattedText"]:
         """Break the formatted text at the point given and return
         a new tuple of two FormattedText representing the before and
         after"""
