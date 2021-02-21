@@ -1,3 +1,7 @@
 [flake8]
 max-line-length = 88
 extend-ignore = E203, W503
+copyright-check = True
+copyright-min-file-size = 1
+copyright-regexp = Copyright \(c\) Facebook\, Inc\. and its affiliates\.
+select = E,F,W,B,I,C
