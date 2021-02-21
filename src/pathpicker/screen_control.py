@@ -5,11 +5,16 @@
 import curses
 import signal
 import sys
+from typing import Dict, List, Tuple
 
 from pathpicker import logger, output, usage_strings
 from pathpicker.char_code_mapping import CODE_TO_CHAR
 from pathpicker.color_printer import ColorPrinter
-from pathpicker.line_format import LineMatch
+from pathpicker.curses_api import CursesApiBase
+from pathpicker.key_bindings import KeyBindings
+from pathpicker.line_format import LineBase, LineMatch
+from pathpicker.screen import ScreenBase
+from pathpicker.screen_flags import ScreenFlags
 
 
 def signal_handler(_sig, _frame) -> None:
@@ -49,7 +54,7 @@ BLOCK_CURSOR = 2
 
 
 class HelperChrome:
-    def __init__(self, printer, screen_control, flags):
+    def __init__(self, printer: ColorPrinter, screen_control: "Controller", flags):
         self.printer = printer
         self.screen_control = screen_control
         self.flags = flags
@@ -62,7 +67,7 @@ class HelperChrome:
         else:
             logger.add_event("init_narrow_mode")
 
-    def output(self, mode):
+    def output(self, mode: str) -> None:
         self.mode = mode
         for func in [self.output_side, self.output_bottom, self.toggle_cursor]:
             try:
@@ -70,42 +75,42 @@ class HelperChrome:
             except curses.error:
                 pass
 
-    def output_description(self, line_obj):
+    def output_description(self, line_obj) -> None:
         self.output_description_pane(line_obj)
 
-    def toggle_cursor(self):
+    def toggle_cursor(self) -> None:
         # only include cursor when in command mode
         if self.mode == COMMAND_MODE:
             curses.curs_set(BLOCK_CURSOR)
         else:
             curses.curs_set(INVISIBLE_CURSOR)
 
-    def reduce_max_y(self, max_y):
+    def reduce_max_y(self, max_y: int) -> int:
         if self.get_is_sidebar_mode():
             return max_y
         return max_y - 4
 
-    def reduce_max_x(self, max_x):
+    def reduce_max_x(self, max_x: int) -> int:
         if not self.get_is_sidebar_mode():
             return max_x
         return max_x - self.width
 
-    def get_min_x(self):
+    def get_min_x(self) -> int:
         if self.mode == COMMAND_MODE:
             return 0
         return self.screen_control.get_chrome_boundaries()[0]
 
-    def get_min_y(self):
+    def get_min_y(self) -> int:
         return self.screen_control.get_chrome_boundaries()[1]
 
-    def get_is_sidebar_mode(self):
+    def get_is_sidebar_mode(self) -> bool:
         (_max_y, max_x) = self.screen_control.get_screen_dimensions()
         return max_x > 200
 
-    def trim_line(self, line, width):
+    def trim_line(self, line: str, width: int) -> str:
         return line[:width]
 
-    def output_description_pane(self, line_obj):
+    def output_description_pane(self, line_obj) -> None:
         if not self.get_is_sidebar_mode():
             return
         (_max_y, max_x) = self.screen_control.get_screen_dimensions()
@@ -274,7 +279,14 @@ class ScrollBar:
 
 
 class Controller:
-    def __init__(self, flags, key_bindings, stdscr, line_objs, curses_api):
+    def __init__(
+        self,
+        flags: ScreenFlags,
+        key_bindings: KeyBindings,
+        stdscr: ScreenBase,
+        line_objs: Dict[int, LineBase],
+        curses_api: CursesApiBase,
+    ):
         self.stdscr = stdscr
         self.curses_api = curses_api
         self.curses_api.use_default_colors()
@@ -291,16 +303,16 @@ class Controller:
         self.mode = SELECT_MODE
 
         # lets loop through and split
-        self.line_matches = []
+        self.line_matches: List[LineMatch] = []
 
         for line_obj in self.line_objs.values():
             line_obj.set_controller(self)
-            if not line_obj.is_simple():
+            if isinstance(line_obj, LineMatch):
                 self.line_matches.append(line_obj)
 
         # begin tracking dirty state
         self.dirty = False
-        self.dirty_indexes = []
+        self.dirty_indexes: List[int] = []
 
         if self.flags.args.all:
             self.toggle_select_all()
@@ -318,13 +330,13 @@ class Controller:
 
         logger.add_event("init")
 
-    def get_scroll_offset(self):
+    def get_scroll_offset(self) -> int:
         return self.scroll_offset
 
-    def get_screen_dimensions(self):
+    def get_screen_dimensions(self) -> Tuple[int, int]:
         return self.stdscr.getmaxyx()
 
-    def get_chrome_boundaries(self):
+    def get_chrome_boundaries(self) -> Tuple[int, int, int, int]:
         (max_y, max_x) = self.stdscr.getmaxyx()
         min_x = (
             CHROME_MIN_X
@@ -336,27 +348,27 @@ class Controller:
         # format of (MINX, MINY, MAXX, MAXY)
         return min_x, CHROME_MIN_Y, max_x, max_y
 
-    def get_viewport_height(self):
+    def get_viewport_height(self) -> int:
         (_min_x, min_y, _max_x, max_y) = self.get_chrome_boundaries()
         return max_y - min_y
 
-    def set_hover(self, index, val):
+    def set_hover(self, index: int, val: bool) -> None:
         self.line_matches[index].set_hover(val)
 
-    def toggle_select(self):
+    def toggle_select(self) -> None:
         self.line_matches[self.hover_index].toggle_select()
 
-    def toggle_select_all(self):
+    def toggle_select_all(self) -> None:
         paths = set()
         for line in self.line_matches:
             if line.get_path() not in paths:
                 paths.add(line.get_path())
                 line.toggle_select()
 
-    def set_select(self, val):
+    def set_select(self, val: bool) -> None:
         self.line_matches[self.hover_index].set_select(val)
 
-    def describe_file(self):
+    def describe_file(self) -> None:
         self.helper_chrome.output_description(self.line_matches[self.hover_index])
 
     def control(self):
@@ -632,7 +644,7 @@ class Controller:
         self.dirty = False
         self.dirty_indexes = []
 
-    def dirty_line(self, index):
+    def dirty_line(self, index: int) -> None:
         self.dirty_indexes.append(index)
 
     def dirty_all(self):

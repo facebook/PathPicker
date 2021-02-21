@@ -2,12 +2,10 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
-from pathpicker.curses_api import CursesAPI
-
-if TYPE_CHECKING:
-    import curses
+from pathpicker.curses_api import CursesApiBase
+from pathpicker.screen import ScreenBase
 
 
 class ColorPrinter:
@@ -18,7 +16,7 @@ class ColorPrinter:
     DEFAULT_COLOR_INDEX = 1
     CURRENT_COLORS = -1
 
-    def __init__(self, screen: "curses._CursesWindow", curses_api: CursesAPI):
+    def __init__(self, screen: ScreenBase, curses_api: CursesApiBase):
         self.colors = {}
         self.colors[(0, 0)] = 0  # 0,0 = white on black is hardcoded
         # in general, we want to use -1,-1 for most "normal" text printing

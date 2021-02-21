@@ -6,12 +6,13 @@ import curses
 import os
 import pickle
 import sys
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from pathpicker import logger, output, screen_control, state_files
-from pathpicker.curses_api import CursesAPI
+from pathpicker.curses_api import CursesApi, CursesApiBase
 from pathpicker.key_bindings import KeyBindings, read_key_bindings
-from pathpicker.line_format import LineMatch
+from pathpicker.line_format import LineBase, LineMatch
+from pathpicker.screen import CursesScreen, ScreenBase
 from pathpicker.screen_flags import ScreenFlags
 
 LOAD_SELECTION_WARNING = """
@@ -24,18 +25,18 @@ this error will go away)
 
 
 def do_program(
-    stdscr,
+    stdscr: ScreenBase,
     flags: ScreenFlags,
     key_bindings: Optional[KeyBindings] = None,
-    curses_api=None,
-    line_objs=None,
+    curses_api: Optional[CursesApiBase] = None,
+    line_objs: Optional[Dict[int, LineBase]] = None,
 ) -> None:
     # curses and lineObjs get dependency injected for
     # our tests, so init these if they are not provided
     if not key_bindings:
         key_bindings = read_key_bindings()
     if not curses_api:
-        curses_api = CursesAPI()
+        curses_api = CursesApi()
     if not line_objs:
         line_objs = get_line_objs()
     output.clear_file()
@@ -46,10 +47,10 @@ def do_program(
     screen.control()
 
 
-def get_line_objs():
+def get_line_objs() -> Dict[int, LineBase]:
     file_path = state_files.get_pickle_file_path()
     try:
-        line_objs = pickle.load(open(file_path, "rb"))
+        line_objs: Dict[int, LineBase] = pickle.load(open(file_path, "rb"))
     except (OSError, KeyError, pickle.PickleError):
         output.append_error(LOAD_SELECTION_WARNING)
         output.append_exit()
@@ -60,7 +61,9 @@ def get_line_objs():
     if os.path.isfile(selection_path):
         set_selections_from_pickle(selection_path, line_objs)
 
-    matches = [line_obj for line_obj in line_objs.values() if not line_obj.is_simple()]
+    matches = [
+        line_obj for line_obj in line_objs.values() if isinstance(line_obj, LineMatch)
+    ]
     if not matches:
         output.write_to_file('echo "No lines matched!";')
         output.append_exit()
@@ -100,7 +103,7 @@ def main(argv: List[str]) -> int:
     # so we can benefit from the default argparse
     # behavior:
     flags = ScreenFlags.init_from_args(argv[1:])
-    curses.wrapper(lambda x: do_program(x, flags))
+    curses.wrapper(lambda x: do_program(CursesScreen(x), flags))
     return 0
 
 
