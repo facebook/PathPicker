@@ -9,7 +9,7 @@ class CursesForTest:
     """The dependency-injected curses wrapper which simply
     stores some state in test runs of the UI"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.is_echo = False
         self.is_default_colors = False
         self.color_pairs = {}
