@@ -237,7 +237,7 @@ REGEX_WATERFALL: List[RegexConfig] = [
 # Attempts to resolve the root directory of the
 # repository in which path resides (i.e. the current directory).
 # both git and hg have commands for this, so let's just use those.
-def get_repo_path():
+def get_repo_path() -> str:
     proc = subprocess.Popen(
         ["git rev-parse --show-toplevel"],
         stdout=subprocess.PIPE,
@@ -246,7 +246,7 @@ def get_repo_path():
         universal_newlines=True,
     )
 
-    (stdout, stderr) = proc.communicate()
+    stdout, stderr = proc.communicate()
 
     # If there was no error return the output
     if not stderr:
@@ -261,7 +261,7 @@ def get_repo_path():
         universal_newlines=True,
     )
 
-    (stdout, stderr) = proc.communicate()
+    stdout, stderr = proc.communicate()
 
     # If there was no error return the output
     if not stderr:
@@ -273,7 +273,7 @@ def get_repo_path():
     return "./"
 
 
-PREPEND_PATH = str(get_repo_path().strip()) + "/"
+PREPEND_PATH = f"{get_repo_path().strip()}/"
 
 
 # returns a filename and (optional) line number
