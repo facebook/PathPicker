@@ -13,7 +13,7 @@ from tests.lib.key_bindings import (
 
 
 class TestKeyBindingsParser(unittest.TestCase):
-    def test_ignore_non_existing_configuration_file(self):
+    def test_ignore_non_existing_configuration_file(self) -> None:
         file = tempfile.NamedTemporaryFile(delete=True)
         file.close()
 
@@ -28,7 +28,7 @@ class TestKeyBindingsParser(unittest.TestCase):
             ),
         )
 
-    def test_standard_parsing(self):
+    def test_standard_parsing(self) -> None:
         file = tempfile.NamedTemporaryFile(mode="wt", delete=False)
         file.write(KEY_BINDINGS_FOR_TEST_CONFIG_CONTENT)
         file.close()
