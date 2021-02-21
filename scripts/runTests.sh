@@ -27,3 +27,4 @@ poetry run mypy src
 poetry run flake8 src
 poetry run pylint src
 poetry run pytest src/tests
+poetry run vulture src

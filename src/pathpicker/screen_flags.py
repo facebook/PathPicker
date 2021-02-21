@@ -25,9 +25,6 @@ class ScreenFlags:
     def __init__(self, args: argparse.Namespace):
         self.args = args
 
-    def get_is_record_mode(self) -> bool:
-        return bool(self.args.record)
-
     def get_preset_command(self) -> str:
         return " ".join(self.args.command)
 
@@ -42,9 +39,6 @@ class ScreenFlags:
 
     def get_all_input(self) -> bool:
         return bool(self.args.all_input)
-
-    def get_is_non_interactive(self) -> bool:
-        return bool(self.args.non_interactive)
 
     @staticmethod
     def get_arg_parser() -> argparse.ArgumentParser:

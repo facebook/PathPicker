@@ -23,9 +23,6 @@ class FormattedText:
     FOREGROUND_RANGE = Range(30, 39)
     BACKGROUND_RANGE = Range(40, 49)
 
-    DEFAULT_COLOR_FOREGROUND = -1
-    DEFAULT_COLOR_BACKGROUND = -1
-
     def __init__(self, text: Optional[str] = None):
         self.text = text
 

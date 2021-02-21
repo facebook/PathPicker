@@ -9,7 +9,6 @@ from typing import List, Tuple, Union
 from pathpicker import logger, state_files
 from pathpicker.line_format import LineMatch
 
-DEBUG = "~/.fbPager.debug.text"
 RED_COLOR = "\033[0;31m"
 NO_COLOR = "\033[0m"
 
@@ -91,13 +90,6 @@ def get_editor_and_path() -> Tuple[str, str]:
         logger.add_event(f"using_editor_{editor}")
         return editor, editor_path
     return "vim", "vim"
-
-
-def expand_path(file_path: str) -> str:
-    # expand ~/ paths
-    file_path = os.path.expanduser(file_path)
-    # and in case of grep, expand ./ as well
-    return os.path.abspath(file_path)
 
 
 def join_files_into_command(files_and_line_numbers: List[Tuple[str, int]]) -> str:
