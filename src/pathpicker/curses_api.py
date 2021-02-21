@@ -11,9 +11,6 @@ class CursesAPI:
     """A dummy curses wrapper that allows us to intercept these
     calls when in a test environment"""
 
-    def __init__(self):
-        pass
-
     def use_default_colors(self) -> None:
         curses.use_default_colors()
 

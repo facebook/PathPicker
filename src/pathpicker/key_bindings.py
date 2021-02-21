@@ -14,7 +14,7 @@ KEY_BINDINGS_FILE = os.path.join(FPP_DIR, ".fpp.keys")
 KeyBindings = NewType("KeyBindings", List[Tuple[str, bytes]])
 
 
-def read_key_bindings(key_bindings_file=KEY_BINDINGS_FILE) -> KeyBindings:
+def read_key_bindings(key_bindings_file: str = KEY_BINDINGS_FILE) -> KeyBindings:
     """Returns configured key bindings, in the format [(key, command), ...].
     The ordering of the entries is not guaranteed, although it's irrelevant
     to the purpose.
