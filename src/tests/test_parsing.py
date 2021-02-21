@@ -346,7 +346,7 @@ TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class TestParseFunction(unittest.TestCase):
-    def test_prepend_dir(self):
+    def test_prepend_dir(self) -> None:
         for test_case in PREPEND_DIR_TEST_CASES:
             in_file = test_case["in"]
 
@@ -358,7 +358,7 @@ class TestParseFunction(unittest.TestCase):
             self.assertEqual(expected, result)
         print(f"Tested {len(PREPEND_DIR_TEST_CASES)} dir cases.")
 
-    def test_file_fuzz(self):
+    def test_file_fuzz(self) -> None:
         befores = ["M ", "Modified: ", "Changed: ", "+++ ", "Banana asdasdoj pjo "]
         afters = [
             " * Adapts AdsErrorCodestore to something",
@@ -376,7 +376,7 @@ class TestParseFunction(unittest.TestCase):
                     self.check_file_result(this_case)
         print(f"Tested {len(FILE_TEST_CASES)} cases for file fuzz.")
 
-    def test_unresolvable(self):
+    def test_unresolvable(self) -> None:
         file_line = ".../something/foo.py"
         result = parse.match_line(file_line)
         if not result:
@@ -387,7 +387,7 @@ class TestParseFunction(unittest.TestCase):
         )
         print("Tested unresolvable case.")
 
-    def test_resolvable(self):
+    def test_resolvable(self) -> None:
         to_check = [case for case in FILE_TEST_CASES if case.match]
         for test_case in to_check:
             result = parse.match_line(test_case.test_input)
@@ -400,12 +400,12 @@ class TestParseFunction(unittest.TestCase):
             )
         print(f"Tested {len(to_check)} resolvable cases.")
 
-    def test_file_match(self):
+    def test_file_match(self) -> None:
         for test_case in FILE_TEST_CASES:
             self.check_file_result(test_case)
         print(f"Tested {len(FILE_TEST_CASES)} cases.")
 
-    def test_all_input_matches(self):
+    def test_all_input_matches(self) -> None:
         for test_case in ALL_INPUT_TEST_CASES:
             result = parse.match_line(test_case.test_input, False, True)
 
@@ -425,7 +425,7 @@ class TestParseFunction(unittest.TestCase):
 
         print(f"Tested {len(ALL_INPUT_TEST_CASES)} cases for all-input matching.")
 
-    def check_file_result(self, test_case):
+    def check_file_result(self, test_case: ParsingTestCase) -> None:
         working_dir = TESTS_DIR
         if test_case.working_dir is not None:
             working_dir = os.path.join(working_dir, test_case.working_dir)

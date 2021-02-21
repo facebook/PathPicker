@@ -5,7 +5,7 @@
 import os
 import re
 import unittest
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 from tests.lib import screen_test_runner
 
@@ -208,7 +208,7 @@ SCREEN_TEST_CASES: List[ScreenTestCase] = [
 
 
 class TestScreenLogic(unittest.TestCase):
-    def test_screen_inputs(self):
+    def test_screen_inputs(self) -> None:
         seen_cases: Dict[str, bool] = {}
         for test_case in SCREEN_TEST_CASES:
             # make sure its not copy pasta-ed
@@ -234,21 +234,25 @@ class TestScreenLogic(unittest.TestCase):
                 all_input=("-ai" in args or "--all-input" in args),
             )
 
-            self.compare_to_expected(test_case, test_name, screen_data)
+            self.compare_to_expected(test_case, screen_data)
             print(f"Tested {test_name}")
 
-    def compare_to_expected(self, test_case, test_name, screen_data):
+    def compare_to_expected(
+        self, test_case: ScreenTestCase, screen_data: Tuple[List[str], List[str]]
+    ) -> None:
         TestScreenLogic.maybe_make_expected_dir()
-        (actual_lines, _actual_attributes) = screen_data
+        actual_lines, _actual_attributes = screen_data
 
         if test_case.with_attributes:
-            self.compare_lines_and_attributes_to_expected(test_name, screen_data)
+            self.compare_lines_and_attributes_to_expected(test_case.name, screen_data)
         else:
-            self.compare_lines_to_expected(test_name, actual_lines)
+            self.compare_lines_to_expected(test_case.name, actual_lines)
 
-    def compare_lines_and_attributes_to_expected(self, test_name, screen_data):
-        (actual_lines, actual_attributes) = screen_data
-        actual_merged_lines = []
+    def compare_lines_and_attributes_to_expected(
+        self, test_name: str, screen_data: Tuple[List[str], List[str]]
+    ) -> None:
+        actual_lines, actual_attributes = screen_data
+        actual_merged_lines: List[str] = []
         for actual_line, attribute_line in zip(actual_lines, actual_attributes):
             actual_merged_lines.append(actual_line)
             actual_merged_lines.append(attribute_line)
@@ -260,7 +264,9 @@ class TestScreenLogic(unittest.TestCase):
 
         self.assert_equal_lines(test_name, actual_merged_lines, expected_merged_lines)
 
-    def compare_lines_to_expected(self, test_name, actual_lines):
+    def compare_lines_to_expected(
+        self, test_name: str, actual_lines: List[str]
+    ) -> None:
         self.output_if_not_file(test_name, "\n".join(actual_lines))
 
         file = open(TestScreenLogic.get_expected_file(test_name))
@@ -269,7 +275,7 @@ class TestScreenLogic(unittest.TestCase):
 
         self.assert_equal_lines(test_name, actual_lines, expected_lines)
 
-    def output_if_not_file(self, test_name, output):
+    def output_if_not_file(self, test_name: str, output: str) -> None:
         expected_file = TestScreenLogic.get_expected_file(test_name)
         if os.path.isfile(expected_file):
             return
@@ -280,7 +286,9 @@ class TestScreenLogic(unittest.TestCase):
         file.close()
         self.fail(f"File outputted, please inspect {expected_file} for correctness")
 
-    def assert_equal_num_lines(self, test_name, actual_lines, expected_lines):
+    def assert_equal_num_lines(
+        self, test_name: str, actual_lines: List[str], expected_lines: List[str]
+    ) -> None:
         self.assertEqual(
             len(actual_lines),
             len(expected_lines),
@@ -290,7 +298,9 @@ class TestScreenLogic(unittest.TestCase):
             ),
         )
 
-    def assert_equal_lines(self, test_name, actual_lines, expected_lines):
+    def assert_equal_lines(
+        self, test_name: str, actual_lines: List[str], expected_lines: List[str]
+    ) -> None:
         self.assert_equal_num_lines(test_name, actual_lines, expected_lines)
         expected_file = TestScreenLogic.get_expected_file(test_name)
         glob_needle = " (glob)"
@@ -307,17 +317,19 @@ class TestScreenLogic(unittest.TestCase):
             else:
                 self.assertEqual(expected_line, actual_line, error_message)
 
-    def assert_equal_with_glob(self, expected_line, actual_line, error_message):
+    def assert_equal_with_glob(
+        self, expected_line: str, actual_line: str, error_message: str
+    ) -> None:
         # Escape all regex symbols and replace "*" with ".*"
         pattern = ".*".join(map(re.escape, expected_line.split("*")))
         self.assertTrue(re.match(pattern, actual_line), error_message)
 
     @staticmethod
-    def get_expected_file(test_name):
+    def get_expected_file(test_name: str) -> str:
         return os.path.join(EXPECTED_DIR, test_name + ".txt")
 
     @staticmethod
-    def maybe_make_expected_dir():
+    def maybe_make_expected_dir() -> None:
         if not os.path.isdir(EXPECTED_DIR):
             os.makedirs(EXPECTED_DIR)
 
