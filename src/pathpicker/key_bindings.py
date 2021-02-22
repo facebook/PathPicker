@@ -11,7 +11,7 @@ from pathpicker.state_files import FPP_DIR
 KEY_BINDINGS_FILE = os.path.join(FPP_DIR, ".fpp.keys")
 
 
-KeyBindings = NewType("KeyBindings", List[Tuple[str, bytes]])
+KeyBindings = NewType("KeyBindings", List[Tuple[str, str]])
 
 
 def read_key_bindings(key_bindings_file: str = KEY_BINDINGS_FILE) -> KeyBindings:
@@ -23,17 +23,7 @@ def read_key_bindings(key_bindings_file: str = KEY_BINDINGS_FILE) -> KeyBindings
     parser = configparser.ConfigParser()
     parser.read(config_file_path)
 
-    # The `execute_preconfigured_command` underlying APIs use `curses.getstr()`,
-    # which returns an encoded string, and invoke `decode()` on it.
-    # In Python 3/configparser, the parsed strings are already decoded,
-    # therefore don't support this method anymore, so we convert them
-    # to encoded ones first.
     bindings = KeyBindings([])
     if parser.has_section("bindings"):
-        bindings = KeyBindings(
-            [
-                (key, command.encode("utf-8"))
-                for key, command in parser.items("bindings")
-            ]
-        )
+        bindings = KeyBindings(parser.items("bindings"))
     return bindings

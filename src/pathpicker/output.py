@@ -4,7 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 import os
 import pickle
-from typing import List, Tuple, Union
+from typing import List, Tuple
 
 from pathpicker import logger, state_files
 from pathpicker.line_format import LineMatch
@@ -30,14 +30,13 @@ CONTINUE_WARNING = "Are you sure you want to continue? Ctrl-C to quit"
 #
 
 
-def exec_composed_command(
-    command: Union[str, bytes], line_objs: List[LineMatch]
-) -> None:
+def exec_composed_command(command: str, line_objs: List[LineMatch]) -> None:
     if not command:
         edit_files(line_objs)
         return
 
-    decoded_command = command if isinstance(command, str) else command.decode()
+    # decoded_command = command if isinstance(command, str) else command.decode()
+    decoded_command = command
 
     logger.add_event("command_on_num_files", len(line_objs))
     decoded_command = compose_command(decoded_command, line_objs)

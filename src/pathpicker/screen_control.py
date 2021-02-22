@@ -625,7 +625,7 @@ class Controller:
         output.exec_composed_command(command, line_objs)
         sys.exit(0)
 
-    def execute_preconfigured_command(self, command: bytes) -> None:
+    def execute_preconfigured_command(self, command: str) -> None:
         line_objs = self.get_paths_to_use()
         output.exec_composed_command(command, line_objs)
         sys.exit(0)
