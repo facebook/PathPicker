@@ -43,6 +43,7 @@ flake8-bugbear = "^20.11.1"
 flake8-use-fstring = "^1.1"
 flake8-copyright = "^0.2.2"
 vulture = "^2.3"
+flake8-eradicate = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
