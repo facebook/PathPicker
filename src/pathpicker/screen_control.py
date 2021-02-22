@@ -5,6 +5,7 @@
 import curses
 import signal
 import sys
+from types import FrameType
 from typing import Dict, List, Tuple
 
 from pathpicker import logger, output, usage_strings
@@ -17,7 +18,7 @@ from pathpicker.screen import ScreenBase
 from pathpicker.screen_flags import ScreenFlags
 
 
-def signal_handler(_sig, _frame) -> None:
+def signal_handler(_sig: int, _frame: FrameType) -> None:
     # from http://stackoverflow.com/a/1112350/948126
     # Lets just quit rather than signal.SIGINT printing the stack
     sys.exit(0)
@@ -54,7 +55,9 @@ BLOCK_CURSOR = 2
 
 
 class HelperChrome:
-    def __init__(self, printer: ColorPrinter, screen_control: "Controller", flags):
+    def __init__(
+        self, printer: ColorPrinter, screen_control: "Controller", flags: ScreenFlags
+    ):
         self.printer = printer
         self.screen_control = screen_control
         self.flags = flags
@@ -75,7 +78,7 @@ class HelperChrome:
             except curses.error:
                 pass
 
-    def output_description(self, line_obj) -> None:
+    def output_description(self, line_obj: LineMatch) -> None:
         self.output_description_pane(line_obj)
 
     def toggle_cursor(self) -> None:
@@ -110,7 +113,7 @@ class HelperChrome:
     def trim_line(self, line: str, width: int) -> str:
         return line[:width]
 
-    def output_description_pane(self, line_obj) -> None:
+    def output_description_pane(self, line_obj: LineMatch) -> None:
         if not self.get_is_sidebar_mode():
             return
         _max_y, max_x = self.screen_control.get_screen_dimensions()
