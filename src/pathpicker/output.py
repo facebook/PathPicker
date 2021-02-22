@@ -35,14 +35,11 @@ def exec_composed_command(command: str, line_objs: List[LineMatch]) -> None:
         edit_files(line_objs)
         return
 
-    # decoded_command = command if isinstance(command, str) else command.decode()
-    decoded_command = command
-
     logger.add_event("command_on_num_files", len(line_objs))
-    decoded_command = compose_command(decoded_command, line_objs)
+    command = compose_command(command, line_objs)
     append_alias_expansion()
     append_if_invalid(line_objs)
-    append_friendly_command(decoded_command)
+    append_friendly_command(command)
     append_exit()
 
 

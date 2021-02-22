@@ -13,7 +13,7 @@ class CursesForTest(CursesApiBase):
     def __init__(self) -> None:
         self.color_pairs = {}
         self.current_color = (0, 0)
-        # the (0, 0) is hardcoded
+        # The (0, 0) is hardcoded.
         self.color_pairs[0] = self.current_color
 
     def use_default_colors(self) -> None:

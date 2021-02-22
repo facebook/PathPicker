@@ -35,8 +35,7 @@ FILE_TEST_CASES: List[ParsingTestCase] = [
     ParsingTestCase(".ssh/.gitignore", True, ".ssh/.gitignore"),
     # For now, don't worry about matching the following case perfectly,
     # simply because it's complicated.
-    #    'input': '~/.ssh/known_hosts',
-    #    'match': True,
+    # '~/.ssh/known_hosts', True, '~/.ssh/known_hosts'
     ParsingTestCase(".ssh/known_hosts", True, ".ssh/known_hosts"),
     # Arbitrarily ignore really short dot filenames
     ParsingTestCase(".a", False),
