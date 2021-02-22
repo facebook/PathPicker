@@ -7,7 +7,7 @@ from pathpicker.key_bindings import KeyBindings
 KEY_BINDINGS_FOR_TEST_CONFIG_CONTENT: str = "[bindings]\nr = rspec\ns = subl\n"
 KEY_BINDINGS_FOR_TEST: KeyBindings = KeyBindings(
     [
-        ("r", "rspec".encode("utf-8")),
-        ("s", "subl".encode("utf-8")),
+        ("r", "rspec"),
+        ("s", "subl"),
     ]
 )
