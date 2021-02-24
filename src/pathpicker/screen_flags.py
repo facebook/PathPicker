@@ -40,6 +40,9 @@ class ScreenFlags:
     def get_all_input(self) -> bool:
         return bool(self.args.all_input)
 
+    def get_keep_open(self) -> bool:
+        return bool(self.args.keep_open)
+
     @staticmethod
     def get_arg_parser() -> argparse.ArgumentParser:
         parser = argparse.ArgumentParser(prog="fpp")
