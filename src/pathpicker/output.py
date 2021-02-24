@@ -106,7 +106,7 @@ def join_files_into_command(files_and_line_numbers: List[Tuple[str, int]]) -> st
             editor_without_args = editor.split()[0]
             if (
                 editor_without_args
-                in ["vi", "nvim", "nano", "joe", "emacs", "emacsclient"]
+                in ["vi", "nvim", "nano", "joe", "emacs", "emacsclient", "micro"]
                 and line_num != 0
             ):
                 cmd += f" +{line_num} '{file_path}'"
