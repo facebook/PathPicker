@@ -81,6 +81,7 @@ def main(argv: List[str]) -> int:
         # otherwise you need to manually clear the old selection every
         # time fpp is reopened.
         if flags.get_keep_open():
+            # delete the old selection
             selection_path = state_files.get_selection_file_path()
             if os.path.isfile(selection_path):
                 os.remove(selection_path)
