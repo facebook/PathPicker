@@ -77,6 +77,13 @@ def main(argv: List[str]) -> int:
         print(f"Done! Removed {len(state_files.get_all_state_files())} files ")
         return 0
     if sys.stdin.isatty():
+        # don't keep the old selection if the --keep-open option is used;
+        # otherwise you need to manually clear the old selection every
+        # time fpp is reopened.
+        if flags.get_keep_open():
+            selection_path = state_files.get_selection_file_path()
+            if os.path.isfile(selection_path):
+                os.remove(selection_path)
         if os.path.isfile(state_files.get_pickle_file_path()):
             print("Using previous input piped to fpp...")
         else:
