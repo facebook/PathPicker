@@ -592,7 +592,7 @@ class Controller:
         self.curses_api.echo()
         max_x = int(round(max_x - 1))
 
-        return str(self.stdscr.getstr(begin_height + 3, 0, max_x))
+        return self.stdscr.getstr(begin_height + 3, 0, max_x)
 
     def begin_enter_command(self) -> None:
         self.stdscr.erase()

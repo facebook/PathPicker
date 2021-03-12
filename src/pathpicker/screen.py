@@ -3,7 +3,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Tuple, Union
+from typing import TYPE_CHECKING, Tuple
 
 if TYPE_CHECKING:
     import curses
@@ -39,7 +39,7 @@ class ScreenBase(ABC):
         pass
 
     @abstractmethod
-    def getstr(self, y_pos: int, x_pos: int, max_len: int) -> Union[str, bytes, int]:
+    def getstr(self, y_pos: int, x_pos: int, max_len: int) -> str:
         pass
 
 
@@ -68,5 +68,10 @@ class CursesScreen(ScreenBase):
     def getch(self) -> int:
         return self.screen.getch()
 
-    def getstr(self, y_pos: int, x_pos: int, max_len: int) -> Union[str, bytes, int]:
-        return self.screen.getstr(y_pos, x_pos, max_len)
+    def getstr(self, y_pos: int, x_pos: int, max_len: int) -> str:
+        result = self.screen.getstr(y_pos, x_pos, max_len)
+        if isinstance(result, str):
+            return result
+        if isinstance(result, int):
+            return str(result)
+        return result.decode("utf-8")
