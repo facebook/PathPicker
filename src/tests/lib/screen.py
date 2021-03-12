@@ -3,7 +3,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 from copy import copy
-from typing import Dict, List, NewType, Optional, Tuple, Union
+from typing import Dict, List, NewType, Optional, Tuple
 
 from pathpicker.char_code_mapping import CHAR_TO_CODE
 from pathpicker.screen import ScreenBase
@@ -89,7 +89,7 @@ class ScreenForTest(ScreenBase):
     def getch(self) -> int:
         return CHAR_TO_CODE[self.char_inputs.pop(0)]
 
-    def getstr(self, _y: int, _x: int, _max_len: int) -> Union[str, bytes, int]:
+    def getstr(self, _y: int, _x: int, _max_len: int) -> str:
         # TODO -- enable editing this
         return ""
 
