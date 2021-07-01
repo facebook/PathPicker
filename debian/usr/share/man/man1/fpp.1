@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: fpp
-.\"    Author: [FIXME: author] [see http://docbook.sf.net/el/author]
-.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
-.\"      Date: 06/15/2015
+.\"    Author: [FIXME: author] [see http://www.docbook.org/tdg5/en/html/author]
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 07/01/2021
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "FPP" "1" "06/15/2015" "\ \&" "\ \&"
+.TH "FPP" "1" "07/01/2021" "\ \&" "\ \&"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -31,9 +31,63 @@
 fpp \- Facebook PathPicker; a command line tool for selecting files out of bash output
 .SH "SYNOPSIS"
 .sp
-usage: fpp [\-h] [\-r] [\-\-version] [\-\-clean] [\-ko] [\-c COMMAND [COMMAND \&...]] [\-nfc]
-.sp
-optional arguments: \-h, \-\-help show this help message and exit \-r, \-\-record Record input and output\&. This is largely used for testing, but you may find it useful for scripting\&. \-\-version Print the version of fpp and exit\&. \-\-clean Remove the state files that fpp uses when starting up, including the previous input used and selection pickle\&. Useful when using fpp in a script context where the previous state should be discarded\&. \-ko, \-\-keep\-open keep PathPicker open once a file selection or command is performed\&. This will loop the program until Ctrl\-C is used to terminate the process\&. \-c COMMAND [COMMAND \&...], \-\-command COMMAND [COMMAND \&...] You may specify a command while invoking fpp that will be run once files have been selected\&. Normally, fpp opens your editor (see discussion of $EDITOR, $VISUAL, and $FPP_EDITOR) when you press enter\&. If you specify a command here, it will be invoked instead\&. \-nfc, \-\-no\-file\-checks You may want to turn off file system validation for a particular instance of PathPicker; this flag disables our internal logic for checking if a regex match is an actual file on the system\&. This is particularly useful when using PathPicker for an input of, say, deleted files in git status that you would like to restore to a given revision\&. It enables you to select the deleted files even though they do not exist on the system anymore\&.
+.nf
+usage: fpp [\-h] [\-r] [\-\-version] [\-\-clean] [\-ko] [\-c COMMAND [COMMAND \&.\&.\&.]]
+           [\-e EXECUTE_KEYS [EXECUTE_KEYS \&.\&.\&.]] [\-nfc] [\-ai] [\-ni] [\-a]
+
+optional arguments:
+  \-h, \-\-help            show this help message and exit
+  \-r, \-\-record          Record input and output\&. This is largely used for
+                        testing, but you may find it useful for scripting\&.
+  \-\-version             Print the version of fpp and exit\&.
+  \-\-clean               Remove the state files that fpp uses when starting up,
+                        including the previous input used and selection
+                        pickle\&. Useful when using fpp in a script context
+                        where the previous state should be discarded\&.
+  \-ko, \-\-keep\-open      keep PathPicker open once a file selection or command
+                        is performed\&. This will loop the program until Ctrl\-C
+                        is used to terminate the process\&.
+  \-c COMMAND [COMMAND \&.\&.\&.], \-\-command COMMAND [COMMAND \&.\&.\&.]
+                        You may specify a command while invoking fpp that will
+                        be run once files have been selected\&. Normally, fpp
+                        opens your editor (see discussion of $EDITOR, $VISUAL,
+                        and $FPP_EDITOR) when you press enter\&. If you specify
+                        a command here, it will be invoked instead\&.
+  \-e EXECUTE_KEYS [EXECUTE_KEYS \&.\&.\&.], \-\-execute\-keys EXECUTE_KEYS [EXECUTE_KEYS \&.\&.\&.]
+                        Automatically execute the given keys when the file
+                        list shows up\&. This is useful on certain cases, e\&.g\&.
+                        using "END" in order to automatically go to the last
+                        entry when there is a long list\&.
+  \-nfc, \-\-no\-file\-checks
+                        You may want to turn off file system validation for a
+                        particular instance of PathPicker; this flag disables
+                        our internal logic for checking if a regex match is an
+                        actual file on the system\&. This is particularly useful
+                        when using PathPicker for an input of, say, deleted
+                        files in git status that you would like to restore to
+                        a given revision\&. It enables you to select the deleted
+                        files even though they do not exist on the system
+                        anymore\&.
+  \-ai, \-\-all\-input      You may force PathPicker to recognize all lines as
+                        acceptable input\&. Typically, PathPicker will scan the
+                        input for references to file paths\&. Passing this
+                        option will disable those scans and the program will
+                        assume that every input line is a match\&. In practice,
+                        this option allows for input selection for a variety
+                        of sources that would otherwise be unsupported \-\- git
+                        branches, mercurial bookmarks, etc\&.
+  \-ni, \-\-non\-interactive
+                        Normally, the command that runs after you\*(Aqve chosen
+                        files to operate on is spawned in an interactive
+                        subshell\&. This allows you to use aliases and have
+                        access to environment variables defined in your
+                        startup files, but can have strange side\-effects when
+                        starting and stopping jobs and redirecting inputs\&.
+                        Using this flag runs your commands in a non\-
+                        interactive subshell, like a normal shell script\&.
+  \-a, \-\-all             Automatically select all available lines once the
+                        interactive editor has been entered\&.
+.fi
 .SH "INTRO"
 .sp
 To get started with fpp, pipe some kind of terminal output into the program\&. Examples include:
@@ -195,6 +249,17 @@ Once fpp parses your input (and something that looks like a file matches), it wi
 [x] quick select mode
 .RE
 .sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+[d] describe file
+.RE
+.sp
 Once you have your files selected, you can either open them in your favorite text editor or execute commands with them via command mode:
 .sp
 .RS 4
@@ -289,6 +354,12 @@ PathPicker offers a bit of configuration currently with more to come in the futu
 Editor
 .sp
 The $FPP_EDITOR environment variable can be set to tell PathPicker which editor to open the selected files with\&. If that variable is not set, $VISUAL and then $EDITOR are used as fallbacks, with "vim" as a last resort\&.
+.sp
+The $FPP_DISABLE_SPLIT environment variable will disable splitting files into panes for vim clients (aka sequential editing)\&.
+.sp
+Directory
+.sp
+PathPicker saves state files for use when starting up, including the previous input used and selection pickle\&. By default, these files are saved in $XDG_CACHE_HOME/fpp, but the $FPP_DIR environment variable can be used to tell PathPicker to use another directory\&.
 .sp
 Colors
 .sp

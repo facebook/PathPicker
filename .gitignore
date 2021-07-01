@@ -10,3 +10,5 @@ fpp.deb
 fpp*.deb
 debian/usr/
 pathpicker*.deb
+# man page leftovers
+manpage.adoc
