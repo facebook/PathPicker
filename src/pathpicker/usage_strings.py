@@ -180,9 +180,9 @@ MANPAGE_STR = "\n\n".join(
         MANPAGE_HEADER,
         MANPAGE_NAME_SECTION,
         MANPAGE_SYNOPSIS,
-        # FIXME: asciidoc example block?
-        # http://www.methods.co.nz/asciidoc/userguide.html#X48
+        "--------------------------------------",
         ScreenFlags.get_arg_parser().format_help(),
+        "--------------------------------------",
         MANPAGE_INTRO_PRE,
         INTRO,
         USAGE_PAGE_HEADER,
