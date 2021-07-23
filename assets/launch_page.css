@@ -296,11 +296,19 @@ hr {
   top: 0;
   width: 100%;
 } */
-
-@media (max-width:768px){
-  
+.mobile-show{
+  display: none;
+}
+.mobile-show img {
+  width:300px;
+  height: auto;
 }
 
-@media (min-width:769px){
-  
-}
+@media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px){ 
+      .mobile-show {display: inline;
+                    width: 50pxpx;
+                    height: 50px;}
+      .mobile-hide {display: none;}
+  }
