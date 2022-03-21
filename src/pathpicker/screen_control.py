@@ -34,7 +34,9 @@ SELECT_MODE = "SELECT"
 COMMAND_MODE = "COMMAND_MODE"
 X_MODE = "X_MODE"
 
-LABELS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'"
+# characters for quick select mode label(excluded reserved characters: A,F)
+LABELS = "BCDEGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*()_+<>?{}|;'" 
+
 
 # options for displayed to the user at the bottom of the screen
 SHORT_NAV_OPTION_SELECTION_STR = "[f|A] selection"
