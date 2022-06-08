@@ -57,7 +57,7 @@ On Debian-based systems, run these steps:
 $ git clone https://github.com/facebook/PathPicker.git
 $ cd PathPicker/debian
 $ ./package.sh
-$ ls ../fpp_0.7.2_noarch.deb
+$ ls ../pathpicker_*_all.deb
 ```
 
 On Arch Linux, PathPicker can be installed from Arch User Repository (AUR).
