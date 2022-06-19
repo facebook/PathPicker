@@ -1,36 +1,32 @@
-A README.md                      |  8 ++++-
+B README.md                      |  8 ++++-
       *********                                                                 
-B fpp                            |  6 ++--
+C fpp                            |  6 ++--
                                                                                 
-C src/__tests__/__init__.py      |  0
+D src/__tests__/__init__.py      |  0
       _________________________                                                 
-D src/__tests__/cursesForTest.py | 45 ++++++++++++++++++++++++++++
+E src/__tests__/cursesForTest.py | 45 ++++++++++++++++++++++++++++
       ______________________________                                            
-E |===>src/__tests__/initTest.py      | 28 ++++++++++++++++++
+G |===>src/__tests__/initTest.py      | 28 ++++++++++++++++++
       ||||||||||||||||||||||||||||||                                            
-F src/__tests__/screenForTest.py | 67 ++++++++++++++++++++++++++++++++++++++
+H src/__tests__/screenForTest.py | 67 ++++++++++++++++++++++++++++++++++++++
       ______________________________                                            
-G src/charCodeMapping.py         | 20 +++++++++++++
+I src/charCodeMapping.py         | 20 +++++++++++++
       ______________________                                                    
-H |===>src/choose.py                  | 15 ++++++++--
+J |===>src/choose.py                  | 15 ++++++++--
       ||||||||||||||||||                                                        
-I src/colorPrinter.py            | 21 ++++++++-----
+K src/colorPrinter.py            | 21 ++++++++-----
       ___________________                                                       
-J src/cursesAPI.py               | 40 +++++++++++++++++++++++++
+L src/cursesAPI.py               | 40 +++++++++++++++++++++++++
       ________________                                                          
-K src/format.py                  |  4 +--
+M src/format.py                  |  4 +--
       _____________                                                             
-L src/processInput.py            |  7 +++++
+N src/processInput.py            |  7 +++++
       ___________________                                                       
-M src/screenControl.py           | 28 +++++++-----------
+O src/screenControl.py           | 28 +++++++-----------
       ____________________                                                      
-N src/screenFlags.py             | 34 +++++++++++++++++++++
+P src/screenFlags.py             | 34 +++++++++++++++++++++
       __________________                                                        
-O 14 files changed, 290 insertions(+), 33 deletions(-)
-                                                                                
-P
-                                                                                
-Q
+Q 14 files changed, 290 insertions(+), 33 deletions(-)
                                                                                 
 R
                                                                                 
@@ -54,7 +50,11 @@ Z
                                                                                 
 2
                                                                                 
-3___________________________________________________________________________
+3
+                                                                                
+4
+                                                                                
+5___________________________________________________________________________
                                                                                 
 [f|A] selection, [down|j|up|k|space|b] navigation, [enter] open, [x] quick 
                                                                                 

@@ -147,7 +147,7 @@ SCREEN_TEST_CASES: List[ScreenTestCase] = [
         "xModeWithSelect",
         input_file="gitDiff.txt",
         with_attributes=True,
-        inputs=["x", "E", "H"],
+        inputs=["x", "G", "J"],
     ),
     ScreenTestCase(
         "gitAbbreviatedFiles",
