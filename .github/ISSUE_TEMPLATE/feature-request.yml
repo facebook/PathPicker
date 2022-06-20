@@ -11,7 +11,7 @@ body:
   - type: textarea
     id: solution
     attributes:
-      label: 💡 Idea
+      label: '💡 Idea'
       description: |
         Please describe the desired behavior, pitch your idea, or suggest improvements
     validations:
