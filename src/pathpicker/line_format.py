@@ -174,7 +174,7 @@ class LineMatch(LineBase):
 
     def is_git_abbreviated_path(self) -> bool:
         # this method mainly serves as a warning for when we get
-        # git-abbrievated paths like ".../" that confuse users.
+        # git-abbreviated paths like ".../" that confuse users.
         parts = self.path.split(os.path.sep)
         return len(parts) > 0 and parts[0] == "..."
 
