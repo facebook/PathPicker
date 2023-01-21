@@ -64,7 +64,7 @@ MASTER_REGEX_WITH_SPACES_AND_WEIRD_FILES = re.compile(
         # capture some pre-dir stuff like / and ./
         r"(?:"
         r"\.?/"
-        r")?"  # thats optional
+        r")?"  # that's optional
         # now we look at directories. The 'character class ' allowed before the '/'
         # is either a real character or a character and a space. This allows
         # multiple spaces in a directory as long as each space is followed by
@@ -102,7 +102,7 @@ MASTER_REGEX_WITH_SPACES = re.compile(
         # capture some pre-dir stuff like / and ./
         r"(?:"
         r"\.?/"
-        r")?"  # thats optional
+        r")?"  # that's optional
         # now we look at directories. The 'character class ' allowed before the '/'
         # is either a real character or a character and a space. This allows
         # multiple spaces in a directory as long as each space is followed by
@@ -358,7 +358,7 @@ def prepend_dir(file: str, with_file_inspection: bool = False) -> str:
 
     if file[0:4] == ".../":
         # these are the gross git abbreviated paths, so
-        # return early since we cant do anything here
+        # return early since we can't do anything here
         return file
 
     if file[0:2] == "~/":

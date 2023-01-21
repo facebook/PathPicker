@@ -277,7 +277,7 @@ FILE_TEST_CASES: List[ParsingTestCase] = [
         working_dir="inputs",
     ),
     ParsingTestCase(
-        "otehr thing ./foo/file-from-yocto_3.1%.bbappend",
+        "other thing ./foo/file-from-yocto_3.1%.bbappend",
         True,
         "file-from-yocto_3.1%.bbappend",
         validate_file_exists=True,

@@ -311,7 +311,7 @@
 [31m-    record mode. Possibly will be expanded in the future."""[m
 [32m+[m[32m    """A class that just represents the total set of flags[m
 [32m+[m[32m    available to FPP. Note that some of these are actually[m
-[32m+[m[32m    processsed by the fpp batch file, and not by python.[m
+[32m+[m[32m    processed by the fpp batch file, and not by python.[m
 [32m+[m[32m    However, they are documented here because argsparse is[m
 [32m+[m[32m    clean and easy to use for that purpose.[m
 [32m+[m
