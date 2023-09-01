@@ -110,7 +110,7 @@ def join_files_into_command(files_and_line_numbers: List[Tuple[str, int]]) -> st
                 and line_num != 0
             ):
                 cmd += f" +{line_num} '{file_path}'"
-            elif editor_without_args in ["subl", "sublime", "atom"] and line_num != 0:
+            elif editor_without_args in ["subl", "sublime", "atom", "hx"] and line_num != 0:
                 cmd += f" '{file_path}:{line_num}'"
             elif line_num != 0 and os.environ.get("FPP_LINENUM_SEP"):
                 cmd += f" '{file_path}{os.environ.get('FPP_LINENUM_SEP')}{line_num}'"
