@@ -21,7 +21,7 @@ max-line-length = "88"
 
 [tool.poetry]
 name = "pathpicker"
-version = "0.9.2"
+version = "0.9.5"
 description = "PathPicker accepts a wide range of input -- output from git commands, grep results, searches -- pretty much anything. After parsing the input, PathPicker presents you with a nice UI to select which files you're interested in. After that you can open them in your favorite editor or execute arbitrary commands."
 authors = ["Peter Cottle <pcottle@fb.com>"]
 license = "MIT"
