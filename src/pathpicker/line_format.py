@@ -44,7 +44,7 @@ class SimpleLine(LineBase):
         y_pos = min_y + self.index + self.controller.get_scroll_offset()
 
         if y_pos < min_y or y_pos >= max_y:
-            # wont be displayed!
+            # won't be displayed!
             return
 
         self.formatted_line.print_text(y_pos, min_x, printer, max_len)
@@ -287,7 +287,7 @@ class LineMatch(LineBase):
         y_pos = min_y + self.index + self.controller.get_scroll_offset()
 
         if y_pos < min_y or y_pos >= max_y:
-            # wont be displayed!
+            # won't be displayed!
             return
 
         # we dont care about the after text, but we should be able to see
