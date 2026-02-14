@@ -5,6 +5,7 @@
 import os
 import pickle
 import sys
+import tempfile
 from typing import Dict, List
 
 from pathpicker import parse, state_files
@@ -59,8 +60,14 @@ def get_line_objs_from_lines(
 def do_program(flags: ScreenFlags) -> None:
     file_path = state_files.get_pickle_file_path()
     line_objs = get_line_objs(flags)
-    # pickle it so the next program can parse it
-    pickle.dump(line_objs, open(file_path, "wb"))
+    # write atomically and set restrictive permissions
+    dirpath = os.path.dirname(file_path)
+    with tempfile.NamedTemporaryFile(dir=dirpath, delete=False) as tf:
+        pickle.dump(line_objs, tf, protocol=pickle.HIGHEST_PROTOCOL)
+        tf.flush()
+        os.fsync(tf.fileno())
+    os.replace(tf.name, file_path)
+    os.chmod(file_path, 0o600)
 
 
 def usage() -> None:

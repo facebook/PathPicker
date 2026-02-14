@@ -4,6 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 import os
 import pickle
+import tempfile
 from typing import List, Tuple
 
 from pathpicker import logger, state_files
@@ -70,9 +71,13 @@ def append_if_invalid(line_objs: List[LineMatch]) -> None:
 def output_selection(line_objs: List[LineMatch]) -> None:
     file_path = state_files.get_selection_file_path()
     indices = [line.index for line in line_objs]
-    file = open(file_path, "wb")
-    pickle.dump(indices, file)
-    file.close()
+    dirpath = os.path.dirname(file_path)
+    with tempfile.NamedTemporaryFile(dir=dirpath, delete=False) as tf:
+        pickle.dump(indices, tf, protocol=pickle.HIGHEST_PROTOCOL)
+        tf.flush()
+        os.fsync(tf.fileno())
+    os.replace(tf.name, file_path)
+    os.chmod(file_path, 0o600)
 
 
 def get_editor_and_path() -> Tuple[str, str]:

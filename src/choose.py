@@ -49,6 +49,11 @@ def do_program(
 
 def get_line_objs() -> Dict[int, LineBase]:
     file_path = state_files.get_pickle_file_path()
+    # refuse to load pickles that are not safe (ownership/permissions)
+    if os.path.exists(file_path) and not state_files.is_state_file_safe(file_path):
+        output.append_error(LOAD_SELECTION_WARNING)
+        output.append_exit()
+        sys.exit(1)
     try:
         line_objs: Dict[int, LineBase] = pickle.load(open(file_path, "rb"))
     except (OSError, KeyError, pickle.PickleError):
@@ -74,6 +79,10 @@ def get_line_objs() -> Dict[int, LineBase]:
 def set_selections_from_pickle(
     selection_path: str, line_objs: Dict[int, LineBase]
 ) -> None:
+    if not state_files.is_state_file_safe(selection_path):
+        output.append_error(LOAD_SELECTION_WARNING)
+        output.append_exit()
+        sys.exit(1)
     try:
         selected_indices = pickle.load(open(selection_path, "rb"))
     except (OSError, KeyError, pickle.PickleError):
