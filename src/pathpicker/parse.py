@@ -4,6 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 import os
 import re
+import shutil
 import subprocess
 from functools import partial
 from typing import Callable, List, Match, NamedTuple, NewType, Optional, Pattern, Tuple
@@ -238,35 +239,37 @@ REGEX_WATERFALL: List[RegexConfig] = [
 # repository in which path resides (i.e. the current directory).
 # both git and hg have commands for this, so let's just use those.
 def get_repo_path() -> str:
-    proc = subprocess.Popen(
-        ["git rev-parse --show-toplevel"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        shell=True,
-        universal_newlines=True,
-    )
+    git_path = shutil.which("git")
+    if git_path:
+        proc = subprocess.run(
+            [git_path, "rev-parse", "--show-toplevel"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            check=False,
+        )
+        stdout, stderr = proc.stdout, proc.stderr
 
-    stdout, stderr = proc.communicate()
+        # If there was no error return the output
+        if not stderr:
+            logger.add_event("using_git")
+            return stdout
 
-    # If there was no error return the output
-    if not stderr:
-        logger.add_event("using_git")
-        return stdout
+    hg_path = shutil.which("hg")
+    if hg_path:
+        proc = subprocess.run(
+            [hg_path, "root"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            check=False,
+        )
+        stdout, stderr = proc.stdout, proc.stderr
 
-    proc = subprocess.Popen(
-        ["hg root"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        shell=True,
-        universal_newlines=True,
-    )
-
-    stdout, stderr = proc.communicate()
-
-    # If there was no error return the output
-    if not stderr:
-        logger.add_event("using_hg")
-        return stdout
+        # If there was no error return the output
+        if not stderr:
+            logger.add_event("using_hg")
+            return stdout
 
     # Not a git or hg repo, go with current dir as a default
     logger.add_event("used_outside_repo")
