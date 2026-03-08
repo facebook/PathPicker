@@ -11,9 +11,11 @@ from typing import Callable, List, Match, NamedTuple, NewType, Optional, Pattern
 from pathpicker import logger
 from pathpicker.repos import REPOS
 
+from pathpicker.regexes import MASTER_REGEX, JUST_FILE_WITH_SPACES  # type: ignore
+
 MatchResult = NewType("MatchResult", Tuple[str, int, Match])
 
-MASTER_REGEX = re.compile(
+MASTER_RsEGEX = re.compile(
     r"(/?([a-z.A-Z0-9\-_]+/)+[@a-zA-Z0-9\-_+.]+\.[a-zA-Z0-9]{1,10})[:-]?(\d+)?"
 )
 MASTER_REGEX_MORE_EXTENSIONS = re.compile(
@@ -32,9 +34,10 @@ JUST_FILE_WITH_NUMBER = re.compile(
 JUST_FILE = re.compile(r"([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+")
 JUST_EMACS_TEMP_FILE = re.compile(r"([@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10}~)(\s|$|:)+")
 JUST_VIM_TEMP_FILE = re.compile(r"(#[@%+a-z.A-Z0-9\-_]+\.[a-zA-Z]{1,10}#)(\s|$|:)+")
-# start with a normal char for ls -l
-JUST_FILE_WITH_SPACES = re.compile(
-    r"([a-zA-Z][@+a-z. A-Z0-9\-_]+\.[a-zA-Z]{1,10})(\s|$|:)+"
+# matches normal files including spaces, parentheses, and accented letters
+JUST_FILE_WITH_SPACES_UNICODE = re.compile(
+    r"([\w\s\(\)@%+\-\.]+)\.[a-zA-Z0-9-]{1,30}(\s|$|:)+",
+    re.UNICODE
 )
 FILE_NO_PERIODS = re.compile(
     (
@@ -230,6 +233,12 @@ REGEX_WATERFALL: List[RegexConfig] = [
         ENTIRE_TRIMMED_LINE_IF_NOT_WHITESPACE,
         no_num=True,
         with_all_lines_matched=True,
+    ),
+     RegexConfig(
+        "JUST_FILE_WITH_SPACES_UNICODE",
+        JUST_FILE_WITH_SPACES_UNICODE,
+        no_num=True,
+        only_with_file_inspection=True
     ),
 ]
 

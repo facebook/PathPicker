@@ -4,6 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Tuple
+from .command_mode import run_command
 
 if TYPE_CHECKING:
     import curses
@@ -75,3 +76,46 @@ class CursesScreen(ScreenBase):
         if isinstance(result, int):
             return str(result)
         return result.decode("utf-8")
+    
+    def clrtoeol(self) -> None:
+        """
+        Clears from cursor to end of line using curses.
+        """
+        if hasattr(self.screen, "clrtoeol"):
+            self.screen.clrtoeol()
+        else:
+            max_y, max_x = self.getmaxyx()
+            y, x = self.screen.getyx()
+            for _ in range(x, max_x):
+                self.delch(y, x)
+        self.refresh()
+
+    def handle_command_mode(self, current_selection: str) -> None:
+        """
+        Trigger command mode for the selected file/directory.
+        """
+        self.addstr(0, 0, "Enter command: ", 0)
+        self.refresh()
+        cmd_input = self.getstr(0, 15, 100)  # read input from user
+
+        # Run the command with token expansion
+        run_command(cmd_input, current_selection, auto_mode=False)
+
+        # Clear the input line after running
+        self.move(0, 0)
+        self.clrtoeol()
+        self.refresh()
+
+    def handle_input(self, current_selection: str) -> None:
+        """
+        Main input loop for the screen.
+        """
+        while True:
+            key = self.getch()
+
+            if key in (ord('q'), ord('Q')):
+                break  # quit
+            elif key == ord(':'):
+                # Enter command mode
+                self.handle_command_mode(current_selection)
+            # Add other key handling here, e.g., navigation
